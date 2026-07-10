@@ -1340,7 +1340,7 @@
 /* ---- */
 
 (function(){
-  var IMG="https://files.catbox.moe/elkcuh.webp";
+  var IMG="https://files.catbox.moe/9ah8jn.webp";
   var LOGO="https://files.catbox.moe/au80tp.png";
   function on(){ return /\/inventurliste\/?$/.test(location.pathname); }
   function mount(){
