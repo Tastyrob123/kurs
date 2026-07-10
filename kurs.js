@@ -1339,7 +1339,7 @@
 /* ---- */
 
 (function(){
-  var IMG="https://files.catbox.moe/l40xto.webp";
+  var IMG="https://files.catbox.moe/6antt8.webp";
   var LOGO="https://files.catbox.moe/au80tp.png";
   function on(){ return /\/inventurliste\/?$/.test(location.pathname); }
   function mount(){
