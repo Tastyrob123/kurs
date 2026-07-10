@@ -972,12 +972,13 @@
 /* Tasty Studios · mehrwert-zielbild · MacBook-Cover + Klick-Lightbox
    Extern gehostet, damit super.so-Code klein bleibt. Läuft nur auf /mehrwert-zielbild. */
 (function(){
-  var POSTER="https://files.catbox.moe/yy7cte.png";
+  var POSTER="https://files.catbox.moe/2p4632.png";
   var CSS=[
     '.page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading) > .notion-column:not(:has(h1.notion-heading)){display:flex!important;}',
     '@media (min-width:768px){',
-    '.page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading){display:flex!important;}',
-    '.page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading) > .notion-column{width:calc((100% - var(--column-spacing) * 1) * 0.5)!important;}',
+    '.page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading){display:flex!important;gap:0!important;}',
+    '.page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading) > .notion-column{width:calc((100% - 18px) * 0.5)!important;}',
+    '.page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading) > .notion-column + .notion-column{margin-inline-start:18px!important;}',
     '}',
     '.page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading) .notion-video video{display:none!important;}',
     '.page__mehrwert-zielbild .tsmac{position:relative;cursor:pointer;display:block;width:100%;border-radius:14px;overflow:hidden;line-height:0;background:#05060b;}',

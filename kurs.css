@@ -555,11 +555,12 @@ details > summary {
 /* mehrwert-zielbild — nur Intro über den Kacheln zentriert */
 .page__mehrwert-zielbild .ts-mz-center{ text-align:center; }
 
-/* mehrwert-zielbild — Video-Spalte neben "Warum…" wieder anzeigen */
+/* mehrwert-zielbild — Video-Spalte neben "Warum…" wieder anzeigen (Spalten eng, Text nah am Cover) */
 .page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading) > .notion-column:not(:has(h1.notion-heading)){ display:flex !important; }
 @media (min-width:768px){
-  .page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading){ display:flex !important; }
-  .page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading) > .notion-column{ width:calc((100% - var(--column-spacing) * 1) * 0.5) !important; }
+  .page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading){ display:flex !important; gap:0 !important; }
+  .page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading) > .notion-column{ width:calc((100% - 18px) * 0.5) !important; }
+  .page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading) > .notion-column + .notion-column{ margin-inline-start:18px !important; }
 }
 
 /* ============================================================
