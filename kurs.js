@@ -1053,6 +1053,7 @@
   var CSS=[
     '#tsmb-root{--tsmb-gold:#9e947f;--tsmb-ease:cubic-bezier(.16,1,.3,1);margin:0 0 8px;display:flex;flex-direction:column;align-items:center;gap:14px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;}',
     '.notion-column-list.tsmb-centered-row{align-items:center;}',
+    '@media(min-width:768px){#tsmb-root{padding-top:59px;}}',
     '#tsmb-root .tsmb-caption{width:100%;text-align:center;font-size:15px;font-weight:600;letter-spacing:.005em;color:#fff;margin-top:4px;}',
     '#tsmb-root .tsmb-caption .tsmb-accent{color:var(--tsmb-gold);}',
     '#tsmb-root .tsmb-tile{position:relative;width:100%;max-width:520px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 10px 30px rgba(0,0,0,.45));transition:transform .5s var(--tsmb-ease),filter .5s var(--tsmb-ease);}',
