@@ -623,7 +623,7 @@ details > summary {
 }
 
 /* mehrwert-zielbild · MacBook-Cover + Klick-Lightbox */
-.page__mehrwert-zielbild .tsmac{position:relative;cursor:pointer;display:block;width:100%;border-radius:14px;overflow:hidden;line-height:0;background:#05060b;}
+.page__mehrwert-zielbild .tsmac{position:relative;cursor:pointer;display:block;width:100%;line-height:0;background:transparent;}
 .page__mehrwert-zielbild .tsmac img{width:100%;height:auto;display:block;transition:transform .5s ease;}
 .page__mehrwert-zielbild .tsmac:hover img{transform:scale(1.02);}
 .page__mehrwert-zielbild .tsmac__play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}

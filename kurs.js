@@ -972,7 +972,7 @@
 /* Tasty Studios · mehrwert-zielbild · MacBook-Cover + Klick-Lightbox
    Extern gehostet, damit super.so-Code klein bleibt. Läuft nur auf /mehrwert-zielbild. */
 (function(){
-  var POSTER="https://files.catbox.moe/2p4632.png";
+  var POSTER="https://files.catbox.moe/qryb5j.png";
   (function(){ var pre=new Image(); pre.src=POSTER; })(); // Poster vorladen -> kein Leer-Blitz
   var CSS=[
     '.page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading) > .notion-column:not(:has(h1.notion-heading)){display:flex!important;}',
@@ -982,7 +982,7 @@
     '.page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading) > .notion-column + .notion-column{margin-inline-start:18px!important;}',
     '}',
     '.page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading) .notion-video video{display:none!important;}',
-    '.page__mehrwert-zielbild .tsmac{position:relative;cursor:pointer;display:block;width:100%;border-radius:14px;overflow:hidden;line-height:0;background:#05060b;}',
+    '.page__mehrwert-zielbild .tsmac{position:relative;cursor:pointer;display:block;width:100%;line-height:0;background:transparent;}',
     '.page__mehrwert-zielbild .tsmac img{width:100%;height:auto;display:block;transition:transform .5s ease;}',
     '.page__mehrwert-zielbild .tsmac:hover img{transform:scale(1.02);}',
     '.page__mehrwert-zielbild .tsmac__play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}',
