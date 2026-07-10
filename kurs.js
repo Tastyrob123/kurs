@@ -402,7 +402,7 @@
         <div class="eco-node" data-id="allergene" style="left:66%;top:72%;"><div class="eco-node-box sub"><span class="eco-node-label">Allergene</span></div></div>
       </div></div>
       <div class="net-args">
-        <div class="net-arg"><div class="net-arg-title">Kein Datensilo</div><p class="net-arg-text">Vom Lieferpartner über die Rezeptur bis zum Deckungsbeitrag — alle Daten fließen automatisch durch das gesamte System.</p></div>
+        <div class="net-arg"><div class="net-arg-title">Effektiver Datenfluss</div><p class="net-arg-text">Vom Lieferpartner über die Rezeptur bis zum Deckungsbeitrag — alle Daten fließen automatisch durch das gesamte System.</p></div>
         <div class="net-arg"><div class="net-arg-title">Durchgängige Kalkulation</div><p class="net-arg-text">Ändert sich ein Einkaufspreis, aktualisiert sich die gesamte Kette: Wareneinsatz, Deckungsbeitrag, Event-Kalkulation.</p></div>
         <div class="net-arg"><div class="net-arg-title">Alles verbunden</div><p class="net-arg-text">Allergene, Nährstoffe, Kosten und Verpackung — jedes Detail ist mit deinen Gerichten verknüpft. Keine Inseln.</p></div>
       </div></div></section>`;
