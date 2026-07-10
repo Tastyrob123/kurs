@@ -1728,3 +1728,256 @@
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
+/* ---- */
+
+/* ============================================================
+   Schaufenster / Warenkorb — #tsshop (Gastro-OS Shop-Datenmodell)
+   Jede Produkt-Kachel des Gastro-OS = eine Tabelle mit bildbaren
+   Objekt-Varianten + einer Einheit ("Währung"). Konzept-Kacheln
+   tragen ist_produkt_kachel:false und kein Objekt/Einheit-Schema.
+   Karten-Werte = Beispielwerte (Schaufenster) — KEINE echten
+   Kalkulationsdaten. img:null → eleganter Platzhalter; echte
+   Bild-URL einfach im Feld img der Variante eintragen.
+   v1 gerendert auf /inventurliste (db0_inventurliste); weitere
+   Seiten über PAGES ergänzen. Anker: vor der Phasen-Spaltenliste
+   ("Phase I" + "Schritt"), Phrase-first, Fallback Text-Anker.
+   Optik: Luxus-Kachel-Muster (#tslink) + Bild-Kachel (#tsq),
+   horizontal scrollbares Regal, 4 Karten sichtbar (Desktop).
+   ============================================================ */
+(function(){
+  if(window.__tsshop) return; window.__tsshop=true;
+
+  /* ---------- Datenmodell: alle Kacheln des Gastro-OS ---------- */
+  var KACHELN=[
+    { kachel_id:'db0_inventurliste', kachel_name:'Inventurliste', ist_produkt_kachel:true,
+      einheit:'Preis (€)', einheit_typ:'preis',
+      objekt_varianten:[ /* Demo-Werte, offene Liste — beliebig ergänzbar */
+        { name:'Glas Kapern',  desc:'Eingelegt und salzig — kleine Position, klarer Preis.',  wert:3.49,  img:null },
+        { name:'Flasche Wein', desc:'0,75 l im dunklen Glas — Lager und Karte zugleich.',     wert:8.90,  img:null },
+        { name:'Laib Käse',    desc:'Am Stück gekauft, in Portionen kalkuliert.',             wert:24.50, img:null },
+        { name:'Baguette',     desc:'Täglich frisch geliefert, täglich gezählt.',             wert:1.80,  img:null },
+        { name:'Sack Mehl',    desc:'Grundlage im Trockenlager — gekauft in Kilo.',           wert:18.90, img:null },
+        { name:'Dose Tomaten', desc:'Geschält und gestückelt — Basis jeder Sauce.',           wert:4.20,  img:null }
+      ]},
+    { kachel_id:'db4_zutaten', kachel_name:'Zutaten', ist_produkt_kachel:true,
+      einheit:'Portionsgröße (g)', einheit_typ:'menge_g',
+      objekt_varianten:[{name:'Avocado'},{name:'Zwiebel'},{name:'Lachsfilet'},{name:'Ei'},{name:'Basilikum-Bund'},{name:'Butter'}]},
+    { kachel_id:'db13_lieferanten', kachel_name:'Lieferanten', ist_produkt_kachel:true,
+      einheit:'Mindestbelieferung (€)', einheit_typ:'preis',
+      objekt_varianten:[{name:'Kühl-Van'},{name:'Sattelzug'},{name:'Kleintransporter'},{name:'Kastenwagen'}]},
+    { kachel_id:'db13_ansprechpartner', kachel_name:'Ansprechpartner', ist_produkt_kachel:true,
+      einheit:'Rückvergütung (%)', einheit_typ:'prozent',
+      objekt_varianten:[{name:'Cap'},{name:'Poloshirt'},{name:'Kugelschreiber'},{name:'Notizblock'}]},
+    { kachel_id:'db5_rezepte', kachel_name:'Rezepte', ist_produkt_kachel:true,
+      einheit:'Portionen (Yield)', einheit_typ:'anzahl',
+      objekt_varianten:[{name:'Burger'},{name:'Pasta-Teller'},{name:'Salatschale'},{name:'Suppe'},{name:'Steak'},{name:'Dessert'}]},
+    { kachel_id:'db6_gk_loehne', kachel_name:'GK & Löhne', ist_produkt_kachel:true,
+      einheit:'Stundenlohn (€/h)', einheit_typ:'preis',
+      objekt_varianten:[{name:'Euro-Münzstapel'},{name:'Geldschein-Bündel'},{name:'Lohnzettel'},{name:'Portemonnaie'}]},
+    { kachel_id:'db7_allergene', kachel_name:'Allergene', ist_produkt_kachel:true,
+      einheit:'EU-Ziffer (1–14)', einheit_typ:'code',
+      objekt_varianten:[{name:'Weizenähre'},{name:'Erdnuss'},{name:'Milchkanne'},{name:'Fisch'},{name:'Ei'},{name:'Sellerie'}]},
+    { kachel_id:'db7_gerichte', kachel_name:'Gerichte', ist_produkt_kachel:true,
+      einheit:'Verkaufspreis (€)', einheit_typ:'preis',
+      objekt_varianten:[{name:'Hauptgang'},{name:'Vorspeise'},{name:'Dessert'},{name:'Bowl'},{name:'Pizza'}]},
+    { kachel_id:'menue_kalkulation', kachel_name:'Menü Kalkulation', ist_produkt_kachel:true,
+      einheit:'Foodcost (%)', einheit_typ:'prozent',
+      objekt_varianten:[{name:'Taschenrechner'},{name:'Abakus'},{name:'Kassenbon'},{name:'Waage'}]},
+    { kachel_id:'food_drinks_quartier', kachel_name:'Food / Drinks', ist_produkt_kachel:true,
+      einheit:'Menge (ml)', einheit_typ:'menge_ml',
+      objekt_varianten:[{name:'Cocktailglas'},{name:'Weinflasche'},{name:'Bierkrug'},{name:'Kaffeetasse'},{name:'Wasserkaraffe'}]},
+    { kachel_id:'key_metrics', kachel_name:'Key Metrics', ist_produkt_kachel:true,
+      einheit:'Zielwert', einheit_typ:'prozent',
+      objekt_varianten:[{name:'Tacho-Dial'},{name:'Balkendiagramm'},{name:'Zielscheibe'},{name:'Stoppuhr'}]},
+    { kachel_id:'multi_standorte', kachel_name:'Multi Standorte', ist_produkt_kachel:true,
+      einheit:'Umsatz (€)', einheit_typ:'preis',
+      objekt_varianten:[{name:'Karten-Pin'},{name:'Filial-Gebäude'},{name:'Globus'},{name:'Standort-Flagge'}]},
+    { kachel_id:'operations_area', kachel_name:'Operations Area', ist_produkt_kachel:true,
+      einheit:'Frequenz (x/Tag)', einheit_typ:'frequenz',
+      objekt_varianten:[{name:'Küchen-Bon'},{name:'Checkliste'},{name:'Timer'},{name:'Schichtplan'}]},
+    /* Konzept-Kacheln — bewusst ohne Objekt/Einheit-Schema */
+    { kachel_id:'konzept_mehrwert_zielbild', kachel_name:'Mehrwert & Zielbild', ist_produkt_kachel:false },
+    { kachel_id:'konzept_interface_design',  kachel_name:'Interface Design',    ist_produkt_kachel:false },
+    { kachel_id:'konzept_vision_frame',      kachel_name:'Vision Frame',        ist_produkt_kachel:false },
+    { kachel_id:'konzept_notion_ai',         kachel_name:'Notion AI',           ist_produkt_kachel:false },
+    { kachel_id:'konzept_dynamic_system',    kachel_name:'Dynamic System',      ist_produkt_kachel:false },
+    { kachel_id:'konzept_allgemeine_tipps',  kachel_name:'Allgemeine Tipps',    ist_produkt_kachel:false }
+  ];
+  function kachel(id){ for(var i=0;i<KACHELN.length;i++){ if(KACHELN[i].kachel_id===id) return KACHELN[i]; } return null; }
+  function fmt(typ,v){
+    if(v==null) return '';
+    if(typ==='preis')    return v.toFixed(2).replace('.',',')+' €';
+    if(typ==='menge_g')  return v+' g';
+    if(typ==='menge_ml') return v+' ml';
+    if(typ==='prozent')  return v+' %';
+    if(typ==='anzahl')   return String(v);
+    if(typ==='code')     return 'Nr. '+v;
+    if(typ==='frequenz') return v+'×/Tag';
+    return String(v);
+  }
+
+  /* Seiten-Zuordnung: welcher Pfad zeigt welchen Warenkorb */
+  var PAGES=[
+    { path:/\/inventurliste\/?$/, kachel:'db0_inventurliste',
+      eyebrow:'Der Warenkorb · DB 0',
+      title:'Deine Rohzutaten. <span>Gemessen in Euro.</span>',
+      sub:'Jede Tabelle in deinem System hat eine eigene Währung. Die der Inventurliste ist der Preis — hier stehen typische Positionen, wie sie in DB 0 leben.' }
+  ];
+
+  var CSS=`
+  #tsshop{width:100vw;max-width:100vw;margin:40px 0 8px;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 clamp(20px,4vw,56px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
+  #tsshop *{box-sizing:border-box}
+  #tsshop .tss-inner{max-width:1280px;margin:0 auto}
+  #tsshop .tss-head{text-align:center;margin-bottom:24px}
+  #tsshop .tss-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin-bottom:12px}
+  #tsshop .tss-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#9e947f;box-shadow:0 0 12px rgba(158,148,127,.7)}
+  #tsshop .tss-title{font-size:clamp(26px,3.4vw,38px);font-weight:800;letter-spacing:-.02em;line-height:1.12;color:#fff;margin:0 0 10px}
+  #tsshop .tss-title span{color:#c7b489}
+  #tsshop .tss-sub{font-size:15px;color:rgba(255,255,255,.42);max-width:580px;margin:0 auto;line-height:1.6}
+  #tsshop .tss-shelf{position:relative}
+  #tsshop .tss-track{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 2px 22px;scrollbar-width:none;-ms-overflow-style:none;overscroll-behavior-x:contain}
+  #tsshop .tss-track::-webkit-scrollbar{display:none}
+  #tsshop .tss-card{flex:0 0 calc((100% - 3*22px)/4);scroll-snap-align:start;border-radius:16px;overflow:hidden;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0));border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85);opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .75s cubic-bezier(.22,1,.36,1),border-color .4s ease,box-shadow .5s ease}
+  #tsshop .tss-card.on{opacity:1;transform:translateY(0)}
+  #tsshop .tss-card:hover{transform:translateY(-4px);border-color:rgba(158,148,127,.45);box-shadow:0 12px 36px -16px rgba(158,148,127,.28),0 26px 54px -36px rgba(0,0,0,.9)}
+  #tsshop .tss-imgwrap{aspect-ratio:1/1;overflow:hidden;background:#0b0d14}
+  #tsshop .tss-imgwrap img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.22,1,.36,1)}
+  #tsshop .tss-card:hover .tss-imgwrap img{transform:scale(1.04)}
+  #tsshop .tss-body{padding:16px 18px 18px}
+  #tsshop .tss-name{font-size:1.02rem;font-weight:600;letter-spacing:-.012em;color:#fff;margin:0 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #tsshop .tss-desc{font-size:.82rem;color:rgba(255,255,255,.52);line-height:1.5;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #tsshop .tss-val{text-align:right;margin-top:14px;font-size:1rem;font-weight:700;font-variant-numeric:tabular-nums;color:#d8c9ab}
+  #tsshop .tss-fade{position:absolute;top:0;bottom:22px;width:64px;z-index:2;pointer-events:none;opacity:0;transition:opacity .35s ease}
+  #tsshop .tss-fade.prev{left:0;background:linear-gradient(90deg,rgba(5,6,11,.92),rgba(5,6,11,0))}
+  #tsshop .tss-fade.next{right:0;background:linear-gradient(270deg,rgba(5,6,11,.92),rgba(5,6,11,0))}
+  #tsshop .tss-fade.on{opacity:1}
+  #tsshop .tss-nav{position:absolute;top:calc(50% - 31px);z-index:3;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(10,12,20,.72);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.75);cursor:pointer;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:opacity .3s ease,border-color .25s ease,color .25s ease,transform .25s ease;opacity:0;pointer-events:none;padding:0}
+  #tsshop .tss-nav.on{opacity:1;pointer-events:auto}
+  #tsshop .tss-nav:hover{border-color:rgba(158,148,127,.55);color:#d8c9ab;transform:scale(1.06)}
+  #tsshop .tss-nav.prev{left:-10px}
+  #tsshop .tss-nav.next{right:-10px}
+  #tsshop .tss-note{text-align:center;margin-top:2px;font-size:11.5px;letter-spacing:.03em;color:rgba(255,255,255,.25)}
+  @media(max-width:1024px){#tsshop .tss-card{flex-basis:calc((100% - 2*22px)/3)}}
+  @media(max-width:820px){#tsshop .tss-card{flex-basis:calc((100% - 22px)/2)}}
+  @media(max-width:540px){#tsshop .tss-card{flex-basis:78%}#tsshop .tss-track{gap:16px}}
+  @media(hover:none){#tsshop .tss-nav{display:none}}
+  @media(prefers-reduced-motion:reduce){
+    #tsshop .tss-card{opacity:1;transform:none;transition:none}
+    #tsshop .tss-imgwrap img{transition:none}
+    #tsshop .tss-nav{transition:none}
+  }`;
+
+  /* Platzhalter-Bild (SVG data-URI) — bis Robert echte Produktbilder einträgt */
+  function ph(name){
+    var initial=(name||'').trim().charAt(0).toUpperCase();
+    var svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600">'
+      +'<rect width="600" height="600" fill="#0b0d14"/>'
+      +'<circle cx="300" cy="262" r="170" fill="rgba(199,180,137,0.045)"/>'
+      +'<circle cx="300" cy="262" r="112" fill="rgba(199,180,137,0.05)"/>'
+      +'<circle cx="300" cy="262" r="86" fill="none" stroke="rgba(199,180,137,0.35)" stroke-width="1.5"/>'
+      +'<text x="300" y="290" text-anchor="middle" font-family="Georgia,serif" font-size="76" fill="rgba(216,201,171,0.75)">'+initial+'</text>'
+      +'<text x="300" y="436" text-anchor="middle" font-family="-apple-system,Helvetica,sans-serif" font-size="21" letter-spacing="5" fill="rgba(255,255,255,0.4)">'+(name||'').toUpperCase()+'</text>'
+      +'<text x="300" y="470" text-anchor="middle" font-family="-apple-system,Helvetica,sans-serif" font-size="12" letter-spacing="3" fill="rgba(158,148,127,0.55)">BILD FOLGT</text>'
+      +'</svg>';
+    return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+  }
+
+  function injectCSS(){ if(document.getElementById('tsshop-css'))return; var s=document.createElement('style'); s.id='tsshop-css'; s.textContent=CSS; document.head.appendChild(s); }
+
+  var CHEV_L='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>';
+  var CHEV_R='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+
+  function build(page){
+    var k=kachel(page.kachel); if(!k||!k.ist_produkt_kachel) return null;
+    var root=document.createElement('div'); root.id='tsshop';
+    var cards=k.objekt_varianten.map(function(v){
+      return '<article class="tss-card">'
+        +'<div class="tss-imgwrap"><img src="'+(v.img||ph(v.name))+'" alt="'+v.name+'" loading="lazy"></div>'
+        +'<div class="tss-body">'
+          +'<h4 class="tss-name">'+v.name+'</h4>'
+          +'<p class="tss-desc">'+(v.desc||'')+'</p>'
+          +'<div class="tss-val">'+fmt(k.einheit_typ,v.wert)+'</div>'
+        +'</div></article>';
+    }).join('');
+    root.innerHTML='<div class="tss-inner">'
+      +'<div class="tss-head">'
+        +'<div class="tss-eyebrow">'+page.eyebrow+'</div>'
+        +'<h3 class="tss-title">'+page.title+'</h3>'
+        +'<p class="tss-sub">'+page.sub+'</p>'
+      +'</div>'
+      +'<div class="tss-shelf" role="region" aria-label="'+k.kachel_name+' — Warenkorb">'
+        +'<div class="tss-fade prev"></div><div class="tss-fade next"></div>'
+        +'<button type="button" class="tss-nav prev" aria-label="Zurück scrollen">'+CHEV_L+'</button>'
+        +'<button type="button" class="tss-nav next" aria-label="Weiter scrollen">'+CHEV_R+'</button>'
+        +'<div class="tss-track">'+cards+'</div>'
+      +'</div>'
+      +'<p class="tss-note">Beispielhafte Positionen und Preise — zur Veranschaulichung.</p>'
+      +'</div>';
+    return root;
+  }
+
+  function setup(root){
+    var track=root.querySelector('.tss-track');
+    var cards=[].slice.call(root.querySelectorAll('.tss-card'));
+    var fadeP=root.querySelector('.tss-fade.prev'), fadeN=root.querySelector('.tss-fade.next');
+    var navP=root.querySelector('.tss-nav.prev'), navN=root.querySelector('.tss-nav.next');
+    /* Start-Animation: gestaffelter Reveal der sichtbaren Reihe */
+    var io=new IntersectionObserver(function(e){
+      if(!e[0].isIntersecting) return;
+      cards.forEach(function(c,i){
+        c.style.transitionDelay=((i%4)*0.13)+'s';
+        c.classList.add('on');
+        setTimeout(function(){ c.style.transitionDelay=''; },(i%4)*130+900);
+      });
+      io.disconnect();
+    },{threshold:.25});
+    io.observe(root);
+    /* Scroll-Status: Pfeile + Kantenschleier nur zeigen, wenn es dort weitergeht */
+    function upd(){
+      var max=track.scrollWidth-track.clientWidth-2;
+      var canP=track.scrollLeft>4, canN=track.scrollLeft<max;
+      fadeP.classList.toggle('on',canP); navP.classList.toggle('on',canP);
+      fadeN.classList.toggle('on',canN); navN.classList.toggle('on',canN);
+    }
+    function step(){ var c=cards[0]; return c?c.getBoundingClientRect().width+22:320; }
+    navP.addEventListener('click',function(){ track.scrollBy({left:-step(),behavior:'smooth'}); });
+    navN.addEventListener('click',function(){ track.scrollBy({left:step(),behavior:'smooth'}); });
+    track.addEventListener('scroll',upd,{passive:true});
+    window.addEventListener('resize',upd);
+    setTimeout(upd,150);
+  }
+
+  /* Anker: die Spaltenliste mit den Phasen ("Phase I" + "Schritt") — tiefste Fundstelle */
+  function findSpot(){
+    var lists=document.querySelectorAll('.notion-column-list'), cand=null;
+    for(var i=0;i<lists.length;i++){
+      var t=lists[i].textContent||'';
+      if(t.indexOf('Phase I')>-1&&t.indexOf('Schritt')>-1){ if(!cand||cand.contains(lists[i])) cand=lists[i]; }
+    }
+    if(cand) return {mode:'before',el:cand};
+    var n=document.querySelectorAll('.notion-text');
+    for(var j=0;j<n.length;j++){ if((n[j].textContent||'').indexOf('legen wir in der nächsten Lektion gemeinsam an')>-1) return {mode:'after',el:n[j]}; }
+    return null;
+  }
+  function pageFor(){
+    for(var i=0;i<PAGES.length;i++){ if(PAGES[i].path.test(location.pathname)) return PAGES[i]; }
+    return null;
+  }
+  function mount(){
+    var page=pageFor();
+    if(!page){ var e=document.getElementById('tsshop'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    if(document.getElementById('tsshop')) return;
+    var spot=findSpot(); if(!spot) return;
+    injectCSS();
+    var root=build(page); if(!root) return;
+    if(spot.mode==='before') spot.el.parentNode.insertBefore(root,spot.el);
+    else spot.el.parentNode.insertBefore(root,spot.el.nextSibling);
+    setup(root);
+  }
+  function boot(){
+    var tries=0;
+    var iv=setInterval(function(){ tries++; mount(); if(tries>40) clearInterval(iv); },300);
+    new MutationObserver(function(){ if(!document.getElementById('tsshop')) mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
