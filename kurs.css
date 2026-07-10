@@ -697,6 +697,7 @@ details > summary {
 /* inventurliste — t1/t2 als mittiger Block (volle Zeilen, nicht per Zeile zentriert) */
 .page__inventurliste #block-399b9546553480c0ac35e72c9d8c4055,
 .page__inventurliste #block-38eb9546553480d3ac7dda0fb8e1ab61{ max-width:900px; margin-left:auto; margin-right:auto; }
-/* inventurliste — Untertitel "Die Inventurliste traegt die Nummer Null" mittig + gedaempft */
+/* inventurliste — Ueberschrift "Die Inventurliste traegt die Nummer Null" — weiss, groesser, mittig, Abstand nach unten */
 .page__inventurliste #block-399b9546553480d993d5ef22dd9598a6,
-.page__inventurliste #block-399b9546553480d993d5ef22dd9598a6 .notion-text__content{ text-align:center; color:rgba(255,255,255,.5); font-size:1.02rem; }
+.page__inventurliste #block-399b9546553480d993d5ef22dd9598a6 .notion-text__content{ text-align:center; color:#ffffff; font-size:1.7rem; font-weight:600; line-height:1.3; }
+.page__inventurliste #block-399b9546553480d993d5ef22dd9598a6{ margin-bottom:40px; }
