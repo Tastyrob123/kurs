@@ -1421,8 +1421,22 @@
     for(var i=0;i<n.length;i++){ if(n[i].textContent && n[i].textContent.indexOf('In dieser Datenbank hinterlegst du alle Produkte')>-1) return n[i].closest('[id^="block-"]')||n[i]; }
     return null;
   }
+  function colorNull(){
+    var h=document.getElementById('block-399b9546553480d993d5ef22dd9598a6');
+    if(!h||h.querySelector('.ts-null-red')) return;
+    var w=document.createTreeWalker(h,NodeFilter.SHOW_TEXT,null),node,target=null;
+    while(node=w.nextNode()){ if(/\bNull\b/.test(node.nodeValue)){ target=node; break; } }
+    if(!target) return;
+    var i=target.nodeValue.search(/\bNull\b/);
+    var before=target.nodeValue.slice(0,i), after=target.nodeValue.slice(i+4);
+    var sp=document.createElement('span'); sp.className='ts-null-red'; sp.style.color='#e32552'; sp.textContent='Null';
+    var f=document.createDocumentFragment();
+    if(before)f.appendChild(document.createTextNode(before)); f.appendChild(sp); if(after)f.appendChild(document.createTextNode(after));
+    target.parentNode.replaceChild(f,target);
+  }
   function mount(){
     if(!/\/inventurliste\/?$/.test(location.pathname)){ var e=document.getElementById('tsflow'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    colorNull();
     if(document.getElementById('tsflow')) return;
     var a=findAnchor(); if(!a) return;
     injectCSS();
