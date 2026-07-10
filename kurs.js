@@ -1556,3 +1556,106 @@
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
+
+/* ============================================================
+   inventurliste — Verknuepfungs-Animation "Was uns jetzt noch fehlt"
+   DB 0 : Inventurliste (Hub links) -> DB Lieferpartner / DB Zutaten /
+   DB Packaging (rechts). Ersetzt die 3 Text-Bullets. Gleiche rAF-Uhr
+   wie #tsflow: Linien zeichnen, Kugel poppt bei Ankunft der Spitze,
+   danach wandern Puls-Punkte ueber die Verbindungen.
+   ============================================================ */
+(function(){
+  if(window.__tslink) return; window.__tslink=true;
+  var CSS=`
+  #tslink{width:min(1000px,95vw);margin:38px auto 30px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
+  #tslink .stage{position:relative;width:100%;aspect-ratio:1000/300;}
+  #tslink svg.wire{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+  #tslink .ln{fill:none;stroke:#cbb994;stroke-width:2;stroke-linecap:round;vector-effect:non-scaling-stroke}
+  #tslink .pulse{fill:#e7dcc4;opacity:0}
+  #tslink .nd{position:absolute;transform:translate(-50%,-50%) scale(.5);opacity:0;transition:opacity .3s ease,transform .4s cubic-bezier(.34,1.56,.64,1)}
+  #tslink .nd.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  #tslink .dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#0f1218;border:1.5px solid #cbb994;box-shadow:0 0 18px rgba(203,185,148,.22);margin:0 auto}
+  #tslink .nd.hub .dot{width:46px;height:46px;background:#e7dcc4;border-color:#cbb994;color:#1a1a1a;font-size:15px;font-weight:600}
+  #tslink .nd.hub .lbl{position:absolute;top:56px;left:50%;transform:translateX(-50%);width:190px;text-align:center;font-size:11px;font-weight:500;letter-spacing:1.4px;text-transform:uppercase;line-height:1.35;color:rgba(255,255,255,.55)}
+  #tslink .nd.t .lbl{position:absolute;left:48px;top:50%;transform:translateY(-50%);white-space:nowrap;font-size:11px;font-weight:500;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,.55)}
+  @media(max-width:720px){#tslink{overflow-x:auto}#tslink .stage{min-width:720px}}
+  `;
+  var DBICON='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#e7dcc4" stroke-width="1.6" stroke-linecap="round"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg>';
+  var PATHS=[
+    'M 178,150 C 400,95 550,52 778,52',
+    'M 180,150 H 778',
+    'M 178,150 C 400,205 550,248 778,248'
+  ];
+  var TARGETS=[['DB Lieferpartner',17.33],['DB Zutaten',50],['DB Packaging',82.67]];
+  function injectCSS(){ if(document.getElementById('tslink-css'))return; var s=document.createElement('style'); s.id='tslink-css'; s.textContent=CSS; document.head.appendChild(s); }
+  function build(){
+    var root=document.createElement('div'); root.id='tslink';
+    var svg='<svg class="wire" viewBox="0 0 1000 300" preserveAspectRatio="none">'+PATHS.map(function(d){return '<path class="ln" d="'+d+'"/>';}).join('')+'</svg>';
+    var hub='<div class="nd hub"><span class="dot">0</span><span class="lbl">DB 0 : Inventurliste</span></div>';
+    var ts=TARGETS.map(function(t,i){ return '<div class="nd t" data-k="'+i+'" style="left:80%;top:'+t[1]+'%"><span class="dot">'+DBICON+'</span><span class="lbl">'+t[0]+'</span></div>'; }).join('');
+    root.innerHTML='<div class="stage">'+svg+hub+ts+'</div>';
+    var h=root.querySelector('.nd.hub'); h.style.left='15%'; h.style.top='50%';
+    return root;
+  }
+  function setup(root){
+    var SPEED=430, LEAD=50, HUB=0.15, STARTS=[0.4,0.55,0.7];
+    var svg=root.querySelector('svg.wire');
+    var paths=[...root.querySelectorAll('.ln')];
+    var hub=root.querySelector('.nd.hub');
+    var targets=[...root.querySelectorAll('.nd.t')];
+    var lines=paths.map(function(p,i){ var L=p.getTotalLength(); p.style.strokeDasharray=L; p.style.strokeDashoffset=L; return {p:p,L:L,start:STARTS[i],node:targets[i],pulsed:false}; });
+    function addPulse(i){
+      var c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('class','pulse'); c.setAttribute('r','3.2');
+      var m=document.createElementNS('http://www.w3.org/2000/svg','animateMotion');
+      m.setAttribute('dur','2.6s'); m.setAttribute('repeatCount','indefinite'); m.setAttribute('path',PATHS[i].replace('M ','M').trim());
+      var o=document.createElementNS('http://www.w3.org/2000/svg','animate');
+      o.setAttribute('attributeName','opacity'); o.setAttribute('values','0;.9;.9;0'); o.setAttribute('keyTimes','0;.08;.85;1'); o.setAttribute('dur','2.6s'); o.setAttribute('repeatCount','indefinite');
+      c.appendChild(m); c.appendChild(o); svg.appendChild(c);
+    }
+    var t0=null;
+    function frame(now){
+      if(t0===null) t0=now;
+      var t=(now-t0)/1000, done=true;
+      if(t>=HUB) hub.classList.add('on'); else done=false;
+      lines.forEach(function(s,i){
+        var drawn=Math.max(0,Math.min(s.L,(t-s.start)*SPEED));
+        s.p.style.strokeDashoffset=s.L-drawn;
+        if(drawn>=s.L-LEAD) s.node.classList.add('on');
+        if(drawn>=s.L){ if(!s.pulsed){ s.pulsed=true; addPulse(i); } } else done=false;
+      });
+      if(!done) requestAnimationFrame(frame);
+    }
+    root.__tslFrame=frame; // Test-Hook
+    var io=new IntersectionObserver(function(e){ if(e[0].isIntersecting){ requestAnimationFrame(frame); io.disconnect(); } },{threshold:.35});
+    io.observe(root);
+  }
+  function findList(){
+    var ps=document.querySelectorAll('.page__inventurliste .notion-text');
+    for(var i=0;i<ps.length;i++){
+      if(/verknüpfen mit/.test(ps[i].textContent||'')){
+        var el=ps[i].nextElementSibling;
+        while(el){ if(el.matches&&el.matches('ul.notion-bulleted-list')) return el; el=el.nextElementSibling; }
+      }
+    }
+    var uls=document.querySelectorAll('.page__inventurliste ul.notion-bulleted-list');
+    for(var j=0;j<uls.length;j++){ var tx=uls[j].textContent||''; if(/DB Lieferpartner/.test(tx)&&/DB Packaging/.test(tx)) return uls[j]; }
+    return null;
+  }
+  function mount(){
+    if(!/\/inventurliste\/?$/.test(location.pathname)){ var e=document.getElementById('tslink'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    if(document.getElementById('tslink')) return;
+    var ul=findList(); if(!ul) return;
+    injectCSS();
+    ul.style.display='none';
+    var root=build();
+    ul.parentNode.insertBefore(root, ul.nextSibling);
+    setup(root);
+  }
+  function boot(){
+    var tries=0;
+    var iv=setInterval(function(){ tries++; mount(); if(tries>40) clearInterval(iv); },300);
+    new MutationObserver(function(){ if(!document.getElementById('tslink')) mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
