@@ -1037,20 +1037,22 @@
 })();
 
 
+
+
 /* ============================================================
    MacBook-Scroll-Kachel "Thai Peanut Tofu Bowl" (mehrwert-zielbild)
+   Sitzt in der leeren LINKEN Spalte neben dem "Du siehst..."-Text.
    Klick auf MacBook -> großer PC -> Screen scrollt die ganze
-   Gericht-Detailseite (langer Screenshot). Läuft nur auf
-   /mehrwert-zielbild. Extern gehostet (catbox), Bilder:
-   Frame  = oj1wa9.png   ·   Screenshot = 4s49ab.png
+   Gericht-Detailseite (langer Screenshot). Nur auf /mehrwert-zielbild.
+   Bilder (catbox): Frame = oj1wa9.png · Screenshot = 4s49ab.png
    ============================================================ */
 (function(){
   var FRAME="https://files.catbox.moe/oj1wa9.png";
   var SHOT="https://files.catbox.moe/4s49ab.png";
-  var ANCHOR="Eigenschaft für Eigenschaft";
+  var ANCHOR="verwendeten Zutaten und Produkte";   // Text der RECHTEN Spalte -> MacBook links daneben
   var CSS=[
-    '#tsmb-root{--tsmb-gold:#9e947f;--tsmb-ease:cubic-bezier(.16,1,.3,1);margin:26px 0;display:flex;flex-direction:column;align-items:flex-start;gap:14px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;}',
-    '#tsmb-root .tsmb-eyebrow{font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--tsmb-gold);}',
+    '#tsmb-root{--tsmb-gold:#9e947f;--tsmb-ease:cubic-bezier(.16,1,.3,1);margin:0 0 8px;display:flex;flex-direction:column;align-items:center;gap:14px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;}',
+    '#tsmb-root .tsmb-eyebrow{width:100%;text-align:center;font-size:.82rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--tsmb-gold);}',
     '#tsmb-root .tsmb-tile{position:relative;width:100%;max-width:520px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 10px 30px rgba(0,0,0,.45));transition:transform .5s var(--tsmb-ease),filter .5s var(--tsmb-ease);}',
     '#tsmb-root .tsmb-tile:hover{transform:translateY(-4px) scale(1.02);animation:tsmbHeartbeat 2.6s var(--tsmb-ease) infinite;}',
     '@keyframes tsmbHeartbeat{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(158,148,127,.14));}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(158,148,127,.30));}}',
@@ -1058,7 +1060,7 @@
     '#tsmb-root .tsmb-frame{width:100%;height:auto;display:block;position:relative;z-index:1;pointer-events:none;user-select:none;}',
     '#tsmb-root .tsmb-cover{position:absolute;top:3.65%;left:12.22%;width:73.06%;height:83.85%;overflow:hidden;z-index:0;border-radius:3px;background:#191919;}',
     '#tsmb-root .tsmb-cover img{width:100%;display:block;}',
-    '#tsmb-root .tsmb-hint{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.32);align-self:center;animation:tsmbHint 2.5s ease-in-out infinite;}',
+    '#tsmb-root .tsmb-hint{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.32);animation:tsmbHint 2.5s ease-in-out infinite;}',
     '@keyframes tsmbHint{0%,100%{opacity:.4}50%{opacity:.8}}',
     '#tsmb-lb{position:fixed;inset:0;z-index:99999;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(5,6,11,.92);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);padding:32px;opacity:0;transition:opacity .24s cubic-bezier(.16,1,.3,1);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;}',
     '#tsmb-lb.open{display:flex;opacity:1;}',
@@ -1096,21 +1098,30 @@
   }
   function openLb(){ var lb=ensureLb(); lb.classList.add('open'); lb.classList.remove('full'); document.body.style.overflow='hidden'; var sc=lb.querySelector('.tsmb-screen'); if(sc) sc.scrollTop=0; }
   function findAnchor(){ var n=document.querySelectorAll('.notion-text'); for(var i=0;i<n.length;i++){ var t=n[i].textContent; if(t && t.indexOf(ANCHOR)>-1) return n[i]; } return null; }
-  function mount(){
-    if(!/\/mehrwert-zielbild\/?$/.test(location.pathname)){ var e=document.getElementById('tsmb-root'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
-    injectCSS();
-    if(document.getElementById('tsmb-root')) return;
-    var host=findAnchor(); if(!host) return;
+  function buildTile(){
     var root=document.createElement('div'); root.id='tsmb-root';
     root.innerHTML='<div class="tsmb-eyebrow">Gerichte-Datenbank · Live-Beispiel</div><div class="tsmb-tile" role="button" tabindex="0" aria-label="MacBook vergrößern"><div class="tsmb-cover"><img src="'+SHOT+'" alt=""></div><img class="tsmb-frame" src="'+FRAME+'" alt="MacBook"></div><div class="tsmb-hint">Klicke zum Vergrößern</div>';
-    host.parentNode.insertBefore(root, host.nextSibling);
     var tile=root.querySelector('.tsmb-tile');
     tile.addEventListener('click',openLb);
     tile.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(); } });
+    return root;
+  }
+  function mount(){
+    if(!/\/mehrwert-zielbild\/?$/.test(location.pathname)){ var e=document.getElementById('tsmb-root'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    injectCSS();
+    var p=findAnchor(); if(!p) return;
+    var textCol=p.closest('.notion-column'); if(!textCol) return;
+    var list=p.closest('.notion-column-list'); if(!list) return;
+    var cols=[]; for(var i=0;i<list.children.length;i++){ var c=list.children[i]; if(c.classList&&c.classList.contains('notion-column')) cols.push(c); }
+    var target=null; for(var j=0;j<cols.length;j++){ if(cols[j]!==textCol){ target=cols[j]; break; } }
+    if(!target) return;
+    var existing=document.getElementById('tsmb-root');
+    if(existing){ if(target.contains(existing)) return; existing.parentNode.removeChild(existing); }
+    target.insertBefore(buildTile(), target.firstChild);
   }
   function boot(){
     var tries=0;
-    var iv=setInterval(function(){ tries++; mount(); if(document.getElementById('tsmb-root')||tries>60) clearInterval(iv); },300);
+    var iv=setInterval(function(){ tries++; mount(); if((document.getElementById('tsmb-root')&&document.getElementById('tsmb-root').closest('.notion-column'))||tries>60) clearInterval(iv); },300);
     new MutationObserver(function(){ mount(); }).observe(document.documentElement,{childList:true,subtree:true});
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
