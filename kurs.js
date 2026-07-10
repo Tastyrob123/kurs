@@ -342,7 +342,7 @@
     @keyframes tsLinePulse { 0%{opacity:1} 50%{opacity:.7} 100%{opacity:1} }
     #tsEcoRoot .eco-path.pulsing { animation:tsLinePulse 3.5s ease-in-out infinite; }
     #tsEcoRoot .eco-arrow { opacity:0; }
-    #tsEcoRoot .net-args { display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-top:16px; }
+    #tsEcoRoot .net-args { display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-top:-110px; }
     #tsEcoRoot .net-arg { padding:0 40px; position:relative; }
     #tsEcoRoot .net-arg:not(:last-child)::after { content:''; position:absolute; right:0; top:0; bottom:0; width:1px; background:rgba(199,180,137,.1); }
     #tsEcoRoot .net-arg:first-child { padding-left:0; }
@@ -352,7 +352,7 @@
     @media(max-width:900px){
       #tsEcoRoot .eco-canvas-wrap { aspect-ratio:auto; height:520px; overflow-x:auto; overflow-y:hidden; }
       #tsEcoRoot .eco-canvas-wrap > .eco-scroll { min-width:800px; position:relative; height:100%; }
-      #tsEcoRoot .net-args { grid-template-columns:1fr; gap:32px; }
+      #tsEcoRoot .net-args { grid-template-columns:1fr; gap:32px; margin-top:16px; }
       #tsEcoRoot .net-arg { padding:0; }
       #tsEcoRoot .net-arg:not(:last-child)::after { display:none; }
     }
