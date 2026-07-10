@@ -1404,14 +1404,32 @@
     var TY=24,RY=70,nodesHTML='';
     TOP.forEach(function(t,i){ nodesHTML+='<div class="nd '+t[3]+'" data-i="'+i+'" style="left:'+t[2]+'%;top:'+TY+'%"><span class="dot">'+t[0]+'</span><span class="lbl">'+t[1]+'</span></div>'; });
     RED.forEach(function(t,i){ nodesHTML+='<div class="nd red" data-i="'+(6+i)+'" style="left:'+t[2]+'%;top:'+RY+'%"><span class="dot">'+t[0]+'</span><span class="lbl">'+t[1]+'</span></div>'; });
-    root.innerHTML='<div class="stage"><svg viewBox="0 0 1000 320" preserveAspectRatio="none"><path class="ln ln-beige" d="M 110,77 H 234"/><path class="ln ln-green" d="M 274,77 H 890"/><path class="ln ln-red" d="M 254,95 V 205 Q 254,224 274,224 H 890"/></svg>'+nodesHTML+'<div class="plabel green" style="left:89%;top:11%">Preis richtig</div><div class="plabel red" style="left:89%;top:58%">Preis falsch</div></div>';
+    root.innerHTML='<div class="stage"><svg viewBox="0 0 1000 320" preserveAspectRatio="none"><path class="ln ln-beige" d="M 110,77 H 234"/><path class="ln ln-green" d="M 274,77 H 890"/><path class="ln ln-red" d="M 254,150 V 205 Q 254,224 274,224 H 890"/></svg>'+nodesHTML+'<div class="plabel green" style="left:89%;top:11%">Preis richtig</div><div class="plabel red" style="left:89%;top:58%">Preis falsch</div></div>';
     return root;
   }
   function setup(root){
-    var lines=root.querySelectorAll('.ln');
-    lines.forEach(function(p,i){ var L=p.getTotalLength(); p.style.strokeDasharray=L; p.style.strokeDashoffset=L; p.style.transition='stroke-dashoffset 1.1s ease '+(i===0?0.1:i===1?0.35:0.75)+'s'; });
-    root.querySelectorAll('.nd').forEach(function(n){ n.style.transitionDelay=(0.15+(+n.getAttribute('data-i'))*0.12)+'s'; });
-    var io=new IntersectionObserver(function(e){ if(e[0].isIntersecting){ root.classList.add('in'); lines.forEach(function(p){p.style.strokeDashoffset=0;}); io.disconnect(); } },{threshold:.3});
+    var SPEED=430, START=0.15; // px/s in viewBox-Einheiten; Linie und Kugeln laufen synchron
+    var beige=root.querySelector('.ln-beige'), green=root.querySelector('.ln-green'), red=root.querySelector('.ln-red');
+    var t2=START+beige.getTotalLength()/SPEED; // Moment, in dem die Linie Inventar erreicht
+    [[beige,START],[green,t2],[red,t2]].forEach(function(s){
+      var p=s[0], L=p.getTotalLength();
+      p.style.strokeDasharray=L; p.style.strokeDashoffset=L;
+      p.style.transition='stroke-dashoffset '+(L/SPEED).toFixed(2)+'s linear '+s[1].toFixed(2)+'s';
+    });
+    function reach(path,start,x){ var L=path.getTotalLength(); for(var l=0;l<=L;l+=5){ if(path.getPointAtLength(l).x>=x) return start+l/SPEED; } return start+L/SPEED; }
+    var TX=[90,254,418,582,746,910];
+    root.querySelectorAll('.nd').forEach(function(n){
+      var i=+n.getAttribute('data-i'), d;
+      if(i===0) d=START; else if(i===1) d=t2;
+      else if(i<6) d=reach(green,t2,TX[i]);
+      else d=reach(red,t2,TX[i-4]);
+      n.style.transitionDelay=d.toFixed(2)+'s';
+    });
+    root.querySelectorAll('.plabel').forEach(function(pl){
+      var p=pl.classList.contains('green')?green:red;
+      pl.style.transitionDelay=(t2+p.getTotalLength()/SPEED).toFixed(2)+'s';
+    });
+    var io=new IntersectionObserver(function(e){ if(e[0].isIntersecting){ root.classList.add('in'); [beige,green,red].forEach(function(p){p.style.strokeDashoffset=0;}); io.disconnect(); } },{threshold:.3});
     io.observe(root);
   }
   function findAnchor(){
