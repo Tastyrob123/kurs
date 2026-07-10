@@ -1382,16 +1382,16 @@
   #tsflow .ln-beige{stroke:#cbb994}
   #tsflow .ln-green{stroke:#46af73}
   #tsflow .ln-red{stroke:#e0574f}
-  #tsflow .nd{position:absolute;transform:translate(-50%,-50%) scale(.5);opacity:0;transition:opacity .5s ease,transform .55s cubic-bezier(.34,1.56,.64,1)}
-  #tsflow.in .nd{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  #tsflow .nd{position:absolute;transform:translate(-50%,-50%) scale(.5);opacity:0;transition:opacity .3s ease,transform .4s cubic-bezier(.34,1.56,.64,1)}
+  #tsflow .nd.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
   #tsflow .dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;background:#0f1218;border:1.5px solid rgba(255,255,255,.25);color:rgba(255,255,255,.85);margin:0 auto}
   #tsflow .nd.beige .dot{background:#e7dcc4;border-color:#cbb994;color:#1a1a1a}
   #tsflow .nd.green .dot{border-color:#46af73;box-shadow:0 0 18px rgba(70,175,115,.25);color:#bfe8cf}
   #tsflow .nd.red .dot{border-color:#e0574f;box-shadow:0 0 18px rgba(224,87,79,.25);color:#f0c3c0}
   #tsflow .lbl{position:absolute;top:46px;left:50%;transform:translateX(-50%);width:150px;text-align:center;font-size:11px;font-weight:500;letter-spacing:1.4px;text-transform:uppercase;line-height:1.35;color:rgba(255,255,255,.55)}
   #tsflow .nd.red .lbl{color:rgba(224,87,79,.6)}
-  #tsflow .plabel{position:absolute;transform:translate(-50%,-50%);font-size:12px;font-weight:600;letter-spacing:.04em;padding:4px 12px;border-radius:999px;white-space:nowrap;opacity:0;transition:opacity .6s ease}
-  #tsflow.in .plabel{opacity:1;transition-delay:1.1s}
+  #tsflow .plabel{position:absolute;transform:translate(-50%,-50%);font-size:12px;font-weight:600;letter-spacing:.04em;padding:4px 12px;border-radius:999px;white-space:nowrap;opacity:0;transition:opacity .35s ease}
+  #tsflow .plabel.on{opacity:1}
   #tsflow .plabel.green{color:#7fd3a3;background:rgba(70,175,115,.12);border:1px solid rgba(70,175,115,.35)}
   #tsflow .plabel.red{color:#f0968f;background:rgba(224,87,79,.1);border:1px solid rgba(224,87,79,.32)}
   @media(max-width:720px){#tsflow{overflow-x:auto}#tsflow .stage{min-width:720px}}
@@ -1408,28 +1408,42 @@
     return root;
   }
   function setup(root){
-    var SPEED=430, START=0.15; // px/s in viewBox-Einheiten; Linie und Kugeln laufen synchron
+    var SPEED=430, START=0.15, LEAD=50; // px/s; LEAD: Kugel zuendet kurz bevor die Spitze ankommt
     var beige=root.querySelector('.ln-beige'), green=root.querySelector('.ln-green'), red=root.querySelector('.ln-red');
-    var t2=START+beige.getTotalLength()/SPEED; // Moment, in dem die Linie Inventar erreicht
-    [[beige,START],[green,t2],[red,t2]].forEach(function(s){
-      var p=s[0], L=p.getTotalLength();
-      p.style.strokeDasharray=L; p.style.strokeDashoffset=L;
-      p.style.transition='stroke-dashoffset '+(L/SPEED).toFixed(2)+'s linear '+s[1].toFixed(2)+'s';
-    });
-    function reach(path,start,x){ var L=path.getTotalLength(); for(var l=0;l<=L;l+=5){ if(path.getPointAtLength(l).x>=x) return start+l/SPEED; } return start+L/SPEED; }
+    // Roter Abzweig beginnt knapp unter dem Inventar-Label (aus echter Label-Position berechnet)
+    try{
+      var sr=root.querySelector('.stage').getBoundingClientRect();
+      var lbl=root.querySelector('.nd[data-i="1"] .lbl');
+      var y=Math.max(112, Math.min(190, (0.24*sr.height + 28 + lbl.offsetHeight + 10) / sr.height * 320)); // Node-Top(24%)+Label-Offset 28px+Label-Hoehe+10px Luft (transform-unabhaengig)
+      red.setAttribute('d','M 254,'+y.toFixed(0)+' V 205 Q 254,224 274,224 H 890');
+    }catch(e){}
+    var t2=START+beige.getTotalLength()/SPEED; // Spitze erreicht Inventar
+    var lines=[[beige,START],[green,t2],[red,t2]].map(function(s){ var L=s[0].getTotalLength(); s[0].style.strokeDasharray=L; s[0].style.strokeDashoffset=L; return [s[0],s[1],L]; });
+    function lenAtX(path,x){ var T=path.getTotalLength(); for(var l=0;l<=T;l+=5){ if(path.getPointAtLength(l).x>=x) return l; } return T; }
     var TX=[90,254,418,582,746,910];
+    var jobs=[]; // [Element, Startzeit, Pfad|null, Pfadlaenge bis Kugel]
     root.querySelectorAll('.nd').forEach(function(n){
-      var i=+n.getAttribute('data-i'), d;
-      if(i===0) d=START; else if(i===1) d=t2;
-      else if(i<6) d=reach(green,t2,TX[i]);
-      else d=reach(red,t2,TX[i-4]);
-      n.style.transitionDelay=d.toFixed(2)+'s';
+      var i=+n.getAttribute('data-i');
+      if(i===0) jobs.push([n,START,null,0]);
+      else if(i===1) jobs.push([n,t2,null,0]);
+      else if(i<6) jobs.push([n,t2,green,lenAtX(green,TX[i])]);
+      else jobs.push([n,t2,red,lenAtX(red,TX[i-4])]);
     });
-    root.querySelectorAll('.plabel').forEach(function(pl){
-      var p=pl.classList.contains('green')?green:red;
-      pl.style.transitionDelay=(t2+p.getTotalLength()/SPEED).toFixed(2)+'s';
-    });
-    var io=new IntersectionObserver(function(e){ if(e[0].isIntersecting){ root.classList.add('in'); [beige,green,red].forEach(function(p){p.style.strokeDashoffset=0;}); io.disconnect(); } },{threshold:.3});
+    jobs.push([root.querySelector('.plabel.green'), t2+lines[1][2]/SPEED, null, 0]);
+    jobs.push([root.querySelector('.plabel.red'),   t2+lines[2][2]/SPEED, null, 0]);
+    var t0=null;
+    function frame(now){
+      if(t0===null) t0=now;
+      var t=(now-t0)/1000, done=true;
+      lines.forEach(function(s){ var drawn=Math.max(0,Math.min(s[2],(t-s[1])*SPEED)); s[0].style.strokeDashoffset=s[2]-drawn; if(drawn<s[2]) done=false; });
+      jobs.forEach(function(j){
+        if(j[0].classList.contains('on')) return;
+        if(j[2] ? ((t-j[1])*SPEED >= j[3]-LEAD) : (t>=j[1])) j[0].classList.add('on'); else done=false;
+      });
+      if(!done) requestAnimationFrame(frame);
+    }
+    root.__tsfFrame=frame; // Test-Hook
+    var io=new IntersectionObserver(function(e){ if(e[0].isIntersecting){ root.classList.add('in'); requestAnimationFrame(frame); io.disconnect(); } },{threshold:.3});
     io.observe(root);
   }
   function findAnchor(){
