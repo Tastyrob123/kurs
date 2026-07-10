@@ -1115,3 +1115,208 @@
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
+
+/* ---- */
+
+/* ============================================================
+   Deckungsbeitrags-Treppe DB I–III (mehrwert-zielbild)
+   Waterfall-Balken: Verkaufspreis → Abzüge → DB III.
+   Beispielzahlen = fiktives Rechenbeispiel (14,00 € netto).
+   ============================================================ */
+(function(){
+  if (window.__tsdb) return; window.__tsdb = true;
+  var PATH = /\/mehrwert-zielbild\/?$/;
+  var ANCHOR_ID = 'block-398b954655348072900bcd6259cccef1';   // Block mit den drei DB-Formeln
+  var ANCHOR_PHRASE = 'Deckungsbeitrag (DB) I';
+  var ROOT_ID = 'tsdb';
+  var STEP_MS = 620, BAR_MS = 850;
+
+  /* Beispielgericht 14,00 € netto — Anteile in % des Verkaufspreises */
+  var ROWS = [
+    { kind:'base',   name:'Verkaufspreis Netto',  sub:'dein Startwert',               from:0,      to:100,    val:14.00, sign:''  },
+    { kind:'cost',   name:'Wareneinsatz',         sub:'',                             from:70,     to:100,    val:4.20,  sign:'−' },
+    { kind:'result', name:'Deckungsbeitrag I',    sub:'Verkaufspreis − Wareneinsatz', from:0,      to:70,     val:9.80,  sign:'=' },
+    { kind:'cost',   name:'Gemeinkostenanteil',   sub:'',                             from:45,     to:70,     val:3.50,  sign:'−' },
+    { kind:'result', name:'Deckungsbeitrag II',   sub:'DB I − Gemeinkostenanteil',    from:0,      to:45,     val:6.30,  sign:'=' },
+    { kind:'cost',   name:'Personalkostenanteil', sub:'',                             from:15.714, to:45,     val:4.10,  sign:'−' },
+    { kind:'final',  name:'Deckungsbeitrag III',  sub:'DB II − Personalkostenanteil', from:0,      to:15.714, val:2.20,  sign:'=' }
+  ];
+  var GUIDES = [100, 70, 45, 15.714];
+
+  var CSS = `
+  #tsdb{width:100%;max-width:900px;margin:30px auto 12px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
+  #tsdb *{box-sizing:border-box}
+  #tsdb .tsdb-head{text-align:center;margin-bottom:28px}
+  #tsdb .tsdb-title{font-size:clamp(24px,3.2vw,36px);font-weight:800;letter-spacing:-.02em;line-height:1.12;color:#fff;margin:0 0 10px}
+  #tsdb .tsdb-title span{color:#c7b489}
+  #tsdb .tsdb-sub{font-size:15px;color:rgba(255,255,255,.42);max-width:520px;margin:0 auto;line-height:1.6}
+  #tsdb .tsdb-chart{position:relative;padding:4px 0}
+  #tsdb .tsdb-guides{position:absolute;z-index:0;top:2px;bottom:2px;left:216px;right:100px;pointer-events:none}
+  #tsdb .tsdb-guide{position:absolute;top:0;bottom:0;width:0;border-left:1px dashed rgba(216,201,171,.16);opacity:0;transition:opacity .8s ease}
+  #tsdb .tsdb-guide.on{opacity:1}
+  #tsdb .tsdb-rows{position:relative;z-index:1;display:flex;flex-direction:column;gap:10px}
+  #tsdb .tsdb-row{display:grid;grid-template-columns:200px 1fr 84px;grid-template-areas:"lab track val";gap:16px;align-items:center;opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s cubic-bezier(.16,1,.3,1)}
+  #tsdb .tsdb-row.on{opacity:1;transform:none}
+  #tsdb .tsdb-lab{grid-area:lab;text-align:right;line-height:1.3;min-width:0}
+  #tsdb .tsdb-name{display:block;font-size:13px;font-weight:700;letter-spacing:.02em;color:rgba(255,255,255,.82);white-space:nowrap}
+  #tsdb .tsdb-row[data-kind="cost"] .tsdb-name{color:rgba(255,255,255,.5);font-weight:600}
+  #tsdb .tsdb-row[data-kind="result"] .tsdb-name{color:#d8c9ab}
+  #tsdb .tsdb-row[data-kind="final"] .tsdb-name{color:#efe6d2}
+  #tsdb .tsdb-formula{display:block;font-size:11px;color:rgba(255,255,255,.3);margin-top:2px;white-space:nowrap}
+  #tsdb .tsdb-track{grid-area:track;position:relative;height:32px;border-radius:8px;background:rgba(255,255,255,.035);box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+  #tsdb .tsdb-bar{position:absolute;top:3px;bottom:3px;border-radius:6px;transform:scaleX(0);transform-origin:left center;transition:transform ${BAR_MS}ms cubic-bezier(.16,1,.3,1)}
+  #tsdb .tsdb-row[data-kind="cost"] .tsdb-bar{transform-origin:right center}
+  #tsdb .tsdb-row.on .tsdb-bar{transform:scaleX(1)}
+  #tsdb .tsdb-row[data-kind="base"] .tsdb-bar{background:linear-gradient(90deg,rgba(255,255,255,.13),rgba(255,255,255,.26));box-shadow:inset 0 0 0 1px rgba(255,255,255,.28)}
+  #tsdb .tsdb-row[data-kind="cost"] .tsdb-bar{background:linear-gradient(90deg,rgba(227,37,82,.14),rgba(227,37,82,.32));box-shadow:inset 0 0 0 1px rgba(227,37,82,.38)}
+  #tsdb .tsdb-row[data-kind="result"] .tsdb-bar{background:linear-gradient(90deg,rgba(216,201,171,.18),rgba(216,201,171,.4));box-shadow:inset 0 0 0 1px rgba(216,201,171,.42)}
+  #tsdb .tsdb-row[data-kind="final"] .tsdb-bar{background:linear-gradient(90deg,rgba(216,201,171,.5),rgba(239,230,210,.78));box-shadow:inset 0 0 0 1px rgba(239,230,210,.6),0 0 22px rgba(199,180,137,.28)}
+  @keyframes tsdbPulse{0%,100%{box-shadow:inset 0 0 0 1px rgba(239,230,210,.6),0 0 18px rgba(199,180,137,.22)}50%{box-shadow:inset 0 0 0 1px rgba(239,230,210,.75),0 0 34px rgba(199,180,137,.42)}}
+  #tsdb .tsdb-row[data-kind="final"].pulse .tsdb-bar{animation:tsdbPulse 3.2s ease-in-out infinite}
+  #tsdb .tsdb-val{grid-area:val;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.01em;color:rgba(255,255,255,.85);white-space:nowrap}
+  #tsdb .tsdb-row[data-kind="cost"] .tsdb-val{color:rgba(227,37,82,.85);font-weight:600}
+  #tsdb .tsdb-row[data-kind="result"] .tsdb-val{color:#d8c9ab}
+  #tsdb .tsdb-row[data-kind="final"] .tsdb-val{color:#efe6d2;font-size:15px}
+  #tsdb .tsdb-take{text-align:center;margin:24px auto 0;max-width:560px;font-size:14px;color:rgba(255,255,255,.42);line-height:1.6;opacity:0;transform:translateY(8px);transition:opacity .7s ease,transform .7s cubic-bezier(.16,1,.3,1)}
+  #tsdb .tsdb-take.on{opacity:1;transform:none}
+  #tsdb .tsdb-take b{color:#d8c9ab;font-weight:700}
+  #tsdb .tsdb-replay{display:block;margin:14px auto 0;padding:7px 18px;border:1px solid rgba(216,201,171,.25);border-radius:9999px;background:transparent;color:rgba(216,201,171,.55);font-size:12px;font-weight:600;letter-spacing:.04em;cursor:pointer;opacity:0;transition:opacity .5s ease,color .2s ease,border-color .2s ease}
+  #tsdb .tsdb-replay.on{opacity:1}
+  #tsdb .tsdb-replay:hover{color:#d8c9ab;border-color:rgba(216,201,171,.5)}
+  @media(max-width:700px){
+    #tsdb .tsdb-row{grid-template-columns:1fr auto;grid-template-areas:"lab val" "track track";gap:5px 12px}
+    #tsdb .tsdb-lab{text-align:left}
+    #tsdb .tsdb-name{white-space:normal}
+    #tsdb .tsdb-formula{display:none}
+    #tsdb .tsdb-val{align-self:end}
+    #tsdb .tsdb-track{height:26px}
+    #tsdb .tsdb-rows{gap:14px}
+    #tsdb .tsdb-guides{display:none}
+  }
+  @media(prefers-reduced-motion:reduce){
+    #tsdb .tsdb-row,#tsdb .tsdb-bar,#tsdb .tsdb-take,#tsdb .tsdb-replay,#tsdb .tsdb-guide{transition:none}
+    #tsdb .tsdb-row[data-kind="final"].pulse .tsdb-bar{animation:none}
+  }`;
+
+  function euro(v){ return v.toFixed(2).replace('.', ',') + ' €'; }
+
+  function injectStyle(){
+    if (document.getElementById('tsdb-style')) return;
+    var s = document.createElement('style'); s.id = 'tsdb-style'; s.textContent = CSS;
+    document.head.appendChild(s);
+  }
+
+  function buildMarkup(){
+    var root = document.createElement('div'); root.id = ROOT_ID;
+    var rows = ROWS.map(function(r){
+      return '<div class="tsdb-row" data-kind="' + r.kind + '">' +
+        '<div class="tsdb-lab"><span class="tsdb-name">' + r.name + '</span>' +
+          (r.sub ? '<span class="tsdb-formula">' + r.sub + '</span>' : '') + '</div>' +
+        '<div class="tsdb-track"><div class="tsdb-bar" style="left:' + r.from + '%;width:' + (r.to - r.from) + '%;"></div></div>' +
+        '<div class="tsdb-val">' + (r.sign ? r.sign + '&nbsp;' : '') + '0,00&nbsp;€</div>' +
+      '</div>';
+    }).join('');
+    var guides = GUIDES.map(function(g){ return '<div class="tsdb-guide" style="left:' + g + '%;"></div>'; }).join('');
+    root.innerHTML =
+      '<div class="tsdb-head">' +
+        '<h3 class="tsdb-title">Deckungsbeitrag. <span>Stufe für Stufe.</span></h3>' +
+        '<p class="tsdb-sub">Ein Beispielgericht für 14,00&nbsp;€ netto — und was nach jedem Abzug übrig bleibt.</p>' +
+      '</div>' +
+      '<div class="tsdb-chart">' +
+        '<div class="tsdb-guides">' + guides + '</div>' +
+        '<div class="tsdb-rows">' + rows + '</div>' +
+      '</div>' +
+      '<p class="tsdb-take">Von <b>14,00&nbsp;€</b> netto bleiben <b>2,20&nbsp;€</b> — dein Deckungsbeitrag III.</p>' +
+      '<button type="button" class="tsdb-replay">↻ Nochmal abspielen</button>';
+    return root;
+  }
+
+  function countUp(el, target, sign, ms){
+    var start = null;
+    function frame(ts){
+      if (!start) start = ts;
+      var p = Math.min(1, (ts - start) / ms);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = (sign ? sign + ' ' : '') + euro(target * eased).replace(' €', ' €');
+      if (p < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function play(root, instant){
+    var rows = root.querySelectorAll('.tsdb-row');
+    rows.forEach(function(row, i){
+      var val = row.querySelector('.tsdb-val');
+      var data = ROWS[i];
+      if (instant){
+        row.classList.add('on'); if (data.kind === 'final') row.classList.add('pulse');
+        val.textContent = (data.sign ? data.sign + ' ' : '') + euro(data.val).replace(' €', ' €');
+        return;
+      }
+      setTimeout(function(){
+        row.classList.add('on');
+        countUp(val, data.val, data.sign, BAR_MS);
+        if (data.kind === 'final') setTimeout(function(){ row.classList.add('pulse'); }, BAR_MS);
+      }, 150 + i * STEP_MS);
+    });
+    setTimeout(function(){
+      root.querySelectorAll('.tsdb-guide').forEach(function(g){ g.classList.add('on'); });
+      var take = root.querySelector('.tsdb-take'); if (take) take.classList.add('on');
+      var rep = root.querySelector('.tsdb-replay'); if (rep) rep.classList.add('on');
+    }, instant ? 0 : 150 + rows.length * STEP_MS + 250);
+  }
+
+  function reset(root){
+    root.querySelectorAll('.tsdb-row').forEach(function(row, i){
+      row.classList.remove('on', 'pulse');
+      row.querySelector('.tsdb-val').textContent = (ROWS[i].sign ? ROWS[i].sign + ' ' : '') + '0,00 €';
+    });
+    root.querySelectorAll('.tsdb-guide').forEach(function(g){ g.classList.remove('on'); });
+    var take = root.querySelector('.tsdb-take'); if (take) take.classList.remove('on');
+  }
+
+  function init(root){
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var played = false;
+    if (!('IntersectionObserver' in window)){ play(root, true); return; }
+    var io = new IntersectionObserver(function(en){
+      if (en[0].isIntersecting && !played){ played = true; io.disconnect(); play(root, reduced); }
+    }, { threshold: 0.35 });
+    io.observe(root.querySelector('.tsdb-chart'));
+    var rep = root.querySelector('.tsdb-replay');
+    if (rep) rep.addEventListener('click', function(){
+      if (reduced) return;
+      reset(root);
+      setTimeout(function(){ play(root, false); }, 60);
+    });
+  }
+
+  function findAnchor(){
+    var a = document.getElementById(ANCHOR_ID);
+    if (a) return a;
+    var cands = document.querySelectorAll('.notion-text, p');
+    for (var i=0;i<cands.length;i++){ if (cands[i].textContent && cands[i].textContent.indexOf(ANCHOR_PHRASE)!==-1) return cands[i]; }
+    return null;
+  }
+  function mount(){
+    if (!PATH.test(location.pathname)){
+      var stale = document.getElementById(ROOT_ID); if (stale && stale.parentNode) stale.parentNode.removeChild(stale);
+      return;
+    }
+    if (document.getElementById(ROOT_ID)) return;
+    var anchor = findAnchor();
+    if (!anchor) return;
+    injectStyle();
+    var root = buildMarkup();
+    anchor.parentNode.insertBefore(root, anchor.nextSibling);
+    init(root);
+  }
+  function boot(){
+    var tries = 0;
+    var iv = setInterval(function(){ tries++; mount(); if (tries > 40) clearInterval(iv); }, 300);
+    new MutationObserver(function(){ if (!document.getElementById(ROOT_ID)) mount(); })
+      .observe(document.documentElement, {childList:true, subtree:true});
+  }
+  if (document.readyState === 'complete') boot();
+  else window.addEventListener('load', boot);
+})();
