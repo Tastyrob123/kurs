@@ -1639,3 +1639,92 @@
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
+
+/* ============================================================
+   inventurliste — #tsdb0 Scroll-Animation "DB 0 : Inventurliste"
+   Ersetzt den Screenshot (Heading + Ansichts-Tabs) durch natives,
+   scroll-getriggertes Element: Reveal + wandernde Glas-Pille durch
+   die 3 Ansichten (Tabelle / Nach Lieferpartner / Nach Preis).
+   Anker: Callout "Empfehlung zur Anzeige" (linke Spalte daneben).
+   ============================================================ */
+(function(){
+  if(window.__tsdb0) return; window.__tsdb0=true;
+  var CSS=`
+  #tsdb0{width:100%;margin:6px 0 10px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
+  #tsdb0 .hd{font-size:1.65rem;font-weight:700;letter-spacing:-.01em;line-height:1.2;margin:0 0 18px;opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+  #tsdb0 .hd .g{color:#9e947f}
+  #tsdb0.in .hd{opacity:1;transform:none}
+  #tsdb0 .row{position:relative;display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+  #tsdb0 .ind{position:absolute;top:0;left:0;height:100%;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);box-shadow:0 0 22px rgba(199,180,137,.10);opacity:0;transition:left .55s cubic-bezier(.22,1,.36,1),width .55s cubic-bezier(.22,1,.36,1),opacity .4s ease;pointer-events:none}
+  #tsdb0.in .ind{opacity:1}
+  #tsdb0 .tb{position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;font-size:.92rem;font-weight:600;color:rgba(255,255,255,.5);white-space:nowrap;opacity:0;transform:translateY(10px) scale(.96);transition:color .45s ease,opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
+  #tsdb0 .tb svg{width:15px;height:15px;flex:none;opacity:.75}
+  #tsdb0.in .tb{opacity:1;transform:none}
+  #tsdb0.in .tb:nth-child(3){transition-delay:.10s}
+  #tsdb0.in .tb:nth-child(4){transition-delay:.20s}
+  #tsdb0 .tb.on{color:#fff}
+  #tsdb0 .tb.on svg{opacity:1}
+  @media(max-width:720px){#tsdb0 .hd{font-size:1.35rem}#tsdb0 .tb{padding:8px 12px;font-size:.85rem}}
+  `;
+  var ICON='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1.5" y="2.5" width="13" height="11" rx="1.5"/><path d="M1.5 6.5h13M6.5 6.5v7"/></svg>';
+  var TABS=['Tabelle','Nach Lieferpartner','Nach Preis'];
+  function injectCSS(){ if(document.getElementById('tsdb0-css'))return; var s=document.createElement('style'); s.id='tsdb0-css'; s.textContent=CSS; document.head.appendChild(s); }
+  function build(){
+    var root=document.createElement('div'); root.id='tsdb0';
+    root.innerHTML='<div class="hd">DB 0 : <span class="g">Inventurliste</span></div>'+
+      '<div class="row"><span class="ind"></span>'+
+      TABS.map(function(t){ return '<span class="tb">'+ICON+t+'</span>'; }).join('')+'</div>';
+    return root;
+  }
+  function setup(root){
+    var tabs=[].slice.call(root.querySelectorAll('.tb')), ind=root.querySelector('.ind'), idx=0, timer=null;
+    function move(){
+      var t=tabs[idx];
+      ind.style.left=t.offsetLeft+'px'; ind.style.width=t.offsetWidth+'px';
+      tabs.forEach(function(x,i){ x.classList.toggle('on',i===idx); });
+    }
+    var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var io=new IntersectionObserver(function(e){
+      if(e[0].isIntersecting){
+        root.classList.add('in'); move();
+        if(!reduce&&!timer) timer=setInterval(function(){ idx=(idx+1)%tabs.length; move(); },2400);
+      } else if(timer){ clearInterval(timer); timer=null; }
+    },{threshold:.35});
+    io.observe(root);
+    window.addEventListener('resize',move);
+  }
+  function findSpot(){
+    var cs=document.querySelectorAll('.notion-callout,[class*="callout"]');
+    var a=null;
+    for(var i=0;i<cs.length;i++){ if(/Empfehlung zur Anzeige/.test(cs[i].textContent||'')){ a=cs[i]; break; } }
+    if(!a){
+      var n=document.querySelectorAll('.notion-text,.notion-semantic-string');
+      for(var j=0;j<n.length;j++){ if(/Empfehlung zur Anzeige/.test(n[j].textContent||'')){ a=n[j]; break; } }
+    }
+    if(!a) return null;
+    var col=a.closest('.notion-column');
+    if(col){
+      var list=col.closest('.notion-column-list');
+      var first=list?list.querySelector('.notion-column'):null;
+      if(first&&first!==col) return {mode:'append',el:first};
+    }
+    var blk=a.closest('[id^="block-"]')||a;
+    return {mode:'before',el:blk};
+  }
+  function mount(){
+    if(!/\/inventurliste\/?$/.test(location.pathname)){ var e=document.getElementById('tsdb0'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    if(document.getElementById('tsdb0')) return;
+    var spot=findSpot(); if(!spot) return;
+    injectCSS();
+    var root=build();
+    if(spot.mode==='append') spot.el.appendChild(root);
+    else spot.el.parentNode.insertBefore(root,spot.el);
+    setup(root);
+  }
+  function boot(){
+    var tries=0;
+    var iv=setInterval(function(){ tries++; mount(); if(tries>40) clearInterval(iv); },300);
+    new MutationObserver(function(){ if(!document.getElementById('tsdb0')) mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
