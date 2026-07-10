@@ -1052,7 +1052,8 @@
   var ANCHOR="verwendeten Zutaten und Produkte";   // Text der RECHTEN Spalte -> MacBook links daneben
   var CSS=[
     '#tsmb-root{--tsmb-gold:#9e947f;--tsmb-ease:cubic-bezier(.16,1,.3,1);margin:0 0 8px;display:flex;flex-direction:column;align-items:center;gap:14px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;}',
-    '#tsmb-root .tsmb-eyebrow{width:100%;text-align:center;font-size:.82rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--tsmb-gold);}',
+    '#tsmb-root .tsmb-caption{width:100%;text-align:center;font-size:15px;font-weight:600;letter-spacing:.005em;color:#fff;margin-top:4px;}',
+    '#tsmb-root .tsmb-caption .tsmb-accent{color:var(--tsmb-gold);}',
     '#tsmb-root .tsmb-tile{position:relative;width:100%;max-width:520px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 10px 30px rgba(0,0,0,.45));transition:transform .5s var(--tsmb-ease),filter .5s var(--tsmb-ease);}',
     '#tsmb-root .tsmb-tile:hover{transform:translateY(-4px) scale(1.02);animation:tsmbHeartbeat 2.6s var(--tsmb-ease) infinite;}',
     '@keyframes tsmbHeartbeat{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(158,148,127,.14));}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(158,148,127,.30));}}',
@@ -1100,7 +1101,7 @@
   function findAnchor(){ var n=document.querySelectorAll('.notion-text'); for(var i=0;i<n.length;i++){ var t=n[i].textContent; if(t && t.indexOf(ANCHOR)>-1) return n[i]; } return null; }
   function buildTile(){
     var root=document.createElement('div'); root.id='tsmb-root';
-    root.innerHTML='<div class="tsmb-eyebrow">Gerichte-Datenbank · Live-Beispiel</div><div class="tsmb-tile" role="button" tabindex="0" aria-label="MacBook vergrößern"><div class="tsmb-cover"><img src="'+SHOT+'" alt=""></div><img class="tsmb-frame" src="'+FRAME+'" alt="MacBook"></div><div class="tsmb-hint">Klicke zum Vergrößern</div>';
+    root.innerHTML='<div class="tsmb-tile" role="button" tabindex="0" aria-label="MacBook vergrößern"><div class="tsmb-cover"><img src="'+SHOT+'" alt=""></div><img class="tsmb-frame" src="'+FRAME+'" alt="MacBook"></div><div class="tsmb-caption">Gerichte Datenbank<span class="tsmb-accent"> – Live Beispiel</span></div><div class="tsmb-hint">Klicke zum Vergrößern</div>';
     var tile=root.querySelector('.tsmb-tile');
     tile.addEventListener('click',openLb);
     tile.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(); } });
