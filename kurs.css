@@ -693,3 +693,10 @@ details > summary {
   .page__inventurliste .ts-hero__text{ padding:0 16px 20px; }
   .page__inventurliste .ts-hero__title{ font-size:clamp(2rem,12vw,3rem); }
 }
+
+/* inventurliste — t1/t2 als mittiger Block (volle Zeilen, nicht per Zeile zentriert) */
+.page__inventurliste #block-399b9546553480c0ac35e72c9d8c4055,
+.page__inventurliste #block-38eb9546553480d3ac7dda0fb8e1ab61{ max-width:900px; margin-left:auto; margin-right:auto; }
+/* inventurliste — Untertitel "Die Inventurliste traegt die Nummer Null" mittig + gedaempft */
+.page__inventurliste #block-399b9546553480d993d5ef22dd9598a6,
+.page__inventurliste #block-399b9546553480d993d5ef22dd9598a6 .notion-text__content{ text-align:center; color:rgba(255,255,255,.5); font-size:1.02rem; }

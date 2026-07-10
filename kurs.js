@@ -1366,3 +1366,74 @@
   document.addEventListener("DOMContentLoaded", mount);
   new MutationObserver(mount).observe(document.documentElement,{childList:true,subtree:true});
 })();
+
+/* ============================================================
+   inventurliste — Flow-Animation "Preis richtig / Preis falsch"
+   Node 1 beige; gruene Hauptlinie ab Inventar; roter Abzweig nach unten.
+   Stil nach tasty-studios.vercel.app. Mount zwischen den beiden Textabsaetzen.
+   ============================================================ */
+(function(){
+  if(window.__tsflow) return; window.__tsflow=true;
+  var CSS=`
+  #tsflow{width:min(1000px,95vw);margin:46px auto 34px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
+  #tsflow .stage{position:relative;width:100%;aspect-ratio:1000/320;}
+  #tsflow svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+  #tsflow .ln{fill:none;stroke-width:2;stroke-linecap:round;vector-effect:non-scaling-stroke}
+  #tsflow .ln-beige{stroke:#cbb994}
+  #tsflow .ln-green{stroke:#46af73}
+  #tsflow .ln-red{stroke:#e0574f}
+  #tsflow .nd{position:absolute;transform:translate(-50%,-50%) scale(.5);opacity:0;transition:opacity .5s ease,transform .55s cubic-bezier(.34,1.56,.64,1)}
+  #tsflow.in .nd{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  #tsflow .dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;background:#0f1218;border:1.5px solid rgba(255,255,255,.25);color:rgba(255,255,255,.85);margin:0 auto}
+  #tsflow .nd.beige .dot{background:#e7dcc4;border-color:#cbb994;color:#1a1a1a}
+  #tsflow .nd.green .dot{border-color:#46af73;box-shadow:0 0 18px rgba(70,175,115,.25);color:#bfe8cf}
+  #tsflow .nd.red .dot{border-color:#e0574f;box-shadow:0 0 18px rgba(224,87,79,.25);color:#f0c3c0}
+  #tsflow .lbl{position:absolute;top:46px;left:50%;transform:translateX(-50%);width:150px;text-align:center;font-size:11px;font-weight:500;letter-spacing:1.4px;text-transform:uppercase;line-height:1.35;color:rgba(255,255,255,.55)}
+  #tsflow .nd.red .lbl{color:rgba(224,87,79,.6)}
+  #tsflow .plabel{position:absolute;transform:translate(-50%,-50%);font-size:12px;font-weight:600;letter-spacing:.04em;padding:4px 12px;border-radius:999px;white-space:nowrap;opacity:0;transition:opacity .6s ease}
+  #tsflow.in .plabel{opacity:1;transition-delay:1.1s}
+  #tsflow .plabel.green{color:#7fd3a3;background:rgba(70,175,115,.12);border:1px solid rgba(70,175,115,.35)}
+  #tsflow .plabel.red{color:#f0968f;background:rgba(224,87,79,.1);border:1px solid rgba(224,87,79,.32)}
+  @media(max-width:720px){#tsflow{overflow-x:auto}#tsflow .stage{min-width:720px}}
+  `;
+  function injectCSS(){ if(document.getElementById('tsflow-css'))return; var s=document.createElement('style'); s.id='tsflow-css'; s.textContent=CSS; document.head.appendChild(s); }
+  var TOP=[['1','Liefer- &<br>Ansprechpartner',9,'beige'],['2','Inventar',25.4,'green'],['3','Zutaten',41.8,'green'],['4','Rezepte',58.2,'green'],['5','Gericht',74.6,'green'],['6','Menükalkulation',91,'green']];
+  var RED=[['3','Zutaten',41.8],['4','Rezepte',58.2],['5','Gericht',74.6],['6','Menükalkulation',91]];
+  function build(){
+    var root=document.createElement('div'); root.id='tsflow';
+    var TY=24,RY=70,nodesHTML='';
+    TOP.forEach(function(t,i){ nodesHTML+='<div class="nd '+t[3]+'" data-i="'+i+'" style="left:'+t[2]+'%;top:'+TY+'%"><span class="dot">'+t[0]+'</span><span class="lbl">'+t[1]+'</span></div>'; });
+    RED.forEach(function(t,i){ nodesHTML+='<div class="nd red" data-i="'+(6+i)+'" style="left:'+t[2]+'%;top:'+RY+'%"><span class="dot">'+t[0]+'</span><span class="lbl">'+t[1]+'</span></div>'; });
+    root.innerHTML='<div class="stage"><svg viewBox="0 0 1000 320" preserveAspectRatio="none"><path class="ln ln-beige" d="M 110,77 H 234"/><path class="ln ln-green" d="M 274,77 H 890"/><path class="ln ln-red" d="M 254,95 V 205 Q 254,224 274,224 H 890"/></svg>'+nodesHTML+'<div class="plabel green" style="left:33%;top:11%">Preis richtig</div><div class="plabel red" style="left:26%;top:57%">Preis falsch</div></div>';
+    return root;
+  }
+  function setup(root){
+    var lines=root.querySelectorAll('.ln');
+    lines.forEach(function(p,i){ var L=p.getTotalLength(); p.style.strokeDasharray=L; p.style.strokeDashoffset=L; p.style.transition='stroke-dashoffset 1.1s ease '+(i===0?0.1:i===1?0.35:0.75)+'s'; });
+    root.querySelectorAll('.nd').forEach(function(n){ n.style.transitionDelay=(0.15+(+n.getAttribute('data-i'))*0.12)+'s'; });
+    var io=new IntersectionObserver(function(e){ if(e[0].isIntersecting){ root.classList.add('in'); lines.forEach(function(p){p.style.strokeDashoffset=0;}); io.disconnect(); } },{threshold:.3});
+    io.observe(root);
+  }
+  function findAnchor(){
+    var a=document.getElementById('block-399b9546553480c0ac35e72c9d8c4055');
+    if(a) return a;
+    var n=document.querySelectorAll('.notion-text');
+    for(var i=0;i<n.length;i++){ if(n[i].textContent && n[i].textContent.indexOf('In dieser Datenbank hinterlegst du alle Produkte')>-1) return n[i].closest('[id^="block-"]')||n[i]; }
+    return null;
+  }
+  function mount(){
+    if(!/\/inventurliste\/?$/.test(location.pathname)){ var e=document.getElementById('tsflow'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    if(document.getElementById('tsflow')) return;
+    var a=findAnchor(); if(!a) return;
+    injectCSS();
+    var root=build();
+    a.parentNode.insertBefore(root, a.nextSibling);
+    setup(root);
+  }
+  function boot(){
+    var tries=0;
+    var iv=setInterval(function(){ tries++; mount(); if(tries>40) clearInterval(iv); },300);
+    new MutationObserver(function(){ if(!document.getElementById('tsflow')) mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
