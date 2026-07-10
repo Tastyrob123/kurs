@@ -1137,8 +1137,10 @@
 (function(){
   if (window.__tsdb) return; window.__tsdb = true;
   var PATH = /\/mehrwert-zielbild\/?$/;
-  var ANCHOR_ID = 'block-398b954655348072900bcd6259cccef1';   // Block mit den drei DB-Formeln
-  var ANCHOR_PHRASE = 'Deckungsbeitrag (DB) I';
+  /* Anker: Satz NACH der Animation ("Und genau diese drei Stufen…") — Widget wird DAVOR eingefügt.
+     Phrase zuerst (Block-IDs haben sich am 10.07. als instabil erwiesen: Formel-Block verschwand samt ID). */
+  var ANCHOR_ID = 'block-38eb9546553480a5a7c8c1b512fd2f2b';
+  var ANCHOR_PHRASE = 'Und genau diese drei Stufen rechnet';
   var ROOT_ID = 'tsdb';
   var STEP_MS = 620, BAR_MS = 850;
 
@@ -1303,11 +1305,9 @@
   }
 
   function findAnchor(){
-    var a = document.getElementById(ANCHOR_ID);
-    if (a) return a;
     var cands = document.querySelectorAll('.notion-text, p');
     for (var i=0;i<cands.length;i++){ if (cands[i].textContent && cands[i].textContent.indexOf(ANCHOR_PHRASE)!==-1) return cands[i]; }
-    return null;
+    return document.getElementById(ANCHOR_ID);
   }
   function mount(){
     if (!PATH.test(location.pathname)){
@@ -1319,7 +1319,7 @@
     if (!anchor) return;
     injectStyle();
     var root = buildMarkup();
-    anchor.parentNode.insertBefore(root, anchor.nextSibling);
+    anchor.parentNode.insertBefore(root, anchor);
     init(root);
   }
   function boot(){
