@@ -973,6 +973,7 @@
    Extern gehostet, damit super.so-Code klein bleibt. Läuft nur auf /mehrwert-zielbild. */
 (function(){
   var POSTER="https://files.catbox.moe/2p4632.png";
+  (function(){ var pre=new Image(); pre.src=POSTER; })(); // Poster vorladen -> kein Leer-Blitz
   var CSS=[
     '.page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading) > .notion-column:not(:has(h1.notion-heading)){display:flex!important;}',
     '@media (min-width:768px){',
@@ -1018,7 +1019,7 @@
     var src=raw.currentSrc||raw.getAttribute('src')||(raw.querySelector('source')&&raw.querySelector('source').getAttribute('src'));
     if(!src) return;
     var poster=document.createElement('div'); poster.className='tsmac';
-    poster.innerHTML='<img src="'+POSTER+'" alt="Lektion 3.2 – Mehrwert & Zielbild"><div class="tsmac__play"><span></span></div>';
+    poster.innerHTML='<img src="'+POSTER+'" alt="Lektion 3.2 – Mehrwert & Zielbild" fetchpriority="high" decoding="async"><div class="tsmac__play"><span></span></div>';
     nv.appendChild(poster);
     poster.addEventListener('click',function(){
       var lb=ensureLb(); var stage=lb.querySelector('.tsmac-stage');
