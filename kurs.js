@@ -1558,76 +1558,56 @@
 })();
 
 /* ============================================================
-   inventurliste — Verknuepfungs-Animation "Was uns jetzt noch fehlt"
-   DB 0 : Inventurliste (Hub links) -> DB Lieferpartner / DB Zutaten /
-   DB Packaging (rechts). Ersetzt die 3 Text-Bullets. Gleiche rAF-Uhr
-   wie #tsflow: Linien zeichnen, Kugel poppt bei Ankunft der Spitze,
-   danach wandern Puls-Punkte ueber die Verbindungen.
+   inventurliste — Kacheln "Was uns jetzt noch fehlt"
+   Drei reduzierte Luxus-Kacheln (DB Lieferpartner / Zutaten /
+   Packaging) ersetzen die Text-Bullets. Dunkles Glas, feine
+   Linien, Champagner-Gold, gestaffelter Reveal beim Scrollen.
    ============================================================ */
 (function(){
   if(window.__tslink) return; window.__tslink=true;
   var CSS=`
-  #tslink{width:min(1000px,95vw);margin:38px auto 30px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
-  #tslink .stage{position:relative;width:100%;aspect-ratio:1000/300;}
-  #tslink svg.wire{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-  #tslink .ln{fill:none;stroke:#cbb994;stroke-width:2;stroke-linecap:round;vector-effect:non-scaling-stroke}
-  #tslink .pulse{fill:#e7dcc4;opacity:0}
-  #tslink .nd{position:absolute;transform:translate(-50%,-50%) scale(.5);opacity:0;transition:opacity .3s ease,transform .4s cubic-bezier(.34,1.56,.64,1)}
-  #tslink .nd.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
-  #tslink .dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#0f1218;border:1.5px solid #cbb994;box-shadow:0 0 18px rgba(203,185,148,.22);margin:0 auto}
-  #tslink .nd.hub .dot{width:46px;height:46px;background:#e7dcc4;border-color:#cbb994;color:#1a1a1a;font-size:15px;font-weight:600}
-  #tslink .nd.hub .lbl{position:absolute;top:56px;left:50%;transform:translateX(-50%);width:190px;text-align:center;font-size:11px;font-weight:500;letter-spacing:1.4px;text-transform:uppercase;line-height:1.35;color:rgba(255,255,255,.55)}
-  #tslink .nd.t .lbl{position:absolute;left:48px;top:50%;transform:translateY(-50%);white-space:nowrap;font-size:11px;font-weight:500;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,.55)}
-  @media(max-width:720px){#tslink{overflow-x:auto}#tslink .stage{min-width:720px}}
+  #tslink{width:min(1000px,95vw);margin:36px auto 30px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
+  #tslink *{box-sizing:border-box}
+  #tslink .tsl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  #tslink .tsl-card{position:relative;border-radius:16px;padding:30px 26px 22px;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0));border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85);opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .75s cubic-bezier(.22,1,.36,1),border-color .4s ease,box-shadow .5s ease}
+  #tslink .tsl-card.on{opacity:1;transform:translateY(0)}
+  #tslink .tsl-card:hover{transform:translateY(-4px);border-color:rgba(158,148,127,.45);box-shadow:0 12px 36px -16px rgba(158,148,127,.28),0 26px 54px -36px rgba(0,0,0,.9)}
+  #tslink .tsl-num{position:absolute;top:26px;right:26px;font-size:.7rem;font-weight:500;letter-spacing:.2em;color:rgba(199,180,137,.55)}
+  #tslink .tsl-ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(199,180,137,.08);border:1px solid rgba(199,180,137,.28);margin-bottom:20px}
+  #tslink .tsl-k{display:block;font-size:.58rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin-bottom:8px}
+  #tslink .tsl-h{font-size:1.28rem;font-weight:600;letter-spacing:-.012em;line-height:1.15;color:#fff;margin:0 0 12px}
+  #tslink .tsl-t{color:rgba(255,255,255,.58);font-size:.88rem;line-height:1.62;margin:0}
+  #tslink .tsl-foot{display:flex;align-items:center;gap:8px;margin-top:20px;padding-top:15px;border-top:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.42);font-size:.76rem;letter-spacing:.03em}
+  #tslink .tsl-foot svg{flex:none;opacity:.7}
+  @media(max-width:860px){#tslink .tsl-grid{grid-template-columns:1fr}}
+  @media(prefers-reduced-motion:reduce){#tslink .tsl-card{opacity:1;transform:none;transition:none}}
   `;
-  var DBICON='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#e7dcc4" stroke-width="1.6" stroke-linecap="round"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg>';
-  var PATHS=[
-    'M 178,150 C 400,95 550,52 778,52',
-    'M 180,150 H 778',
-    'M 178,150 C 400,205 550,248 778,248'
+  var DB='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#d8c9ab" stroke-width="1.5" stroke-linecap="round"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg>';
+  var LINKICON='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>';
+  var CARDS=[
+    ['01','Lieferpartner','Deine Lieferanten & Ansprechpartner — die Quelle jeder Einkaufszeile.'],
+    ['02','Zutaten','Zieht ihre Preise später direkt aus deiner Inventurliste.'],
+    ['03','Packaging','Auch Verpackung wird Teil der Kalkulation — bis auf den Cent.']
   ];
-  var TARGETS=[['DB Lieferpartner',17.33],['DB Zutaten',50],['DB Packaging',82.67]];
   function injectCSS(){ if(document.getElementById('tslink-css'))return; var s=document.createElement('style'); s.id='tslink-css'; s.textContent=CSS; document.head.appendChild(s); }
   function build(){
     var root=document.createElement('div'); root.id='tslink';
-    var svg='<svg class="wire" viewBox="0 0 1000 300" preserveAspectRatio="none">'+PATHS.map(function(d){return '<path class="ln" d="'+d+'"/>';}).join('')+'</svg>';
-    var hub='<div class="nd hub"><span class="dot">0</span><span class="lbl">DB 0 : Inventurliste</span></div>';
-    var ts=TARGETS.map(function(t,i){ return '<div class="nd t" data-k="'+i+'" style="left:80%;top:'+t[1]+'%"><span class="dot">'+DBICON+'</span><span class="lbl">'+t[0]+'</span></div>'; }).join('');
-    root.innerHTML='<div class="stage">'+svg+hub+ts+'</div>';
-    var h=root.querySelector('.nd.hub'); h.style.left='15%'; h.style.top='50%';
+    root.innerHTML='<div class="tsl-grid">'+CARDS.map(function(c){
+      return '<div class="tsl-card"><span class="tsl-num">'+c[0]+'</span><div class="tsl-ic">'+DB+'</div><span class="tsl-k">Datenbank</span><h3 class="tsl-h">DB '+c[1]+'</h3><p class="tsl-t">'+c[2]+'</p><div class="tsl-foot">'+LINKICON+'Verknüpfung folgt</div></div>';
+    }).join('')+'</div>';
     return root;
   }
   function setup(root){
-    var SPEED=430, LEAD=50, HUB=0.15, STARTS=[0.4,0.55,0.7];
-    var svg=root.querySelector('svg.wire');
-    var paths=[...root.querySelectorAll('.ln')];
-    var hub=root.querySelector('.nd.hub');
-    var targets=[...root.querySelectorAll('.nd.t')];
-    var lines=paths.map(function(p,i){ var L=p.getTotalLength(); p.style.strokeDasharray=L; p.style.strokeDashoffset=L; return {p:p,L:L,start:STARTS[i],node:targets[i],pulsed:false}; });
-    function addPulse(i){
-      var c=document.createElementNS('http://www.w3.org/2000/svg','circle');
-      c.setAttribute('class','pulse'); c.setAttribute('r','3.2');
-      var m=document.createElementNS('http://www.w3.org/2000/svg','animateMotion');
-      m.setAttribute('dur','2.6s'); m.setAttribute('repeatCount','indefinite'); m.setAttribute('path',PATHS[i].replace('M ','M').trim());
-      var o=document.createElementNS('http://www.w3.org/2000/svg','animate');
-      o.setAttribute('attributeName','opacity'); o.setAttribute('values','0;.9;.9;0'); o.setAttribute('keyTimes','0;.08;.85;1'); o.setAttribute('dur','2.6s'); o.setAttribute('repeatCount','indefinite');
-      c.appendChild(m); c.appendChild(o); svg.appendChild(c);
-    }
-    var t0=null;
-    function frame(now){
-      if(t0===null) t0=now;
-      var t=(now-t0)/1000, done=true;
-      if(t>=HUB) hub.classList.add('on'); else done=false;
-      lines.forEach(function(s,i){
-        var drawn=Math.max(0,Math.min(s.L,(t-s.start)*SPEED));
-        s.p.style.strokeDashoffset=s.L-drawn;
-        if(drawn>=s.L-LEAD) s.node.classList.add('on');
-        if(drawn>=s.L){ if(!s.pulsed){ s.pulsed=true; addPulse(i); } } else done=false;
+    var cards=[...root.querySelectorAll('.tsl-card')];
+    var io=new IntersectionObserver(function(e){
+      if(!e[0].isIntersecting) return;
+      cards.forEach(function(c,i){
+        c.style.transitionDelay=(i*0.13)+'s';
+        c.classList.add('on');
+        setTimeout(function(){ c.style.transitionDelay=''; }, i*130+900);
       });
-      if(!done) requestAnimationFrame(frame);
-    }
-    root.__tslFrame=frame; // Test-Hook
-    var io=new IntersectionObserver(function(e){ if(e[0].isIntersecting){ requestAnimationFrame(frame); io.disconnect(); } },{threshold:.35});
+      io.disconnect();
+    },{threshold:.3});
     io.observe(root);
   }
   function findList(){
