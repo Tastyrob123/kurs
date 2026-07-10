@@ -1034,3 +1034,83 @@
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
+
+
+/* ============================================================
+   MacBook-Scroll-Kachel "Thai Peanut Tofu Bowl" (mehrwert-zielbild)
+   Klick auf MacBook -> großer PC -> Screen scrollt die ganze
+   Gericht-Detailseite (langer Screenshot). Läuft nur auf
+   /mehrwert-zielbild. Extern gehostet (catbox), Bilder:
+   Frame  = oj1wa9.png   ·   Screenshot = 4s49ab.png
+   ============================================================ */
+(function(){
+  var FRAME="https://files.catbox.moe/oj1wa9.png";
+  var SHOT="https://files.catbox.moe/4s49ab.png";
+  var ANCHOR="Eigenschaft für Eigenschaft";
+  var CSS=[
+    '#tsmb-root{--tsmb-gold:#9e947f;--tsmb-ease:cubic-bezier(.16,1,.3,1);margin:26px 0;display:flex;flex-direction:column;align-items:flex-start;gap:14px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;}',
+    '#tsmb-root .tsmb-eyebrow{font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--tsmb-gold);}',
+    '#tsmb-root .tsmb-tile{position:relative;width:100%;max-width:520px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 10px 30px rgba(0,0,0,.45));transition:transform .5s var(--tsmb-ease),filter .5s var(--tsmb-ease);}',
+    '#tsmb-root .tsmb-tile:hover{transform:translateY(-4px) scale(1.02);animation:tsmbHeartbeat 2.6s var(--tsmb-ease) infinite;}',
+    '@keyframes tsmbHeartbeat{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(158,148,127,.14));}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(158,148,127,.30));}}',
+    '#tsmb-root .tsmb-tile:active{transform:scale(.99);transition-duration:.12s;}',
+    '#tsmb-root .tsmb-frame{width:100%;height:auto;display:block;position:relative;z-index:1;pointer-events:none;user-select:none;}',
+    '#tsmb-root .tsmb-cover{position:absolute;top:3.65%;left:12.22%;width:73.06%;height:83.85%;overflow:hidden;z-index:0;border-radius:3px;background:#191919;}',
+    '#tsmb-root .tsmb-cover img{width:100%;display:block;}',
+    '#tsmb-root .tsmb-hint{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.32);align-self:center;animation:tsmbHint 2.5s ease-in-out infinite;}',
+    '@keyframes tsmbHint{0%,100%{opacity:.4}50%{opacity:.8}}',
+    '#tsmb-lb{position:fixed;inset:0;z-index:99999;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(5,6,11,.92);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);padding:32px;opacity:0;transition:opacity .24s cubic-bezier(.16,1,.3,1);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;}',
+    '#tsmb-lb.open{display:flex;opacity:1;}',
+    '#tsmb-lb .tsmb-inner{position:relative;width:100%;max-width:min(960px,calc(100vw - 64px));transform:scale(.92) translateY(24px);transition:transform .5s cubic-bezier(.16,1,.3,1);}',
+    '#tsmb-lb.open .tsmb-inner{transform:scale(1) translateY(0);}',
+    '#tsmb-lb.full{padding:0;}',
+    '#tsmb-lb.full .tsmb-inner{max-width:100vw;}',
+    '#tsmb-lb .tsmb-mockup{position:relative;width:100%;aspect-ratio:1366/768;filter:drop-shadow(0 30px 80px rgba(0,0,0,.6)) drop-shadow(0 10px 30px rgba(0,0,0,.5));}',
+    '#tsmb-lb .tsmb-frame{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;user-select:none;}',
+    '#tsmb-lb .tsmb-screen{position:absolute;top:3.65%;left:12.22%;width:73.06%;height:83.85%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;z-index:3;border-radius:3px;background:#191919;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.14) transparent;}',
+    '#tsmb-lb .tsmb-screen::-webkit-scrollbar{width:5px;}',
+    '#tsmb-lb .tsmb-screen::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:4px;}',
+    '#tsmb-lb .tsmb-screen img{width:100%;display:block;}',
+    '#tsmb-lb .tsmb-closehint{margin-top:22px;font-size:12px;letter-spacing:.1em;color:rgba(255,255,255,.32);text-align:center;}',
+    '#tsmb-lb.full .tsmb-closehint{display:none;}',
+    '#tsmb-lb .tsmb-btn{position:absolute;top:16px;z-index:10;width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.55);cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);transition:background .2s,color .2s;}',
+    '#tsmb-lb .tsmb-btn:hover{background:rgba(255,255,255,.16);color:#fff;}',
+    '#tsmb-lb .tsmb-expand{left:16px;}#tsmb-lb .tsmb-closex{right:16px;}',
+    '@media(prefers-reduced-motion:reduce){#tsmb-root *,#tsmb-lb *{animation:none!important;transition-duration:.01ms!important;}}'
+  ].join('');
+  function injectCSS(){ if(document.getElementById('tsmb-css'))return; var s=document.createElement('style'); s.id='tsmb-css'; s.textContent=CSS; document.head.appendChild(s); }
+  function shut(){ var lb=document.getElementById('tsmb-lb'); if(!lb)return; lb.classList.remove('open','full'); document.body.style.overflow=''; }
+  function ensureLb(){
+    var lb=document.getElementById('tsmb-lb'); if(lb) return lb;
+    lb=document.createElement('div'); lb.id='tsmb-lb';
+    lb.innerHTML='<button class="tsmb-btn tsmb-expand" title="Vollbild" aria-label="Vollbild"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="tsmb-btn tsmb-closex" title="Schließen" aria-label="Schließen"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 4.5l9 9M13.5 4.5l-9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><div class="tsmb-inner"><div class="tsmb-mockup"><img class="tsmb-frame" src="'+FRAME+'" alt="MacBook"><div class="tsmb-screen"><img src="'+SHOT+'" alt="Thai Peanut Tofu Bowl"></div></div></div><div class="tsmb-closehint">✕ Klicke daneben oder ESC zum Schließen</div>';
+    document.body.appendChild(lb);
+    var inner=lb.querySelector('.tsmb-inner');
+    lb.querySelector('.tsmb-closex').addEventListener('click',shut);
+    lb.querySelector('.tsmb-expand').addEventListener('click',function(e){ e.stopPropagation(); lb.classList.toggle('full'); });
+    inner.addEventListener('click',function(e){ e.stopPropagation(); });
+    lb.addEventListener('click',function(e){ if(e.target===lb) shut(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') shut(); });
+    return lb;
+  }
+  function openLb(){ var lb=ensureLb(); lb.classList.add('open'); lb.classList.remove('full'); document.body.style.overflow='hidden'; var sc=lb.querySelector('.tsmb-screen'); if(sc) sc.scrollTop=0; }
+  function findAnchor(){ var n=document.querySelectorAll('.notion-text'); for(var i=0;i<n.length;i++){ var t=n[i].textContent; if(t && t.indexOf(ANCHOR)>-1) return n[i]; } return null; }
+  function mount(){
+    if(!/\/mehrwert-zielbild\/?$/.test(location.pathname)){ var e=document.getElementById('tsmb-root'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    injectCSS();
+    if(document.getElementById('tsmb-root')) return;
+    var host=findAnchor(); if(!host) return;
+    var root=document.createElement('div'); root.id='tsmb-root';
+    root.innerHTML='<div class="tsmb-eyebrow">Gerichte-Datenbank · Live-Beispiel</div><div class="tsmb-tile" role="button" tabindex="0" aria-label="MacBook vergrößern"><div class="tsmb-cover"><img src="'+SHOT+'" alt=""></div><img class="tsmb-frame" src="'+FRAME+'" alt="MacBook"></div><div class="tsmb-hint">Klicke zum Vergrößern</div>';
+    host.parentNode.insertBefore(root, host.nextSibling);
+    var tile=root.querySelector('.tsmb-tile');
+    tile.addEventListener('click',openLb);
+    tile.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(); } });
+  }
+  function boot(){
+    var tries=0;
+    var iv=setInterval(function(){ tries++; mount(); if(document.getElementById('tsmb-root')||tries>60) clearInterval(iv); },300);
+    new MutationObserver(function(){ mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
