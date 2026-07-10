@@ -558,6 +558,11 @@ details > summary {
 /* mehrwert-zielbild — "Du siehst…"-Vierspalter: mehr Luft oben/unten */
 .page__mehrwert-zielbild #block-398b9546553480e4bf74c90f15b0f5f5{ margin-top:40px; margin-bottom:40px; }
 
+/* mehrwert-zielbild — mehr Luft vor "Und genau diese drei Stufen…" (Abstand zum DB-Diagramm/Button) */
+.page__mehrwert-zielbild #block-38eb9546553480a5a7c8c1b512fd2f2b{ margin-top:44px; }
+/* mehrwert-zielbild — mehr Luft nach "Das ist das Ziel…" (Abstand zu Learnings) */
+.page__mehrwert-zielbild #block-fa4e38c47a9a40b695e7055b5f86fb50{ margin-bottom:52px; }
+
 /* mehrwert-zielbild — Video-Spalte neben "Warum…" wieder anzeigen (Spalten eng, Text nah am Cover) */
 .page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading) > .notion-column:not(:has(h1.notion-heading)){ display:flex !important; }
 @media (min-width:768px){
