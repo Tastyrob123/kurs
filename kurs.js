@@ -972,7 +972,6 @@
 /* Tasty Studios · mehrwert-zielbild · MacBook-Cover + Klick-Lightbox
    Extern gehostet, damit super.so-Code klein bleibt. Läuft nur auf /mehrwert-zielbild. */
 (function(){
-  if(window.__tsMac) return;
   var POSTER="https://files.catbox.moe/yy7cte.png";
   var CSS=[
     '.page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading) > .notion-column:not(:has(h1.notion-heading)){display:flex!important;}',
@@ -980,6 +979,7 @@
     '.page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading){display:flex!important;}',
     '.page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading) > .notion-column{width:calc((100% - var(--column-spacing) * 1) * 0.5)!important;}',
     '}',
+    '.page__mehrwert-zielbild .notion-column-list:has(h1.notion-heading) .notion-video video{display:none!important;}',
     '.page__mehrwert-zielbild .tsmac{position:relative;cursor:pointer;display:block;width:100%;border-radius:14px;overflow:hidden;line-height:0;background:#05060b;}',
     '.page__mehrwert-zielbild .tsmac img{width:100%;height:auto;display:block;transition:transform .5s ease;}',
     '.page__mehrwert-zielbild .tsmac:hover img{transform:scale(1.02);}',
@@ -995,33 +995,41 @@
     '#tsmac-lb__close{position:absolute;top:22px;right:28px;width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}'
   ].join('');
   function injectCSS(){ if(document.getElementById('tsmac-css'))return; var s=document.createElement('style'); s.id='tsmac-css'; s.textContent=CSS; document.head.appendChild(s); }
-  function build(){
-    if(!/\/mehrwert-zielbild\/?$/.test(location.pathname)) return false;
-    var scope=document.querySelector('.page__mehrwert-zielbild'); if(!scope) return false;
-    var nv=scope.querySelector('.notion-column-list:has(h1.notion-heading) .notion-video');
-    var video=nv&&nv.querySelector('video'); if(!nv||!video) return false;
-    if(nv.querySelector('.tsmac')){ window.__tsMac=true; return true; }
-    window.__tsMac=true;
-    injectCSS();
-    var lb=document.createElement('div'); lb.id='tsmac-lb';
+  function shut(){ var lb=document.getElementById('tsmac-lb'); if(!lb)return; lb.classList.remove('open'); var v=lb.querySelector('video'); if(v){ try{v.pause();}catch(e){} } }
+  function ensureLb(){
+    var lb=document.getElementById('tsmac-lb'); if(lb) return lb;
+    lb=document.createElement('div'); lb.id='tsmac-lb';
     var stage=document.createElement('div'); stage.className='tsmac-stage';
     var close=document.createElement('button'); close.id='tsmac-lb__close'; close.textContent='✕';
     lb.appendChild(stage); lb.appendChild(close); document.body.appendChild(lb);
-    video.removeAttribute('style'); video.controls=true; video.setAttribute('playsinline','');
-    stage.appendChild(video);
-    var poster=document.createElement('div'); poster.className='tsmac';
-    poster.innerHTML='<img src="'+POSTER+'" alt="Lektion 3.2 – Mehrwert & Zielbild"><div class="tsmac__play"><span></span></div>';
-    nv.appendChild(poster);
-    function openLb(){ lb.classList.add('open'); try{ video.currentTime=0; video.play(); }catch(e){} }
-    function shut(){ lb.classList.remove('open'); try{ video.pause(); }catch(e){} }
-    poster.addEventListener('click',openLb);
     close.addEventListener('click',shut);
     lb.addEventListener('click',function(e){ if(e.target===lb) shut(); });
     document.addEventListener('keydown',function(e){ if(e.key==='Escape') shut(); });
-    return true;
+    return lb;
   }
-  if(build()) return;
-  var obs=new MutationObserver(function(){ if(build()) obs.disconnect(); });
-  obs.observe(document.documentElement,{childList:true,subtree:true});
-  setTimeout(function(){ try{obs.disconnect();}catch(e){} },10000);
+  function mount(){
+    if(!/\/mehrwert-zielbild\/?$/.test(location.pathname)) return;
+    injectCSS();
+    var scope=document.querySelector('.page__mehrwert-zielbild'); if(!scope) return;
+    var nv=scope.querySelector('.notion-column-list:has(h1.notion-heading) .notion-video'); if(!nv) return;
+    if(nv.querySelector('.tsmac')) return;
+    var raw=nv.querySelector('video'); if(!raw) return;
+    var src=raw.currentSrc||raw.getAttribute('src')||(raw.querySelector('source')&&raw.querySelector('source').getAttribute('src'));
+    if(!src) return;
+    var poster=document.createElement('div'); poster.className='tsmac';
+    poster.innerHTML='<img src="'+POSTER+'" alt="Lektion 3.2 – Mehrwert & Zielbild"><div class="tsmac__play"><span></span></div>';
+    nv.appendChild(poster);
+    poster.addEventListener('click',function(){
+      var lb=ensureLb(); var stage=lb.querySelector('.tsmac-stage');
+      stage.innerHTML='<video controls playsinline preload="auto" src="'+src+'"></video>';
+      lb.classList.add('open');
+      var v=stage.querySelector('video'); if(v){ try{ v.play(); }catch(e){} }
+    });
+  }
+  function boot(){
+    var tries=0;
+    var iv=setInterval(function(){ tries++; mount(); if(tries>60) clearInterval(iv); },300);
+    new MutationObserver(function(){ mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
