@@ -305,7 +305,7 @@
     var css = `
     #tsEcoRoot { margin: 8px 0 4px; }
     #tsEcoRoot * { box-sizing: border-box; }
-    #tsEcoRoot .net-section { position: relative; overflow: hidden; padding: 58px 8px 24px; background: transparent; }  /* ★1 Abstand oben/unten Überschrift */
+    #tsEcoRoot .net-section { position: relative; overflow: hidden; padding: 58px 8px 46px; background: transparent; }  /* ★1 Abstand oben/unten Überschrift */
     #tsEcoRoot .net-section::before { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:1400px; height:1000px; background: radial-gradient(ellipse at center, rgba(199,180,137,.05) 0%, transparent 60%); pointer-events:none; }
     #tsEcoRoot .net-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
     #tsEcoRoot .net-header { text-align: center; margin-bottom: 8px; }
@@ -342,7 +342,7 @@
     @keyframes tsLinePulse { 0%{opacity:1} 50%{opacity:.7} 100%{opacity:1} }
     #tsEcoRoot .eco-path.pulsing { animation:tsLinePulse 3.5s ease-in-out infinite; }
     #tsEcoRoot .eco-arrow { opacity:0; }
-    #tsEcoRoot .net-args { display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-top:-110px; }
+    #tsEcoRoot .net-args { display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-top:-65px; }
     #tsEcoRoot .net-arg { padding:0 40px; position:relative; }
     #tsEcoRoot .net-arg:not(:last-child)::after { content:''; position:absolute; right:0; top:0; bottom:0; width:1px; background:rgba(199,180,137,.1); }
     #tsEcoRoot .net-arg:first-child { padding-left:0; }
