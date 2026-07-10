@@ -1397,14 +1397,14 @@
   @media(max-width:720px){#tsflow{overflow-x:auto}#tsflow .stage{min-width:720px}}
   `;
   function injectCSS(){ if(document.getElementById('tsflow-css'))return; var s=document.createElement('style'); s.id='tsflow-css'; s.textContent=CSS; document.head.appendChild(s); }
-  var TOP=[['1','Liefer- &<br>Ansprechpartner',9,'beige'],['2','Inventar',25.4,'green'],['3','Zutaten',41.8,'green'],['4','Rezepte',58.2,'green'],['5','Gericht',74.6,'green'],['6','Menükalkulation',91,'green']];
-  var RED=[['3','Zutaten',41.8],['4','Rezepte',58.2],['5','Gericht',74.6],['6','Menükalkulation',91]];
+  var TOP=[['1','Liefer- &<br>Ansprechpartner',9,'beige'],['2','Inventar',25.4,'green'],['3','Zutaten',41.8,'green'],['4','Rezepte',58.2,'green'],['5','Gerichte',74.6,'green'],['6','Menükalkulation',91,'green']];
+  var RED=[['3','Zutaten',41.8],['4','Rezepte',58.2],['5','Gerichte',74.6],['6','Menükalkulation',91]];
   function build(){
     var root=document.createElement('div'); root.id='tsflow';
     var TY=24,RY=70,nodesHTML='';
     TOP.forEach(function(t,i){ nodesHTML+='<div class="nd '+t[3]+'" data-i="'+i+'" style="left:'+t[2]+'%;top:'+TY+'%"><span class="dot">'+t[0]+'</span><span class="lbl">'+t[1]+'</span></div>'; });
     RED.forEach(function(t,i){ nodesHTML+='<div class="nd red" data-i="'+(6+i)+'" style="left:'+t[2]+'%;top:'+RY+'%"><span class="dot">'+t[0]+'</span><span class="lbl">'+t[1]+'</span></div>'; });
-    root.innerHTML='<div class="stage"><svg viewBox="0 0 1000 320" preserveAspectRatio="none"><path class="ln ln-beige" d="M 110,77 H 234"/><path class="ln ln-green" d="M 274,77 H 890"/><path class="ln ln-red" d="M 254,95 V 205 Q 254,224 274,224 H 890"/></svg>'+nodesHTML+'<div class="plabel green" style="left:33%;top:11%">Preis richtig</div><div class="plabel red" style="left:26%;top:57%">Preis falsch</div></div>';
+    root.innerHTML='<div class="stage"><svg viewBox="0 0 1000 320" preserveAspectRatio="none"><path class="ln ln-beige" d="M 110,77 H 234"/><path class="ln ln-green" d="M 274,77 H 890"/><path class="ln ln-red" d="M 254,95 V 205 Q 254,224 274,224 H 890"/></svg>'+nodesHTML+'<div class="plabel green" style="left:89%;top:11%">Preis richtig</div><div class="plabel red" style="left:89%;top:58%">Preis falsch</div></div>';
     return root;
   }
   function setup(root){
