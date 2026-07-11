@@ -2668,7 +2668,7 @@
     #tsFlowRoot .tsflow-canvas{ position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; }
     #tsFlowRoot .tsflow-inner{ position:relative; z-index:1; max-width:1080px; margin:0 auto; }
     #tsFlowRoot .tsflow-header{ text-align:center; margin-bottom:46px; }
-    #tsFlowRoot .tsflow-title{ font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif; font-size:clamp(23px,3.1vw,36px); font-weight:600; letter-spacing:-.02em; color:#fff; line-height:1.14; margin:-18px 0 32px; }
+    #tsFlowRoot .tsflow-title{ font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif; font-size:clamp(23px,3.1vw,36px); font-weight:600; letter-spacing:-.02em; color:#fff; line-height:1.14; margin:-32px 0 46px; }
     /* Intro-Textblock der Seite darueber: zentriert + etwas nach unten in den Zwischenraum */
     .tsflow-intro-block{ margin-top:70px !important; }
     .tsflow-intro-block, .tsflow-intro-block .notion-text, .tsflow-intro-block p, .tsflow-intro-block .notion-semantic-string{ text-align:center !important; }
