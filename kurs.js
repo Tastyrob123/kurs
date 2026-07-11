@@ -2089,12 +2089,12 @@
       einheit:'Jahresrückvergütung (%)', einheit_typ:'prozent',
       /* 9 Tasty-Studios-Merch-Bilder (img/ansprechpartner, GitHub Pages) — Werte = Beispielwerte */
       objekt_varianten:[
-        { name:'Emaille-Becher',    wert:1,   img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/emaille-becher.jpg' },
+        { name:'Kochjacke',         wert:1,   img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/kochjacke.jpg' },
         { name:'Hoodie',            wert:1.5, img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/hoodie.jpg' },
         { name:'Kugelschreiber',    wert:2,   img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/kugelschreiber.jpg' },
         { name:'Notizblock',        wert:2.5, img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/notizblock.jpg' },
         { name:'Poloshirt',         wert:3,   img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/poloshirt.jpg' },
-        { name:'Schlüsselanhänger', wert:3.5, img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/schluesselanhaenger.jpg' },
+        { name:'Bomberjacke',       wert:3.5, img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/bomberjacke.jpg' },
         { name:'Schürze',           wert:4,   img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/schuerze.jpg' },
         { name:'Thermosflasche',    wert:5,   img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/thermosflasche.jpg' },
         { name:'Tote Bag',          wert:6,   img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/tote-bag.jpg' },
