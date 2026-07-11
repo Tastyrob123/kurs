@@ -1758,13 +1758,23 @@
   var KACHELN=[
     { kachel_id:'db0_inventurliste', kachel_name:'Inventurliste', ist_produkt_kachel:true,
       einheit:'Preis (€)', einheit_typ:'preis',
-      objekt_varianten:[ /* Demo-Werte, offene Liste — img-URL eintragen sobald vorhanden */
-        { name:'Glas Kapern',  wert:3.49,  img:null },
-        { name:'Flasche Wein', wert:8.90,  img:null },
-        { name:'Laib Käse',    wert:24.50, img:null },
-        { name:'Baguette',     wert:1.80,  img:null },
-        { name:'Sack Mehl',    wert:18.90, img:null },
-        { name:'Dose Tomaten', wert:4.20,  img:null }
+      /* 15 Tasty-Studios-Produktbilder (img/inventar, GitHub Pages) — Preise = Beispielwerte */
+      objekt_varianten:[
+        { name:'Olivenöl',          wert:9.80, img:'https://tastyrob123.github.io/kurs/img/inventar/olivenoel.jpg' },
+        { name:'Balsamico',         wert:7.90, img:'https://tastyrob123.github.io/kurs/img/inventar/balsamico.jpg' },
+        { name:'Meersalz',          wert:2.90, img:'https://tastyrob123.github.io/kurs/img/inventar/meersalz.jpg' },
+        { name:'Schwarzer Pfeffer', wert:4.80, img:'https://tastyrob123.github.io/kurs/img/inventar/schwarzer-pfeffer.jpg' },
+        { name:'Tomatenmark',       wert:1.90, img:'https://tastyrob123.github.io/kurs/img/inventar/tomatenmark.jpg' },
+        { name:'Dijon-Senf',        wert:3.80, img:'https://tastyrob123.github.io/kurs/img/inventar/dijon-senf.jpg' },
+        { name:'Honig',             wert:6.40, img:'https://tastyrob123.github.io/kurs/img/inventar/honig.jpg' },
+        { name:'Sojasauce',         wert:4.20, img:'https://tastyrob123.github.io/kurs/img/inventar/sojasauce.jpg' },
+        { name:'Chilisauce',        wert:4.50, img:'https://tastyrob123.github.io/kurs/img/inventar/chilisauce.jpg' },
+        { name:'Mayonnaise',        wert:5.60, img:'https://tastyrob123.github.io/kurs/img/inventar/mayonnaise.jpg' },
+        { name:'Cornichons',        wert:3.20, img:'https://tastyrob123.github.io/kurs/img/inventar/cornichons.jpg' },
+        { name:'Sardellen',         wert:5.90, img:'https://tastyrob123.github.io/kurs/img/inventar/sardellen.jpg' },
+        { name:'Oregano',           wert:2.40, img:'https://tastyrob123.github.io/kurs/img/inventar/oregano.jpg' },
+        { name:'Paprika Edelsüß',   wert:3.10, img:'https://tastyrob123.github.io/kurs/img/inventar/paprika-edelsuess.jpg' },
+        { name:'Weißweinessig',     wert:3.60, img:'https://tastyrob123.github.io/kurs/img/inventar/weissweinessig.jpg' }
       ]},
     { kachel_id:'db4_zutaten', kachel_name:'Zutaten', ist_produkt_kachel:true,
       einheit:'Portionsgröße (g)', einheit_typ:'menge_g',
@@ -1828,7 +1838,7 @@
     { path:/\/inventurliste\/?$/, kachel:'db0_inventurliste',
       eyebrow:'Der Warenkorb · DB 0',
       title:'Deine Inventurliste. <span>Schritt für Schritt.</span>',
-      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, hake ihn ab — die Währung von DB 0 ist der Preis.' }
+      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB 0 ist der Preis.' }
   ];
 
   var reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1880,42 +1890,48 @@
     #tsshop .tss-imgwrap img{transition:none}
     #tsshop .tss-nav{transition:none}
   }
-  /* ---- Detail-Overlay (Astro-Shop-Detail, dunkel) ---- */
-  #tsshop-detail{position:fixed;inset:0;z-index:2147483000;overflow-y:auto;overscroll-behavior:contain;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
+  /* ---- Detail-Overlay: kompakt wie die Astro-Referenz, schwebt zentriert ---- */
+  #tsshop-detail{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:clamp(14px,3vh,32px);overscroll-behavior:contain;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
   #tsshop-detail *{box-sizing:border-box}
   #tsshop-detail .tsd-back{position:fixed;inset:0;background:rgba(4,5,10,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-  #tsshop-detail .tsd-panel{position:relative;max-width:1080px;margin:5vh auto 6vh;padding:clamp(22px,3.4vw,44px);border-radius:20px;background:linear-gradient(165deg,rgba(20,23,34,.97),rgba(9,11,18,.97));border:1px solid rgba(255,255,255,.10);box-shadow:0 40px 120px -40px rgba(0,0,0,.95)}
-  #tsshop-detail.tsd-anim .tsd-panel{animation:tsdUp .5s cubic-bezier(.22,1,.36,1) both}
-  @keyframes tsdUp{from{opacity:0;transform:translateY(26px) scale(.985)}to{opacity:1;transform:none}}
-  #tsshop-detail .tsd-close{position:absolute;top:16px;right:16px;z-index:5;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.8);cursor:pointer;padding:0;transition:border-color .25s ease,color .25s ease,transform .25s ease}
+  #tsshop-detail .tsd-panel{position:relative;width:min(1020px,94vw);max-height:88vh;padding:clamp(20px,2.6vw,32px);border-radius:20px;background:linear-gradient(165deg,rgba(20,23,34,.97),rgba(9,11,18,.97));border:1px solid rgba(255,255,255,.10);box-shadow:0 40px 120px -40px rgba(0,0,0,.95)}
+  #tsshop-detail.tsd-anim .tsd-panel{animation:tsdUp .55s cubic-bezier(.22,1,.36,1) both}
+  @keyframes tsdUp{from{opacity:0;transform:translateY(42px) scale(.97)}to{opacity:1;transform:none}}
+  #tsshop-detail .tsd-close{position:absolute;top:14px;right:14px;z-index:5;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.8);cursor:pointer;padding:0;transition:border-color .25s ease,color .25s ease,transform .25s ease}
   #tsshop-detail .tsd-close:hover{border-color:rgba(158,148,127,.55);color:#d8c9ab;transform:scale(1.06)}
-  #tsshop-detail .tsd-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(22px,3vw,40px);align-items:start}
-  #tsshop-detail .tsd-imgwrap{position:sticky;top:0;border-radius:14px;overflow:hidden;background:#0b0d14;border:1px solid rgba(255,255,255,.08)}
-  #tsshop-detail .tsd-imgwrap img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover}
-  #tsshop-detail .tsd-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.6rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin:2px 0 10px}
-  #tsshop-detail .tsd-title{font-size:clamp(26px,3.4vw,40px);font-weight:800;letter-spacing:-.02em;line-height:1.1;color:#fff;margin:0 0 16px}
-  #tsshop-detail .tsd-content{font-size:.95rem;line-height:1.65;color:rgba(255,255,255,.72)}
-  #tsshop-detail .tsd-content [id]{}
-  #tsshop-detail .tsd-content .notion-text{margin:6px 0;color:rgba(255,255,255,.72)}
+  /* Referenz-Proportion: Bild links definiert die Höhe, rechts scrollt der Inhalt intern */
+  #tsshop-detail .tsd-grid{display:grid;grid-template-columns:minmax(0,23fr) minmax(0,22fr);gap:clamp(18px,2.4vw,32px);height:min(58vh,540px)}
+  #tsshop-detail .tsd-imgwrap{height:100%;border-radius:14px;overflow:hidden;background:#0b0d14;border:1px solid rgba(255,255,255,.08)}
+  #tsshop-detail .tsd-imgwrap img{display:block;width:100%;height:100%;object-fit:cover}
+  #tsshop-detail .tsd-info{display:flex;flex-direction:column;min-height:0;height:100%}
+  #tsshop-detail .tsd-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.58rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin:2px 0 8px}
+  #tsshop-detail .tsd-title{font-size:clamp(22px,2.8vw,32px);font-weight:800;letter-spacing:-.02em;line-height:1.1;color:#fff;margin:0 0 12px;flex:none}
+  #tsshop-detail .tsd-content{flex:1;min-height:0;overflow-y:auto;padding-right:8px;font-size:.84rem;line-height:1.55;color:rgba(255,255,255,.72);scrollbar-width:thin}
+  #tsshop-detail .tsd-content::-webkit-scrollbar{width:7px}
+  #tsshop-detail .tsd-content::-webkit-scrollbar-thumb{background:rgba(199,180,137,.22);border-radius:99px}
+  #tsshop-detail .tsd-content .notion-text{margin:5px 0;color:rgba(255,255,255,.72)}
   #tsshop-detail .tsd-content .notion-semantic-string{color:inherit}
-  #tsshop-detail .tsd-content img{max-width:100%;height:auto;border-radius:10px}
+  #tsshop-detail .tsd-content img{max-width:100%;width:auto;max-height:150px;height:auto;border-radius:8px}
   #tsshop-detail .tsd-content .notion-column-list{display:block}
-  #tsshop-detail .tsd-content .notion-column{width:100%!important;max-width:100%!important;margin:0 0 10px!important}
-  #tsshop-detail .tsd-content .notion-code{position:relative;max-height:280px;overflow:auto;margin:12px 0;padding:14px 16px;border-radius:10px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);font-size:.8rem;line-height:1.55}
-  #tsshop-detail .tsd-content .notion-code::-webkit-scrollbar{width:8px;height:8px}
+  #tsshop-detail .tsd-content .notion-column{width:100%!important;max-width:100%!important;margin:0 0 8px!important}
+  #tsshop-detail .tsd-content .notion-code{position:relative;max-height:200px;overflow:auto;margin:10px 0;padding:12px 14px;border-radius:10px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);font-size:.72rem;line-height:1.5}
+  #tsshop-detail .tsd-content .notion-code::-webkit-scrollbar{width:7px;height:7px}
   #tsshop-detail .tsd-content .notion-code::-webkit-scrollbar-thumb{background:rgba(199,180,137,.25);border-radius:99px}
-  #tsshop-detail .tsd-copy{position:sticky;top:0;float:right;margin:-4px -6px 6px 10px;padding:5px 13px;border-radius:999px;border:1px solid rgba(216,201,171,.3);background:rgba(10,12,20,.85);color:rgba(216,201,171,.75);font-size:11px;font-weight:600;letter-spacing:.05em;cursor:pointer;transition:color .2s ease,border-color .2s ease}
+  #tsshop-detail .tsd-copy{position:sticky;top:0;float:right;margin:-2px -4px 6px 10px;padding:4px 11px;border-radius:999px;border:1px solid rgba(216,201,171,.3);background:rgba(10,12,20,.85);color:rgba(216,201,171,.75);font-size:10.5px;font-weight:600;letter-spacing:.05em;cursor:pointer;transition:color .2s ease,border-color .2s ease}
   #tsshop-detail .tsd-copy:hover{color:#efe6d2;border-color:rgba(216,201,171,.6)}
-  #tsshop-detail .tsd-buy{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.08)}
-  #tsshop-detail .tsd-price{font-size:1.9rem;font-weight:800;font-variant-numeric:tabular-nums;color:#efe6d2;line-height:1}
-  #tsshop-detail .tsd-price .tsd-pricenote{display:block;margin-top:7px;font-size:11px;font-weight:500;letter-spacing:.03em;color:rgba(255,255,255,.3)}
-  #tsshop-detail .tsd-done{flex:none;display:inline-flex;align-items:center;gap:9px;padding:13px 26px;border-radius:12px;border:1px solid rgba(216,201,171,.35);background:rgba(216,201,171,.1);color:#efe6d2;font-size:.92rem;font-weight:600;cursor:pointer;transition:background .25s ease,border-color .25s ease,color .25s ease}
-  #tsshop-detail .tsd-done:hover{background:rgba(216,201,171,.18);border-color:rgba(216,201,171,.6)}
+  #tsshop-detail .tsd-buy{flex:none;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)}
+  #tsshop-detail .tsd-price{font-size:1.65rem;font-weight:800;font-variant-numeric:tabular-nums;color:#efe6d2;line-height:1}
+  #tsshop-detail .tsd-price .tsd-pricenote{display:block;margin-top:6px;font-size:10.5px;font-weight:500;letter-spacing:.03em;color:rgba(255,255,255,.3)}
+  #tsshop-detail .tsd-done{flex:none;display:inline-flex;align-items:center;gap:9px;padding:12px 24px;border-radius:12px;border:1px solid rgba(239,230,210,.9);background:#efe6d2;color:#0c0e16;font-size:.9rem;font-weight:700;cursor:pointer;transition:background .25s ease,border-color .25s ease,color .25s ease,transform .2s ease}
+  #tsshop-detail .tsd-done:hover{background:#e2d5b8;transform:translateY(-1px)}
   #tsshop-detail .tsd-done.is-done{background:rgba(143,203,170,.14);border-color:rgba(143,203,170,.5);color:#9FD3B9}
   @media(max-width:820px){
-    #tsshop-detail .tsd-panel{margin:12px 10px 20px}
-    #tsshop-detail .tsd-grid{grid-template-columns:1fr}
-    #tsshop-detail .tsd-imgwrap{position:relative;max-width:420px}
+    #tsshop-detail{align-items:flex-end;padding:0}
+    #tsshop-detail .tsd-panel{width:100%;max-height:94vh;border-radius:20px 20px 0 0;overflow-y:auto}
+    #tsshop-detail .tsd-grid{grid-template-columns:1fr;height:auto}
+    #tsshop-detail .tsd-imgwrap{height:auto;max-height:36vh}
+    #tsshop-detail .tsd-imgwrap img{aspect-ratio:4/3}
+    #tsshop-detail .tsd-content{max-height:38vh}
     #tsshop-detail .tsd-buy{flex-direction:column;align-items:stretch}
     #tsshop-detail .tsd-done{justify-content:center}
   }
@@ -1945,6 +1961,7 @@
   var CHEV_R='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
   var XICON='<svg viewBox="0 0 18 18" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4.5 4.5l9 9M13.5 4.5l-9 9"/></svg>';
   var CHECK='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5 10-11"/></svg>';
+  var CART='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="17.5" cy="20" r="1.4"/><path d="M2.5 3.5h2.6l2.5 12h10.3l2.1-8.5H6.1"/></svg>';
 
   /* ---- Schritte aus den Notion-Toggles der Phasen-Sektion lesen ---- */
   function doneKey(txt){ return 'done-'+((txt||'').replace(/[‣\s]/g,'').slice(0,40)); }
@@ -2008,7 +2025,7 @@
   function updProgress(root,steps){
     var el=root.querySelector('.tss-progress'); if(!el) return;
     var done=steps.filter(isDone).length;
-    el.textContent=done+' / '+steps.length+' erledigt';
+    el.textContent=done+' / '+steps.length+' im Einkaufswagen';
     el.classList.toggle('is-on',done>0);
   }
 
@@ -2035,7 +2052,7 @@
             +'<div class="tsd-content"></div>'
             +'<div class="tsd-buy">'
               +'<div class="tsd-price" style="view-transition-name:tsshopprice">'+fmt(k.einheit_typ,v.wert)+'<span class="tsd-pricenote">* Beispielwert — '+k.einheit+'</span></div>'
-              +'<button type="button" class="tsd-done'+(isDone(st)?' is-done':'')+'">'+CHECK+'<span>'+(isDone(st)?'Erledigt':'Als erledigt markieren')+'</span></button>'
+              +'<button type="button" class="tsd-done'+(isDone(st)?' is-done':'')+'">'+(isDone(st)?CHECK:CART)+'<span>'+(isDone(st)?'Im Einkaufswagen':'In den Einkaufswagen')+'</span></button>'
             +'</div>'
           +'</div>'
         +'</div>'
@@ -2071,7 +2088,7 @@
       var val=!isDone(st);
       setDone(st,val);
       doneBtn.classList.toggle('is-done',val);
-      doneBtn.querySelector('span').textContent=val?'Erledigt':'Als erledigt markieren';
+      doneBtn.innerHTML=(val?CHECK:CART)+'<span>'+(val?'Im Einkaufswagen':'In den Einkaufswagen')+'</span>';
       var card=root.querySelector('.tss-card[data-step="'+idx+'"]'); if(card) card.classList.toggle('is-done',val);
       updProgress(root,steps);
     });
