@@ -1949,10 +1949,11 @@
   #tsshop .tss-card:hover .tss-imgwrap img{transform:scale(1.04)}
   #tsshop .tss-donebadge{position:absolute;top:12px;right:12px;z-index:3;width:28px;height:28px;border-radius:50%;display:none;align-items:center;justify-content:center;background:rgba(143,203,170,.92);border:1px solid rgba(255,255,255,.25);color:#0b1512;box-shadow:0 4px 16px rgba(143,203,170,.4)}
   #tsshop .tss-card.is-done .tss-donebadge{display:flex}
-  /* im Einkaufswagen = edles Pastellgrün, weich eingeblendet über ::after-Schleier */
+  /* im Einkaufswagen = edles Pastellgrün — Schleier nur über Rahmen/Textbereich, NICHT über dem Bild */
   #tsshop .tss-card{position:relative}
-  #tsshop .tss-card::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:inherit;background:linear-gradient(180deg,rgba(143,203,170,.10),rgba(143,203,170,.22));opacity:0;transition:opacity .55s ease}
-  #tsshop .tss-card.is-done::after{opacity:1}
+  #tsshop .tss-body{position:relative}
+  #tsshop .tss-body::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(143,203,170,.12),rgba(143,203,170,.22));opacity:0;transition:opacity .55s ease}
+  #tsshop .tss-card.is-done .tss-body::after{opacity:1}
   #tsshop .tss-card.is-done{background:linear-gradient(165deg,rgba(160,208,180,.30),rgba(160,208,180,.12) 55%,rgba(160,208,180,.05));border-color:rgba(160,208,180,.6);box-shadow:0 18px 44px -30px rgba(0,0,0,.85),0 0 38px rgba(143,203,170,.24)}
   #tsshop .tss-card.is-done:hover,#tsshop .tss-card.is-done:focus-visible{border-color:rgba(160,208,180,.8);box-shadow:0 12px 36px -16px rgba(143,203,170,.35),0 26px 54px -36px rgba(0,0,0,.9)}
   #tsshop .tss-card.is-done .tss-val{color:#9FD3B9}
@@ -2009,7 +2010,6 @@
   #tsshop-detail .tsd-copy:hover{color:#efe6d2;border-color:rgba(216,201,171,.6)}
   #tsshop-detail .tsd-buy{flex:none;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)}
   #tsshop-detail .tsd-price{font-size:1.65rem;font-weight:800;font-variant-numeric:tabular-nums;color:#efe6d2;line-height:1}
-  #tsshop-detail .tsd-price .tsd-pricenote{display:block;margin-top:6px;font-size:10.5px;font-weight:500;letter-spacing:.03em;color:rgba(255,255,255,.3)}
   #tsshop-detail .tsd-done{flex:none;display:inline-flex;align-items:center;gap:9px;padding:12px 24px;border-radius:12px;border:1px solid rgba(239,230,210,.9);background:#efe6d2;color:#0c0e16;font-size:.9rem;font-weight:700;cursor:pointer;transition:background .25s ease,border-color .25s ease,color .25s ease,transform .2s ease}
   #tsshop-detail .tsd-done:hover{background:#e2d5b8;transform:translateY(-1px)}
   #tsshop-detail .tsd-done.is-done{background:rgba(143,203,170,.14);border-color:rgba(143,203,170,.5);color:#9FD3B9}
@@ -2138,7 +2138,7 @@
             +'<h2 class="tsd-title" style="view-transition-name:tsshoptitle">'+st.title+'</h2>'
             +'<div class="tsd-content"></div>'
             +'<div class="tsd-buy">'
-              +'<div class="tsd-price" style="view-transition-name:tsshopprice">'+fmt(k.einheit_typ,v.wert)+'<span class="tsd-pricenote">* Beispielwert — '+k.einheit+'</span></div>'
+              +'<div class="tsd-price" style="view-transition-name:tsshopprice">'+fmt(k.einheit_typ,v.wert)+'</div>'
               +'<button type="button" class="tsd-done'+(isDone(st)?' is-done':'')+'">'+(isDone(st)?CHECK:CART)+'<span>'+(isDone(st)?'Im Einkaufswagen':'In den Einkaufswagen')+'</span></button>'
             +'</div>'
           +'</div>'
