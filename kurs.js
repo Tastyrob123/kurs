@@ -1407,6 +1407,36 @@
   new MutationObserver(mount).observe(document.documentElement,{childList:true,subtree:true});
 })();
 
+/* ---- */
+
+(function(){
+  var IMG="https://files.catbox.moe/37tkwn.webp";
+  var LOGO="https://files.catbox.moe/au80tp.png";
+  function on(){ return /\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/.test(location.pathname); }
+  function mount(){
+    if(!on()) return;
+    var sc=document.querySelector(".super-content");
+    if(!sc || sc.querySelector(".ts-hero")) return;
+    var hero=document.createElement("div");
+    hero.className="ts-hero";
+    hero.innerHTML=
+      '<img class="ts-hero__img" alt="DB I - III — Lieferanten" src="'+IMG+'">'+
+      '<div class="ts-hero__text">'+
+        '<img class="ts-hero__logo" alt="Tasty Studios" src="'+LOGO+'">'+
+        '<div class="ts-hero__eyebrow">Lektion 2.2.1</div>'+
+        '<h1 class="ts-hero__title">DB I - III : <span class="ts-gold">Lieferanten</span></h1>'+
+      '</div>';
+    var nr=sc.querySelector(".notion-root");
+    if(nr) sc.insertBefore(hero, nr); else sc.appendChild(hero);
+    Array.prototype.forEach.call(sc.querySelectorAll('.notion-image img[src*="logo_vektor"]'),
+      function(img){ var blk=img.closest(".notion-image"); if(blk) blk.style.display="none"; });
+    var nh=document.querySelector(".notion-header.page"); if(nh) nh.style.display="none";
+  }
+  mount();
+  document.addEventListener("DOMContentLoaded", mount);
+  new MutationObserver(mount).observe(document.documentElement,{childList:true,subtree:true});
+})();
+
 /* ============================================================
    inventurliste — Flow-Animation "Preis richtig / Preis falsch"
    Node 1 beige; gruene Hauptlinie ab Inventar; roter Abzweig nach unten.
