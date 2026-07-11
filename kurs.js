@@ -1393,7 +1393,7 @@
       '<img class="ts-hero__img" alt="DB 0 — Inventurliste" src="'+IMG+'">'+
       '<div class="ts-hero__text">'+
         '<img class="ts-hero__logo" alt="Tasty Studios" src="'+LOGO+'">'+
-        '<div class="ts-hero__eyebrow">Lektion 2.2</div>'+
+        '<div class="ts-hero__eyebrow">Lektion 2.1</div>'+
         '<h1 class="ts-hero__title">DB 0 : <span class="ts-gold">Inventurliste</span></h1>'+
       '</div>';
     var nr=sc.querySelector(".notion-root");
@@ -1557,13 +1557,13 @@
 /* ============================================================
    MacBook-Cover + Klick-Lightbox (inventurliste)
    Exakt wie /mehrwert-zielbild: Rohvideo per CSS versteckt,
-   MacBook-Poster (Lektion 2.2 in den Screen gebacken) sitzt in
+   MacBook-Poster (Lektion 2.1 in den Screen gebacken) sitzt in
    der linken Spalte an der Stelle des Videos, Klick -> Lightbox.
-   Poster (catbox): 74x7t5.png · Läuft nur auf /inventurliste.
+   Poster (catbox): tqee6z.png · Läuft nur auf /inventurliste.
    ============================================================ */
 (function(){
   if(window.__tsmacInv) return; window.__tsmacInv=true;
-  var POSTER="https://files.catbox.moe/74x7t5.png";
+  var POSTER="https://files.catbox.moe/tqee6z.png";
   (function(){ var pre=new Image(); pre.src=POSTER; })(); // Poster vorladen -> kein Leer-Blitz
   var CSS=[
     '.page__inventurliste .notion-column-list:has(h1.notion-heading) > .notion-column:not(:has(h1.notion-heading)){display:flex!important;}',
@@ -1610,7 +1610,7 @@
     var src=raw.currentSrc||raw.getAttribute('src')||(raw.querySelector('source')&&raw.querySelector('source').getAttribute('src'));
     if(!src) return;
     var poster=document.createElement('div'); poster.className='tsmac';
-    poster.innerHTML='<img src="'+POSTER+'" alt="Lektion 2.2 – DB 0: Inventurliste" fetchpriority="high" decoding="async"><div class="tsmac__play"><span></span></div>';
+    poster.innerHTML='<img src="'+POSTER+'" alt="Lektion 2.1 – DB 0: Inventurliste" fetchpriority="high" decoding="async"><div class="tsmac__play"><span></span></div>';
     nv.appendChild(poster);
     poster.addEventListener('click',function(){
       var lb=ensureLb(); var stage=lb.querySelector('.tsmac-stage');
