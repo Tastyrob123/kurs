@@ -1956,7 +1956,7 @@
   #tsshop .tss-shelf{position:relative}
   #tsshop .tss-track{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 2px 22px;scrollbar-width:none;-ms-overflow-style:none;overscroll-behavior-x:contain}
   #tsshop .tss-track::-webkit-scrollbar{display:none}
-  #tsshop .tss-card{--tss-g:104,134,196;flex:0 0 calc((100% - 3*22px)/4);scroll-snap-align:start;cursor:pointer;border-radius:16px;overflow:visible;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0));border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85);opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .75s cubic-bezier(.22,1,.36,1),border-color .4s ease,box-shadow .5s ease}
+  #tsshop .tss-card{--tss-g:104,134,196;flex:0 0 calc((100% - 3*22px)/4);min-width:0;scroll-snap-align:start;cursor:pointer;border-radius:16px;overflow:visible;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0));border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85);opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .75s cubic-bezier(.22,1,.36,1),border-color .4s ease,box-shadow .5s ease}
   #tsshop .tss-card.on{opacity:1;transform:translateY(0)}
   /* Heartbeat-Glow wie #tsq (mehrwert-zielbild): navy-pastell neutral, pastellgrün im Einkaufswagen */
   #tsshop .tss-card:hover,#tsshop .tss-card:focus-visible{transform:translateY(-4px);border-color:rgba(var(--tss-g),.5);animation:tss-heartbeat 2.6s cubic-bezier(.4,0,.3,1) infinite;outline:none}
