@@ -1410,7 +1410,7 @@
 /* ---- */
 
 (function(){
-  var IMG="https://files.catbox.moe/37tkwn.webp";
+  var IMG="https://files.catbox.moe/ecvbxi.webp";
   var LOGO="https://files.catbox.moe/au80tp.png";
   function on(){ return /\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/.test(location.pathname); }
   function mount(){
