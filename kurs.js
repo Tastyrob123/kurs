@@ -1747,11 +1747,14 @@
    3 Kacheln gestylt (.tsm-mid). Darunter 2-Zonen-Grid:
    links (erstes Drittel) die DB0-Animation #tsdb0 als vertikale
    Ansichts-Liste (Glas-Highlight statt wandernder Pille),
-   rechts (2/3) die allgemeinen Infos ("Als nächstes…" +
-   "Empfehlung zur Anzeige" + Liste) als Klone, die per
-   gestaffeltem Scroll-Reveal hochwandern. Notion-DOM wird
-   NICHT verschoben — Originale nur versteckt (React-sicher,
-   Muster wie .tsmac). Anker: Phrase-first.
+   rechts (2/3) die allgemeinen Infos ("Als nächstes…" falls
+   in Notion vorhanden — optional — + "Empfehlung zur Anzeige"
+   + Liste) als Klone, die per gestaffeltem Scroll-Reveal
+   hochwandern. Notion-DOM wird NICHT verschoben — Originale
+   nur versteckt (React-sicher, Muster wie .tsmac).
+   Anker: Phrase-first, Einfügepunkt = h2 "Empfehlung zur
+   Anzeige" (Pflicht-Anker; einzelne Sätze darf Robert in
+   Notion löschen, ohne dass die Sektion zerfällt).
    ============================================================ */
 (function(){
   if(window.__tsmiss) return; window.__tsmiss=true;
@@ -1798,16 +1801,16 @@
     retext();
     if(document.getElementById('tsmiss')) return;
     var db0=document.getElementById('tsdb0');
-    var p2=findText('.page__inventurliste .notion-text', /Als nächstes entwickeln wir/);
+    var p2=findText('.page__inventurliste .notion-text', /Als nächstes entwickeln wir/); /* optional — Satz kann in Notion fehlen */
     var h2=findText('.page__inventurliste h2.notion-heading', /Empfehlung zur Anzeige/);
-    if(!db0||!p2||!h2) return;
+    if(!db0||!h2) return;
     var ol=h2.nextElementSibling;
     while(ol && !(ol.matches&&ol.matches('ol.notion-numbered-list'))) ol=ol.nextElementSibling;
     var wrap=document.createElement('div'); wrap.id='tsmiss';
     var L=document.createElement('div'); L.className='tsm-col';
     var R=document.createElement('div'); R.className='tsm-col';
     wrap.appendChild(L); wrap.appendChild(R);
-    p2.parentNode.insertBefore(wrap, p2);
+    h2.parentNode.insertBefore(wrap, h2);
     L.appendChild(db0);
     function addClone(el,cls){ if(!el)return; var c=stripIds(el.cloneNode(true)); c.className+=' '+cls+' tsm-item'; R.appendChild(c); el.classList.add('tsm-hide'); }
     addClone(p2,'tsm-p'); addClone(h2,'tsm-emph2'); addClone(ol,'tsm-ol');
