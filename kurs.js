@@ -2175,20 +2175,20 @@
       eyebrow:'Der Warenkorb · DB 0',
       title:'Deine Inventurliste. <span>Schritt für Schritt.</span>',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB 0 ist der Preis.',
-      chain:true },
+      summary:'Wareneinsatz', chain:true },
     { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_lieferanten',
       marker:/Kundennummer/,
       eyebrow:'Der Warenkorb · DB I',
       title:'Deine Lieferpartner. <span>An einem Ort.</span>',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB I ist die Mindestbelieferung.',
-      cta:'Tour buchen', ctaDone:'Tour gebucht', chain:true },
+      summary:'Transportkosten', cta:'Tour buchen', ctaDone:'Tour gebucht', chain:true },
     /* Zweites Regal auf derselben Seite: DB II Ansprechpartner (Marker eindeutig = Hauptansprechpartner) */
     { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_ansprechpartner',
       marker:/Hauptansprechpartner/,
       eyebrow:'Der Warenkorb · DB II',
       title:'Deine Ansprechpartner. <span>An einem Ort.</span>',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB II ist die Jahresrückvergütung.<br>Um zu starten: / → neue Tabellenansicht / Datenbank → DB II : Ansprechpartner Übersicht.',
-      cta:'Paket auswählen', ctaDone:'Paket gewählt', chain:true },
+      summary:'Jahresrückvergütung', cta:'Paket auswählen', ctaDone:'Paket gewählt', chain:true },
     /* Drittes Regal auf derselben Seite: DB III Lieferverträge (Marker eindeutig = Vertragsbezeichnung) */
     { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_vertraege',
       marker:/Vertragsbezeichnung/,
@@ -2212,6 +2212,14 @@
   #tsshop .tss-sub{font-size:15px;color:rgba(255,255,255,.42);max-width:600px;margin:0 auto;line-height:1.6}
   #tsshop .tss-progress{text-align:center;margin-top:2px;font-size:15px;font-weight:600;letter-spacing:.05em;color:#c7b489;transition:color .4s ease}
   #tsshop .tss-progress.is-on{color:#d8c9ab}
+  /* Gesamt-Summe der im Einkaufswagen liegenden Karten — große rote Lineal-Zahl + weißes Label */
+  #tsshop .tss-sum{text-align:center;margin-top:clamp(30px,4.5vh,56px);opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .8s cubic-bezier(.22,1,.36,1)}
+  #tsshop .tss-sum.on{opacity:1;transform:none}
+  #tsshop .tss-sum-val{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(42px,6.4vw,78px);font-weight:600;letter-spacing:-.022em;line-height:1;color:#E5484D;font-variant-numeric:tabular-nums;display:inline-block}
+  #tsshop .tss-sum-val.pulse{animation:tss-sumpulse .6s cubic-bezier(.22,1,.36,1)}
+  @keyframes tss-sumpulse{0%{transform:scale(1)}32%{transform:scale(1.09)}100%{transform:scale(1)}}
+  #tsshop .tss-sum-label{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(15px,1.7vw,21px);font-weight:500;letter-spacing:.005em;color:#fff;margin-top:12px}
+  @media(prefers-reduced-motion:reduce){#tsshop .tss-sum{opacity:1;transform:none;transition:none}#tsshop .tss-sum-val.pulse{animation:none}}
   #tsshop .tss-shelf{position:relative}
   #tsshop .tss-track{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 2px 22px;scrollbar-width:none;-ms-overflow-style:none;overscroll-behavior-x:contain}
   #tsshop .tss-track::-webkit-scrollbar{display:none}
@@ -2392,14 +2400,32 @@
         +'<div class="tss-track">'+cards+'</div>'
       +'</div>'
       +'<div class="tss-progress"></div>'
+      +(page.summary?'<div class="tss-sum"><div class="tss-sum-val"></div><div class="tss-sum-label">'+page.summary+'</div></div>':'')
       +'</div>';
     return root;
   }
-  function updProgress(root,steps){
-    var el=root.querySelector('.tss-progress'); if(!el) return;
-    var done=steps.filter(isDone).length;
-    el.textContent=done+' / '+steps.length+' im Einkaufswagen';
-    el.classList.toggle('is-on',done>0);
+  function updProgress(root,steps,k,page){
+    var el=root.querySelector('.tss-progress');
+    if(el){
+      var done=steps.filter(isDone).length;
+      el.textContent=done+' / '+steps.length+' im Einkaufswagen';
+      el.classList.toggle('is-on',done>0);
+    }
+    /* Gesamt-Summe: nur Seiten mit page.summary — Werte exakt wie auf den Karten
+       (zyklisches Mapping Schritt-Index → Objekt-Variante). */
+    if(page&&page.summary&&k&&k.objekt_varianten){
+      var sv=root.querySelector('.tss-sum-val'); if(!sv) return;
+      var total=0, n=k.objekt_varianten.length;
+      for(var i=0;i<steps.length;i++){
+        if(isDone(steps[i])){ var v=k.objekt_varianten[i%n]; if(v&&typeof v.wert==='number') total+=v.wert; }
+      }
+      total=Math.round(total*100)/100;
+      var txt=fmt(page.summaryType||k.einheit_typ,total), old=sv.textContent;
+      if(old!==txt){
+        sv.textContent=txt;
+        if(old!==''&&!reduced){ sv.classList.remove('pulse'); void sv.offsetWidth; sv.classList.add('pulse'); }
+      }
+    }
   }
 
   /* Tron-Neon-Sweep: startet unten links, läuft in beide Richtungen, trifft sich oben rechts */
@@ -2506,7 +2532,7 @@
       var val=!isDone(st);
       setDone(st,val);
       var c=root.querySelector('.tss-card[data-step="'+idx+'"]'); if(c) c.classList.toggle('is-done',val);
-      updProgress(root,steps);
+      updProgress(root,steps,k,page);
       if(val){
         closeOv();
         setTimeout(function(){ neonSweep(c); },420);
@@ -2560,6 +2586,7 @@
         c.classList.add('on');
         setTimeout(function(){ c.style.transitionDelay=''; },(i%4)*130+900);
       });
+      var sum=root.querySelector('.tss-sum'); if(sum) setTimeout(function(){ sum.classList.add('on'); },420);
       io.disconnect();
     },{threshold:.25});
     io.observe(root);
@@ -2579,7 +2606,7 @@
       c.addEventListener('click',function(){ openDetail(page,k,steps,parseInt(c.dataset.step,10),root); });
       c.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openDetail(page,k,steps,parseInt(c.dataset.step,10),root); } });
     });
-    updProgress(root,steps);
+    updProgress(root,steps,k,page);
   }
 
   function pagesFor(){
