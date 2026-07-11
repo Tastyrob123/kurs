@@ -2169,8 +2169,8 @@
       marker:/Hauptansprechpartner/,
       eyebrow:'Der Warenkorb · DB II',
       title:'Deine Ansprechpartner. <span>An einem Ort.</span>',
-      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB II ist die Jahresrückvergütung.',
-      cta:'Tour buchen', ctaDone:'Tour gebucht', chain:true }
+      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB II ist die Jahresrückvergütung.<br>Um zu starten: / → neue Tabellenansicht / Datenbank → DB II : Ansprechpartner Übersicht.',
+      cta:'Paket auswählen', ctaDone:'Paket gewählt', chain:true }
   ];
 
   var reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
