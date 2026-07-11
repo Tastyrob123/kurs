@@ -1728,21 +1728,28 @@
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
+
 /* ---- */
 
 /* ============================================================
-   Schaufenster / Warenkorb — #tsshop (Gastro-OS Shop-Datenmodell)
-   Jede Produkt-Kachel des Gastro-OS = eine Tabelle mit bildbaren
-   Objekt-Varianten + einer Einheit ("Währung"). Konzept-Kacheln
-   tragen ist_produkt_kachel:false und kein Objekt/Einheit-Schema.
-   Karten-Werte = Beispielwerte (Schaufenster) — KEINE echten
-   Kalkulationsdaten. img:null → eleganter Platzhalter; echte
-   Bild-URL einfach im Feld img der Variante eintragen.
-   v1 gerendert auf /inventurliste (db0_inventurliste); weitere
-   Seiten über PAGES ergänzen. Anker: vor der Phasen-Spaltenliste
-   ("Phase I" + "Schritt"), Phrase-first, Fallback Text-Anker.
-   Optik: Luxus-Kachel-Muster (#tslink) + Bild-Kachel (#tsq),
-   horizontal scrollbares Regal, 4 Karten sichtbar (Desktop).
+   Schaufenster / Warenkorb — #tsshop v2 (Gastro-OS Shop)
+   Die Phasen-Bereiche werden zum Shop: jeder Notion-Toggle-
+   Schritt ("1. Button anlegen" … "15. Notizen") wird eine
+   Produkt-Karte im horizontal scrollbaren Regal. Klick öffnet
+   die Detail-Ansicht (Astro-Shop-Muster, View-Transition-Morph):
+   links das Bild, rechts Titel + der GEKLONTE Schritt-Inhalt
+   (Eigenschaft, Spaltenname, Punkte, Screenshots); Formel-
+   Codeblöcke laufen intern scrollbar, gedeckelt — sprengen nie
+   das Layout. "Erledigt"-Button nutzt DIESELBEN localStorage-
+   Keys wie das globale Checkbox-System (verlustfrei kompatibel).
+   Die Original-Phasen-Spaltenliste wird nur versteckt (display:
+   none) — Notion bleibt SSOT, nichts wird gelöscht.
+   Datenmodell: Produkt-Kacheln (bildbares Objekt + Einheit =
+   "Währung") + Konzept-Kacheln (ist_produkt_kachel:false).
+   Bilder: objekt_varianten[i].img eintragen (null → Platzhalter),
+   Karten mappen zyklisch auf die Objekt-Varianten (Bild + Wert).
+   Werte = Beispielwerte, keine echten Kalkulationsdaten.
+   v1→v2: 11.07.2026. Render v2 auf /inventurliste (db0).
    ============================================================ */
 (function(){
   if(window.__tsshop) return; window.__tsshop=true;
@@ -1751,13 +1758,13 @@
   var KACHELN=[
     { kachel_id:'db0_inventurliste', kachel_name:'Inventurliste', ist_produkt_kachel:true,
       einheit:'Preis (€)', einheit_typ:'preis',
-      objekt_varianten:[ /* Demo-Werte, offene Liste — beliebig ergänzbar */
-        { name:'Glas Kapern',  desc:'Eingelegt und salzig — kleine Position, klarer Preis.',  wert:3.49,  img:null },
-        { name:'Flasche Wein', desc:'0,75 l im dunklen Glas — Lager und Karte zugleich.',     wert:8.90,  img:null },
-        { name:'Laib Käse',    desc:'Am Stück gekauft, in Portionen kalkuliert.',             wert:24.50, img:null },
-        { name:'Baguette',     desc:'Täglich frisch geliefert, täglich gezählt.',             wert:1.80,  img:null },
-        { name:'Sack Mehl',    desc:'Grundlage im Trockenlager — gekauft in Kilo.',           wert:18.90, img:null },
-        { name:'Dose Tomaten', desc:'Geschält und gestückelt — Basis jeder Sauce.',           wert:4.20,  img:null }
+      objekt_varianten:[ /* Demo-Werte, offene Liste — img-URL eintragen sobald vorhanden */
+        { name:'Glas Kapern',  wert:3.49,  img:null },
+        { name:'Flasche Wein', wert:8.90,  img:null },
+        { name:'Laib Käse',    wert:24.50, img:null },
+        { name:'Baguette',     wert:1.80,  img:null },
+        { name:'Sack Mehl',    wert:18.90, img:null },
+        { name:'Dose Tomaten', wert:4.20,  img:null }
       ]},
     { kachel_id:'db4_zutaten', kachel_name:'Zutaten', ist_produkt_kachel:true,
       einheit:'Portionsgröße (g)', einheit_typ:'menge_g',
@@ -1820,9 +1827,11 @@
   var PAGES=[
     { path:/\/inventurliste\/?$/, kachel:'db0_inventurliste',
       eyebrow:'Der Warenkorb · DB 0',
-      title:'Deine Rohzutaten. <span>Gemessen in Euro.</span>',
-      sub:'Jede Tabelle in deinem System hat eine eigene Währung. Die der Inventurliste ist der Preis — hier stehen typische Positionen, wie sie in DB 0 leben.' }
+      title:'Deine Inventurliste. <span>Schritt für Schritt.</span>',
+      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, hake ihn ab — die Währung von DB 0 ist der Preis.' }
   ];
+
+  var reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var CSS=`
   #tsshop{width:100vw;max-width:100vw;margin:40px 0 8px;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 clamp(20px,4vw,56px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
@@ -1833,16 +1842,21 @@
   #tsshop .tss-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#9e947f;box-shadow:0 0 12px rgba(158,148,127,.7)}
   #tsshop .tss-title{font-size:clamp(26px,3.4vw,38px);font-weight:800;letter-spacing:-.02em;line-height:1.12;color:#fff;margin:0 0 10px}
   #tsshop .tss-title span{color:#c7b489}
-  #tsshop .tss-sub{font-size:15px;color:rgba(255,255,255,.42);max-width:580px;margin:0 auto;line-height:1.6}
+  #tsshop .tss-sub{font-size:15px;color:rgba(255,255,255,.42);max-width:600px;margin:0 auto;line-height:1.6}
+  #tsshop .tss-progress{margin-top:10px;font-size:12.5px;font-weight:600;letter-spacing:.03em;color:rgba(255,255,255,.3)}
+  #tsshop .tss-progress.is-on{color:#9FD3B9}
   #tsshop .tss-shelf{position:relative}
   #tsshop .tss-track{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 2px 22px;scrollbar-width:none;-ms-overflow-style:none;overscroll-behavior-x:contain}
   #tsshop .tss-track::-webkit-scrollbar{display:none}
-  #tsshop .tss-card{flex:0 0 calc((100% - 3*22px)/4);scroll-snap-align:start;border-radius:16px;overflow:hidden;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0));border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85);opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .75s cubic-bezier(.22,1,.36,1),border-color .4s ease,box-shadow .5s ease}
+  #tsshop .tss-card{flex:0 0 calc((100% - 3*22px)/4);scroll-snap-align:start;cursor:pointer;border-radius:16px;overflow:hidden;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0));border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85);opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .75s cubic-bezier(.22,1,.36,1),border-color .4s ease,box-shadow .5s ease}
   #tsshop .tss-card.on{opacity:1;transform:translateY(0)}
-  #tsshop .tss-card:hover{transform:translateY(-4px);border-color:rgba(158,148,127,.45);box-shadow:0 12px 36px -16px rgba(158,148,127,.28),0 26px 54px -36px rgba(0,0,0,.9)}
-  #tsshop .tss-imgwrap{aspect-ratio:1/1;overflow:hidden;background:#0b0d14}
+  #tsshop .tss-card:hover,#tsshop .tss-card:focus-visible{transform:translateY(-4px);border-color:rgba(158,148,127,.45);box-shadow:0 12px 36px -16px rgba(158,148,127,.28),0 26px 54px -36px rgba(0,0,0,.9);outline:none}
+  #tsshop .tss-imgwrap{position:relative;aspect-ratio:1/1;overflow:hidden;background:#0b0d14}
   #tsshop .tss-imgwrap img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.22,1,.36,1)}
   #tsshop .tss-card:hover .tss-imgwrap img{transform:scale(1.04)}
+  #tsshop .tss-donebadge{position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:50%;display:none;align-items:center;justify-content:center;background:rgba(143,203,170,.16);border:1px solid rgba(143,203,170,.55);color:#9FD3B9;backdrop-filter:blur(4px)}
+  #tsshop .tss-card.is-done .tss-donebadge{display:flex}
+  #tsshop .tss-card.is-done .tss-imgwrap img{filter:saturate(.85) brightness(.9)}
   #tsshop .tss-body{padding:16px 18px 18px}
   #tsshop .tss-name{font-size:1.02rem;font-weight:600;letter-spacing:-.012em;color:#fff;margin:0 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   #tsshop .tss-desc{font-size:.82rem;color:rgba(255,255,255,.52);line-height:1.5;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1865,9 +1879,52 @@
     #tsshop .tss-card{opacity:1;transform:none;transition:none}
     #tsshop .tss-imgwrap img{transition:none}
     #tsshop .tss-nav{transition:none}
-  }`;
+  }
+  /* ---- Detail-Overlay (Astro-Shop-Detail, dunkel) ---- */
+  #tsshop-detail{position:fixed;inset:0;z-index:2147483000;overflow-y:auto;overscroll-behavior:contain;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
+  #tsshop-detail *{box-sizing:border-box}
+  #tsshop-detail .tsd-back{position:fixed;inset:0;background:rgba(4,5,10,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  #tsshop-detail .tsd-panel{position:relative;max-width:1080px;margin:5vh auto 6vh;padding:clamp(22px,3.4vw,44px);border-radius:20px;background:linear-gradient(165deg,rgba(20,23,34,.97),rgba(9,11,18,.97));border:1px solid rgba(255,255,255,.10);box-shadow:0 40px 120px -40px rgba(0,0,0,.95)}
+  #tsshop-detail.tsd-anim .tsd-panel{animation:tsdUp .5s cubic-bezier(.22,1,.36,1) both}
+  @keyframes tsdUp{from{opacity:0;transform:translateY(26px) scale(.985)}to{opacity:1;transform:none}}
+  #tsshop-detail .tsd-close{position:absolute;top:16px;right:16px;z-index:5;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.8);cursor:pointer;padding:0;transition:border-color .25s ease,color .25s ease,transform .25s ease}
+  #tsshop-detail .tsd-close:hover{border-color:rgba(158,148,127,.55);color:#d8c9ab;transform:scale(1.06)}
+  #tsshop-detail .tsd-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(22px,3vw,40px);align-items:start}
+  #tsshop-detail .tsd-imgwrap{position:sticky;top:0;border-radius:14px;overflow:hidden;background:#0b0d14;border:1px solid rgba(255,255,255,.08)}
+  #tsshop-detail .tsd-imgwrap img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover}
+  #tsshop-detail .tsd-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.6rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin:2px 0 10px}
+  #tsshop-detail .tsd-title{font-size:clamp(26px,3.4vw,40px);font-weight:800;letter-spacing:-.02em;line-height:1.1;color:#fff;margin:0 0 16px}
+  #tsshop-detail .tsd-content{font-size:.95rem;line-height:1.65;color:rgba(255,255,255,.72)}
+  #tsshop-detail .tsd-content [id]{}
+  #tsshop-detail .tsd-content .notion-text{margin:6px 0;color:rgba(255,255,255,.72)}
+  #tsshop-detail .tsd-content .notion-semantic-string{color:inherit}
+  #tsshop-detail .tsd-content img{max-width:100%;height:auto;border-radius:10px}
+  #tsshop-detail .tsd-content .notion-column-list{display:block}
+  #tsshop-detail .tsd-content .notion-column{width:100%!important;max-width:100%!important;margin:0 0 10px!important}
+  #tsshop-detail .tsd-content .notion-code{position:relative;max-height:280px;overflow:auto;margin:12px 0;padding:14px 16px;border-radius:10px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);font-size:.8rem;line-height:1.55}
+  #tsshop-detail .tsd-content .notion-code::-webkit-scrollbar{width:8px;height:8px}
+  #tsshop-detail .tsd-content .notion-code::-webkit-scrollbar-thumb{background:rgba(199,180,137,.25);border-radius:99px}
+  #tsshop-detail .tsd-copy{position:sticky;top:0;float:right;margin:-4px -6px 6px 10px;padding:5px 13px;border-radius:999px;border:1px solid rgba(216,201,171,.3);background:rgba(10,12,20,.85);color:rgba(216,201,171,.75);font-size:11px;font-weight:600;letter-spacing:.05em;cursor:pointer;transition:color .2s ease,border-color .2s ease}
+  #tsshop-detail .tsd-copy:hover{color:#efe6d2;border-color:rgba(216,201,171,.6)}
+  #tsshop-detail .tsd-buy{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.08)}
+  #tsshop-detail .tsd-price{font-size:1.9rem;font-weight:800;font-variant-numeric:tabular-nums;color:#efe6d2;line-height:1}
+  #tsshop-detail .tsd-price .tsd-pricenote{display:block;margin-top:7px;font-size:11px;font-weight:500;letter-spacing:.03em;color:rgba(255,255,255,.3)}
+  #tsshop-detail .tsd-done{flex:none;display:inline-flex;align-items:center;gap:9px;padding:13px 26px;border-radius:12px;border:1px solid rgba(216,201,171,.35);background:rgba(216,201,171,.1);color:#efe6d2;font-size:.92rem;font-weight:600;cursor:pointer;transition:background .25s ease,border-color .25s ease,color .25s ease}
+  #tsshop-detail .tsd-done:hover{background:rgba(216,201,171,.18);border-color:rgba(216,201,171,.6)}
+  #tsshop-detail .tsd-done.is-done{background:rgba(143,203,170,.14);border-color:rgba(143,203,170,.5);color:#9FD3B9}
+  @media(max-width:820px){
+    #tsshop-detail .tsd-panel{margin:12px 10px 20px}
+    #tsshop-detail .tsd-grid{grid-template-columns:1fr}
+    #tsshop-detail .tsd-imgwrap{position:relative;max-width:420px}
+    #tsshop-detail .tsd-buy{flex-direction:column;align-items:stretch}
+    #tsshop-detail .tsd-done{justify-content:center}
+  }
+  @media(prefers-reduced-motion:reduce){#tsshop-detail.tsd-anim .tsd-panel{animation:none}}
+  /* View-Transition-Morph Karte → Detail */
+  ::view-transition-group(tsshopimg),::view-transition-group(tsshoptitle),::view-transition-group(tsshopprice){animation-duration:.45s;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+  `;
 
-  /* Platzhalter-Bild (SVG data-URI) — bis Robert echte Produktbilder einträgt */
+  /* Platzhalter-Bild (SVG data-URI) — bis echte Produktbilder eingetragen sind */
   function ph(name){
     var initial=(name||'').trim().charAt(0).toUpperCase();
     var svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600">'
@@ -1886,16 +1943,48 @@
 
   var CHEV_L='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>';
   var CHEV_R='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+  var XICON='<svg viewBox="0 0 18 18" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4.5 4.5l9 9M13.5 4.5l-9 9"/></svg>';
+  var CHECK='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5 10-11"/></svg>';
 
-  function build(page){
-    var k=kachel(page.kachel); if(!k||!k.ist_produkt_kachel) return null;
+  /* ---- Schritte aus den Notion-Toggles der Phasen-Sektion lesen ---- */
+  function doneKey(txt){ return 'done-'+((txt||'').replace(/[‣\s]/g,'').slice(0,40)); }
+  function findPhases(){
+    var lists=document.querySelectorAll('.notion-column-list'), cand=null;
+    for(var i=0;i<lists.length;i++){
+      var t=lists[i].textContent||'';
+      if(t.indexOf('Phase I')>-1&&t.indexOf('Schritt')>-1){ if(!cand||cand.contains(lists[i])) cand=lists[i]; }
+    }
+    return cand;
+  }
+  function collectSteps(list){
+    var toggles=[].slice.call(list.querySelectorAll('.notion-toggle[class*="notion-toggle-heading"]'));
+    return toggles.map(function(t,i){
+      var sum=t.querySelector(':scope > .notion-toggle__summary');
+      var rawTitle=sum?sum.textContent:'';
+      var title=rawTitle.replace(/‣/g,'').replace(/\s+/g,' ').trim();
+      var content=t.querySelector(':scope > .notion-toggle__content');
+      var desc=content?content.textContent.replace(/\s+/g,' ').replace(/^→\s*/,'').trim().slice(0,110):'';
+      return { i:i, toggle:t, title:title, key:doneKey(rawTitle), content:content, desc:desc };
+    });
+  }
+  function isDone(step){ return localStorage.getItem(step.key)==='1'; }
+  function setDone(step,val){
+    localStorage.setItem(step.key, val?'1':'0');
+    /* Original-Toggle-System synchron halten (gleiche Keys, gleiche Attribute) */
+    step.toggle.setAttribute('data-done', val?'1':'0');
+    var box=step.toggle.querySelector('.done-check'); if(box) box.checked=val;
+  }
+
+  /* ---- Markup ---- */
+  function build(page,k,steps){
     var root=document.createElement('div'); root.id='tsshop';
-    var cards=k.objekt_varianten.map(function(v){
-      return '<article class="tss-card">'
-        +'<div class="tss-imgwrap"><img src="'+(v.img||ph(v.name))+'" alt="'+v.name+'" loading="lazy"></div>'
+    var cards=steps.map(function(st,i){
+      var v=k.objekt_varianten[i%k.objekt_varianten.length]||{};
+      return '<article class="tss-card'+(isDone(st)?' is-done':'')+'" data-step="'+i+'" role="button" tabindex="0" aria-label="'+st.title+' öffnen">'
+        +'<div class="tss-imgwrap"><img src="'+(v.img||ph(v.name||st.title))+'" alt="'+st.title+'" loading="lazy"><span class="tss-donebadge">'+CHECK+'</span></div>'
         +'<div class="tss-body">'
-          +'<h4 class="tss-name">'+v.name+'</h4>'
-          +'<p class="tss-desc">'+(v.desc||'')+'</p>'
+          +'<h4 class="tss-name">'+st.title+'</h4>'
+          +'<p class="tss-desc">'+st.desc+'</p>'
           +'<div class="tss-val">'+fmt(k.einheit_typ,v.wert)+'</div>'
         +'</div></article>';
     }).join('');
@@ -1904,6 +1993,7 @@
         +'<div class="tss-eyebrow">'+page.eyebrow+'</div>'
         +'<h3 class="tss-title">'+page.title+'</h3>'
         +'<p class="tss-sub">'+page.sub+'</p>'
+        +'<div class="tss-progress"></div>'
       +'</div>'
       +'<div class="tss-shelf" role="region" aria-label="'+k.kachel_name+' — Warenkorb">'
         +'<div class="tss-fade prev"></div><div class="tss-fade next"></div>'
@@ -1911,17 +2001,114 @@
         +'<button type="button" class="tss-nav next" aria-label="Weiter scrollen">'+CHEV_R+'</button>'
         +'<div class="tss-track">'+cards+'</div>'
       +'</div>'
-      +'<p class="tss-note">Beispielhafte Positionen und Preise — zur Veranschaulichung.</p>'
+      +'<p class="tss-note">Bilder und Beispielwerte dienen der Veranschaulichung.</p>'
       +'</div>';
     return root;
   }
+  function updProgress(root,steps){
+    var el=root.querySelector('.tss-progress'); if(!el) return;
+    var done=steps.filter(isDone).length;
+    el.textContent=done+' / '+steps.length+' erledigt';
+    el.classList.toggle('is-on',done>0);
+  }
 
-  function setup(root){
+  /* ---- Detail-Overlay ---- */
+  function setNames(card,on){
+    if(!card) return;
+    var img=card.querySelector('.tss-imgwrap img'), ttl=card.querySelector('.tss-name'), val=card.querySelector('.tss-val');
+    if(img) img.style.viewTransitionName=on?'tsshopimg':'';
+    if(ttl) ttl.style.viewTransitionName=on?'tsshoptitle':'';
+    if(val) val.style.viewTransitionName=on?'tsshopprice':'';
+  }
+  function buildOverlay(page,k,steps,idx,root){
+    var st=steps[idx];
+    var v=k.objekt_varianten[idx%k.objekt_varianten.length]||{};
+    var ov=document.createElement('div'); ov.id='tsshop-detail';
+    ov.innerHTML='<div class="tsd-back"></div>'
+      +'<div class="tsd-panel">'
+        +'<button type="button" class="tsd-close" aria-label="Schließen">'+XICON+'</button>'
+        +'<div class="tsd-grid">'
+          +'<div class="tsd-imgwrap"><img src="'+(v.img||ph(v.name||st.title))+'" alt="'+st.title+'" style="view-transition-name:tsshopimg"></div>'
+          +'<div class="tsd-info">'
+            +'<div class="tsd-eyebrow">'+page.eyebrow+'</div>'
+            +'<h2 class="tsd-title" style="view-transition-name:tsshoptitle">'+st.title+'</h2>'
+            +'<div class="tsd-content"></div>'
+            +'<div class="tsd-buy">'
+              +'<div class="tsd-price" style="view-transition-name:tsshopprice">'+fmt(k.einheit_typ,v.wert)+'<span class="tsd-pricenote">* Beispielwert — '+k.einheit+'</span></div>'
+              +'<button type="button" class="tsd-done'+(isDone(st)?' is-done':'')+'">'+CHECK+'<span>'+(isDone(st)?'Erledigt':'Als erledigt markieren')+'</span></button>'
+            +'</div>'
+          +'</div>'
+        +'</div>'
+      +'</div>';
+    /* Schritt-Inhalt verlustfrei klonen */
+    var target=ov.querySelector('.tsd-content');
+    if(st.content){
+      var clone=st.content.cloneNode(true);
+      [].slice.call(clone.querySelectorAll('[id]')).forEach(function(e){ e.removeAttribute('id'); });
+      [].slice.call(clone.querySelectorAll('.done-check, .notion-code__copy-button')).forEach(function(e){ e.remove(); });
+      /* eigener Copy-Button je Formelblock */
+      [].slice.call(clone.querySelectorAll('.notion-code')).forEach(function(code){
+        var btn=document.createElement('button'); btn.type='button'; btn.className='tsd-copy'; btn.textContent='Copy';
+        btn.addEventListener('click',function(e){
+          e.stopPropagation();
+          var src=code.cloneNode(true); var b=src.querySelector('.tsd-copy'); if(b) b.remove();
+          var txt=src.textContent.trim();
+          if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(txt);
+          btn.textContent='Kopiert'; setTimeout(function(){ btn.textContent='Copy'; },1600);
+        });
+        code.insertBefore(btn,code.firstChild);
+      });
+      target.appendChild(clone);
+    }
+    /* Erledigt-Button */
+    var doneBtn=ov.querySelector('.tsd-done');
+    doneBtn.addEventListener('click',function(){
+      var val=!isDone(st);
+      setDone(st,val);
+      doneBtn.classList.toggle('is-done',val);
+      doneBtn.querySelector('span').textContent=val?'Erledigt':'Als erledigt markieren';
+      var card=root.querySelector('.tss-card[data-step="'+idx+'"]'); if(card) card.classList.toggle('is-done',val);
+      updProgress(root,steps);
+    });
+    return ov;
+  }
+  function openDetail(page,k,steps,idx,root){
+    if(document.getElementById('tsshop-detail')) return;
+    var card=root.querySelector('.tss-card[data-step="'+idx+'"]');
+    var ov=buildOverlay(page,k,steps,idx,root);
+    function mountOv(){
+      document.body.appendChild(ov);
+      document.body.style.overflow='hidden';
+    }
+    function closeOv(){
+      function unmount(){ ov.remove(); document.body.style.overflow=''; setNames(card,false); }
+      if(document.startViewTransition&&!reduced&&card){
+        setNames(card,false);
+        var vt=document.startViewTransition(function(){ ov.remove(); document.body.style.overflow=''; setNames(card,true); });
+        vt.finished.then(function(){ setNames(card,false); }).catch(function(){ setNames(card,false); });
+      } else unmount();
+    }
+    ov.querySelector('.tsd-close').addEventListener('click',closeOv);
+    ov.querySelector('.tsd-back').addEventListener('click',closeOv);
+    ov.addEventListener('click',function(e){ if(e.target===ov) closeOv(); });
+    document.addEventListener('keydown',function esc(e){ if(e.key==='Escape'){ closeOv(); document.removeEventListener('keydown',esc); } });
+    if(document.startViewTransition&&!reduced&&card){
+      /* Morph nach oben: Karte gibt ihre view-transition-names ans Overlay ab */
+      setNames(card,true);
+      var vt=document.startViewTransition(function(){ setNames(card,false); mountOv(); });
+      vt.finished.catch(function(){});
+    } else {
+      ov.classList.add('tsd-anim');
+      mountOv();
+    }
+  }
+
+  /* ---- Verhalten Regal ---- */
+  function setup(page,k,steps,root){
     var track=root.querySelector('.tss-track');
     var cards=[].slice.call(root.querySelectorAll('.tss-card'));
     var fadeP=root.querySelector('.tss-fade.prev'), fadeN=root.querySelector('.tss-fade.next');
     var navP=root.querySelector('.tss-nav.prev'), navN=root.querySelector('.tss-nav.next');
-    /* Start-Animation: gestaffelter Reveal der sichtbaren Reihe */
     var io=new IntersectionObserver(function(e){
       if(!e[0].isIntersecting) return;
       cards.forEach(function(c,i){
@@ -1932,7 +2119,6 @@
       io.disconnect();
     },{threshold:.25});
     io.observe(root);
-    /* Scroll-Status: Pfeile + Kantenschleier nur zeigen, wenn es dort weitergeht */
     function upd(){
       var max=track.scrollWidth-track.clientWidth-2;
       var canP=track.scrollLeft>4, canN=track.scrollLeft<max;
@@ -1945,39 +2131,39 @@
     track.addEventListener('scroll',upd,{passive:true});
     window.addEventListener('resize',upd);
     setTimeout(upd,150);
+    cards.forEach(function(c){
+      c.addEventListener('click',function(){ openDetail(page,k,steps,parseInt(c.dataset.step,10),root); });
+      c.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openDetail(page,k,steps,parseInt(c.dataset.step,10),root); } });
+    });
+    updProgress(root,steps);
   }
 
-  /* Anker: die Spaltenliste mit den Phasen ("Phase I" + "Schritt") — tiefste Fundstelle */
-  function findSpot(){
-    var lists=document.querySelectorAll('.notion-column-list'), cand=null;
-    for(var i=0;i<lists.length;i++){
-      var t=lists[i].textContent||'';
-      if(t.indexOf('Phase I')>-1&&t.indexOf('Schritt')>-1){ if(!cand||cand.contains(lists[i])) cand=lists[i]; }
-    }
-    if(cand) return {mode:'before',el:cand};
-    var n=document.querySelectorAll('.notion-text');
-    for(var j=0;j<n.length;j++){ if((n[j].textContent||'').indexOf('legen wir in der nächsten Lektion gemeinsam an')>-1) return {mode:'after',el:n[j]}; }
-    return null;
-  }
   function pageFor(){
     for(var i=0;i<PAGES.length;i++){ if(PAGES[i].path.test(location.pathname)) return PAGES[i]; }
     return null;
   }
   function mount(){
     var page=pageFor();
-    if(!page){ var e=document.getElementById('tsshop'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    if(!page){
+      var e=document.getElementById('tsshop'); if(e&&e.parentNode)e.parentNode.removeChild(e);
+      var d=document.getElementById('tsshop-detail'); if(d){ d.remove(); document.body.style.overflow=''; }
+      return;
+    }
+    var list=findPhases(); if(!list) return;
+    /* Original-Phasen verstecken (Notion bleibt SSOT) — auch nach React-Re-Render */
+    if(list.style.display!=='none') list.style.display='none';
     if(document.getElementById('tsshop')) return;
-    var spot=findSpot(); if(!spot) return;
+    var k=kachel(page.kachel); if(!k||!k.ist_produkt_kachel) return;
+    var steps=collectSteps(list); if(!steps.length) return;
     injectCSS();
-    var root=build(page); if(!root) return;
-    if(spot.mode==='before') spot.el.parentNode.insertBefore(root,spot.el);
-    else spot.el.parentNode.insertBefore(root,spot.el.nextSibling);
-    setup(root);
+    var root=build(page,k,steps);
+    list.parentNode.insertBefore(root,list);
+    setup(page,k,steps,root);
   }
   function boot(){
     var tries=0;
     var iv=setInterval(function(){ tries++; mount(); if(tries>40) clearInterval(iv); },300);
-    new MutationObserver(function(){ if(!document.getElementById('tsshop')) mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+    new MutationObserver(function(){ mount(); }).observe(document.documentElement,{childList:true,subtree:true});
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
