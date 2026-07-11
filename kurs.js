@@ -2106,9 +2106,9 @@
       objekt_varianten:[
         { name:'Creme Lack',            wert:350,   img:'https://tastyrob123.github.io/kurs/img/vertraege/creme-lack.jpg' },
         { name:'Taupe Matt',            wert:500,   img:'https://tastyrob123.github.io/kurs/img/vertraege/taupe-matt.jpg' },
-        { name:'Tiefdunkel Poliert',    wert:750,   img:'https://tastyrob123.github.io/kurs/img/vertraege/tiefdunkel-poliert.jpg' },
+        { name:'Navy Creme Zweifarbig', wert:750,   img:'https://tastyrob123.github.io/kurs/img/vertraege/navy-creme-zweifarbig.jpg' },
         { name:'Edelstahl Gebürstet',   wert:1000,  img:'https://tastyrob123.github.io/kurs/img/vertraege/edelstahl-gebuerstet.jpg' },
-        { name:'Navy Creme Zweifarbig', wert:1400,  img:'https://tastyrob123.github.io/kurs/img/vertraege/navy-creme-zweifarbig.jpg' },
+        { name:'Tiefdunkel Poliert',    wert:1400,  img:'https://tastyrob123.github.io/kurs/img/vertraege/tiefdunkel-poliert.jpg' },
         { name:'Schwarz Glanz Chrom',   wert:1900,  img:'https://tastyrob123.github.io/kurs/img/vertraege/schwarz-glanz-chrom.jpg' },
         { name:'Weiß Matt',             wert:2500,  img:'https://tastyrob123.github.io/kurs/img/vertraege/weiss-matt.jpg' },
         { name:'Taupe Leder',           wert:3200,  img:'https://tastyrob123.github.io/kurs/img/vertraege/taupe-leder.jpg' },
