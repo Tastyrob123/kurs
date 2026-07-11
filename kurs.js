@@ -1956,10 +1956,18 @@
   #tsshop .tss-shelf{position:relative}
   #tsshop .tss-track{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 2px 22px;scrollbar-width:none;-ms-overflow-style:none;overscroll-behavior-x:contain}
   #tsshop .tss-track::-webkit-scrollbar{display:none}
-  #tsshop .tss-card{flex:0 0 calc((100% - 3*22px)/4);scroll-snap-align:start;cursor:pointer;border-radius:16px;overflow:hidden;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0));border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85);opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .75s cubic-bezier(.22,1,.36,1),border-color .4s ease,box-shadow .5s ease}
+  #tsshop .tss-card{--tss-g:104,134,196;flex:0 0 calc((100% - 3*22px)/4);scroll-snap-align:start;cursor:pointer;border-radius:16px;overflow:visible;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0));border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85);opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .75s cubic-bezier(.22,1,.36,1),border-color .4s ease,box-shadow .5s ease}
   #tsshop .tss-card.on{opacity:1;transform:translateY(0)}
-  #tsshop .tss-card:hover,#tsshop .tss-card:focus-visible{transform:translateY(-4px);border-color:rgba(158,148,127,.45);box-shadow:0 12px 36px -16px rgba(158,148,127,.28),0 26px 54px -36px rgba(0,0,0,.9);outline:none}
-  #tsshop .tss-imgwrap{position:relative;aspect-ratio:1/1;overflow:hidden;background:#0b0d14}
+  /* Heartbeat-Glow wie #tsq (mehrwert-zielbild): navy-pastell neutral, pastellgrün im Einkaufswagen */
+  #tsshop .tss-card:hover,#tsshop .tss-card:focus-visible{transform:translateY(-4px);border-color:rgba(var(--tss-g),.5);animation:tss-heartbeat 2.6s cubic-bezier(.4,0,.3,1) infinite;outline:none}
+  @keyframes tss-heartbeat{
+    0%{box-shadow:0 4px 14px rgba(var(--tss-g),.10),0 0 14px rgba(var(--tss-g),.10)}
+    18%{box-shadow:0 6px 22px rgba(var(--tss-g),.30),0 0 46px rgba(var(--tss-g),.34)}
+    32%{box-shadow:0 5px 18px rgba(var(--tss-g),.16),0 0 26px rgba(var(--tss-g),.18)}
+    46%{box-shadow:0 6px 20px rgba(var(--tss-g),.26),0 0 40px rgba(var(--tss-g),.28)}
+    72%,100%{box-shadow:0 4px 14px rgba(var(--tss-g),.10),0 0 14px rgba(var(--tss-g),.10)}
+  }
+  #tsshop .tss-imgwrap{position:relative;aspect-ratio:1/1;overflow:hidden;border-radius:16px 16px 0 0;background:#0b0d14}
   #tsshop .tss-imgwrap img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.22,1,.36,1)}
   #tsshop .tss-card:hover .tss-imgwrap img{transform:scale(1.04)}
   #tsshop .tss-donebadge{position:absolute;top:12px;right:12px;z-index:3;width:28px;height:28px;border-radius:50%;display:none;align-items:center;justify-content:center;background:rgba(143,203,170,.92);border:1px solid rgba(255,255,255,.25);color:#0b1512;box-shadow:0 4px 16px rgba(143,203,170,.4)}
@@ -1967,11 +1975,12 @@
   /* im Einkaufswagen = edles Pastellgrün — Schleier nur über Rahmen/Textbereich, NICHT über dem Bild */
   #tsshop .tss-card{position:relative}
   #tsshop .tss-body{position:relative}
-  #tsshop .tss-body::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(143,203,170,.12),rgba(143,203,170,.22));opacity:0;transition:opacity .55s ease}
+  #tsshop .tss-body::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:0 0 16px 16px;background:linear-gradient(180deg,rgba(143,203,170,.12),rgba(143,203,170,.22));opacity:0;transition:opacity .55s ease}
   #tsshop .tss-card.is-done .tss-body::after{opacity:1}
-  #tsshop .tss-card.is-done{background:linear-gradient(165deg,rgba(160,208,180,.30),rgba(160,208,180,.12) 55%,rgba(160,208,180,.05));border-color:rgba(160,208,180,.6);box-shadow:0 18px 44px -30px rgba(0,0,0,.85),0 0 38px rgba(143,203,170,.24)}
-  #tsshop .tss-card.is-done:hover,#tsshop .tss-card.is-done:focus-visible{border-color:rgba(160,208,180,.8);box-shadow:0 12px 36px -16px rgba(143,203,170,.35),0 26px 54px -36px rgba(0,0,0,.9)}
+  #tsshop .tss-card.is-done{--tss-g:143,203,170;background:linear-gradient(165deg,rgba(160,208,180,.30),rgba(160,208,180,.12) 55%,rgba(160,208,180,.05));border-color:rgba(160,208,180,.6);box-shadow:0 18px 44px -30px rgba(0,0,0,.85),0 0 38px rgba(143,203,170,.24)}
   #tsshop .tss-card.is-done .tss-val{color:#9FD3B9}
+  /* Tron-Neon-Sweep beim In-den-Einkaufswagen-Legen */
+  #tsshop .tss-neon{position:absolute;inset:0;width:100%;height:100%;z-index:4;pointer-events:none;overflow:visible;filter:drop-shadow(0 0 5px rgba(143,203,170,.95)) drop-shadow(0 0 16px rgba(143,203,170,.5));transition:opacity .5s ease}
   #tsshop .tss-body{padding:16px 18px 18px}
   #tsshop .tss-name{font-size:1.02rem;font-weight:600;letter-spacing:-.012em;color:#fff;margin:0 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   #tsshop .tss-desc{font-size:.82rem;color:rgba(255,255,255,.52);line-height:1.5;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1991,6 +2000,7 @@
   @media(hover:none){#tsshop .tss-nav{display:none}}
   @media(prefers-reduced-motion:reduce){
     #tsshop .tss-card{opacity:1;transform:none;transition:none}
+    #tsshop .tss-card:hover,#tsshop .tss-card:focus-visible{transform:none;animation:none;box-shadow:0 0 26px rgba(var(--tss-g),.25)}
     #tsshop .tss-imgwrap img{transition:none}
     #tsshop .tss-nav{transition:none}
   }
@@ -2131,6 +2141,32 @@
     el.classList.toggle('is-on',done>0);
   }
 
+  /* Tron-Neon-Sweep: startet unten links, läuft in beide Richtungen, trifft sich oben rechts */
+  function neonSweep(card){
+    if(reduced||!card||card.querySelector('.tss-neon')) return;
+    var w=card.offsetWidth,h=card.offsetHeight; if(!w||!h) return;
+    var i=1.25,r=16-i,q=r-r/Math.SQRT2;
+    var x0=i,y0=i,x1=w-i,y1=h-i;
+    var P0x=x0+q,P0y=y1-q,P1x=x1-q,P1y=y0+q;
+    var pA='M '+P0x+' '+P0y+' A '+r+' '+r+' 0 0 1 '+x0+' '+(y1-r)+' L '+x0+' '+(y0+r)+' A '+r+' '+r+' 0 0 1 '+(x0+r)+' '+y0+' L '+(x1-r)+' '+y0+' A '+r+' '+r+' 0 0 1 '+P1x+' '+P1y;
+    var pB='M '+P0x+' '+P0y+' A '+r+' '+r+' 0 0 0 '+(x0+r)+' '+y1+' L '+(x1-r)+' '+y1+' A '+r+' '+r+' 0 0 0 '+x1+' '+(y1-r)+' L '+x1+' '+(y0+r)+' A '+r+' '+r+' 0 0 0 '+P1x+' '+P1y;
+    var NS='http://www.w3.org/2000/svg';
+    var svg=document.createElementNS(NS,'svg');
+    svg.setAttribute('class','tss-neon');
+    svg.setAttribute('viewBox','0 0 '+w+' '+h);
+    [pA,pB].forEach(function(d){
+      var p=document.createElementNS(NS,'path');
+      p.setAttribute('d',d); p.setAttribute('fill','none');
+      p.setAttribute('stroke','#A9DCC1'); p.setAttribute('stroke-width','2.5'); p.setAttribute('stroke-linecap','round');
+      svg.appendChild(p);
+      var len=p.getTotalLength();
+      p.style.strokeDasharray=len; p.style.strokeDashoffset=len;
+      p.animate([{strokeDashoffset:len},{strokeDashoffset:0}],{duration:950,easing:'cubic-bezier(.22,1,.36,1)',fill:'forwards'});
+    });
+    card.appendChild(svg);
+    setTimeout(function(){ svg.style.opacity='0'; setTimeout(function(){ svg.remove(); },520); },1300);
+  }
+
   /* ---- Detail-Overlay ---- */
   function setNames(card,on){
     if(!card) return;
@@ -2210,7 +2246,7 @@
       setDone(st,val);
       var c=root.querySelector('.tss-card[data-step="'+idx+'"]'); if(c) c.classList.toggle('is-done',val);
       updProgress(root,steps);
-      if(val){ closeOv(); return; }
+      if(val){ closeOv(); setTimeout(function(){ neonSweep(c); },420); return; }
       doneBtn.classList.remove('is-done');
       doneBtn.innerHTML=CART+'<span>In den Einkaufswagen</span>';
     });
