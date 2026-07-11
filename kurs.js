@@ -1852,6 +1852,7 @@
   if(window.__tsmiss) return; window.__tsmiss=true;
   var CSS=`
   .page__inventurliste .tsm-h{text-align:center !important;color:#fff !important;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif !important;font-size:clamp(1.7rem,2.6vw,2.2rem) !important;font-weight:600 !important;letter-spacing:-.01em !important;line-height:1.2 !important;margin-top:72px !important;margin-bottom:16px !important}
+  .page__inventurliste .tsm-h .tsm-hg{color:#9e947f !important}
   .page__inventurliste .tsm-i{max-width:820px;margin-left:auto !important;margin-right:auto !important;text-align:center !important;color:rgba(255,255,255,.62) !important}
   .page__inventurliste .tsm-mid{max-width:820px;margin-left:auto !important;margin-right:auto !important;margin-top:10px !important;text-align:center !important;color:#fff !important}
   #tsmiss{--g:199,180,137;--rx:0deg;--ry:0deg;position:relative;display:grid;grid-template-columns:minmax(300px,1fr) 2fr;gap:clamp(28px,4.5vw,60px);align-items:center;width:min(1000px,95vw);margin:34px auto 30px;padding:clamp(26px,4vw,44px) clamp(24px,4.5vw,50px);border-radius:20px;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0));border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85),0 0 14px rgba(var(--g),.08);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;transform-style:preserve-3d;will-change:transform;opacity:0;transform:perspective(1100px) rotateX(9deg) translateY(34px) scale(.97);transition:opacity .8s ease,transform .9s cubic-bezier(.16,1,.3,1)}
@@ -1893,6 +1894,7 @@
   function retext(){
     var h=findText('.page__inventurliste .notion-heading', /Was uns jetzt noch fehlt/);
     if(h && !h.classList.contains('tsm-h')){ h.classList.add('tsm-h'); h.textContent=(h.textContent||'').replace(/\s*:\s*$/,''); }
+    if(h && !h.querySelector('.tsm-hg')){ h.innerHTML=(h.textContent||'').replace(/(fehlt)(\s*)$/,'<span class="tsm-hg">$1</span>$2'); } /* Zwei-Ton: letztes Wort gold */
     var p=findText('.page__inventurliste .notion-text', /Grundstruktur für deine Inventurliste/);
     if(p && !p.classList.contains('tsm-i')){
       p.classList.add('tsm-i');
