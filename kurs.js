@@ -2195,7 +2195,7 @@
       eyebrow:'Der Warenkorb · DB III',
       title:'Deine Lieferverträge. <span>An einem Ort.</span>',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB III ist der Vertragswert.',
-      cta:'Vertrag abschließen', ctaDone:'Vertrag geschlossen', chain:true }
+      summary:'Vertragsvolumina', cta:'Vertrag abschließen', ctaDone:'Vertrag geschlossen', chain:true }
   ];
 
   var reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2210,12 +2210,10 @@
   #tsshop .tss-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(32px,4.4vw,52px);font-weight:600;letter-spacing:-.02em;line-height:1.1;color:#fff;margin:0 0 12px}
   #tsshop .tss-title span{color:#c7b489}
   #tsshop .tss-sub{font-size:15px;color:rgba(255,255,255,.42);max-width:600px;margin:0 auto;line-height:1.6}
-  #tsshop .tss-progress{text-align:center;margin-top:2px;font-size:15px;font-weight:600;letter-spacing:.05em;color:#c7b489;transition:color .4s ease}
-  #tsshop .tss-progress.is-on{color:#d8c9ab}
-  /* Gesamt-Summe der im Einkaufswagen liegenden Karten — große rote Lineal-Zahl + weißes Label */
-  #tsshop .tss-sum{text-align:center;margin-top:clamp(30px,4.5vh,56px);opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .8s cubic-bezier(.22,1,.36,1)}
+  /* Gesamt-Summe der im Einkaufswagen liegenden Karten — rote Lineal-Zahl + weißes Label */
+  #tsshop .tss-sum{text-align:center;margin-top:clamp(28px,4vh,50px);opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .8s cubic-bezier(.22,1,.36,1)}
   #tsshop .tss-sum.on{opacity:1;transform:none}
-  #tsshop .tss-sum-val{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(42px,6.4vw,78px);font-weight:600;letter-spacing:-.022em;line-height:1;color:#E5484D;font-variant-numeric:tabular-nums;display:inline-block}
+  #tsshop .tss-sum-val{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(34px,5.2vw,62px);font-weight:400;letter-spacing:-.018em;line-height:1;color:#E5484D;font-variant-numeric:tabular-nums;display:inline-block}
   #tsshop .tss-sum-val.pulse{animation:tss-sumpulse .6s cubic-bezier(.22,1,.36,1)}
   @keyframes tss-sumpulse{0%{transform:scale(1)}32%{transform:scale(1.09)}100%{transform:scale(1)}}
   #tsshop .tss-sum-label{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(15px,1.7vw,21px);font-weight:500;letter-spacing:.005em;color:#fff;margin-top:12px}
@@ -2399,18 +2397,11 @@
         +'<button type="button" class="tss-nav next" aria-label="Weiter scrollen">'+CHEV_R+'</button>'
         +'<div class="tss-track">'+cards+'</div>'
       +'</div>'
-      +'<div class="tss-progress"></div>'
       +(page.summary?'<div class="tss-sum"><div class="tss-sum-val"></div><div class="tss-sum-label">'+page.summary+'</div></div>':'')
       +'</div>';
     return root;
   }
   function updProgress(root,steps,k,page){
-    var el=root.querySelector('.tss-progress');
-    if(el){
-      var done=steps.filter(isDone).length;
-      el.textContent=done+' / '+steps.length+' im Einkaufswagen';
-      el.classList.toggle('is-on',done>0);
-    }
     /* Gesamt-Summe: nur Seiten mit page.summary — Werte exakt wie auf den Karten
        (zyklisches Mapping Schritt-Index → Objekt-Variante). */
     if(page&&page.summary&&k&&k.objekt_varianten){
