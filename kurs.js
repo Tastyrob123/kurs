@@ -2144,7 +2144,8 @@
     { path:/\/inventurliste\/?$/, kachel:'db0_inventurliste',
       eyebrow:'Der Warenkorb · DB 0',
       title:'Deine Inventurliste. <span>Schritt für Schritt.</span>',
-      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB 0 ist der Preis.' },
+      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB 0 ist der Preis.',
+      chain:true },
     { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_lieferanten',
       marker:/Kundennummer/,
       eyebrow:'Der Warenkorb · DB I',
@@ -2465,11 +2466,13 @@
         closeOv();
         setTimeout(function(){ neonSweep(c); },420);
         /* Chain (nur Seiten mit page.chain): Overlay schließt → Tron läuft →
-           die Reihe rutscht einen auf, sodass die rechte Nachbar-Kachel exakt
+           die Reihe rutscht auf, sodass die nächste NOCH FREIE Kachel exakt
            die Position der eben geöffneten einnimmt → dann öffnet sie sich.
-           Ausgelöst NUR durch „Tour buchen"; Klick auf X/Backdrop beendet die Kette. */
-        var nextIdx=idx+1;
-        if(page.chain && nextIdx<steps.length){
+           Bereits im Korb liegende Kacheln werden übersprungen. Ausgelöst NUR
+           durch das Hinzufügen; Klick auf X/Backdrop beendet die Kette. */
+        var nextIdx=-1;
+        if(page.chain){ for(var j=idx+1;j<steps.length;j++){ if(!isDone(steps[j])){ nextIdx=j; break; } } }
+        if(nextIdx>=0){
           var slideT=reduced?260:1400, openT=reduced?520:2150;
           setTimeout(function(){
             var track=root.querySelector('.tss-track');
