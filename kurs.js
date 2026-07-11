@@ -1927,10 +1927,10 @@
   var reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var CSS=`
-  #tsshop{width:100vw;max-width:100vw;margin:clamp(35px,5vh,60px) 0;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 clamp(20px,4vw,56px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
+  #tsshop{width:100vw;max-width:100vw;margin:clamp(28px,4vh,46px) 0;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 clamp(20px,4vw,56px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
   #tsshop *{box-sizing:border-box}
   #tsshop .tss-inner{max-width:1280px;margin:0 auto}
-  #tsshop .tss-head{text-align:center;margin-bottom:24px}
+  #tsshop .tss-head{text-align:center;margin-bottom:30px}
   #tsshop .tss-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin-bottom:12px}
   #tsshop .tss-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#9e947f;box-shadow:0 0 12px rgba(158,148,127,.7)}
   #tsshop .tss-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(32px,4.4vw,52px);font-weight:600;letter-spacing:-.02em;line-height:1.1;color:#fff;margin:0 0 12px}
@@ -2263,6 +2263,12 @@
     var list=findPhases(); if(!list) return;
     /* Original-Phasen verstecken (Notion bleibt SSOT) — auch nach React-Re-Render */
     if(list.style.display!=='none') list.style.display='none';
+    /* leere Notion-Text-Blöcke direkt über dem Shop ausblenden — sie erzeugen tote Leerfläche */
+    var top=document.getElementById('tsshop')||list, prev=top.previousElementSibling;
+    while(prev && prev.classList && prev.classList.contains('notion-text') && !(prev.textContent||'').trim()){
+      if(prev.style.display!=='none') prev.style.display='none';
+      prev=prev.previousElementSibling;
+    }
     if(document.getElementById('tsshop')) return;
     var k=kachel(page.kachel); if(!k||!k.ist_produkt_kachel) return;
     var steps=collectSteps(list); if(!steps.length) return;
