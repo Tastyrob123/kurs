@@ -1729,6 +1729,70 @@
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
 
+/* ============================================================
+   inventurliste — #tsside 2-Spalten-Layout
+   Setzt die 3 Luxus-Kacheln (#tslink) und die DB0-Animation
+   (#tsdb0) samt "Empfehlung zur Anzeige" nebeneinander:
+   links die Kacheln vertikal gestapelt, rechts die Animation
+   + geklonte Empfehlung (h2 + nummerierte Liste). Notion-DOM
+   wird NICHT verschoben — Original h2/ol nur versteckt
+   (React-sicher, Muster wie .tsmac). Anker: Phrase-first.
+   ============================================================ */
+(function(){
+  if(window.__tsside) return; window.__tsside=true;
+  var CSS=`
+  #tsside{display:grid;grid-template-columns:1fr 1.08fr;gap:clamp(28px,4vw,52px);align-items:center;width:min(1000px,95vw);margin:36px auto 30px}
+  #tsside .tss-col{min-width:0}
+  #tsside #tslink{width:100%;margin:0}
+  #tsside #tslink .tsl-grid{grid-template-columns:1fr;gap:14px}
+  #tsside #tslink .tsl-card{padding:20px 24px 14px}
+  #tsside #tslink .tsl-ic{width:38px;height:38px;margin-bottom:14px}
+  #tsside #tslink .tsl-foot{margin-top:14px;padding-top:12px}
+  #tsside #tsdb0{margin:0}
+  #tsside .tss-emp{margin-top:26px}
+  #tsside .tss-emp h2{font-size:1.15rem;font-weight:700;color:#fff;margin:0 0 12px;padding:0}
+  #tsside .tss-emp ol{margin:0;padding-left:1.25em}
+  #tsside .tss-emp li{color:rgba(255,255,255,.62);font-size:.92rem;line-height:1.7;margin:0 0 10px}
+  .tss-hide{display:none !important}
+  @media(max-width:900px){#tsside{grid-template-columns:1fr;gap:28px}}
+  `;
+  function on(){ return /\/inventurliste\/?$/.test(location.pathname); }
+  function injectCSS(){ if(document.getElementById('tsside-css'))return; var s=document.createElement('style'); s.id='tsside-css'; s.textContent=CSS; document.head.appendChild(s); }
+  function findEmp(){
+    var hs=document.querySelectorAll('.page__inventurliste h2.notion-heading,.page__inventurliste .notion-callout');
+    for(var i=0;i<hs.length;i++){ if(/Empfehlung zur Anzeige/.test(hs[i].textContent||'')) return hs[i]; }
+    return null;
+  }
+  function stripIds(el){ if(el.removeAttribute)el.removeAttribute('id'); var q=el.querySelectorAll?el.querySelectorAll('[id]'):[]; for(var i=0;i<q.length;i++)q[i].removeAttribute('id'); return el; }
+  function mount(){
+    if(!on()){ var e=document.getElementById('tsside'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    if(document.getElementById('tsside')) return;
+    var link=document.getElementById('tslink'), db0=document.getElementById('tsdb0'), emp=findEmp();
+    if(!link||!db0||!emp) return;
+    var ol=emp.nextElementSibling;
+    while(ol && !(ol.matches&&ol.matches('ol.notion-numbered-list'))) ol=ol.nextElementSibling;
+    injectCSS();
+    var wrap=document.createElement('div'); wrap.id='tsside';
+    var L=document.createElement('div'); L.className='tss-col';
+    var R=document.createElement('div'); R.className='tss-col';
+    wrap.appendChild(L); wrap.appendChild(R);
+    link.parentNode.insertBefore(wrap, link);
+    L.appendChild(link);
+    R.appendChild(db0);
+    var box=document.createElement('div'); box.className='tss-emp';
+    box.appendChild(stripIds(emp.cloneNode(true)));
+    if(ol) box.appendChild(stripIds(ol.cloneNode(true)));
+    R.appendChild(box);
+    emp.classList.add('tss-hide'); if(ol) ol.classList.add('tss-hide');
+  }
+  function boot(){
+    var tries=0;
+    var iv=setInterval(function(){ tries++; mount(); if(tries>60) clearInterval(iv); },300);
+    new MutationObserver(function(){ if(on()&&!document.getElementById('tsside')) mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
+
 /* ---- */
 
 /* ============================================================
