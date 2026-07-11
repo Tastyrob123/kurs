@@ -2697,7 +2697,7 @@
     .tsflow-intro-block{ margin-top:70px !important; }
     .tsflow-intro-block, .tsflow-intro-block .notion-text, .tsflow-intro-block p, .tsflow-intro-block .notion-semantic-string{ text-align:center !important; }
     .tsflow-intro-block .notion-text{ max-width:820px; margin-left:auto !important; margin-right:auto !important; }
-    #tsFlowRoot .tsflow-title span{ color:#adc7ff; }
+    #tsFlowRoot .tsflow-title span{ color:#c7b489; }
     #tsFlowRoot .tsflow-sub{ font-size:17.5px; color:rgba(255,255,255,.44); max-width:660px; margin:0 auto; line-height:1.65; }
 
     #tsFlowRoot .tsflow-track{ display:flex; align-items:flex-start; justify-content:center; gap:0; }
@@ -2710,8 +2710,8 @@
     #tsFlowRoot .tsflow-node.central .tsflow-medallion{ border-width:2px; border-color:rgba(112,142,220,.72); box-shadow:0 0 40px rgba(196,216,255,.2), 0 0 0 4px rgba(196,216,255,.06); }
     #tsFlowRoot .tsflow-node.central:hover .tsflow-medallion{ box-shadow:0 0 60px rgba(206,224,255,.36), 0 0 0 8px rgba(206,224,255,.07); border-color:rgba(150,180,240,.96); }
 
-    #tsFlowRoot .tsflow-num{ font-size:11.5px; font-weight:700; letter-spacing:.18em; color:rgba(170,192,236,.64); margin-bottom:7px; }
-    #tsFlowRoot .tsflow-label{ font-size:15.5px; font-weight:700; letter-spacing:.01em; color:#fff; margin-bottom:5px; }
+    #tsFlowRoot .tsflow-num{ font-size:11.5px; font-weight:700; letter-spacing:.18em; color:rgba(199,180,137,.75); margin-bottom:7px; }
+    #tsFlowRoot .tsflow-label{ font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif; font-size:15.5px; font-weight:600; letter-spacing:-.01em; color:#fff; margin-bottom:5px; }
     #tsFlowRoot .tsflow-node.central .tsflow-label{ color:#eaf1ff; }
     #tsFlowRoot .tsflow-desc{ font-size:13.5px; color:rgba(255,255,255,.4); line-height:1.42; }
 
