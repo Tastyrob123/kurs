@@ -1877,7 +1877,7 @@
   #tsmiss .tsm-item{opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
   #tsmiss.in .tsm-item{opacity:1;transform:none}
   #tsmiss .tsm-p{color:rgba(255,255,255,.62);font-size:.95rem;line-height:1.7;margin:0 0 14px;max-width:none}
-  #tsmiss .tsm-emph2{font-size:1.15rem;font-weight:700;color:#fff;margin:20px 0 12px;padding:0}
+  #tsmiss .tsm-emph2{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1.45rem;font-weight:600;letter-spacing:-.012em;text-align:center;color:#fff;margin:20px 0 16px;padding:0}
   #tsmiss .tsm-ol{margin:0;padding-left:1.6em}
   #tsmiss .tsm-ol li{color:rgba(255,255,255,.62);font-size:.92rem;line-height:1.7;margin:0 0 10px;padding:10px 14px;border-radius:12px;transition:color .45s ease,background .5s ease,box-shadow .5s ease}
   #tsmiss .tsm-ol li::marker{color:rgba(255,255,255,.35);font-weight:600}
