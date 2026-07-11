@@ -2763,20 +2763,34 @@
     var rt; window.addEventListener('resize',function(){ clearTimeout(rt); rt=setTimeout(function(){ if(running){ resize(); initP(); } },200); });
   }
 
+  // Robust anchor: sit directly ABOVE der Video-Sektion ("DB I : Lieferpartner", halb Video / halb Text).
+  // Die Video-Spalten-Liste ist zuverlaessig gerendert; der Intro-Textblock darueber wird von super.so
+  // teils lazy/transient gerendert und taugt daher NICHT als Pflicht-Anker.
+  // Rueckgabe: {node, where}.
   function findAnchor(){
-    var lists=document.querySelectorAll('.notion-column-list');
-    for(var i=0;i<lists.length;i++){ var cl=lists[i];
-      if(cl.textContent && cl.textContent.indexOf('JRV und Co')>-1 && !cl.querySelector('.notion-video, .notion-video__content')) return cl;
+    var root=document.querySelector('.notion-root'); if(!root) return null;
+    var kids=root.children;
+    // primaer: die Top-Level-column-list mit dem Lektions-Video -> davor einhaengen
+    for(var i=0;i<kids.length;i++){
+      var k=kids[i];
+      if(k.classList && k.classList.contains('notion-column-list') && k.querySelector('.notion-video, .notion-video__content'))
+        return { node:k, where:'before' };
     }
+    // fallback: irgendein Video-Wrapper auf der Seite -> vor dessen Top-Level-Container
+    var v=document.querySelector('.notion-video, .notion-video__content');
+    if(v){ var c=v; while(c && c.parentNode!==root) c=c.parentNode; if(c) return { node:c, where:'before' }; }
+    // letzter fallback: Top-Level-Textblock mit 'JRV und Co' -> danach einhaengen
+    for(var j=0;j<kids.length;j++){ var t=kids[j]; if(t.textContent && t.textContent.indexOf('JRV und Co')>-1) return { node:t, where:'after' }; }
     return null;
   }
   function mount(){
     if(!PATH.test(location.pathname)) return;
     if(document.getElementById(ROOT_ID)) return;
-    var anchor=findAnchor(); if(!anchor) return;
+    var a=findAnchor(); if(!a) return;
     injectStyles();
     var root=buildMarkup();
-    anchor.parentNode.insertBefore(root, anchor.nextSibling);
+    if(a.where==='after') a.node.parentNode.insertBefore(root, a.node.nextSibling);
+    else a.node.parentNode.insertBefore(root, a.node);
     initFlow(root);
   }
   function boot(){
