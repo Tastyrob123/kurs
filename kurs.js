@@ -1850,10 +1850,10 @@
   #tsshop .tss-head{text-align:center;margin-bottom:24px}
   #tsshop .tss-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin-bottom:12px}
   #tsshop .tss-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#9e947f;box-shadow:0 0 12px rgba(158,148,127,.7)}
-  #tsshop .tss-title{font-size:clamp(26px,3.4vw,38px);font-weight:800;letter-spacing:-.02em;line-height:1.12;color:#fff;margin:0 0 10px}
+  #tsshop .tss-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(26px,3.4vw,38px);font-weight:600;letter-spacing:-.02em;line-height:1.12;color:#fff;margin:0 0 10px}
   #tsshop .tss-title span{color:#c7b489}
   #tsshop .tss-sub{font-size:15px;color:rgba(255,255,255,.42);max-width:600px;margin:0 auto;line-height:1.6}
-  #tsshop .tss-progress{margin-top:10px;font-size:12.5px;font-weight:600;letter-spacing:.03em;color:rgba(255,255,255,.3)}
+  #tsshop .tss-progress{text-align:center;margin-top:2px;font-size:12px;font-weight:600;letter-spacing:.04em;color:rgba(255,255,255,.28);transition:color .4s ease}
   #tsshop .tss-progress.is-on{color:#9FD3B9}
   #tsshop .tss-shelf{position:relative}
   #tsshop .tss-track{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 2px 22px;scrollbar-width:none;-ms-overflow-style:none;overscroll-behavior-x:contain}
@@ -1866,7 +1866,9 @@
   #tsshop .tss-card:hover .tss-imgwrap img{transform:scale(1.04)}
   #tsshop .tss-donebadge{position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:50%;display:none;align-items:center;justify-content:center;background:rgba(143,203,170,.16);border:1px solid rgba(143,203,170,.55);color:#9FD3B9;backdrop-filter:blur(4px)}
   #tsshop .tss-card.is-done .tss-donebadge{display:flex}
-  #tsshop .tss-card.is-done .tss-imgwrap img{filter:saturate(.85) brightness(.9)}
+  /* im Einkaufswagen = pastellgrün wie das alte Haken-System */
+  #tsshop .tss-card.is-done{background:linear-gradient(165deg,rgba(160,208,180,.16),rgba(160,208,180,.05) 55%,rgba(160,208,180,.02));border-color:rgba(160,208,180,.3);box-shadow:0 18px 44px -30px rgba(0,0,0,.85),0 0 24px rgba(143,203,170,.08)}
+  #tsshop .tss-card.is-done .tss-val{color:#9FD3B9}
   #tsshop .tss-body{padding:16px 18px 18px}
   #tsshop .tss-name{font-size:1.02rem;font-weight:600;letter-spacing:-.012em;color:#fff;margin:0 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   #tsshop .tss-desc{font-size:.82rem;color:rgba(255,255,255,.52);line-height:1.5;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1880,7 +1882,6 @@
   #tsshop .tss-nav:hover{border-color:rgba(158,148,127,.55);color:#d8c9ab;transform:scale(1.06)}
   #tsshop .tss-nav.prev{left:-10px}
   #tsshop .tss-nav.next{right:-10px}
-  #tsshop .tss-note{text-align:center;margin-top:2px;font-size:11.5px;letter-spacing:.03em;color:rgba(255,255,255,.25)}
   @media(max-width:1024px){#tsshop .tss-card{flex-basis:calc((100% - 2*22px)/3)}}
   @media(max-width:820px){#tsshop .tss-card{flex-basis:calc((100% - 22px)/2)}}
   @media(max-width:540px){#tsshop .tss-card{flex-basis:78%}#tsshop .tss-track{gap:16px}}
@@ -2010,7 +2011,6 @@
         +'<div class="tss-eyebrow">'+page.eyebrow+'</div>'
         +'<h3 class="tss-title">'+page.title+'</h3>'
         +'<p class="tss-sub">'+page.sub+'</p>'
-        +'<div class="tss-progress"></div>'
       +'</div>'
       +'<div class="tss-shelf" role="region" aria-label="'+k.kachel_name+' — Warenkorb">'
         +'<div class="tss-fade prev"></div><div class="tss-fade next"></div>'
@@ -2018,7 +2018,7 @@
         +'<button type="button" class="tss-nav next" aria-label="Weiter scrollen">'+CHEV_R+'</button>'
         +'<div class="tss-track">'+cards+'</div>'
       +'</div>'
-      +'<p class="tss-note">Bilder und Beispielwerte dienen der Veranschaulichung.</p>'
+      +'<div class="tss-progress"></div>'
       +'</div>';
     return root;
   }
@@ -2082,16 +2082,6 @@
       });
       target.appendChild(clone);
     }
-    /* Erledigt-Button */
-    var doneBtn=ov.querySelector('.tsd-done');
-    doneBtn.addEventListener('click',function(){
-      var val=!isDone(st);
-      setDone(st,val);
-      doneBtn.classList.toggle('is-done',val);
-      doneBtn.innerHTML=(val?CHECK:CART)+'<span>'+(val?'Im Einkaufswagen':'In den Einkaufswagen')+'</span>';
-      var card=root.querySelector('.tss-card[data-step="'+idx+'"]'); if(card) card.classList.toggle('is-done',val);
-      updProgress(root,steps);
-    });
     return ov;
   }
   function openDetail(page,k,steps,idx,root){
@@ -2110,6 +2100,18 @@
         vt.finished.then(function(){ setNames(card,false); }).catch(function(){ setNames(card,false); });
       } else unmount();
     }
+    /* In den Einkaufswagen: hinzufügen = Karte wird grün + Overlay schließt automatisch */
+    var doneBtn=ov.querySelector('.tsd-done');
+    doneBtn.addEventListener('click',function(){
+      var st=steps[idx];
+      var val=!isDone(st);
+      setDone(st,val);
+      var c=root.querySelector('.tss-card[data-step="'+idx+'"]'); if(c) c.classList.toggle('is-done',val);
+      updProgress(root,steps);
+      if(val){ closeOv(); return; }
+      doneBtn.classList.remove('is-done');
+      doneBtn.innerHTML=CART+'<span>In den Einkaufswagen</span>';
+    });
     ov.querySelector('.tsd-close').addEventListener('click',closeOv);
     ov.querySelector('.tsd-back').addEventListener('click',closeOv);
     ov.addEventListener('click',function(e){ if(e.target===ov) closeOv(); });

@@ -701,6 +701,9 @@ details > summary {
 .page__inventurliste #block-399b9546553480d993d5ef22dd9598a6 .notion-text__content{ text-align:center; color:#ffffff; font-size:1.7rem; font-weight:600; line-height:1.3; }
 .page__inventurliste #block-399b9546553480d993d5ef22dd9598a6{ margin-bottom:40px; }
 
+/* inventurliste — h1 "Formeln - der Gamechanger" in der Display-Schrift Lineal TS */
+.page__inventurliste h1.notion-heading{ font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif !important; font-weight:600 !important; letter-spacing:-.02em; }
+
 /* inventurliste — Video-Spalte neben "Formeln"-h1 wieder anzeigen (50/50 wie mehrwert-zielbild) */
 .page__inventurliste .notion-column-list:has(h1.notion-heading) > .notion-column:not(:has(h1.notion-heading)){ display:flex !important; }
 @media (min-width:768px){
