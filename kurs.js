@@ -2650,22 +2650,13 @@
   var PATH = /\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/;
   var ROOT_ID = 'tsFlowRoot';
 
+  var IMG = 'https://tastyrob123.github.io/kurs/img/flow/';
   var NODES = [
-    { k:'01', label:'Lieferant',          desc:'Die Bezugsquelle',   icon:'truck' },
-    { k:'02', label:'Ansprechpartner',    desc:'Dein Kontakt dort',  icon:'person' },
-    { k:'03', label:'Lieferantenvertrag', desc:'Konditionen & JRV',  icon:'doc' },
-    { k:'04', label:'Produkt',            desc:'Was bei dir ankommt', icon:'box', central:true }
+    { k:'01', label:'Lieferant',          desc:'Die Bezugsquelle',    img:'lieferant.jpg' },
+    { k:'02', label:'Ansprechpartner',    desc:'Dein Kontakt dort',   img:'ansprechpartner.jpg' },
+    { k:'03', label:'Lieferantenvertrag', desc:'Konditionen & JRV',   img:'lieferantenvertrag.jpg' },
+    { k:'04', label:'Produkt',            desc:'Was bei dir ankommt', img:'produkt.jpg', central:true }
   ];
-
-  var ICONS = {
-    truck:'<path d="M2 6.5h11.5v8.5H2z"/><path d="M13.5 9.5h3.6l3.4 3.4V15h-7z"/><circle cx="6" cy="17" r="1.7"/><circle cx="16.5" cy="17" r="1.7"/>',
-    person:'<circle cx="12" cy="8.2" r="3.3"/><path d="M5.6 19c0-3.7 2.9-5.7 6.4-5.7s6.4 2 6.4 5.7"/>',
-    doc:'<path d="M6.5 3h7l4 4v14h-11z"/><path d="M13.5 3v4h4"/><path d="M9 12h6M9 15.2h6M9 8.8h3"/>',
-    box:'<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4.2 7.7l7.8 4.5 7.8-4.5"/><path d="M12 12.2V21"/>'
-  };
-  function svgIcon(name){
-    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICONS[name]+'</svg>';
-  }
 
   function injectStyles(){
     if (document.getElementById('tsFlowStyles')) return;
@@ -2689,18 +2680,18 @@
     #tsFlowRoot .tsflow-node{ flex:0 0 auto; width:168px; text-align:center; opacity:0; transform:translateY(16px) scale(.94); transition:opacity .55s ease, transform .55s cubic-bezier(.34,1.56,.64,1); }
     #tsFlowRoot.play .tsflow-node{ opacity:1; transform:translateY(0) scale(1); transition-delay:calc(var(--i) * .3s + .1s); }
 
-    #tsFlowRoot .tsflow-medallion{ width:66px; height:66px; margin:0 auto 16px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:1.5px solid rgba(216,201,171,.45); background:rgba(216,201,171,.07); box-shadow:0 0 24px rgba(199,180,137,.06); color:#d8c9ab; transition:box-shadow .35s, transform .35s, border-color .35s; }
-    #tsFlowRoot .tsflow-medallion svg{ width:28px; height:28px; display:block; }
-    #tsFlowRoot .tsflow-node:hover .tsflow-medallion{ transform:translateY(-3px); box-shadow:0 0 44px rgba(199,180,137,.18); border-color:rgba(216,201,171,.7); }
-    #tsFlowRoot .tsflow-node.central .tsflow-medallion{ border-width:2px; border-color:rgba(216,201,171,.6); background:rgba(216,201,171,.1); box-shadow:0 0 40px rgba(199,180,137,.12), 0 0 0 4px rgba(199,180,137,.03); color:#efe6d2; }
-    #tsFlowRoot .tsflow-node.central:hover .tsflow-medallion{ box-shadow:0 0 60px rgba(199,180,137,.25), 0 0 0 8px rgba(199,180,137,.05); border-color:rgba(216,201,171,.85); }
+    #tsFlowRoot .tsflow-medallion{ width:104px; height:104px; margin:0 auto 18px; border-radius:50%; overflow:hidden; position:relative; border:1.5px solid rgba(216,201,171,.42); background:#0a0b10; box-shadow:0 0 24px rgba(199,180,137,.06); transition:box-shadow .35s, transform .35s, border-color .35s; }
+    #tsFlowRoot .tsflow-medallion img{ width:100%; height:100%; object-fit:cover; display:block; }
+    #tsFlowRoot .tsflow-node:hover .tsflow-medallion{ transform:translateY(-3px); box-shadow:0 0 46px rgba(199,180,137,.2); border-color:rgba(216,201,171,.75); }
+    #tsFlowRoot .tsflow-node.central .tsflow-medallion{ border-width:2px; border-color:rgba(216,201,171,.62); box-shadow:0 0 40px rgba(199,180,137,.14), 0 0 0 4px rgba(199,180,137,.03); }
+    #tsFlowRoot .tsflow-node.central:hover .tsflow-medallion{ box-shadow:0 0 60px rgba(199,180,137,.28), 0 0 0 8px rgba(199,180,137,.05); border-color:rgba(216,201,171,.9); }
 
     #tsFlowRoot .tsflow-num{ font-size:11px; font-weight:700; letter-spacing:.18em; color:rgba(216,201,171,.5); margin-bottom:7px; }
     #tsFlowRoot .tsflow-label{ font-size:14px; font-weight:700; letter-spacing:.01em; color:#fff; margin-bottom:5px; }
     #tsFlowRoot .tsflow-node.central .tsflow-label{ color:#efe6d2; }
     #tsFlowRoot .tsflow-desc{ font-size:12.5px; color:rgba(255,255,255,.38); line-height:1.42; }
 
-    #tsFlowRoot .tsflow-conn{ flex:1 1 auto; position:relative; height:2px; margin-top:32px; min-width:24px; max-width:120px; }
+    #tsFlowRoot .tsflow-conn{ flex:1 1 auto; position:relative; height:2px; margin-top:52px; min-width:24px; max-width:120px; }
     #tsFlowRoot .tsflow-line{ position:absolute; inset:0; background:linear-gradient(90deg, rgba(216,201,171,.14), rgba(216,201,171,.5)); transform:scaleX(0); transform-origin:left center; transition:transform .5s ease; }
     #tsFlowRoot.play .tsflow-conn .tsflow-line{ transform:scaleX(1); transition-delay:calc(var(--c) * .3s + .35s); }
     #tsFlowRoot .tsflow-tip{ position:absolute; right:-1px; top:50%; width:0; height:0; border-top:4px solid transparent; border-bottom:4px solid transparent; border-left:6px solid rgba(216,201,171,.62); transform:translateY(-50%) scale(0); transition:transform .3s cubic-bezier(.34,1.56,.64,1); }
@@ -2738,7 +2729,7 @@
     var track='';
     NODES.forEach(function(n,i){
       track += '<div class="tsflow-node'+(n.central?' central':'')+'" style="--i:'+i+'">'
-             +   '<div class="tsflow-medallion">'+svgIcon(n.icon)+'</div>'
+             +   '<div class="tsflow-medallion"><img src="'+IMG+n.img+'" alt="'+n.label+'" loading="lazy"></div>'
              +   '<div class="tsflow-num">'+n.k+'</div>'
              +   '<div class="tsflow-label">'+n.label+'</div>'
              +   '<div class="tsflow-desc">'+n.desc+'</div>'
