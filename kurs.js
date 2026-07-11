@@ -2199,7 +2199,8 @@
   #tsshop .tss-name{font-size:1.02rem;font-weight:600;letter-spacing:-.012em;color:#fff;margin:0 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   #tsshop .tss-desc{font-size:.82rem;color:rgba(255,255,255,.52);line-height:1.5;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   #tsshop .tss-val{text-align:right;margin-top:14px;font-size:1rem;font-weight:700;font-variant-numeric:tabular-nums;color:#d8c9ab}
-  #tsshop .tss-fade{position:absolute;top:0;bottom:22px;width:64px;z-index:2;pointer-events:none;opacity:0;transition:opacity .35s ease}
+  /* Kanten-Schatten entfernt: verdeckte am linken Rand die Karte + den Tron-Sweep. Scroll-Hinweis geben die Pfeile. */
+  #tsshop .tss-fade{display:none !important}
   #tsshop .tss-fade.prev{left:0;background:linear-gradient(90deg,rgba(5,6,11,.92),rgba(5,6,11,0))}
   #tsshop .tss-fade.next{right:0;background:linear-gradient(270deg,rgba(5,6,11,.92),rgba(5,6,11,0))}
   #tsshop .tss-fade.on{opacity:1}
