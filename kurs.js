@@ -2086,8 +2086,20 @@
         { name:'Sattelzug Kühlauflieger',  wert:950, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/sattelzug-kuehlauflieger.jpg' }
       ]},
     { kachel_id:'db13_ansprechpartner', kachel_name:'Ansprechpartner', ist_produkt_kachel:true,
-      einheit:'Rückvergütung (%)', einheit_typ:'prozent',
-      objekt_varianten:[{name:'Cap'},{name:'Poloshirt'},{name:'Kugelschreiber'},{name:'Notizblock'}]},
+      einheit:'Jahresrückvergütung (%)', einheit_typ:'prozent',
+      /* 9 Tasty-Studios-Merch-Bilder (img/ansprechpartner, GitHub Pages) — Werte = Beispielwerte */
+      objekt_varianten:[
+        { name:'Emaille-Becher',    wert:1,   img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/emaille-becher.jpg' },
+        { name:'Hoodie',            wert:1.5, img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/hoodie.jpg' },
+        { name:'Kugelschreiber',    wert:2,   img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/kugelschreiber.jpg' },
+        { name:'Notizblock',        wert:2.5, img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/notizblock.jpg' },
+        { name:'Poloshirt',         wert:3,   img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/poloshirt.jpg' },
+        { name:'Schlüsselanhänger', wert:3.5, img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/schluesselanhaenger.jpg' },
+        { name:'Schürze',           wert:4,   img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/schuerze.jpg' },
+        { name:'Thermosflasche',    wert:5,   img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/thermosflasche.jpg' },
+        { name:'Tote Bag',          wert:6,   img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/tote-bag.jpg' },
+        { name:'Emaille-Becher',    wert:8,   img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/emaille-becher.jpg' }
+      ]},
     { kachel_id:'db5_rezepte', kachel_name:'Rezepte', ist_produkt_kachel:true,
       einheit:'Portionen (Yield)', einheit_typ:'anzahl',
       objekt_varianten:[{name:'Burger'},{name:'Pasta-Teller'},{name:'Salatschale'},{name:'Suppe'},{name:'Steak'},{name:'Dessert'}]},
@@ -2129,7 +2141,7 @@
     if(typ==='preis')    return v.toFixed(2).replace('.',',')+' €';
     if(typ==='menge_g')  return v+' g';
     if(typ==='menge_ml') return v+' ml';
-    if(typ==='prozent')  return v+' %';
+    if(typ==='prozent')  return String(v).replace('.',',')+' %';
     if(typ==='anzahl')   return String(v);
     if(typ==='code')     return 'Nr. '+v;
     if(typ==='frequenz') return v+'×/Tag';
@@ -2151,6 +2163,13 @@
       eyebrow:'Der Warenkorb · DB I',
       title:'Deine Lieferpartner. <span>An einem Ort.</span>',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB I ist die Mindestbelieferung.',
+      cta:'Tour buchen', ctaDone:'Tour gebucht', chain:true },
+    /* Zweites Regal auf derselben Seite: DB II Ansprechpartner (Marker eindeutig = Hauptansprechpartner) */
+    { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_ansprechpartner',
+      marker:/Hauptansprechpartner/,
+      eyebrow:'Der Warenkorb · DB II',
+      title:'Deine Ansprechpartner. <span>An einem Ort.</span>',
+      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB II ist die Jahresrückvergütung.',
       cta:'Tour buchen', ctaDone:'Tour gebucht', chain:true }
   ];
 
@@ -2284,7 +2303,8 @@
     return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
   }
 
-  function injectCSS(){ if(document.getElementById('tsshop-css'))return; var s=document.createElement('style'); s.id='tsshop-css'; s.textContent=CSS; document.head.appendChild(s); }
+  /* #tsshop -> .tsshop (Mehrfach-Instanzen pro Seite); #tsshop-detail bleibt Singleton-ID */
+  function injectCSS(){ if(document.getElementById('tsshop-css'))return; var s=document.createElement('style'); s.id='tsshop-css'; s.textContent=CSS.replace(/#tsshop(?!-detail)/g,'.tsshop'); document.head.appendChild(s); }
 
   var CHEV_L='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>';
   var CHEV_R='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
@@ -2323,7 +2343,7 @@
 
   /* ---- Markup ---- */
   function build(page,k,steps){
-    var root=document.createElement('div'); root.id='tsshop';
+    var root=document.createElement('div'); root.className='tsshop'; root.id='tsshop--'+(page.kachel||'x');
     var cards=steps.map(function(st,i){
       var v=k.objekt_varianten[i%k.objekt_varianten.length]||{};
       return '<article class="tss-card'+(isDone(st)?' is-done':'')+'" data-step="'+i+'" role="button" tabindex="0" aria-label="'+st.title+' öffnen">'
@@ -2537,33 +2557,37 @@
     updProgress(root,steps);
   }
 
-  function pageFor(){
-    for(var i=0;i<PAGES.length;i++){ if(PAGES[i].path.test(location.pathname)) return PAGES[i]; }
-    return null;
+  function pagesFor(){
+    var out=[]; for(var i=0;i<PAGES.length;i++){ if(PAGES[i].path.test(location.pathname)) out.push(PAGES[i]); } return out;
   }
-  function mount(){
-    var page=pageFor();
-    if(!page){
-      var e=document.getElementById('tsshop'); if(e&&e.parentNode)e.parentNode.removeChild(e);
-      var d=document.getElementById('tsshop-detail'); if(d){ d.remove(); document.body.style.overflow=''; }
-      return;
-    }
+  function rootIdFor(page){ return 'tsshop--'+(page.kachel||'x'); }
+  function mountPage(page){
     var list=findPhases(page.marker); if(!list) return;
     /* Original-Phasen verstecken (Notion bleibt SSOT) — auch nach React-Re-Render */
     if(list.style.display!=='none') list.style.display='none';
+    var rootId=rootIdFor(page), existing=document.getElementById(rootId);
     /* leere Notion-Text-Blöcke direkt über dem Shop ausblenden — sie erzeugen tote Leerfläche */
-    var top=document.getElementById('tsshop')||list, prev=top.previousElementSibling;
+    var top=existing||list, prev=top.previousElementSibling;
     while(prev && prev.classList && prev.classList.contains('notion-text') && !(prev.textContent||'').trim()){
       if(prev.style.display!=='none') prev.style.display='none';
       prev=prev.previousElementSibling;
     }
-    if(document.getElementById('tsshop')) return;
+    if(existing) return;
     var k=kachel(page.kachel); if(!k||!k.ist_produkt_kachel) return;
     var steps=collectSteps(list); if(!steps.length) return;
     injectCSS();
     var root=build(page,k,steps);
     list.parentNode.insertBefore(root,list);
     setup(page,k,steps,root);
+  }
+  function mount(){
+    var pages=pagesFor();
+    if(!pages.length){
+      [].slice.call(document.querySelectorAll('.tsshop')).forEach(function(e){ if(e.parentNode)e.parentNode.removeChild(e); });
+      var d=document.getElementById('tsshop-detail'); if(d){ d.remove(); document.body.style.overflow=''; }
+      return;
+    }
+    for(var i=0;i<pages.length;i++) mountPage(pages[i]);
   }
   function boot(){
     var tries=0;
