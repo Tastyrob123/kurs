@@ -2100,6 +2100,24 @@
         { name:'Tote Bag',          wert:6,   img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/tote-bag.jpg' },
         { name:'Emaille-Becher',    wert:8,   img:'https://tastyrob123.github.io/kurs/img/ansprechpartner/emaille-becher.jpg' }
       ]},
+    { kachel_id:'db13_vertraege', kachel_name:'Lieferverträge', ist_produkt_kachel:true,
+      einheit:'Vertragswert (€)', einheit_typ:'preis',
+      /* 12 Tasty-Studios-Kugelschreiber-Varianten (img/vertraege, GitHub Pages) — Werte = Beispielwerte */
+      objekt_varianten:[
+        { name:'Creme Lack',            wert:350,   img:'https://tastyrob123.github.io/kurs/img/vertraege/creme-lack.jpg' },
+        { name:'Taupe Matt',            wert:500,   img:'https://tastyrob123.github.io/kurs/img/vertraege/taupe-matt.jpg' },
+        { name:'Tiefdunkel Poliert',    wert:750,   img:'https://tastyrob123.github.io/kurs/img/vertraege/tiefdunkel-poliert.jpg' },
+        { name:'Edelstahl Gebürstet',   wert:1000,  img:'https://tastyrob123.github.io/kurs/img/vertraege/edelstahl-gebuerstet.jpg' },
+        { name:'Navy Creme Zweifarbig', wert:1400,  img:'https://tastyrob123.github.io/kurs/img/vertraege/navy-creme-zweifarbig.jpg' },
+        { name:'Schwarz Glanz Chrom',   wert:1900,  img:'https://tastyrob123.github.io/kurs/img/vertraege/schwarz-glanz-chrom.jpg' },
+        { name:'Weiß Matt',             wert:2500,  img:'https://tastyrob123.github.io/kurs/img/vertraege/weiss-matt.jpg' },
+        { name:'Taupe Leder',           wert:3200,  img:'https://tastyrob123.github.io/kurs/img/vertraege/taupe-leder.jpg' },
+        { name:'Navy Signalrot Ring',   wert:4200,  img:'https://tastyrob123.github.io/kurs/img/vertraege/navy-signalrot-ring.jpg' },
+        { name:'Schiefer Facettiert',   wert:5500,  img:'https://tastyrob123.github.io/kurs/img/vertraege/schiefer-facettiert.jpg' },
+        { name:'Navy Executive',        wert:7000,  img:'https://tastyrob123.github.io/kurs/img/vertraege/navy-executive.jpg' },
+        { name:'Creme Taupe Zweifarbig',wert:9000,  img:'https://tastyrob123.github.io/kurs/img/vertraege/creme-taupe-zweifarbig.jpg' },
+        { name:'Creme Lack',            wert:12000, img:'https://tastyrob123.github.io/kurs/img/vertraege/creme-lack.jpg' }
+      ]},
     { kachel_id:'db5_rezepte', kachel_name:'Rezepte', ist_produkt_kachel:true,
       einheit:'Portionen (Yield)', einheit_typ:'anzahl',
       objekt_varianten:[{name:'Burger'},{name:'Pasta-Teller'},{name:'Salatschale'},{name:'Suppe'},{name:'Steak'},{name:'Dessert'}]},
@@ -2138,7 +2156,7 @@
   function kachel(id){ for(var i=0;i<KACHELN.length;i++){ if(KACHELN[i].kachel_id===id) return KACHELN[i]; } return null; }
   function fmt(typ,v){
     if(v==null) return '';
-    if(typ==='preis')    return v.toFixed(2).replace('.',',')+' €';
+    if(typ==='preis'){ var p=v.toFixed(2).split('.'); return p[0].replace(/\B(?=(\d{3})+(?!\d))/g,'.')+','+p[1]+' €'; }
     if(typ==='menge_g')  return v+' g';
     if(typ==='menge_ml') return v+' ml';
     if(typ==='prozent')  return String(v).replace('.',',')+' %';
@@ -2170,7 +2188,14 @@
       eyebrow:'Der Warenkorb · DB II',
       title:'Deine Ansprechpartner. <span>An einem Ort.</span>',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB II ist die Jahresrückvergütung.<br>Um zu starten: / → neue Tabellenansicht / Datenbank → DB II : Ansprechpartner Übersicht.',
-      cta:'Paket auswählen', ctaDone:'Paket gewählt', chain:true }
+      cta:'Paket auswählen', ctaDone:'Paket gewählt', chain:true },
+    /* Drittes Regal auf derselben Seite: DB III Lieferverträge (Marker eindeutig = Vertragsbezeichnung) */
+    { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_vertraege',
+      marker:/Vertragsbezeichnung/,
+      eyebrow:'Der Warenkorb · DB III',
+      title:'Deine Lieferverträge. <span>An einem Ort.</span>',
+      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB III ist der Vertragswert.',
+      cta:'Vertrag abschließen', ctaDone:'Vertrag geschlossen', chain:true }
   ];
 
   var reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
