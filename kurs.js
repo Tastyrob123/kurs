@@ -2196,7 +2196,7 @@
   /* Tron-Neon-Sweep beim In-den-Einkaufswagen-Legen */
   #tsshop .tss-neon{position:absolute;inset:0;width:100%;height:100%;z-index:4;pointer-events:none;overflow:visible;filter:drop-shadow(0 0 5px rgba(143,203,170,.95)) drop-shadow(0 0 16px rgba(143,203,170,.5));transition:opacity .5s ease}
   #tsshop .tss-body{padding:16px 18px 18px}
-  #tsshop .tss-name{font-size:1.02rem;font-weight:600;letter-spacing:-.012em;color:#fff;margin:22px 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #tsshop .tss-name{font-size:1.02rem;font-weight:600;letter-spacing:-.012em;color:#fff;margin:0 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   #tsshop .tss-desc{font-size:.82rem;color:rgba(255,255,255,.52);line-height:1.5;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   #tsshop .tss-val{text-align:right;margin-top:14px;font-size:1rem;font-weight:700;font-variant-numeric:tabular-nums;color:#d8c9ab}
   #tsshop .tss-fade{position:absolute;top:0;bottom:22px;width:64px;z-index:2;pointer-events:none;opacity:0;transition:opacity .35s ease}
@@ -2233,7 +2233,7 @@
   #tsshop-detail .tsd-imgwrap img{display:block;width:100%;height:100%;object-fit:cover}
   #tsshop-detail .tsd-info{display:flex;flex-direction:column;min-height:0;height:100%}
   #tsshop-detail .tsd-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.58rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin:2px 0 8px}
-  #tsshop-detail .tsd-title{font-size:clamp(22px,2.8vw,32px);font-weight:800;letter-spacing:-.02em;line-height:1.1;color:#fff;margin:0 0 12px;flex:none}
+  #tsshop-detail .tsd-title{font-size:clamp(22px,2.8vw,32px);font-weight:800;letter-spacing:-.02em;line-height:1.1;color:#fff;margin:22px 0 12px;flex:none}
   #tsshop-detail .tsd-content{flex:1;min-height:0;overflow-y:auto;padding-right:8px;font-size:.84rem;line-height:1.55;color:rgba(255,255,255,.72);scrollbar-width:thin}
   #tsshop-detail .tsd-content::-webkit-scrollbar{width:7px}
   #tsshop-detail .tsd-content::-webkit-scrollbar-thumb{background:rgba(199,180,137,.22);border-radius:99px}
