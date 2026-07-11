@@ -1908,7 +1908,7 @@
   var reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var CSS=`
-  #tsshop{width:100vw;max-width:100vw;margin:clamp(70px,10vh,120px) 0;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 clamp(20px,4vw,56px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
+  #tsshop{width:100vw;max-width:100vw;margin:clamp(35px,5vh,60px) 0;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 clamp(20px,4vw,56px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
   #tsshop *{box-sizing:border-box}
   #tsshop .tss-inner{max-width:1280px;margin:0 auto}
   #tsshop .tss-head{text-align:center;margin-bottom:24px}
@@ -1917,8 +1917,8 @@
   #tsshop .tss-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(32px,4.4vw,52px);font-weight:600;letter-spacing:-.02em;line-height:1.1;color:#fff;margin:0 0 12px}
   #tsshop .tss-title span{color:#c7b489}
   #tsshop .tss-sub{font-size:15px;color:rgba(255,255,255,.42);max-width:600px;margin:0 auto;line-height:1.6}
-  #tsshop .tss-progress{text-align:center;margin-top:2px;font-size:12px;font-weight:600;letter-spacing:.04em;color:rgba(255,255,255,.28);transition:color .4s ease}
-  #tsshop .tss-progress.is-on{color:#9FD3B9}
+  #tsshop .tss-progress{text-align:center;margin-top:2px;font-size:15px;font-weight:600;letter-spacing:.05em;color:#c7b489;transition:color .4s ease}
+  #tsshop .tss-progress.is-on{color:#d8c9ab}
   #tsshop .tss-shelf{position:relative}
   #tsshop .tss-track{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 2px 22px;scrollbar-width:none;-ms-overflow-style:none;overscroll-behavior-x:contain}
   #tsshop .tss-track::-webkit-scrollbar{display:none}
