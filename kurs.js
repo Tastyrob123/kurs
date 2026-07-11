@@ -1908,13 +1908,13 @@
   var reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var CSS=`
-  #tsshop{width:100vw;max-width:100vw;margin:40px 0 8px;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 clamp(20px,4vw,56px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
+  #tsshop{width:100vw;max-width:100vw;margin:clamp(70px,10vh,120px) 0;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 clamp(20px,4vw,56px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
   #tsshop *{box-sizing:border-box}
   #tsshop .tss-inner{max-width:1280px;margin:0 auto}
   #tsshop .tss-head{text-align:center;margin-bottom:24px}
   #tsshop .tss-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin-bottom:12px}
   #tsshop .tss-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#9e947f;box-shadow:0 0 12px rgba(158,148,127,.7)}
-  #tsshop .tss-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(26px,3.4vw,38px);font-weight:600;letter-spacing:-.02em;line-height:1.12;color:#fff;margin:0 0 10px}
+  #tsshop .tss-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(32px,4.4vw,52px);font-weight:600;letter-spacing:-.02em;line-height:1.1;color:#fff;margin:0 0 12px}
   #tsshop .tss-title span{color:#c7b489}
   #tsshop .tss-sub{font-size:15px;color:rgba(255,255,255,.42);max-width:600px;margin:0 auto;line-height:1.6}
   #tsshop .tss-progress{text-align:center;margin-top:2px;font-size:12px;font-weight:600;letter-spacing:.04em;color:rgba(255,255,255,.28);transition:color .4s ease}
@@ -1928,10 +1928,14 @@
   #tsshop .tss-imgwrap{position:relative;aspect-ratio:1/1;overflow:hidden;background:#0b0d14}
   #tsshop .tss-imgwrap img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.22,1,.36,1)}
   #tsshop .tss-card:hover .tss-imgwrap img{transform:scale(1.04)}
-  #tsshop .tss-donebadge{position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:50%;display:none;align-items:center;justify-content:center;background:rgba(143,203,170,.16);border:1px solid rgba(143,203,170,.55);color:#9FD3B9;backdrop-filter:blur(4px)}
+  #tsshop .tss-donebadge{position:absolute;top:12px;right:12px;z-index:3;width:28px;height:28px;border-radius:50%;display:none;align-items:center;justify-content:center;background:rgba(143,203,170,.92);border:1px solid rgba(255,255,255,.25);color:#0b1512;box-shadow:0 4px 16px rgba(143,203,170,.4)}
   #tsshop .tss-card.is-done .tss-donebadge{display:flex}
-  /* im Einkaufswagen = pastellgrün wie das alte Haken-System */
-  #tsshop .tss-card.is-done{background:linear-gradient(165deg,rgba(160,208,180,.16),rgba(160,208,180,.05) 55%,rgba(160,208,180,.02));border-color:rgba(160,208,180,.3);box-shadow:0 18px 44px -30px rgba(0,0,0,.85),0 0 24px rgba(143,203,170,.08)}
+  /* im Einkaufswagen = edles Pastellgrün, weich eingeblendet über ::after-Schleier */
+  #tsshop .tss-card{position:relative}
+  #tsshop .tss-card::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:inherit;background:linear-gradient(180deg,rgba(143,203,170,.10),rgba(143,203,170,.22));opacity:0;transition:opacity .55s ease}
+  #tsshop .tss-card.is-done::after{opacity:1}
+  #tsshop .tss-card.is-done{background:linear-gradient(165deg,rgba(160,208,180,.30),rgba(160,208,180,.12) 55%,rgba(160,208,180,.05));border-color:rgba(160,208,180,.6);box-shadow:0 18px 44px -30px rgba(0,0,0,.85),0 0 38px rgba(143,203,170,.24)}
+  #tsshop .tss-card.is-done:hover,#tsshop .tss-card.is-done:focus-visible{border-color:rgba(160,208,180,.8);box-shadow:0 12px 36px -16px rgba(143,203,170,.35),0 26px 54px -36px rgba(0,0,0,.9)}
   #tsshop .tss-card.is-done .tss-val{color:#9FD3B9}
   #tsshop .tss-body{padding:16px 18px 18px}
   #tsshop .tss-name{font-size:1.02rem;font-weight:600;letter-spacing:-.012em;color:#fff;margin:0 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
