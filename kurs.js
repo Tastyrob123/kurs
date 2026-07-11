@@ -2149,7 +2149,8 @@
       marker:/Kundennummer/,
       eyebrow:'Der Warenkorb · DB I',
       title:'Deine Lieferpartner. <span>An einem Ort.</span>',
-      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB I ist die Mindestbelieferung.' }
+      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB I ist die Mindestbelieferung.',
+      cta:'Tour buchen', ctaDone:'Tour gebucht' }
   ];
 
   var reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2195,7 +2196,7 @@
   /* Tron-Neon-Sweep beim In-den-Einkaufswagen-Legen */
   #tsshop .tss-neon{position:absolute;inset:0;width:100%;height:100%;z-index:4;pointer-events:none;overflow:visible;filter:drop-shadow(0 0 5px rgba(143,203,170,.95)) drop-shadow(0 0 16px rgba(143,203,170,.5));transition:opacity .5s ease}
   #tsshop .tss-body{padding:16px 18px 18px}
-  #tsshop .tss-name{font-size:1.02rem;font-weight:600;letter-spacing:-.012em;color:#fff;margin:0 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #tsshop .tss-name{font-size:1.02rem;font-weight:600;letter-spacing:-.012em;color:#fff;margin:22px 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   #tsshop .tss-desc{font-size:.82rem;color:rgba(255,255,255,.52);line-height:1.5;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   #tsshop .tss-val{text-align:right;margin-top:14px;font-size:1rem;font-weight:700;font-variant-numeric:tabular-nums;color:#d8c9ab}
   #tsshop .tss-fade{position:absolute;top:0;bottom:22px;width:64px;z-index:2;pointer-events:none;opacity:0;transition:opacity .35s ease}
@@ -2403,7 +2404,7 @@
             +'<div class="tsd-content"></div>'
             +'<div class="tsd-buy">'
               +'<div class="tsd-price" style="view-transition-name:tsshopprice">'+fmt(k.einheit_typ,v.wert)+'</div>'
-              +'<button type="button" class="tsd-done'+(isDone(st)?' is-done':'')+'">'+(isDone(st)?CHECK:CART)+'<span>'+(isDone(st)?'Im Einkaufswagen':'In den Einkaufswagen')+'</span></button>'
+              +'<button type="button" class="tsd-done'+(isDone(st)?' is-done':'')+'">'+(isDone(st)?CHECK:CART)+'<span>'+(isDone(st)?(page.ctaDone||'Im Einkaufswagen'):(page.cta||'In den Einkaufswagen'))+'</span></button>'
             +'</div>'
           +'</div>'
         +'</div>'
@@ -2461,7 +2462,7 @@
       updProgress(root,steps);
       if(val){ closeOv(); setTimeout(function(){ neonSweep(c); },420); return; }
       doneBtn.classList.remove('is-done');
-      doneBtn.innerHTML=CART+'<span>In den Einkaufswagen</span>';
+      doneBtn.innerHTML=CART+'<span>'+(page.cta||'In den Einkaufswagen')+'</span>';
     });
     ov.querySelector('.tsd-close').addEventListener('click',closeOv);
     ov.querySelector('.tsd-back').addEventListener('click',closeOv);
