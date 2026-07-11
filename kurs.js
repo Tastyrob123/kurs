@@ -1795,6 +1795,19 @@
    Anker: Phrase-first, Einfügepunkt = h2 "Empfehlung zur
    Anzeige" (Pflicht-Anker; einzelne Sätze darf Robert in
    Notion löschen, ohne dass die Sektion zerfällt).
+   v2 (11.07.2026): Das 2-Zonen-Grid ist jetzt EINE zusammen-
+   hängende 3D-Glas-Kachel (Glas-Sprache wie #tslink, Champagner-
+   Glow --g:199,180,137): Scroll-Entrance mit Perspektive
+   (rotateX), dezenter Pointer-Tilt nur bei hover:hover +
+   pointer:fine (reduced-motion: alles statisch), Heartbeat-Glow
+   bei Hover. Zusammenhang sichtbar gemacht: die aktive Ansicht
+   in #tsdb0 koppelt live auf den zugehörigen Empfehlungs-Schritt
+   ("Nach Lieferpartner"→Schritt 1, "Nach Preis"→Schritt 2,
+   Glas-Highlight wie .tb.on) + goldene SVG-Verbindungslinie
+   zwischen beiden (Layout-Koordinaten via offsetParent-Kette,
+   nur >900px; mobil nur Schritt-Highlight). NEUES MUSTER:
+   3D-Tilt-Kachel — vor Zweitnutzung in Design-System.md
+   kanonisieren.
    ============================================================ */
 (function(){
   if(window.__tsmiss) return; window.__tsmiss=true;
@@ -1802,8 +1815,19 @@
   .page__inventurliste .tsm-h{text-align:center !important;color:#fff !important;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif !important;font-size:clamp(1.7rem,2.6vw,2.2rem) !important;font-weight:600 !important;letter-spacing:-.01em !important;line-height:1.2 !important;margin-top:72px !important;margin-bottom:16px !important}
   .page__inventurliste .tsm-i{max-width:820px;margin-left:auto !important;margin-right:auto !important;text-align:center !important;color:rgba(255,255,255,.62) !important}
   .page__inventurliste .tsm-mid{max-width:820px;margin-left:auto !important;margin-right:auto !important;margin-top:10px !important;text-align:center !important;color:#fff !important}
-  #tsmiss{display:grid;grid-template-columns:minmax(300px,1fr) 2fr;gap:clamp(28px,4.5vw,60px);align-items:center;width:min(1000px,95vw);margin:34px auto 30px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
-  #tsmiss .tsm-col{min-width:0}
+  #tsmiss{--g:199,180,137;--rx:0deg;--ry:0deg;position:relative;display:grid;grid-template-columns:minmax(300px,1fr) 2fr;gap:clamp(28px,4.5vw,60px);align-items:center;width:min(1000px,95vw);margin:34px auto 30px;padding:clamp(26px,4vw,44px) clamp(24px,4.5vw,50px);border-radius:20px;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0));border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85),0 0 14px rgba(var(--g),.08);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;transform-style:preserve-3d;will-change:transform;opacity:0;transform:perspective(1100px) rotateX(9deg) translateY(34px) scale(.97);transition:opacity .8s ease,transform .9s cubic-bezier(.16,1,.3,1)}
+  #tsmiss,#tsmiss *{box-sizing:border-box}
+  #tsmiss.in{opacity:1;transform:perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry))}
+  #tsmiss.live{transition:transform .16s ease-out,box-shadow .5s ease,border-color .4s ease}
+  #tsmiss.live:hover{border-color:rgba(var(--g),.4);animation:tsm-heartbeat 2.6s cubic-bezier(.4,0,.3,1) infinite}
+  #tsmiss::before{content:"";position:absolute;inset:0;border-radius:20px;background:radial-gradient(560px circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,.055),transparent 46%);opacity:0;transition:opacity .5s ease;pointer-events:none}
+  #tsmiss.live:hover::before{opacity:1}
+  #tsmiss::after{content:"";position:absolute;top:0;left:9%;right:9%;height:1px;background:linear-gradient(90deg,transparent,rgba(var(--g),.4),transparent);pointer-events:none}
+  #tsmiss .tsm-link{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:0;opacity:1;transition:opacity .35s ease}
+  #tsmiss .tsm-link.off{opacity:0}
+  #tsmiss .tsm-link path{fill:none;stroke:rgba(var(--g),.55);stroke-width:1.5;filter:drop-shadow(0 0 6px rgba(var(--g),.35))}
+  #tsmiss .tsm-link circle{fill:rgba(var(--g),.9)}
+  #tsmiss .tsm-col{min-width:0;position:relative;z-index:1;transform:translateZ(22px)}
   #tsmiss #tsdb0{margin:0}
   #tsmiss #tsdb0 .hd{font-size:1.4rem;margin-bottom:14px}
   #tsmiss #tsdb0 .row{display:flex;flex-direction:column;align-items:stretch;gap:6px;max-width:280px}
@@ -1814,11 +1838,15 @@
   #tsmiss.in .tsm-item{opacity:1;transform:none}
   #tsmiss .tsm-p{color:rgba(255,255,255,.62);font-size:.95rem;line-height:1.7;margin:0 0 14px;max-width:none}
   #tsmiss .tsm-emph2{font-size:1.15rem;font-weight:700;color:#fff;margin:20px 0 12px;padding:0}
-  #tsmiss .tsm-ol{margin:0;padding-left:1.25em}
-  #tsmiss .tsm-ol li{color:rgba(255,255,255,.62);font-size:.92rem;line-height:1.7;margin:0 0 10px}
+  #tsmiss .tsm-ol{margin:0;padding-left:1.6em}
+  #tsmiss .tsm-ol li{color:rgba(255,255,255,.62);font-size:.92rem;line-height:1.7;margin:0 0 10px;padding:10px 14px;border-radius:12px;transition:color .45s ease,background .5s ease,box-shadow .5s ease}
+  #tsmiss .tsm-ol li::marker{color:rgba(255,255,255,.35);font-weight:600}
+  #tsmiss .tsm-ol li.lit{color:#fff;background:rgba(255,255,255,.09);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),0 0 22px rgba(var(--g),.10)}
+  #tsmiss .tsm-ol li.lit::marker{color:rgba(var(--g),.9)}
   .tsm-hide{display:none !important}
-  @media(max-width:900px){#tsmiss{grid-template-columns:1fr;gap:26px}}
-  @media(prefers-reduced-motion:reduce){#tsmiss .tsm-item{opacity:1;transform:none;transition:none}}
+  @keyframes tsm-heartbeat{0%{box-shadow:0 4px 14px rgba(var(--g),.10),0 0 14px rgba(var(--g),.10)}18%{box-shadow:0 6px 22px rgba(var(--g),.30),0 0 46px rgba(var(--g),.34)}32%{box-shadow:0 5px 18px rgba(var(--g),.16),0 0 26px rgba(var(--g),.18)}46%{box-shadow:0 6px 20px rgba(var(--g),.26),0 0 40px rgba(var(--g),.28)}72%,100%{box-shadow:0 4px 14px rgba(var(--g),.10),0 0 14px rgba(var(--g),.10)}}
+  @media(max-width:900px){#tsmiss{grid-template-columns:1fr;gap:26px}#tsmiss .tsm-link{display:none}}
+  @media(prefers-reduced-motion:reduce){#tsmiss,#tsmiss.in{opacity:1;transform:none;transition:none}#tsmiss .tsm-item{opacity:1;transform:none;transition:none}#tsmiss.live:hover{animation:none;box-shadow:0 18px 44px -30px rgba(0,0,0,.85),0 0 26px rgba(var(--g),.22)}}
   `;
   function on(){ return /\/inventurliste\/?$/.test(location.pathname); }
   function injectCSS(){ if(document.getElementById('tsmiss-css'))return; var s=document.createElement('style'); s.id='tsmiss-css'; s.textContent=CSS; document.head.appendChild(s); }
@@ -1835,6 +1863,75 @@
     if(m && !m.classList.contains('tsm-mid')) m.classList.add('tsm-mid');
   }
   function stripIds(el){ el.removeAttribute('id'); var q=el.querySelectorAll('[id]'); for(var i=0;i<q.length;i++)q[i].removeAttribute('id'); return el; }
+  function pos(el,root){ var x=0,y=0; while(el&&el!==root){ x+=el.offsetLeft; y+=el.offsetTop; el=el.offsetParent; } return {x:x,y:y}; }
+  /* Live-Kopplung Ansicht → Empfehlungs-Schritt + goldene Verbindungslinie */
+  function connect(wrap){
+    var NS='http://www.w3.org/2000/svg';
+    var tabs=[].slice.call(wrap.querySelectorAll('#tsdb0 .tb'));
+    var lis=[].slice.call(wrap.querySelectorAll('.tsm-ol li'));
+    if(tabs.length<3||lis.length<2) return;
+    var MAP={1:0,2:1}; /* Nach Lieferpartner→Schritt 1, Nach Preis→Schritt 2 */
+    var svg=document.createElementNS(NS,'svg'); svg.setAttribute('class','tsm-link off');
+    var path=document.createElementNS(NS,'path');
+    var c1=document.createElementNS(NS,'circle'), c2=document.createElementNS(NS,'circle');
+    c1.setAttribute('r','2.5'); c2.setAttribute('r','2.5');
+    svg.appendChild(path); svg.appendChild(c1); svg.appendChild(c2);
+    wrap.appendChild(svg);
+    function draw(a,b){
+      svg.setAttribute('viewBox','0 0 '+wrap.clientWidth+' '+wrap.clientHeight);
+      var pa=pos(a,wrap), pb=pos(b,wrap);
+      var ax=pa.x+a.offsetWidth+10, ay=pa.y+a.offsetHeight/2;
+      var bx=pb.x-14, by=pb.y+b.offsetHeight/2;
+      var dx=Math.max(30,(bx-ax)*.45);
+      path.setAttribute('d','M'+ax+' '+ay+' C'+(ax+dx)+' '+ay+', '+(bx-dx)+' '+by+', '+bx+' '+by);
+      c1.setAttribute('cx',ax); c1.setAttribute('cy',ay);
+      c2.setAttribute('cx',bx); c2.setAttribute('cy',by);
+      try{
+        var len=path.getTotalLength();
+        path.style.transition='none';
+        path.style.strokeDasharray=len;
+        path.style.strokeDashoffset=len;
+        void path.getBoundingClientRect();
+        path.style.transition='stroke-dashoffset .55s cubic-bezier(.22,1,.36,1)';
+        path.style.strokeDashoffset='0';
+      }catch(e){}
+      svg.classList.remove('off');
+    }
+    function upd(){
+      var act=-1;
+      for(var i=0;i<tabs.length;i++) if(tabs[i].classList.contains('on')) act=i;
+      var li=(act in MAP)?lis[MAP[act]]:null;
+      for(var j=0;j<lis.length;j++) lis[j].classList.toggle('lit',lis[j]===li);
+      if(!li||window.innerWidth<901){ svg.classList.add('off'); return; }
+      draw(tabs[act],li);
+    }
+    var mo=new MutationObserver(upd);
+    tabs.forEach(function(t){ mo.observe(t,{attributes:true,attributeFilter:['class']}); });
+    window.addEventListener('resize',upd);
+    upd();
+  }
+  /* Dezenter 3D-Pointer-Tilt — nur Desktop-Pointer, nie bei reduced-motion */
+  function tilt(wrap){
+    if(!(window.matchMedia&&matchMedia('(hover: hover) and (pointer: fine)').matches)) return;
+    if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var raf=null, cx=0, cy=0;
+    wrap.addEventListener('mousemove',function(e){
+      cx=e.clientX; cy=e.clientY;
+      if(!wrap.classList.contains('live')||raf) return;
+      raf=requestAnimationFrame(function(){
+        raf=null;
+        var r=wrap.getBoundingClientRect();
+        var px=(cx-r.left)/r.width, py=(cy-r.top)/r.height;
+        wrap.style.setProperty('--ry',((px-.5)*5).toFixed(2)+'deg');
+        wrap.style.setProperty('--rx',((.5-py)*4).toFixed(2)+'deg');
+        wrap.style.setProperty('--mx',(px*100).toFixed(1)+'%');
+        wrap.style.setProperty('--my',(py*100).toFixed(1)+'%');
+      });
+    });
+    wrap.addEventListener('mouseleave',function(){
+      wrap.style.setProperty('--rx','0deg'); wrap.style.setProperty('--ry','0deg');
+    });
+  }
   function mount(){
     if(!on()){ var e=document.getElementById('tsmiss'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
     injectCSS();
@@ -1856,8 +1953,16 @@
     addClone(p2,'tsm-p'); addClone(h2,'tsm-emph2'); addClone(ol,'tsm-ol');
     var items=R.querySelectorAll('.tsm-item');
     for(var i=0;i<items.length;i++) items[i].style.transitionDelay=(i*0.12)+'s';
-    var io=new IntersectionObserver(function(e){ if(e[0].isIntersecting){ wrap.classList.add('in'); io.disconnect(); } },{threshold:.25});
+    var io=new IntersectionObserver(function(e){
+      if(e[0].isIntersecting){
+        wrap.classList.add('in');
+        setTimeout(function(){ wrap.classList.add('live'); },950);
+        io.disconnect();
+      }
+    },{threshold:.25});
     io.observe(wrap);
+    connect(wrap);
+    tilt(wrap);
   }
   function boot(){
     var tries=0;
