@@ -2688,39 +2688,39 @@
     #tsFlowRoot{ width:100%; margin:8px 0; }
     #tsFlowRoot *{ box-sizing:border-box; }
     #tsFlowRoot .tsflow-section{ position:relative; overflow:hidden; padding:56px 8px 52px; background:transparent; }
-    #tsFlowRoot .tsflow-section::before{ content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:1200px; height:720px; background:radial-gradient(ellipse at center, rgba(199,180,137,.05) 0%, transparent 62%); pointer-events:none; }
+    #tsFlowRoot .tsflow-section::before{ content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:1200px; height:720px; background:radial-gradient(ellipse at center, rgba(150,175,255,.05) 0%, transparent 62%); pointer-events:none; }
     #tsFlowRoot .tsflow-canvas{ position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; }
     #tsFlowRoot .tsflow-inner{ position:relative; z-index:1; max-width:1080px; margin:0 auto; }
     #tsFlowRoot .tsflow-header{ text-align:center; margin-bottom:46px; }
-    #tsFlowRoot .tsflow-title{ font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif; font-size:clamp(23px,3.1vw,36px); font-weight:600; letter-spacing:-.02em; color:#fff; line-height:1.14; margin:-32px 0 46px; }
+    #tsFlowRoot .tsflow-title{ font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif; font-size:clamp(27px,3.5vw,41px); font-weight:600; letter-spacing:-.02em; color:#fff; line-height:1.14; margin:0 0 14px; }
     /* Intro-Textblock der Seite darueber: zentriert + etwas nach unten in den Zwischenraum */
     .tsflow-intro-block{ margin-top:70px !important; }
     .tsflow-intro-block, .tsflow-intro-block .notion-text, .tsflow-intro-block p, .tsflow-intro-block .notion-semantic-string{ text-align:center !important; }
     .tsflow-intro-block .notion-text{ max-width:820px; margin-left:auto !important; margin-right:auto !important; }
-    #tsFlowRoot .tsflow-title span{ color:#c7b489; }
-    #tsFlowRoot .tsflow-sub{ font-size:16px; color:#ffffff; max-width:640px; margin:0 auto; line-height:1.65; }
+    #tsFlowRoot .tsflow-title span{ color:#adc7ff; }
+    #tsFlowRoot .tsflow-sub{ font-size:17.5px; color:rgba(255,255,255,.44); max-width:660px; margin:0 auto; line-height:1.65; }
 
     #tsFlowRoot .tsflow-track{ display:flex; align-items:flex-start; justify-content:center; gap:0; }
     #tsFlowRoot .tsflow-node{ flex:0 0 auto; width:168px; text-align:center; opacity:0; transform:translateY(16px) scale(.94); transition:opacity .55s ease, transform .55s cubic-bezier(.34,1.56,.64,1); }
     #tsFlowRoot.play .tsflow-node{ opacity:1; transform:translateY(0) scale(1); transition-delay:calc(var(--i) * .3s + .1s); }
 
-    #tsFlowRoot .tsflow-medallion{ width:104px; height:104px; margin:0 auto 18px; border-radius:50%; overflow:hidden; position:relative; border:1.5px solid rgba(216,201,171,.42); background:#0a0b10; box-shadow:0 0 24px rgba(199,180,137,.06); transition:box-shadow .35s, transform .35s, border-color .35s; }
+    #tsFlowRoot .tsflow-medallion{ width:104px; height:104px; margin:0 auto 18px; border-radius:50%; overflow:hidden; position:relative; border:1.5px solid rgba(88,116,190,.6); background:#0a0b10; box-shadow:0 0 24px rgba(185,208,255,.12); transition:box-shadow .35s, transform .35s, border-color .35s; }
     #tsFlowRoot .tsflow-medallion img{ width:100%; height:100%; object-fit:cover; display:block; }
-    #tsFlowRoot .tsflow-node:hover .tsflow-medallion{ transform:translateY(-3px); box-shadow:0 0 46px rgba(199,180,137,.2); border-color:rgba(216,201,171,.75); }
-    #tsFlowRoot .tsflow-node.central .tsflow-medallion{ border-width:2px; border-color:rgba(216,201,171,.62); box-shadow:0 0 40px rgba(199,180,137,.14), 0 0 0 4px rgba(199,180,137,.03); }
-    #tsFlowRoot .tsflow-node.central:hover .tsflow-medallion{ box-shadow:0 0 60px rgba(199,180,137,.28), 0 0 0 8px rgba(199,180,137,.05); border-color:rgba(216,201,171,.9); }
+    #tsFlowRoot .tsflow-node:hover .tsflow-medallion{ transform:translateY(-3px); box-shadow:0 0 46px rgba(200,220,255,.32); border-color:rgba(140,170,232,.92); }
+    #tsFlowRoot .tsflow-node.central .tsflow-medallion{ border-width:2px; border-color:rgba(112,142,220,.72); box-shadow:0 0 40px rgba(196,216,255,.2), 0 0 0 4px rgba(196,216,255,.06); }
+    #tsFlowRoot .tsflow-node.central:hover .tsflow-medallion{ box-shadow:0 0 60px rgba(206,224,255,.36), 0 0 0 8px rgba(206,224,255,.07); border-color:rgba(150,180,240,.96); }
 
-    #tsFlowRoot .tsflow-num{ font-size:11px; font-weight:700; letter-spacing:.18em; color:rgba(216,201,171,.5); margin-bottom:7px; }
-    #tsFlowRoot .tsflow-label{ font-size:14px; font-weight:700; letter-spacing:.01em; color:#fff; margin-bottom:5px; }
-    #tsFlowRoot .tsflow-node.central .tsflow-label{ color:#efe6d2; }
-    #tsFlowRoot .tsflow-desc{ font-size:12.5px; color:rgba(255,255,255,.38); line-height:1.42; }
+    #tsFlowRoot .tsflow-num{ font-size:11.5px; font-weight:700; letter-spacing:.18em; color:rgba(170,192,236,.64); margin-bottom:7px; }
+    #tsFlowRoot .tsflow-label{ font-size:15.5px; font-weight:700; letter-spacing:.01em; color:#fff; margin-bottom:5px; }
+    #tsFlowRoot .tsflow-node.central .tsflow-label{ color:#eaf1ff; }
+    #tsFlowRoot .tsflow-desc{ font-size:13.5px; color:rgba(255,255,255,.4); line-height:1.42; }
 
     #tsFlowRoot .tsflow-conn{ flex:1 1 auto; position:relative; height:2px; margin-top:52px; min-width:24px; max-width:120px; }
-    #tsFlowRoot .tsflow-line{ position:absolute; inset:0; background:linear-gradient(90deg, rgba(216,201,171,.14), rgba(216,201,171,.5)); transform:scaleX(0); transform-origin:left center; transition:transform .5s ease; }
+    #tsFlowRoot .tsflow-line{ position:absolute; inset:0; background:linear-gradient(90deg, rgba(150,175,232,.14), rgba(150,175,232,.5)); transform:scaleX(0); transform-origin:left center; transition:transform .5s ease; }
     #tsFlowRoot.play .tsflow-conn .tsflow-line{ transform:scaleX(1); transition-delay:calc(var(--c) * .3s + .35s); }
-    #tsFlowRoot .tsflow-tip{ position:absolute; right:-1px; top:50%; width:0; height:0; border-top:4px solid transparent; border-bottom:4px solid transparent; border-left:6px solid rgba(216,201,171,.62); transform:translateY(-50%) scale(0); transition:transform .3s cubic-bezier(.34,1.56,.64,1); }
+    #tsFlowRoot .tsflow-tip{ position:absolute; right:-1px; top:50%; width:0; height:0; border-top:4px solid transparent; border-bottom:4px solid transparent; border-left:6px solid rgba(160,185,236,.66); transform:translateY(-50%) scale(0); transition:transform .3s cubic-bezier(.34,1.56,.64,1); }
     #tsFlowRoot.play .tsflow-conn .tsflow-tip{ transform:translateY(-50%) scale(1); transition-delay:calc(var(--c) * .3s + .76s); }
-    #tsFlowRoot .tsflow-pulse{ position:absolute; top:50%; left:0; width:5px; height:5px; border-radius:50%; background:#e6d6b3; box-shadow:0 0 8px rgba(216,201,171,.85); transform:translate(-50%,-50%); opacity:0; }
+    #tsFlowRoot .tsflow-pulse{ position:absolute; top:50%; left:0; width:5px; height:5px; border-radius:50%; background:#dce9ff; box-shadow:0 0 8px rgba(190,212,255,.9); transform:translate(-50%,-50%); opacity:0; }
     #tsFlowRoot.play .tsflow-conn .tsflow-pulse{ animation:tsFlowPulseH 2.6s linear infinite; animation-delay:calc(var(--c) * .3s + 1.05s); }
     @keyframes tsFlowPulseH{ 0%{ left:0; opacity:0; } 12%{ opacity:1; } 88%{ opacity:1; } 100%{ left:100%; opacity:0; } }
     @keyframes tsFlowPulseV{ 0%{ top:0; opacity:0; } 12%{ opacity:1; } 88%{ opacity:1; } 100%{ top:100%; opacity:0; } }
@@ -2731,9 +2731,9 @@
       #tsFlowRoot .tsflow-track{ flex-direction:column; align-items:center; }
       #tsFlowRoot .tsflow-node{ width:100%; max-width:250px; }
       #tsFlowRoot .tsflow-conn{ flex:0 0 auto; width:2px; height:34px; min-width:0; max-width:none; margin:8px 0; }
-      #tsFlowRoot .tsflow-line{ background:linear-gradient(180deg, rgba(216,201,171,.14), rgba(216,201,171,.5)); transform:scaleY(0); transform-origin:top center; }
+      #tsFlowRoot .tsflow-line{ background:linear-gradient(180deg, rgba(150,175,232,.14), rgba(150,175,232,.5)); transform:scaleY(0); transform-origin:top center; }
       #tsFlowRoot.play .tsflow-conn .tsflow-line{ transform:scaleY(1); }
-      #tsFlowRoot .tsflow-tip{ right:auto; left:50%; top:auto; bottom:-1px; border-left:4px solid transparent; border-right:4px solid transparent; border-top:6px solid rgba(216,201,171,.62); border-bottom:0; transform:translateX(-50%) scale(0); }
+      #tsFlowRoot .tsflow-tip{ right:auto; left:50%; top:auto; bottom:-1px; border-left:4px solid transparent; border-right:4px solid transparent; border-top:6px solid rgba(160,185,236,.66); border-bottom:0; transform:translateX(-50%) scale(0); }
       #tsFlowRoot.play .tsflow-conn .tsflow-tip{ transform:translateX(-50%) scale(1); }
       #tsFlowRoot .tsflow-pulse{ left:50%; top:0; }
       #tsFlowRoot.play .tsflow-conn .tsflow-pulse{ animation-name:tsFlowPulseV; }
@@ -2792,7 +2792,7 @@
       particles.forEach(function(p){ p.x+=p.vx; p.y+=p.vy; p.pulse+=.005;
         if(p.x<0)p.x=pw; if(p.x>pw)p.x=0; if(p.y<0)p.y=ph; if(p.y>ph)p.y=0;
         var a=p.alpha*(.7+Math.sin(p.pulse)*.3);
-        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle='rgba(199,180,137,'+a+')'; ctx.fill(); });
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle='rgba(180,205,255,'+a+')'; ctx.fill(); });
       animFrame=requestAnimationFrame(draw);
     }
     var played=false;
