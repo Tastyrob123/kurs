@@ -1730,65 +1730,84 @@
 })();
 
 /* ============================================================
-   inventurliste — #tsside 2-Spalten-Layout
-   Setzt die 3 Luxus-Kacheln (#tslink) und die DB0-Animation
-   (#tsdb0) samt "Empfehlung zur Anzeige" nebeneinander:
-   links die Kacheln vertikal gestapelt, rechts die Animation
-   + geklonte Empfehlung (h2 + nummerierte Liste). Notion-DOM
-   wird NICHT verschoben — Original h2/ol nur versteckt
-   (React-sicher, Muster wie .tsmac). Anker: Phrase-first.
+   inventurliste — #tsmiss "Was uns jetzt noch fehlt"
+   (ersetzt #tsside, 11.07.2026.) Heading groß + mittig,
+   Intro-Text mittig mit Wortlaut-Override "… verknüpfen mit
+   unserem System." (Display-Layer; no-opt von selbst, sobald
+   der Text in Notion nachgezogen ist). Darunter 2-Zonen-Grid:
+   links (erstes Drittel) die DB0-Animation #tsdb0 als vertikale
+   Ansichts-Liste (Glas-Highlight statt wandernder Pille),
+   rechts (2/3) die allgemeinen Infos (2 Absätze + "Empfehlung
+   zur Anzeige" + Liste) als Klone, die per gestaffeltem
+   Scroll-Reveal hochwandern. Notion-DOM wird NICHT verschoben —
+   Originale nur versteckt (React-sicher, Muster wie .tsmac).
+   Anker: Phrase-first.
    ============================================================ */
 (function(){
-  if(window.__tsside) return; window.__tsside=true;
+  if(window.__tsmiss) return; window.__tsmiss=true;
   var CSS=`
-  #tsside{display:grid;grid-template-columns:1fr 1.08fr;gap:clamp(28px,4vw,52px);align-items:center;width:min(1000px,95vw);margin:36px auto 30px}
-  #tsside .tss-col{min-width:0}
-  #tsside #tslink{width:100%;margin:0}
-  #tsside #tslink .tsl-grid{grid-template-columns:1fr;gap:14px}
-  #tsside #tslink .tsl-card{padding:20px 24px 14px}
-  #tsside #tslink .tsl-ic{width:38px;height:38px;margin-bottom:14px}
-  #tsside #tslink .tsl-foot{margin-top:14px;padding-top:12px}
-  #tsside #tsdb0{margin:0}
-  #tsside .tss-emp{margin-top:26px}
-  #tsside .tss-emp h2{font-size:1.15rem;font-weight:700;color:#fff;margin:0 0 12px;padding:0}
-  #tsside .tss-emp ol{margin:0;padding-left:1.25em}
-  #tsside .tss-emp li{color:rgba(255,255,255,.62);font-size:.92rem;line-height:1.7;margin:0 0 10px}
-  .tss-hide{display:none !important}
-  @media(max-width:900px){#tsside{grid-template-columns:1fr;gap:28px}}
+  .page__inventurliste .tsm-h{text-align:center !important;color:#fff !important;font-size:clamp(1.7rem,2.6vw,2.2rem) !important;font-weight:600 !important;letter-spacing:-.01em !important;line-height:1.2 !important;margin-bottom:16px !important}
+  .page__inventurliste .tsm-i{max-width:820px;margin-left:auto !important;margin-right:auto !important;text-align:center !important;color:rgba(255,255,255,.62) !important}
+  #tsmiss{display:grid;grid-template-columns:minmax(300px,1fr) 2fr;gap:clamp(28px,4.5vw,60px);align-items:center;width:min(1000px,95vw);margin:34px auto 30px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
+  #tsmiss .tsm-col{min-width:0}
+  #tsmiss #tsdb0{margin:0}
+  #tsmiss #tsdb0 .hd{font-size:1.4rem;margin-bottom:14px}
+  #tsmiss #tsdb0 .row{display:flex;flex-direction:column;align-items:stretch;gap:6px;max-width:280px}
+  #tsmiss #tsdb0 .ind{display:none}
+  #tsmiss #tsdb0 .tb{border-radius:12px;padding:10px 14px;transition:color .45s ease,background .5s ease,box-shadow .5s ease,opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
+  #tsmiss #tsdb0 .tb.on{background:rgba(255,255,255,.09);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),0 0 22px rgba(199,180,137,.10)}
+  #tsmiss .tsm-item{opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+  #tsmiss.in .tsm-item{opacity:1;transform:none}
+  #tsmiss .tsm-p{color:rgba(255,255,255,.62);font-size:.95rem;line-height:1.7;margin:0 0 14px;max-width:none}
+  #tsmiss .tsm-emph2{font-size:1.15rem;font-weight:700;color:#fff;margin:20px 0 12px;padding:0}
+  #tsmiss .tsm-ol{margin:0;padding-left:1.25em}
+  #tsmiss .tsm-ol li{color:rgba(255,255,255,.62);font-size:.92rem;line-height:1.7;margin:0 0 10px}
+  .tsm-hide{display:none !important}
+  @media(max-width:900px){#tsmiss{grid-template-columns:1fr;gap:26px}}
+  @media(prefers-reduced-motion:reduce){#tsmiss .tsm-item{opacity:1;transform:none;transition:none}}
   `;
   function on(){ return /\/inventurliste\/?$/.test(location.pathname); }
-  function injectCSS(){ if(document.getElementById('tsside-css'))return; var s=document.createElement('style'); s.id='tsside-css'; s.textContent=CSS; document.head.appendChild(s); }
-  function findEmp(){
-    var hs=document.querySelectorAll('.page__inventurliste h2.notion-heading,.page__inventurliste .notion-callout');
-    for(var i=0;i<hs.length;i++){ if(/Empfehlung zur Anzeige/.test(hs[i].textContent||'')) return hs[i]; }
-    return null;
+  function injectCSS(){ if(document.getElementById('tsmiss-css'))return; var s=document.createElement('style'); s.id='tsmiss-css'; s.textContent=CSS; document.head.appendChild(s); }
+  function findText(sel,re){ var n=document.querySelectorAll(sel); for(var i=0;i<n.length;i++){ if(re.test(n[i].textContent||'')) return n[i]; } return null; }
+  function retext(){
+    var h=findText('.page__inventurliste .notion-heading', /Was uns jetzt noch fehlt/);
+    if(h && !h.classList.contains('tsm-h')){ h.classList.add('tsm-h'); h.textContent=(h.textContent||'').replace(/\s*:\s*$/,''); }
+    var p=findText('.page__inventurliste .notion-text', /Grundstruktur für deine Inventurliste/);
+    if(p && !p.classList.contains('tsm-i')){
+      p.classList.add('tsm-i');
+      p.textContent=(p.textContent||'').replace(/^\s*DIe\s/,'Die ').replace(/verknüpfen mit\s*:?\s*$/,'verknüpfen mit unserem System.');
+    }
   }
-  function stripIds(el){ if(el.removeAttribute)el.removeAttribute('id'); var q=el.querySelectorAll?el.querySelectorAll('[id]'):[]; for(var i=0;i<q.length;i++)q[i].removeAttribute('id'); return el; }
+  function stripIds(el){ el.removeAttribute('id'); var q=el.querySelectorAll('[id]'); for(var i=0;i<q.length;i++)q[i].removeAttribute('id'); return el; }
   function mount(){
-    if(!on()){ var e=document.getElementById('tsside'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
-    if(document.getElementById('tsside')) return;
-    var link=document.getElementById('tslink'), db0=document.getElementById('tsdb0'), emp=findEmp();
-    if(!link||!db0||!emp) return;
-    var ol=emp.nextElementSibling;
-    while(ol && !(ol.matches&&ol.matches('ol.notion-numbered-list'))) ol=ol.nextElementSibling;
+    if(!on()){ var e=document.getElementById('tsmiss'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
     injectCSS();
-    var wrap=document.createElement('div'); wrap.id='tsside';
-    var L=document.createElement('div'); L.className='tss-col';
-    var R=document.createElement('div'); R.className='tss-col';
+    retext();
+    if(document.getElementById('tsmiss')) return;
+    var db0=document.getElementById('tsdb0');
+    var p1=findText('.page__inventurliste .notion-text', /Dazu kommen wir in den jeweiligen Lektionen/);
+    var p2=findText('.page__inventurliste .notion-text', /Als nächstes entwickeln wir/);
+    var h2=findText('.page__inventurliste h2.notion-heading', /Empfehlung zur Anzeige/);
+    if(!db0||!p1||!h2) return;
+    var ol=h2.nextElementSibling;
+    while(ol && !(ol.matches&&ol.matches('ol.notion-numbered-list'))) ol=ol.nextElementSibling;
+    var wrap=document.createElement('div'); wrap.id='tsmiss';
+    var L=document.createElement('div'); L.className='tsm-col';
+    var R=document.createElement('div'); R.className='tsm-col';
     wrap.appendChild(L); wrap.appendChild(R);
-    link.parentNode.insertBefore(wrap, link);
-    L.appendChild(link);
-    R.appendChild(db0);
-    var box=document.createElement('div'); box.className='tss-emp';
-    box.appendChild(stripIds(emp.cloneNode(true)));
-    if(ol) box.appendChild(stripIds(ol.cloneNode(true)));
-    R.appendChild(box);
-    emp.classList.add('tss-hide'); if(ol) ol.classList.add('tss-hide');
+    p1.parentNode.insertBefore(wrap, p1);
+    L.appendChild(db0);
+    function addClone(el,cls){ if(!el)return; var c=stripIds(el.cloneNode(true)); c.className+=' '+cls+' tsm-item'; R.appendChild(c); el.classList.add('tsm-hide'); }
+    addClone(p1,'tsm-p'); addClone(p2,'tsm-p'); addClone(h2,'tsm-emph2'); addClone(ol,'tsm-ol');
+    var items=R.querySelectorAll('.tsm-item');
+    for(var i=0;i<items.length;i++) items[i].style.transitionDelay=(i*0.12)+'s';
+    var io=new IntersectionObserver(function(e){ if(e[0].isIntersecting){ wrap.classList.add('in'); io.disconnect(); } },{threshold:.25});
+    io.observe(wrap);
   }
   function boot(){
     var tries=0;
     var iv=setInterval(function(){ tries++; mount(); if(tries>60) clearInterval(iv); },300);
-    new MutationObserver(function(){ if(on()&&!document.getElementById('tsside')) mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+    new MutationObserver(function(){ if(on()) mount(); }).observe(document.documentElement,{childList:true,subtree:true});
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
