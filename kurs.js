@@ -780,17 +780,27 @@
 (function(){
   if(window.__tsNext) return;
   window.__tsNext = true;
-  var PATH = /\/mehrwert-zielbild\/?$/;
+  /* Seiten-Map: auf welcher Lektion führt "Nächste Lektion" wohin */
+  var PAGES = [
+    { re:/\/mehrwert-zielbild\/?$/, href:'/inventurliste' },
+    { re:/\/inventurliste\/?$/,     href:'/lieferpartner-ansprechpartner-lieferantenvertrge' }
+  ];
+  function pageHref(){
+    for(var i=0;i<PAGES.length;i++){ if(PAGES[i].re.test(location.pathname)) return PAGES[i].href; }
+    return null;
+  }
   function mount(){
-    if(!PATH.test(location.pathname)) return;
-    if(document.getElementById('ts-next')) return;
+    var href = pageHref();
+    var ex = document.getElementById('ts-next');
+    if(!href){ if(ex){ var w=document.getElementById('ts-next-wrap'); if(w&&w.parentNode)w.parentNode.removeChild(w); else if(ex.parentNode)ex.parentNode.removeChild(ex); } return; }
+    if(ex){ if(ex.getAttribute('href')!==href) ex.setAttribute('href',href); return; }
     var host = document.querySelector('.notion-root') || document.querySelector('main');
     if(!host) return;
     var wrap = document.createElement('div');
     wrap.id = 'ts-next-wrap';
     var a = document.createElement('a');
     a.id = 'ts-next';
-    a.href = '/inventurliste';
+    a.href = href;
     a.textContent = 'Nächste Lektion';
     wrap.appendChild(a);
     host.appendChild(wrap);
@@ -852,10 +862,37 @@
   function orb(i,tx){
     return '<div class="tsl-cell" style="--i:'+i+'"><div class="tsl-orb"><p class="tsl-t">'+tx+'</p></div></div>';
   }
-  var HTML = '<section id="tsl">' +
-    '<div class="tsl-head"><span class="tsl-eyebrow">Was du mitnimmst</span><h2 class="tsl-title">Learnings</h2></div>' +
-    '<div class="tsl-grid">' + ITEMS.map(function(t,i){return orb(i,t);}).join('') + '</div>' +
-  '</section>';
+  function buildHTML(items){
+    return '<section id="tsl">' +
+      '<div class="tsl-head"><span class="tsl-eyebrow">Was du mitnimmst</span><h2 class="tsl-title">Learnings</h2></div>' +
+      '<div class="tsl-grid">' + items.map(function(t,i){return orb(i,t);}).join('') + '</div>' +
+    '</section>';
+  }
+  /* Seiten-Map: mehrwert-zielbild = fixe Texte (Original), inventurliste = Texte
+     dynamisch aus der Notion-Bullet-Liste unter "Learnings" (Robert darf sie in
+     Notion editieren/ergänzen, die Bubbles ziehen automatisch nach) */
+  var PAGES = [
+    { re:/\/mehrwert-zielbild\/?$/, items:ITEMS },
+    { re:/\/inventurliste\/?$/,     items:null }
+  ];
+  function pageCfg(){
+    for(var i=0;i<PAGES.length;i++){ if(PAGES[i].re.test(location.pathname)) return PAGES[i]; }
+    return null;
+  }
+  function readItems(head){
+    var out=[], hb=blockOf(head), n=hb.nextElementSibling;
+    while(n){
+      var isList = n.matches('ul, ol, .notion-list, [class*="bulleted"], [class*="numbered"]') ||
+                   (n.querySelector && n.querySelector('ul, ol, .notion-list'));
+      if(!isList) break;
+      n.querySelectorAll('li').forEach(function(li){
+        var t=(li.textContent||'').trim();
+        if(t) out.push(t);
+      });
+      n = n.nextElementSibling;
+    }
+    return out;
+  }
 
   function injectStyle(){
     if (document.getElementById('tsl-style')) return;
@@ -896,14 +933,17 @@
     setTimeout(showAll, 1800);
   }
   function mount(){
-    if (!/\/mehrwert-zielbild\/?$/.test(location.pathname)){
+    var cfg = pageCfg();
+    if (!cfg){
       var e = document.getElementById('tsl'); if (e && e.parentNode) e.parentNode.removeChild(e); return;
     }
     if (document.getElementById('tsl')) return;
     var head = findHead(); if (!head) return;
+    var items = cfg.items || readItems(head);
+    if (!items.length) return;
     injectStyle();
     var hb = hideOriginals(head);
-    var d = document.createElement('div'); d.innerHTML = HTML;
+    var d = document.createElement('div'); d.innerHTML = buildHTML(items);
     var node = d.firstElementChild;
     hb.parentNode.insertBefore(node, hb);
     reveal(node);
