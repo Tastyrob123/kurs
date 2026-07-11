@@ -2619,3 +2619,173 @@
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
+
+/* ---- Organisationsfluss: Lieferant -> Ansprechpartner -> Lieferantenvertrag -> Produkt ---- */
+(function(){
+  if (window.__tsFlow) return; window.__tsFlow = true;
+  var PATH = /\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/;
+  var ROOT_ID = 'tsFlowRoot';
+
+  var NODES = [
+    { k:'01', label:'Lieferant',          desc:'Die Bezugsquelle',   icon:'truck' },
+    { k:'02', label:'Ansprechpartner',    desc:'Dein Kontakt dort',  icon:'person' },
+    { k:'03', label:'Lieferantenvertrag', desc:'Konditionen & JRV',  icon:'doc' },
+    { k:'04', label:'Produkt',            desc:'Was bei dir ankommt', icon:'box', central:true }
+  ];
+
+  var ICONS = {
+    truck:'<path d="M2 6.5h11.5v8.5H2z"/><path d="M13.5 9.5h3.6l3.4 3.4V15h-7z"/><circle cx="6" cy="17" r="1.7"/><circle cx="16.5" cy="17" r="1.7"/>',
+    person:'<circle cx="12" cy="8.2" r="3.3"/><path d="M5.6 19c0-3.7 2.9-5.7 6.4-5.7s6.4 2 6.4 5.7"/>',
+    doc:'<path d="M6.5 3h7l4 4v14h-11z"/><path d="M13.5 3v4h4"/><path d="M9 12h6M9 15.2h6M9 8.8h3"/>',
+    box:'<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4.2 7.7l7.8 4.5 7.8-4.5"/><path d="M12 12.2V21"/>'
+  };
+  function svgIcon(name){
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICONS[name]+'</svg>';
+  }
+
+  function injectStyles(){
+    if (document.getElementById('tsFlowStyles')) return;
+    var css = `
+    #tsFlowRoot{ width:100%; margin:8px 0; }
+    #tsFlowRoot *{ box-sizing:border-box; }
+    #tsFlowRoot .tsflow-section{ position:relative; overflow:hidden; padding:56px 8px 52px; background:transparent; }
+    #tsFlowRoot .tsflow-section::before{ content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:1200px; height:720px; background:radial-gradient(ellipse at center, rgba(199,180,137,.05) 0%, transparent 62%); pointer-events:none; }
+    #tsFlowRoot .tsflow-canvas{ position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+    #tsFlowRoot .tsflow-inner{ position:relative; z-index:1; max-width:1080px; margin:0 auto; }
+    #tsFlowRoot .tsflow-header{ text-align:center; margin-bottom:46px; }
+    #tsFlowRoot .tsflow-title{ font-size:clamp(28px,4vw,46px); font-weight:800; letter-spacing:-.03em; color:#fff; line-height:1.12; margin:0 0 14px; }
+    #tsFlowRoot .tsflow-title span{ color:#c7b489; }
+    #tsFlowRoot .tsflow-sub{ font-size:16px; color:rgba(255,255,255,.42); max-width:640px; margin:0 auto; line-height:1.65; }
+
+    #tsFlowRoot .tsflow-track{ display:flex; align-items:flex-start; justify-content:center; gap:0; }
+    #tsFlowRoot .tsflow-node{ flex:0 0 auto; width:168px; text-align:center; opacity:0; transform:translateY(16px) scale(.94); transition:opacity .55s ease, transform .55s cubic-bezier(.34,1.56,.64,1); }
+    #tsFlowRoot.play .tsflow-node{ opacity:1; transform:translateY(0) scale(1); transition-delay:calc(var(--i) * .3s + .1s); }
+
+    #tsFlowRoot .tsflow-medallion{ width:66px; height:66px; margin:0 auto 16px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:1.5px solid rgba(216,201,171,.45); background:rgba(216,201,171,.07); box-shadow:0 0 24px rgba(199,180,137,.06); color:#d8c9ab; transition:box-shadow .35s, transform .35s, border-color .35s; }
+    #tsFlowRoot .tsflow-medallion svg{ width:28px; height:28px; display:block; }
+    #tsFlowRoot .tsflow-node:hover .tsflow-medallion{ transform:translateY(-3px); box-shadow:0 0 44px rgba(199,180,137,.18); border-color:rgba(216,201,171,.7); }
+    #tsFlowRoot .tsflow-node.central .tsflow-medallion{ border-width:2px; border-color:rgba(216,201,171,.6); background:rgba(216,201,171,.1); box-shadow:0 0 40px rgba(199,180,137,.12), 0 0 0 4px rgba(199,180,137,.03); color:#efe6d2; }
+    #tsFlowRoot .tsflow-node.central:hover .tsflow-medallion{ box-shadow:0 0 60px rgba(199,180,137,.25), 0 0 0 8px rgba(199,180,137,.05); border-color:rgba(216,201,171,.85); }
+
+    #tsFlowRoot .tsflow-num{ font-size:11px; font-weight:700; letter-spacing:.18em; color:rgba(216,201,171,.5); margin-bottom:7px; }
+    #tsFlowRoot .tsflow-label{ font-size:14px; font-weight:700; letter-spacing:.01em; color:#fff; margin-bottom:5px; }
+    #tsFlowRoot .tsflow-node.central .tsflow-label{ color:#efe6d2; }
+    #tsFlowRoot .tsflow-desc{ font-size:12.5px; color:rgba(255,255,255,.38); line-height:1.42; }
+
+    #tsFlowRoot .tsflow-conn{ flex:1 1 auto; position:relative; height:2px; margin-top:32px; min-width:24px; max-width:120px; }
+    #tsFlowRoot .tsflow-line{ position:absolute; inset:0; background:linear-gradient(90deg, rgba(216,201,171,.14), rgba(216,201,171,.5)); transform:scaleX(0); transform-origin:left center; transition:transform .5s ease; }
+    #tsFlowRoot.play .tsflow-conn .tsflow-line{ transform:scaleX(1); transition-delay:calc(var(--c) * .3s + .35s); }
+    #tsFlowRoot .tsflow-tip{ position:absolute; right:-1px; top:50%; width:0; height:0; border-top:4px solid transparent; border-bottom:4px solid transparent; border-left:6px solid rgba(216,201,171,.62); transform:translateY(-50%) scale(0); transition:transform .3s cubic-bezier(.34,1.56,.64,1); }
+    #tsFlowRoot.play .tsflow-conn .tsflow-tip{ transform:translateY(-50%) scale(1); transition-delay:calc(var(--c) * .3s + .76s); }
+    #tsFlowRoot .tsflow-pulse{ position:absolute; top:50%; left:0; width:5px; height:5px; border-radius:50%; background:#e6d6b3; box-shadow:0 0 8px rgba(216,201,171,.85); transform:translate(-50%,-50%); opacity:0; }
+    #tsFlowRoot.play .tsflow-conn .tsflow-pulse{ animation:tsFlowPulseH 2.6s linear infinite; animation-delay:calc(var(--c) * .3s + 1.05s); }
+    @keyframes tsFlowPulseH{ 0%{ left:0; opacity:0; } 12%{ opacity:1; } 88%{ opacity:1; } 100%{ left:100%; opacity:0; } }
+    @keyframes tsFlowPulseV{ 0%{ top:0; opacity:0; } 12%{ opacity:1; } 88%{ opacity:1; } 100%{ top:100%; opacity:0; } }
+
+    @media(max-width:720px){
+      #tsFlowRoot .tsflow-section{ padding:44px 6px 40px; }
+      #tsFlowRoot .tsflow-header{ margin-bottom:34px; }
+      #tsFlowRoot .tsflow-track{ flex-direction:column; align-items:center; }
+      #tsFlowRoot .tsflow-node{ width:100%; max-width:250px; }
+      #tsFlowRoot .tsflow-conn{ flex:0 0 auto; width:2px; height:34px; min-width:0; max-width:none; margin:8px 0; }
+      #tsFlowRoot .tsflow-line{ background:linear-gradient(180deg, rgba(216,201,171,.14), rgba(216,201,171,.5)); transform:scaleY(0); transform-origin:top center; }
+      #tsFlowRoot.play .tsflow-conn .tsflow-line{ transform:scaleY(1); }
+      #tsFlowRoot .tsflow-tip{ right:auto; left:50%; top:auto; bottom:-1px; border-left:4px solid transparent; border-right:4px solid transparent; border-top:6px solid rgba(216,201,171,.62); border-bottom:0; transform:translateX(-50%) scale(0); }
+      #tsFlowRoot.play .tsflow-conn .tsflow-tip{ transform:translateX(-50%) scale(1); }
+      #tsFlowRoot .tsflow-pulse{ left:50%; top:0; }
+      #tsFlowRoot.play .tsflow-conn .tsflow-pulse{ animation-name:tsFlowPulseV; }
+    }
+
+    @media(prefers-reduced-motion:reduce){
+      #tsFlowRoot .tsflow-node{ opacity:1 !important; transform:none !important; transition:none; }
+      #tsFlowRoot .tsflow-conn .tsflow-line{ transform:scaleX(1) !important; transition:none; }
+      #tsFlowRoot .tsflow-conn .tsflow-tip{ transform:translateY(-50%) scale(1) !important; transition:none; }
+      #tsFlowRoot .tsflow-conn .tsflow-pulse{ animation:none !important; opacity:0 !important; }
+    }`;
+    var s=document.createElement('style'); s.id='tsFlowStyles'; s.textContent=css; document.head.appendChild(s);
+  }
+
+  function buildMarkup(){
+    var root=document.createElement('div'); root.id=ROOT_ID;
+    var track='';
+    NODES.forEach(function(n,i){
+      track += '<div class="tsflow-node'+(n.central?' central':'')+'" style="--i:'+i+'">'
+             +   '<div class="tsflow-medallion">'+svgIcon(n.icon)+'</div>'
+             +   '<div class="tsflow-num">'+n.k+'</div>'
+             +   '<div class="tsflow-label">'+n.label+'</div>'
+             +   '<div class="tsflow-desc">'+n.desc+'</div>'
+             + '</div>';
+      if (i < NODES.length-1){
+        track += '<div class="tsflow-conn" style="--c:'+i+'"><span class="tsflow-line"></span><span class="tsflow-tip"></span><span class="tsflow-pulse"></span></div>';
+      }
+    });
+    root.innerHTML =
+      '<section class="tsflow-section">'
+    +   '<canvas class="tsflow-canvas" id="tsFlowCanvas"></canvas>'
+    +   '<div class="tsflow-inner">'
+    +     '<div class="tsflow-header">'
+    +       '<h2 class="tsflow-title">Ein Vorgang, <span>eine Kette.</span></h2>'
+    +       '<p class="tsflow-sub">Jeder Lieferant hängt an einem Ansprechpartner, jeder Ansprechpartner an einem Vertrag — und jeder Vertrag bestimmt, welches Produkt zu welchen Konditionen bei dir ankommt. Genau diesen Fluss bildest du im Backoffice ab.</p>'
+    +     '</div>'
+    +     '<div class="tsflow-track">'+track+'</div>'
+    +   '</div>'
+    + '</section>';
+    return root;
+  }
+
+  function initFlow(root){
+    var section=root.querySelector('.tsflow-section');
+    var canvas=root.querySelector('#tsFlowCanvas');
+    var ctx=canvas.getContext('2d');
+    var particles=[], animFrame, running=false, _rect={width:0,height:0}, _last=0, FRAME_MS=33;
+    function resize(){ var r=section.getBoundingClientRect(); _rect=r; var dpr=window.devicePixelRatio||1; canvas.width=r.width*dpr; canvas.height=r.height*dpr; canvas.style.width=r.width+'px'; canvas.style.height=r.height+'px'; ctx.setTransform(dpr,0,0,dpr,0,0); }
+    function initP(){ particles=[]; var r=section.getBoundingClientRect(); _rect=r; for(var i=0;i<32;i++){ particles.push({ x:Math.random()*r.width, y:Math.random()*r.height, r:Math.random()*.8+.2, vx:(Math.random()-.5)*.07, vy:(Math.random()-.5)*.05, alpha:Math.random()*.1+.02, pulse:Math.random()*Math.PI*2 }); } }
+    function draw(ts){
+      if(!running) return;
+      if(ts && _last && ts-_last<FRAME_MS){ animFrame=requestAnimationFrame(draw); return; }
+      if(ts) _last=ts;
+      var pw=_rect.width, ph=_rect.height; if(!pw||!ph){ animFrame=requestAnimationFrame(draw); return; }
+      ctx.clearRect(0,0,pw,ph);
+      particles.forEach(function(p){ p.x+=p.vx; p.y+=p.vy; p.pulse+=.005;
+        if(p.x<0)p.x=pw; if(p.x>pw)p.x=0; if(p.y<0)p.y=ph; if(p.y>ph)p.y=0;
+        var a=p.alpha*(.7+Math.sin(p.pulse)*.3);
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle='rgba(199,180,137,'+a+')'; ctx.fill(); });
+      animFrame=requestAnimationFrame(draw);
+    }
+    var played=false;
+    var io=new IntersectionObserver(function(en){
+      if(en[0].isIntersecting){
+        if(!played){ played=true; root.classList.add('play'); resize(); initP(); running=true; draw(); }
+        else if(!running){ running=true; resize(); draw(); }
+      } else if(running){ running=false; cancelAnimationFrame(animFrame); }
+    },{threshold:0.15});
+    io.observe(section);
+    var rt; window.addEventListener('resize',function(){ clearTimeout(rt); rt=setTimeout(function(){ if(running){ resize(); initP(); } },200); });
+  }
+
+  function findAnchor(){
+    var lists=document.querySelectorAll('.notion-column-list');
+    for(var i=0;i<lists.length;i++){ var cl=lists[i];
+      if(cl.textContent && cl.textContent.indexOf('JRV und Co')>-1 && !cl.querySelector('.notion-video, .notion-video__content')) return cl;
+    }
+    return null;
+  }
+  function mount(){
+    if(!PATH.test(location.pathname)) return;
+    if(document.getElementById(ROOT_ID)) return;
+    var anchor=findAnchor(); if(!anchor) return;
+    injectStyles();
+    var root=buildMarkup();
+    anchor.parentNode.insertBefore(root, anchor.nextSibling);
+    initFlow(root);
+  }
+  function boot(){
+    mount();
+    var mo=new MutationObserver(function(){
+      if(!PATH.test(location.pathname)){ var st=document.getElementById(ROOT_ID); if(st) st.remove(); return; }
+      if(!document.getElementById(ROOT_ID)) mount();
+    });
+    mo.observe(document.body,{childList:true,subtree:true});
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+})();
