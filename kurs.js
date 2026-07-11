@@ -2548,3 +2548,74 @@
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
+
+/* ============================================================
+   MacBook-Cover + Klick-Lightbox (lieferpartner)
+   Exakt wie /inventurliste: Rohvideo per CSS versteckt,
+   MacBook-Poster (Lektion 2.2 "DB I - III: Lieferpartner" in
+   den Screen gebacken) sitzt im Video-Block der Sektion
+   "DB I - III: Lieferanten" (Block 39ab…6bcf), Klick -> Lightbox.
+   Poster (catbox): yznugp.png · Läuft nur auf
+   /lieferpartner-ansprechpartner-lieferantenvertrge.
+   ============================================================ */
+(function(){
+  if(window.__tsmacLief) return; window.__tsmacLief=true;
+  var POSTER="https://files.catbox.moe/yznugp.png";
+  (function(){ var pre=new Image(); pre.src=POSTER; })(); // Poster vorladen -> kein Leer-Blitz
+  var PG='.page__lieferpartner-ansprechpartner-lieferantenvertrge';
+  var VID='#block-39ab954655348084b1bee141678f6bcf';
+  var CSS=[
+    PG+' '+VID+' video{display:none!important;}',
+    PG+' .tsmac{position:relative;cursor:pointer;display:block;width:100%;line-height:0;background:transparent;}',
+    PG+' .tsmac img{width:100%;height:auto;display:block;transition:transform .5s ease;}',
+    PG+' .tsmac:hover img{transform:scale(1.02);}',
+    PG+' .tsmac__play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}',
+    PG+' .tsmac__play span{width:76px;height:76px;border-radius:50%;background:rgba(255,255,255,.16);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;transition:transform .3s,background .3s;}',
+    PG+' .tsmac__play span::after{content:"";border-style:solid;border-width:12px 0 12px 20px;border-color:transparent transparent transparent #fff;margin-left:5px;}',
+    PG+' .tsmac:hover .tsmac__play span{transform:scale(1.08);background:rgba(255,255,255,.26);}',
+    '#tsmac-lb{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;background:rgba(5,6,11,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:4vw;opacity:0;transition:opacity .35s ease;}',
+    '#tsmac-lb.open{display:flex;opacity:1;}',
+    '#tsmac-lb .tsmac-stage{transform:scale(.94);transition:transform .4s cubic-bezier(.2,.7,.2,1);width:min(92vw,1180px);}',
+    '#tsmac-lb.open .tsmac-stage{transform:scale(1);}',
+    '#tsmac-lb video{width:100%;max-height:86vh;border-radius:12px;box-shadow:0 40px 120px rgba(0,0,0,.6);background:#000;display:block;}',
+    '#tsmac-lb__close{position:absolute;top:22px;right:28px;width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}'
+  ].join('');
+  function injectCSS(){ if(document.getElementById('tsmac-lief-css'))return; var s=document.createElement('style'); s.id='tsmac-lief-css'; s.textContent=CSS; document.head.appendChild(s); }
+  function shut(){ var lb=document.getElementById('tsmac-lb'); if(!lb)return; lb.classList.remove('open'); var v=lb.querySelector('video'); if(v){ try{v.pause();}catch(e){} } }
+  function ensureLb(){
+    var lb=document.getElementById('tsmac-lb'); if(lb) return lb;
+    lb=document.createElement('div'); lb.id='tsmac-lb';
+    var stage=document.createElement('div'); stage.className='tsmac-stage';
+    var close=document.createElement('button'); close.id='tsmac-lb__close'; close.textContent='✕';
+    lb.appendChild(stage); lb.appendChild(close); document.body.appendChild(lb);
+    close.addEventListener('click',shut);
+    lb.addEventListener('click',function(e){ if(e.target===lb) shut(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') shut(); });
+    return lb;
+  }
+  function mount(){
+    if(!/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/.test(location.pathname)) return;
+    injectCSS();
+    var scope=document.querySelector(PG); if(!scope) return;
+    var nv=scope.querySelector(VID); if(!nv) return;
+    if(nv.querySelector('.tsmac')) return;
+    var raw=nv.querySelector('video'); if(!raw) return;
+    var src=raw.currentSrc||raw.getAttribute('src')||(raw.querySelector('source')&&raw.querySelector('source').getAttribute('src'));
+    if(!src) return;
+    var poster=document.createElement('div'); poster.className='tsmac';
+    poster.innerHTML='<img src="'+POSTER+'" alt="Lektion 2.2 – DB I - III: Lieferpartner" fetchpriority="high" decoding="async"><div class="tsmac__play"><span></span></div>';
+    nv.appendChild(poster);
+    poster.addEventListener('click',function(){
+      var lb=ensureLb(); var stage=lb.querySelector('.tsmac-stage');
+      stage.innerHTML='<video controls playsinline preload="auto" src="'+src+'"></video>';
+      lb.classList.add('open');
+      var v=stage.querySelector('video'); if(v){ try{ v.play(); }catch(e){} }
+    });
+  }
+  function boot(){
+    var tries=0;
+    var iv=setInterval(function(){ tries++; mount(); if(tries>60) clearInterval(iv); },300);
+    new MutationObserver(function(){ mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
