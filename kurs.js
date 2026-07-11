@@ -2044,6 +2044,11 @@
     var target=ov.querySelector('.tsd-content');
     if(st.content){
       var clone=st.content.cloneNode(true);
+      /* Toggle war zu → Klon erbt inline display:none; alles aufklappen */
+      clone.style.removeProperty('display');
+      clone.removeAttribute('hidden');
+      [].slice.call(clone.querySelectorAll('.notion-toggle__content')).forEach(function(e){ e.style.removeProperty('display'); });
+      [].slice.call(clone.querySelectorAll('.notion-toggle.closed')).forEach(function(e){ e.classList.remove('closed'); });
       [].slice.call(clone.querySelectorAll('[id]')).forEach(function(e){ e.removeAttribute('id'); });
       [].slice.call(clone.querySelectorAll('.done-check, .notion-code__copy-button')).forEach(function(e){ e.remove(); });
       /* eigener Copy-Button je Formelblock */
