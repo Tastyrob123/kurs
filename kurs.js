@@ -2654,7 +2654,11 @@
     #tsFlowRoot .tsflow-canvas{ position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; }
     #tsFlowRoot .tsflow-inner{ position:relative; z-index:1; max-width:1080px; margin:0 auto; }
     #tsFlowRoot .tsflow-header{ text-align:center; margin-bottom:46px; }
-    #tsFlowRoot .tsflow-title{ font-size:clamp(28px,4vw,46px); font-weight:800; letter-spacing:-.03em; color:#fff; line-height:1.12; margin:0 0 14px; }
+    #tsFlowRoot .tsflow-title{ font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif; font-size:clamp(23px,3.1vw,36px); font-weight:600; letter-spacing:-.02em; color:#fff; line-height:1.14; margin:0 0 14px; }
+    /* Intro-Textblock der Seite darueber: zentriert + etwas nach unten in den Zwischenraum */
+    .tsflow-intro-block{ margin-top:70px !important; }
+    .tsflow-intro-block, .tsflow-intro-block .notion-text, .tsflow-intro-block p, .tsflow-intro-block .notion-semantic-string{ text-align:center !important; }
+    .tsflow-intro-block .notion-text{ max-width:820px; margin-left:auto !important; margin-right:auto !important; }
     #tsFlowRoot .tsflow-title span{ color:#c7b489; }
     #tsFlowRoot .tsflow-sub{ font-size:16px; color:rgba(255,255,255,.42); max-width:640px; margin:0 auto; line-height:1.65; }
 
@@ -2792,7 +2796,19 @@
     var root=buildMarkup();
     if(a.where==='after') a.node.parentNode.insertBefore(root, a.node.nextSibling);
     else a.node.parentNode.insertBefore(root, a.node);
+    tagIntro();
     initFlow(root);
+  }
+  // Intro-Absatz der Seite ("In dieser Lektion erstellen wir gleich...") zentrieren + tiefer setzen
+  function tagIntro(){
+    var texts=document.querySelectorAll('.notion-text');
+    for(var i=0;i<texts.length;i++){
+      if(texts[i].textContent && texts[i].textContent.indexOf('In dieser Lektion erstellen wir gleich')>-1){
+        var block=texts[i].closest('.notion-column-list')||texts[i];
+        block.classList.add('tsflow-intro-block');
+        return;
+      }
+    }
   }
   function boot(){
     mount();
