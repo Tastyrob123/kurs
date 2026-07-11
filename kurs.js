@@ -2034,6 +2034,10 @@
    Karten mappen zyklisch auf die Objekt-Varianten (Bild + Wert).
    Werte = Beispielwerte, keine echten Kalkulationsdaten.
    v1→v2: 11.07.2026. Render v2 auf /inventurliste (db0).
+   11.07.2026: db13_lieferanten auf /lieferpartner-… (DB I,
+   13 Fahrzeug-Bilder img/lieferpartner, Währung = Mindest-
+   belieferung €). PAGES.marker scopt die richtige Phasen-
+   Sektion auf Seiten mit mehreren Phase-I/II-Bereichen.
    ============================================================ */
 (function(){
   if(window.__tsshop) return; window.__tsshop=true;
@@ -2063,9 +2067,24 @@
     { kachel_id:'db4_zutaten', kachel_name:'Zutaten', ist_produkt_kachel:true,
       einheit:'Portionsgröße (g)', einheit_typ:'menge_g',
       objekt_varianten:[{name:'Avocado'},{name:'Zwiebel'},{name:'Lachsfilet'},{name:'Ei'},{name:'Basilikum-Bund'},{name:'Butter'}]},
-    { kachel_id:'db13_lieferanten', kachel_name:'Lieferanten', ist_produkt_kachel:true,
+    { kachel_id:'db13_lieferanten', kachel_name:'Lieferpartner', ist_produkt_kachel:true,
       einheit:'Mindestbelieferung (€)', einheit_typ:'preis',
-      objekt_varianten:[{name:'Kühl-Van'},{name:'Sattelzug'},{name:'Kleintransporter'},{name:'Kastenwagen'}]},
+      /* 13 Tasty-Studios-Fahrzeugbilder (img/lieferpartner, GitHub Pages) — Werte = Beispielwerte */
+      objekt_varianten:[
+        { name:'Lieferroller',             wert:25,  img:'https://tastyrob123.github.io/kurs/img/lieferpartner/lieferroller.jpg' },
+        { name:'E-Lastenrad',              wert:35,  img:'https://tastyrob123.github.io/kurs/img/lieferpartner/e-lastenrad.jpg' },
+        { name:'Pickup',                   wert:60,  img:'https://tastyrob123.github.io/kurs/img/lieferpartner/pickup.jpg' },
+        { name:'Stadtlieferwagen kompakt', wert:75,  img:'https://tastyrob123.github.io/kurs/img/lieferpartner/stadtlieferwagen-kompakt.jpg' },
+        { name:'E-Lieferwagen',            wert:90,  img:'https://tastyrob123.github.io/kurs/img/lieferpartner/e-lieferwagen.jpg' },
+        { name:'Hochdach-Transporter',     wert:120, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/hochdach-transporter.jpg' },
+        { name:'Kastenwagen Transit',      wert:150, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/kastenwagen-transit.jpg' },
+        { name:'Kühltransporter Sprinter', wert:180, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/kuehltransporter-sprinter.jpg' },
+        { name:'Pritschenwagen',           wert:220, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/pritschenwagen-kisten.jpg' },
+        { name:'Getränke-LKW',             wert:350, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/getraenke-lkw.jpg' },
+        { name:'Kühlkoffer 7,5t',          wert:450, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/kuehlkoffer-7-5t.jpg' },
+        { name:'Tiefkühl-LKW 18t',         wert:680, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/tiefkuehl-lkw-18t.jpg' },
+        { name:'Sattelzug Kühlauflieger',  wert:950, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/sattelzug-kuehlauflieger.jpg' }
+      ]},
     { kachel_id:'db13_ansprechpartner', kachel_name:'Ansprechpartner', ist_produkt_kachel:true,
       einheit:'Rückvergütung (%)', einheit_typ:'prozent',
       objekt_varianten:[{name:'Cap'},{name:'Poloshirt'},{name:'Kugelschreiber'},{name:'Notizblock'}]},
@@ -2117,12 +2136,20 @@
     return String(v);
   }
 
-  /* Seiten-Zuordnung: welcher Pfad zeigt welchen Warenkorb */
+  /* Seiten-Zuordnung: welcher Pfad zeigt welchen Warenkorb.
+     marker (optional): RegExp, der die richtige Phasen-Sektion wählt,
+     wenn eine Seite MEHRERE Phase-I/II-Bereiche hat (z. B. Lieferpartner-
+     Seite: DB I + DB II + DB III — "Kundennummer" gibt es nur in DB I). */
   var PAGES=[
     { path:/\/inventurliste\/?$/, kachel:'db0_inventurliste',
       eyebrow:'Der Warenkorb · DB 0',
       title:'Deine Inventurliste. <span>Schritt für Schritt.</span>',
-      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB 0 ist der Preis.' }
+      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB 0 ist der Preis.' },
+    { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_lieferanten',
+      marker:/Kundennummer/,
+      eyebrow:'Der Warenkorb · DB I',
+      title:'Deine Lieferpartner. <span>An einem Ort.</span>',
+      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB I ist die Mindestbelieferung.' }
   ];
 
   var reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2264,11 +2291,11 @@
 
   /* ---- Schritte aus den Notion-Toggles der Phasen-Sektion lesen ---- */
   function doneKey(txt){ return 'done-'+((txt||'').replace(/[‣\s]/g,'').slice(0,40)); }
-  function findPhases(){
+  function findPhases(marker){
     var lists=document.querySelectorAll('.notion-column-list'), cand=null;
     for(var i=0;i<lists.length;i++){
       var t=lists[i].textContent||'';
-      if(t.indexOf('Phase I')>-1&&t.indexOf('Schritt')>-1){ if(!cand||cand.contains(lists[i])) cand=lists[i]; }
+      if(t.indexOf('Phase I')>-1&&t.indexOf('Schritt')>-1&&(!marker||marker.test(t))){ if(!cand||cand.contains(lists[i])) cand=lists[i]; }
     }
     return cand;
   }
@@ -2497,7 +2524,7 @@
       var d=document.getElementById('tsshop-detail'); if(d){ d.remove(); document.body.style.overflow=''; }
       return;
     }
-    var list=findPhases(); if(!list) return;
+    var list=findPhases(page.marker); if(!list) return;
     /* Original-Phasen verstecken (Notion bleibt SSOT) — auch nach React-Re-Render */
     if(list.style.display!=='none') list.style.display='none';
     /* leere Notion-Text-Blöcke direkt über dem Shop ausblenden — sie erzeugen tote Leerfläche */
