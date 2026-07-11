@@ -2150,7 +2150,7 @@
       eyebrow:'Der Warenkorb · DB I',
       title:'Deine Lieferpartner. <span>An einem Ort.</span>',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB I ist die Mindestbelieferung.',
-      cta:'Tour buchen', ctaDone:'Tour gebucht' }
+      cta:'Tour buchen', ctaDone:'Tour gebucht', chain:true }
   ];
 
   var reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2460,7 +2460,26 @@
       setDone(st,val);
       var c=root.querySelector('.tss-card[data-step="'+idx+'"]'); if(c) c.classList.toggle('is-done',val);
       updProgress(root,steps);
-      if(val){ closeOv(); setTimeout(function(){ neonSweep(c); },420); return; }
+      if(val){
+        closeOv();
+        setTimeout(function(){ neonSweep(c); },420);
+        /* Chain (nur Seiten mit page.chain): Overlay schließt → Tron läuft →
+           die Reihe rutscht einen auf, sodass die rechte Nachbar-Kachel exakt
+           die Position der eben geöffneten einnimmt → dann öffnet sie sich.
+           Ausgelöst NUR durch „Tour buchen"; Klick auf X/Backdrop beendet die Kette. */
+        var nextIdx=idx+1;
+        if(page.chain && nextIdx<steps.length){
+          var slideT=reduced?260:1400, openT=reduced?520:2150;
+          setTimeout(function(){
+            var track=root.querySelector('.tss-track');
+            var cur=root.querySelector('.tss-card[data-step="'+idx+'"]');
+            var nx=root.querySelector('.tss-card[data-step="'+nextIdx+'"]');
+            if(track&&cur&&nx){ track.scrollBy({left:nx.offsetLeft-cur.offsetLeft, behavior:reduced?'auto':'smooth'}); }
+          }, slideT);
+          setTimeout(function(){ openDetail(page,k,steps,nextIdx,root); }, openT);
+        }
+        return;
+      }
       doneBtn.classList.remove('is-done');
       doneBtn.innerHTML=CART+'<span>'+(page.cta||'In den Einkaufswagen')+'</span>';
     });
