@@ -1636,6 +1636,10 @@
    Titel in "Lineal TS", Fußzeile "Verknüpfung in Lektion
    2.2.1/2.2.2/2.2.3", Hover-Heartbeat-Glow wie #tsq
    (mehrwert-zielbild), Champagner-Gold als Glow-Farbe.
+   v4 (11.07.2026): Hintergrundbild je Kachel (catbox-JPEG 3:2,
+   object-fit:contain — nichts abgeschnitten, Bildschwarz ver-
+   schmilzt mit Kachelgrund #04050a) + Scrim in der Hero-Farb-
+   familie rgba(4,5,10,…) + Hero-Text-Shadows fürs Lesen.
    ============================================================ */
 (function(){
   if(window.__tslink) return; window.__tslink=true;
@@ -1645,15 +1649,20 @@
   #tslink{width:min(1000px,95vw);margin:36px auto 30px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
   #tslink *{box-sizing:border-box}
   #tslink .tsl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-  #tslink a.tsl-card{position:relative;display:block;text-align:center;text-decoration:none;color:inherit;-webkit-tap-highlight-color:transparent;border-radius:16px;padding:30px 26px 22px;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0));border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85);opacity:0;transform:translateY(18px);will-change:transform,box-shadow;transition:opacity .65s ease,transform .75s cubic-bezier(.22,1,.36,1),border-color .4s ease,box-shadow .5s ease}
+  #tslink a.tsl-card{position:relative;display:block;overflow:hidden;text-align:center;text-decoration:none;color:inherit;-webkit-tap-highlight-color:transparent;border-radius:16px;padding:30px 26px 22px;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0));border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85);opacity:0;transform:translateY(18px);will-change:transform,box-shadow;transition:opacity .65s ease,transform .75s cubic-bezier(.22,1,.36,1),border-color .4s ease,box-shadow .5s ease}
+  #tslink .tsl-bg{position:absolute;inset:0;z-index:0;border-radius:inherit;overflow:hidden;background:#04050a;pointer-events:none}
+  #tslink .tsl-bg img{width:100%;height:100%;object-fit:contain;object-position:center;display:block}
+  #tslink .tsl-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0)),radial-gradient(92% 80% at 50% 58%,rgba(4,5,10,.74) 0%,rgba(4,5,10,.48) 50%,rgba(4,5,10,.14) 76%,rgba(4,5,10,0) 100%)}
+  #tslink .tsl-num,#tslink .tsl-logo,#tslink .tsl-k,#tslink .tsl-h,#tslink .tsl-t,#tslink .tsl-foot{position:relative;z-index:2}
   #tslink a.tsl-card.on{opacity:1;transform:translateY(0)}
   #tslink a.tsl-card:hover{transform:translateY(-4px);border-color:rgba(var(--g),.5);animation:tsl-heartbeat 2.6s cubic-bezier(.4,0,.3,1) infinite}
   #tslink a.tsl-card:focus-visible{outline:2px solid rgba(var(--g),.7);outline-offset:4px}
   #tslink .tsl-num{position:absolute;top:26px;right:26px;font-size:.7rem;font-weight:500;letter-spacing:.2em;color:rgba(199,180,137,.55)}
   #tslink .tsl-logo{display:block;height:34px;width:auto;margin:2px auto 18px}
   #tslink .tsl-k{display:block;font-size:.58rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin-bottom:8px}
-  #tslink .tsl-h{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1.32rem;font-weight:600;letter-spacing:-.012em;line-height:1.15;color:#fff;margin:0 0 12px}
-  #tslink .tsl-t{color:rgba(255,255,255,.58);font-size:.88rem;line-height:1.62;margin:0 auto;max-width:34ch}
+  #tslink .tsl-h{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1.32rem;font-weight:600;letter-spacing:-.012em;line-height:1.15;color:#fff;margin:0 0 12px;text-shadow:0 0 4px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,.95),0 3px 14px rgba(0,0,0,.9),0 6px 34px rgba(0,0,0,.8)}
+  #tslink .tsl-t{color:rgba(255,255,255,.66);font-size:.88rem;line-height:1.62;margin:0 auto;max-width:34ch;text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 10px rgba(0,0,0,.85),0 4px 22px rgba(0,0,0,.7)}
+  #tslink .tsl-k{text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 8px rgba(0,0,0,.8)}
   #tslink .tsl-foot{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px;padding-top:15px;border-top:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.42);font-size:.76rem;letter-spacing:.03em}
   #tslink .tsl-foot svg{flex:none;opacity:.7}
   @keyframes tsl-heartbeat{0%{box-shadow:0 4px 14px rgba(var(--g),.10),0 0 14px rgba(var(--g),.10)}18%{box-shadow:0 6px 22px rgba(var(--g),.30),0 0 46px rgba(var(--g),.34)}32%{box-shadow:0 5px 18px rgba(var(--g),.16),0 0 26px rgba(var(--g),.18)}46%{box-shadow:0 6px 20px rgba(var(--g),.26),0 0 40px rgba(var(--g),.28)}72%,100%{box-shadow:0 4px 14px rgba(var(--g),.10),0 0 14px rgba(var(--g),.10)}}
@@ -1662,15 +1671,15 @@
   `;
   var LINKICON='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>';
   var CARDS=[
-    ['01','Lieferpartner','Deine Lieferanten & Ansprechpartner — die Quelle jeder Einkaufszeile.','https://sore-donut-083.notion.site/DB-Lieferpartner-2f5b9546553483e2afbc816dd470da0a?source=copy_link','Lektion 2.2.1'],
-    ['02','Zutaten','Zieht ihre Preise später direkt aus deiner Inventurliste.','https://sore-donut-083.notion.site/DB-Zutaten-388b95465534827481c0011c243f90de?source=copy_link','Lektion 2.2.2'],
-    ['03','Packaging','Auch Verpackung wird Teil der Kalkulation — bis auf den Cent.','https://sore-donut-083.notion.site/Packaging-cfdb95465534835e9e5f8153ce960d12?source=copy_link','Lektion 2.2.3']
+    ['01','Lieferpartner','Deine Lieferanten & Ansprechpartner — die Quelle jeder Einkaufszeile.','https://sore-donut-083.notion.site/DB-Lieferpartner-2f5b9546553483e2afbc816dd470da0a?source=copy_link','Lektion 2.2.1','https://files.catbox.moe/wl5y7h.jpg'],
+    ['02','Zutaten','Zieht ihre Preise später direkt aus deiner Inventurliste.','https://sore-donut-083.notion.site/DB-Zutaten-388b95465534827481c0011c243f90de?source=copy_link','Lektion 2.2.2','https://files.catbox.moe/cvv9ee.jpg'],
+    ['03','Packaging','Auch Verpackung wird Teil der Kalkulation — bis auf den Cent.','https://sore-donut-083.notion.site/Packaging-cfdb95465534835e9e5f8153ce960d12?source=copy_link','Lektion 2.2.3','https://files.catbox.moe/bwgtim.jpg']
   ];
   function injectCSS(){ if(document.getElementById('tslink-css'))return; var s=document.createElement('style'); s.id='tslink-css'; s.textContent=CSS; document.head.appendChild(s); }
   function build(){
     var root=document.createElement('div'); root.id='tslink';
     root.innerHTML='<div class="tsl-grid">'+CARDS.map(function(c){
-      return '<a class="tsl-card" href="'+c[3]+'" target="_blank" rel="noopener" style="--g:'+GLOW+'"><span class="tsl-num">'+c[0]+'</span><img class="tsl-logo" src="'+LOGO+'" alt="Tasty Studios" loading="lazy"><span class="tsl-k">Datenbank</span><h3 class="tsl-h">DB '+c[1]+'</h3><p class="tsl-t">'+c[2]+'</p><div class="tsl-foot">'+LINKICON+'Verknüpfung in '+c[4]+'</div></a>';
+      return '<a class="tsl-card" href="'+c[3]+'" target="_blank" rel="noopener" style="--g:'+GLOW+'"><span class="tsl-bg" aria-hidden="true"><img src="'+c[5]+'" alt="" loading="lazy"></span><span class="tsl-num">'+c[0]+'</span><img class="tsl-logo" src="'+LOGO+'" alt="Tasty Studios" loading="lazy"><span class="tsl-k">Datenbank</span><h3 class="tsl-h">DB '+c[1]+'</h3><p class="tsl-t">'+c[2]+'</p><div class="tsl-foot">'+LINKICON+'Verknüpfung in '+c[4]+'</div></a>';
     }).join('')+'</div>';
     return root;
   }
