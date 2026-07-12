@@ -690,7 +690,7 @@ details > summary {
 .page__mehrwert-zielbild #block-398b9546553480e4bf74c90f15b0f5f5{ margin-top:40px; margin-bottom:40px; }
 
 /* mehrwert-zielbild — mehr Luft vor "Und genau diese drei Stufen…" (Abstand zum DB-Diagramm/Button) */
-.page__mehrwert-zielbild #block-38eb9546553480a5a7c8c1b512fd2f2b{ margin-top:44px; }
+.page__mehrwert-zielbild #block-38eb9546553480a5a7c8c1b512fd2f2b{ margin-top:44px; font-size:1.2rem !important; line-height:1.5 !important; }
 /* mehrwert-zielbild — mehr Luft nach "Das ist das Ziel…" (Abstand zu Learnings) */
 .page__mehrwert-zielbild #block-fa4e38c47a9a40b695e7055b5f86fb50{ margin-bottom:52px; }
 
