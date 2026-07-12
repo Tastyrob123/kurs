@@ -189,7 +189,7 @@
    gerichte-getrnke-finaler-schritt — Hero "DB VIII : Gerichte & Getränke" (Muster: rezepturen-Hero DB V)
    ============================================================ */
 (function(){
-  var IMG="https://files.catbox.moe/cou55t.png"; /* 3-Laptop-Cover Gerichte & Getränke: weisser Hintergrund per Edge-Flood-Fill entfernt (transparent RGBA, kein AI) + 2x nachgeschaerft (Lanczos+Unsharp), 2732px fuer Retina-Schaerfe (aus Gerichte.png) */
+  var IMG="https://files.catbox.moe/5xdglr.png"; /* 3-Laptop-Cover Gerichte & Getränke: weisser Hintergrund per Edge-Flood-Fill entfernt (transparent RGBA, kein AI), Farben knallig (Saettigung +24%), SANFT geschaerft (kein Kontrast-Crunch), eng auf die Laptops beschnitten -> groesser+hoeher wie Referenz, 2700px (aus Gerichte.png) */
   var LOGO="https://files.catbox.moe/au80tp.png";
   function on(){ return /\/gerichte-getrnke-finaler-schritt\/?$/.test(location.pathname); }
   function mount(){
