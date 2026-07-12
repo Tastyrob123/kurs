@@ -1735,7 +1735,7 @@
 /* gemeinkosten-mitarbeiterlhne — Hero "DB VI–VII : GK und Löhne" (Muster: inventurliste-Hero).
    Bild = 3-Laptop-Cover (Finance Studio) freigestellt auf Transparenz (aus GK & Löhne.png). Text = HTML/CSS-Overlay. */
 (function(){
-  var IMG="https://files.catbox.moe/jwamne.webp";
+  var IMG="https://files.catbox.moe/sscg6x.webp";
   var LOGO="https://files.catbox.moe/au80tp.png";
   function on(){ return /\/gemeinkosten-mitarbeiterlhne\/?$/.test(location.pathname); }
   function mount(){
