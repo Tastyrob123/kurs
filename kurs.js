@@ -1233,7 +1233,8 @@
   var PAGES = [
     { re:/\/mehrwert-zielbild\/?$/, items:ITEMS },
     { re:/\/inventurliste\/?$/,     items:null },
-    { re:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, items:null }
+    { re:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, items:null },
+    { re:/\/zutatenliste\/?$/,      items:null }
   ];
   function pageCfg(){
     for(var i=0;i<PAGES.length;i++){ if(PAGES[i].re.test(location.pathname)) return PAGES[i]; }
