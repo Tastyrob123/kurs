@@ -1732,10 +1732,14 @@
    inventurliste — MacBook-Scroll-Kachel "Mein Inventar" (#tsiv)
    Zwischen dem oberen Fortschritts-Balken und der Überschrift
    „Was uns jetzt noch fehlt". Muster = die „Live Beispiel"-
-   Kachel von /mehrwert-zielbild (#tsmb): links ein anklickbarer
-   MacBook (Cover = pc.png, „Mein Inventar"-Galerie), Klick →
-   großer PC (leerer MacBook-Frame) → Screen scrollt den langen
-   Avocado-Detail-Screenshot. Nur auf /inventurliste.
+   Kachel von /mehrwert-zielbild (#tsmb): anklickbarer MacBook
+   (Cover = pc.png, „Mein Inventar"-Galerie), Klick → großer PC
+   (leerer MacBook-Frame) → Screen scrollt den langen Avocado-
+   Detail-Screenshot. Nur auf /inventurliste.
+   LAYOUT wie DB 0/Zielbild: #tsiv-root ist selbst ein 2-Spalten-
+   Grid (eine Node, vor der Überschrift eingefügt) — linke Hälfte
+   frei (Platz für Roberts Notion-Text daneben), MacBook rechts.
+   Mobil (<900px) stapelt es: linke Hälfte weg, MacBook voll.
    Bilder (catbox, wie #tsmb): Cover = r8ef2f.png (pc.png) ·
    Scroll = 5hhr5b.png (avocado.png) · Frame (geteilt mit #tsmb)
    = oj1wa9.png. Repo-Archiv: img/inventurliste/{pc,avocado}.png.
@@ -1746,9 +1750,12 @@
   var COVER="https://files.catbox.moe/r8ef2f.png";
   var SHOT="https://files.catbox.moe/5hhr5b.png";
   var CSS=[
-    '#tsiv-root{--tsiv-gold:#9e947f;--tsiv-ease:cubic-bezier(.16,1,.3,1);width:min(1000px,95vw);margin:8px auto 40px;display:flex;flex-direction:column;align-items:center;gap:8px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;opacity:0;transform:translateY(20px);transition:opacity .8s var(--tsiv-ease),transform .9s var(--tsiv-ease);}',
+    '#tsiv-root{--tsiv-gold:#9e947f;--tsiv-ease:cubic-bezier(.16,1,.3,1);width:min(1000px,95vw);margin:8px auto 40px;display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4.5vw,60px);align-items:center;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;opacity:0;transform:translateY(20px);transition:opacity .8s var(--tsiv-ease),transform .9s var(--tsiv-ease);}',
     '#tsiv-root.in{opacity:1;transform:none;}',
-    '#tsiv-root .tsiv-tile{position:relative;width:100%;max-width:560px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 18px 44px rgba(0,0,0,.5));transition:transform .5s var(--tsiv-ease),filter .5s var(--tsiv-ease);}',
+    '#tsiv-root .tsiv-textslot{min-width:0;min-height:1px;}',
+    '#tsiv-root .tsiv-unit{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;}',
+    '@media(max-width:900px){#tsiv-root{grid-template-columns:1fr;}#tsiv-root .tsiv-textslot{display:none;}}',
+    '#tsiv-root .tsiv-tile{position:relative;width:100%;max-width:520px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 18px 44px rgba(0,0,0,.5));transition:transform .5s var(--tsiv-ease),filter .5s var(--tsiv-ease);}',
     '#tsiv-root .tsiv-tile:hover{transform:translateY(-4px) scale(1.02);animation:tsivHeartbeat 2.6s var(--tsiv-ease) infinite;}',
     '@keyframes tsivHeartbeat{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(158,148,127,.14));}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(158,148,127,.30));}}',
     '#tsiv-root .tsiv-tile:active{transform:scale(.99);transition-duration:.12s;}',
@@ -1794,13 +1801,14 @@
   function openLb(){ var lb=ensureLb(); lb.classList.add('open'); lb.classList.remove('full'); document.body.style.overflow='hidden'; var sc=lb.querySelector('.tsiv-screen'); if(sc) sc.scrollTop=0; }
   function buildTile(){
     var root=document.createElement('div'); root.id='tsiv-root';
-    root.innerHTML='<div class="tsiv-tile" role="button" tabindex="0" aria-label="Mein Inventar vergrößern"><img class="tsiv-cover" src="'+COVER+'" alt="Mein Inventar — DB Inventurliste" fetchpriority="high" decoding="async"></div><div class="tsiv-caption">Mein Inventar<span class="tsiv-accent"> – Live Beispiel</span></div><div class="tsiv-hint">Klicke zum Vergrößern</div>';
+    root.innerHTML='<div class="tsiv-textslot" aria-hidden="true"></div><div class="tsiv-unit"><div class="tsiv-tile" role="button" tabindex="0" aria-label="Mein Inventar vergrößern"><img class="tsiv-cover" src="'+COVER+'" alt="Mein Inventar — DB Inventurliste" fetchpriority="high" decoding="async"></div><div class="tsiv-caption">Mein Inventar<span class="tsiv-accent"> – Live Beispiel</span></div><div class="tsiv-hint">Klicke zum Vergrößern</div></div>';
     var tile=root.querySelector('.tsiv-tile');
     tile.addEventListener('click',openLb);
     tile.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(); } });
     return root;
   }
   function reveal(root){
+    if(root.__rv) return; root.__rv=true;
     var io=new IntersectionObserver(function(en){ if(en[0].isIntersecting){ root.classList.add('in'); io.disconnect(); } },{threshold:.2});
     io.observe(root);
   }
@@ -1809,8 +1817,13 @@
     for(var i=0;i<hs.length;i++){ if(/Was uns jetzt noch fehlt/i.test(hs[i].textContent||'')) return hs[i]; }
     return null;
   }
+  /* Eine Node vor der Überschrift „Was uns jetzt noch fehlt": #tsiv-root ist selbst
+     ein 2-Spalten-Grid — linke Hälfte frei (Platz für Roberts Notion-Text), MacBook rechts. */
   function mount(){
-    if(!/\/inventurliste\/?$/.test(location.pathname)){ var e=document.getElementById('tsiv-root'); if(e&&e.parentNode)e.parentNode.removeChild(e); var l=document.getElementById('tsiv-lb'); if(l&&l.parentNode)l.parentNode.removeChild(l); return; }
+    if(!/\/inventurliste\/?$/.test(location.pathname)){
+      ['tsiv-root','tsiv-lb'].forEach(function(id){ var e=document.getElementById(id); if(e&&e.parentNode)e.parentNode.removeChild(e); });
+      return;
+    }
     if(document.getElementById('tsiv-root')) return;
     var h=findHeading(); if(!h) return;
     var block=h.closest('[id^="block-"]')||h;
@@ -1821,8 +1834,9 @@
   }
   function boot(){
     var tries=0;
-    var iv=setInterval(function(){ tries++; mount(); if(document.getElementById('tsiv-root')||tries>60) clearInterval(iv); },300);
-    new MutationObserver(function(){ if(!document.getElementById('tsiv-root')) mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+    var iv=setInterval(function(){ tries++; mount(); if(tries>60) clearInterval(iv); },300);
+    var t=null;
+    new MutationObserver(function(){ if(t) return; t=setTimeout(function(){ t=null; mount(); },200); }).observe(document.documentElement,{childList:true,subtree:true});
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
@@ -3067,4 +3081,92 @@
     mo.observe(document.body,{childList:true,subtree:true});
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+})();
+
+
+/* ============================================================
+   MacBook-Vergrößerung (lieferpartner) — #ts2mac
+   Drei freigestellte MacBooks unter den Shop-Sektionen:
+   DB I (links) · DB II (rechts) · DB III (rechts), je mit
+   Textfläche daneben. Größe/Abstand wie #tsmb (mehrwert-zielbild).
+   Klick auf den PC öffnet ihn groß in einer Lightbox.
+   ⚠ Interim: Bilder sind kurze Einzelansichten -> Lightbox
+   vergrößert nur. Für die echte Scroll-Animation (wie #tsmb)
+   je einen LANGEN Ganzseiten-Screenshot einsetzen (dann .stage
+   auf frame+scrollbaren screen umstellen). Bilder freigestellt
+   (transparenter Hintergrund) unter img/lieferpartner-mac/.
+   ============================================================ */
+(function(){
+  if(window.__ts2mac) return; window.__ts2mac=true;
+  var PATH=/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/;
+  var BASE='https://tastyrob123.github.io/kurs/img/lieferpartner-mac/';
+  var MACS=[
+    { after:'tsshop--db13_lieferanten',     side:'left',  img:BASE+'lieferpartner-uebersicht.png', cap:'Lieferpartner-Übersicht' },
+    { after:'tsshop--db13_ansprechpartner', side:'right', img:BASE+'ansprechpartner-galerie.png',   cap:'Ansprechpartner-Galerie' },
+    { after:'tsshop--db13_vertraege',       side:'right', img:BASE+'vertraege-datenbank.png',        cap:'Verträge-Datenbank' }
+  ];
+  var CSS = `
+  .ts2mac-row{width:100%;max-width:1180px;margin:clamp(30px,4vh,58px) auto 0;padding:0 clamp(16px,3vw,40px);display:flex;align-items:center;gap:clamp(20px,4vw,64px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;box-sizing:border-box}
+  .ts2mac-row.right{flex-direction:row-reverse}
+  .ts2mac-row .ts2mac-cell{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center}
+  .ts2mac-tile{width:100%;max-width:520px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 18px 44px rgba(0,0,0,.5));transition:transform .5s cubic-bezier(.16,1,.3,1),filter .5s cubic-bezier(.16,1,.3,1)}
+  .ts2mac-tile img{width:100%;height:auto;display:block}
+  .ts2mac-tile:hover,.ts2mac-tile:focus-visible{transform:translateY(-4px) scale(1.02);animation:ts2macHb 2.6s cubic-bezier(.16,1,.3,1) infinite;outline:none}
+  @keyframes ts2macHb{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(158,148,127,.14))}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(158,148,127,.30))}}
+  .ts2mac-tile:active{transform:scale(.99);transition-duration:.12s}
+  .ts2mac-cap{width:100%;text-align:center;font-size:15px;font-weight:600;letter-spacing:.005em;color:#fff;margin-top:14px}
+  .ts2mac-cap .g{color:#9e947f}
+  .ts2mac-hint{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.32);margin-top:6px;animation:ts2macHint 2.5s ease-in-out infinite}
+  @keyframes ts2macHint{0%,100%{opacity:.4}50%{opacity:.8}}
+  #ts2mac-lb{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;background:rgba(5,6,11,.92);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:clamp(16px,4vw,52px);opacity:0;transition:opacity .3s ease}
+  #ts2mac-lb.open{display:flex;opacity:1}
+  #ts2mac-lb .ts2mac-stage{width:100%;max-width:min(1180px,calc(100vw - 48px));transform:scale(.94);transition:transform .45s cubic-bezier(.16,1,.3,1)}
+  #ts2mac-lb.open .ts2mac-stage{transform:scale(1)}
+  #ts2mac-lb .ts2mac-stage img{width:100%;height:auto;display:block;filter:drop-shadow(0 40px 120px rgba(0,0,0,.6))}
+  #ts2mac-lb__close{position:absolute;top:22px;right:28px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s}
+  #ts2mac-lb__close:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.5)}
+  @media(max-width:820px){.ts2mac-row,.ts2mac-row.right{flex-direction:column}.ts2mac-txt{display:none}}
+  @media(prefers-reduced-motion:reduce){.ts2mac-tile,.ts2mac-tile:hover{animation:none;transition:none}.ts2mac-hint{animation:none}}
+  `;
+  function injectCSS(){ if(document.getElementById('ts2mac-css'))return; var s=document.createElement('style'); s.id='ts2mac-css'; s.textContent=CSS; document.head.appendChild(s); }
+  function shut(){ var lb=document.getElementById('ts2mac-lb'); if(lb) lb.classList.remove('open'); document.body.style.overflow=''; }
+  function ensureLb(){
+    var lb=document.getElementById('ts2mac-lb'); if(lb) return lb;
+    lb=document.createElement('div'); lb.id='ts2mac-lb';
+    lb.innerHTML='<button id="ts2mac-lb__close" aria-label="Schließen">✕</button><div class="ts2mac-stage"><img alt=""></div>';
+    document.body.appendChild(lb);
+    lb.querySelector('#ts2mac-lb__close').addEventListener('click',shut);
+    lb.addEventListener('click',function(e){ if(e.target===lb) shut(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') shut(); });
+    return lb;
+  }
+  function openLb(src,alt){ var lb=ensureLb(); var img=lb.querySelector('.ts2mac-stage img'); img.src=src; img.alt=alt||''; lb.classList.add('open'); document.body.style.overflow='hidden'; }
+  function buildRow(m){
+    var row=document.createElement('div'); row.className='ts2mac-row'+(m.side==='right'?' right':''); row.id='ts2mac--'+m.after;
+    var pc=document.createElement('div'); pc.className='ts2mac-cell ts2mac-pc';
+    pc.innerHTML='<div class="ts2mac-tile" role="button" tabindex="0" aria-label="'+m.cap+' vergrößern"><img src="'+m.img+'" alt="'+m.cap+'" loading="lazy" decoding="async"></div>'
+      +'<div class="ts2mac-cap">'+m.cap+'<span class="g"> – Live Beispiel</span></div>'
+      +'<div class="ts2mac-hint">Klicke zum Vergrößern</div>';
+    var txt=document.createElement('div'); txt.className='ts2mac-cell ts2mac-txt';
+    row.appendChild(pc); row.appendChild(txt);
+    var tile=pc.querySelector('.ts2mac-tile');
+    tile.addEventListener('click',function(){ openLb(m.img,m.cap); });
+    tile.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(m.img,m.cap); } });
+    return row;
+  }
+  function mount(){
+    if(!PATH.test(location.pathname)){ var r=document.getElementById('ts2mac-lb'); if(r&&r.parentNode)r.parentNode.removeChild(r); return; }
+    injectCSS();
+    MACS.forEach(function(m){
+      if(document.getElementById('ts2mac--'+m.after)) return;
+      var shop=document.getElementById(m.after); if(!shop) return;
+      shop.parentNode.insertBefore(buildRow(m), shop.nextSibling);
+    });
+  }
+  function boot(){
+    var tries=0;
+    var iv=setInterval(function(){ tries++; mount(); if(tries>80) clearInterval(iv); },300);
+    new MutationObserver(function(){ mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
