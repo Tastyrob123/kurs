@@ -2248,14 +2248,22 @@
   #tsshop .tss-title span{color:#c7b489}
   #tsshop .tss-sub{font-size:15px;color:rgba(255,255,255,.42);max-width:600px;margin:0 auto;line-height:1.6}
   /* Gesamt-Summe der im Einkaufswagen liegenden Karten — rote Lineal-Zahl + weißes Label */
-  #tsshop .tss-sum{text-align:center;margin-top:clamp(28px,4vh,50px);opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .8s cubic-bezier(.22,1,.36,1)}
-  #tsshop .tss-sum.on{opacity:1;transform:none}
-  /* System-Font (SF Pro Display) statt Lineal TS: Lineal ist nur als 600er-Schnitt eingebunden und ignoriert font-weight — echter Light-Schnitt (300) geht nur über die System-Font */
-  #tsshop .tss-sum-val{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:clamp(28px,3.6vw,46px);font-weight:300;letter-spacing:-.01em;line-height:1;color:#E5484D;font-variant-numeric:tabular-nums;display:inline-block}
-  #tsshop .tss-sum-val.pulse{animation:tss-sumpulse .6s cubic-bezier(.22,1,.36,1)}
-  @keyframes tss-sumpulse{0%{transform:scale(1)}32%{transform:scale(1.09)}100%{transform:scale(1)}}
-  #tsshop .tss-sum-label{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(15px,1.7vw,21px);font-weight:500;letter-spacing:.005em;color:#fff;margin-top:12px}
-  @media(prefers-reduced-motion:reduce){#tsshop .tss-sum{opacity:1;transform:none;transition:none}#tsshop .tss-sum-val.pulse{animation:none}}
+  /* Fortschritts-Balken unter dem Warenkorb: links Summe (beige, dick), Mitte Block-Fortschritt, rechts Backoffice-Gesamt (rot) */
+  #tsshop .tss-bar{display:flex;align-items:center;gap:clamp(16px,3vw,40px);max-width:860px;margin:clamp(26px,3.5vh,48px) auto 0;padding:16px clamp(18px,2.4vw,26px);border-radius:16px;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.09);opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .8s cubic-bezier(.22,1,.36,1)}
+  #tsshop .tss-bar.on{opacity:1;transform:none}
+  #tsshop .tss-bar__side{flex:0 0 auto;min-width:104px}
+  #tsshop .tss-bar__left{text-align:left}
+  #tsshop .tss-bar__right{text-align:right}
+  #tsshop .tss-bar__val{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:clamp(22px,2.6vw,32px);font-weight:700;letter-spacing:-.01em;line-height:1;color:#c7b489;font-variant-numeric:tabular-nums}
+  #tsshop .tss-bar__global{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:clamp(22px,2.6vw,32px);font-weight:700;letter-spacing:-.01em;line-height:1;color:#E5484D;font-variant-numeric:tabular-nums}
+  #tsshop .tss-bar__cap{font-size:11.5px;font-weight:500;letter-spacing:.02em;color:rgba(255,255,255,.55);margin-top:8px;white-space:nowrap}
+  #tsshop .tss-bar__mid{flex:1 1 auto;min-width:0}
+  #tsshop .tss-bar__track{height:8px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+  #tsshop .tss-bar__fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#9e947f,#d8c9ab);transition:width .6s cubic-bezier(.22,1,.36,1)}
+  #tsshop .tss-bar__mid-cap{display:flex;justify-content:space-between;gap:10px;margin-top:9px;font-size:11.5px;font-weight:500;letter-spacing:.02em;color:rgba(255,255,255,.45)}
+  #tsshop .tss-bar__mid-cap b{color:rgba(255,255,255,.82);font-weight:600}
+  @media(max-width:640px){#tsshop .tss-bar{flex-direction:column;align-items:stretch;gap:16px;text-align:center}#tsshop .tss-bar__left,#tsshop .tss-bar__right{text-align:center}#tsshop .tss-bar__side{min-width:0}#tsshop .tss-bar__cap{white-space:normal}}
+  @media(prefers-reduced-motion:reduce){#tsshop .tss-bar{opacity:1;transform:none;transition:none}#tsshop .tss-bar__fill{transition:none}}
   #tsshop .tss-shelf{position:relative}
   #tsshop .tss-track{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 2px 22px;scrollbar-width:none;-ms-overflow-style:none;overscroll-behavior-x:contain}
   #tsshop .tss-track::-webkit-scrollbar{display:none}
@@ -2435,26 +2443,42 @@
         +'<button type="button" class="tss-nav next" aria-label="Weiter scrollen">'+CHEV_R+'</button>'
         +'<div class="tss-track">'+cards+'</div>'
       +'</div>'
-      +(page.summary?'<div class="tss-sum"><div class="tss-sum-val"></div><div class="tss-sum-label">'+page.summary+'</div></div>':'')
+      +(page.summary?'<div class="tss-bar">'
+          +'<div class="tss-bar__side tss-bar__left"><div class="tss-bar__val"></div><div class="tss-bar__cap">'+page.summary+'</div></div>'
+          +'<div class="tss-bar__mid"><div class="tss-bar__track"><div class="tss-bar__fill"></div></div><div class="tss-bar__mid-cap"></div></div>'
+          +'<div class="tss-bar__side tss-bar__right"><div class="tss-bar__global"></div><div class="tss-bar__cap">Backoffice</div></div>'
+        +'</div>':'')
       +'</div>';
     return root;
   }
+  /* ---- Backoffice-Gesamtfortschritt: % ALLER Schritte aller Lektion-2-Blöcke ----
+     Nenner = Summe der bekannten Schrittzahlen (auch noch nicht besuchte Seiten
+     zählen mit). Zähler = erledigte Schritte = localStorage-Keys "done-…"='1'
+     (dieselben Keys, die das Karten-/Checkbox-System setzt → immer aktuell). */
+  var BACKOFFICE={ db0_inventurliste:16, db13_lieferanten:13, db13_ansprechpartner:10, db13_vertraege:13, db4_zutaten:30 };
+  function backofficeTotal(){ var t=0; for(var kk in BACKOFFICE){ if(BACKOFFICE.hasOwnProperty(kk)) t+=BACKOFFICE[kk]; } return t; }
+  function backofficeDone(){ var d=0; try{ for(var i=0;i<localStorage.length;i++){ var key=localStorage.key(i); if(key&&key.slice(0,5)==='done-'&&localStorage.getItem(key)==='1') d++; } }catch(e){} return d; }
+  function backofficePct(){ var t=backofficeTotal(), d=Math.min(backofficeDone(),t); return t>0?Math.round(d/t*100):0; }
+  function refreshGlobals(){ var g=backofficePct()+' %', els=document.querySelectorAll('.tsshop .tss-bar__global'); for(var i=0;i<els.length;i++) els[i].textContent=g; }
+  /* Live-Aktualisierung, wenn in einem anderen Tab ein Schritt erledigt wird */
+  window.addEventListener('storage',function(e){ if(!e.key||e.key.slice(0,5)==='done-') refreshGlobals(); });
+
   function updProgress(root,steps,k,page){
-    /* Gesamt-Summe: nur Seiten mit page.summary — Werte exakt wie auf den Karten
-       (zyklisches Mapping Schritt-Index → Objekt-Variante). */
-    if(page&&page.summary&&k&&k.objekt_varianten){
-      var sv=root.querySelector('.tss-sum-val'); if(!sv) return;
-      var total=0, n=k.objekt_varianten.length;
-      for(var i=0;i<steps.length;i++){
-        if(isDone(steps[i])){ var v=k.objekt_varianten[i%n]; if(v&&typeof v.wert==='number') total+=v.wert; }
-      }
-      total=Math.round(total*100)/100;
-      var txt=fmt(page.summaryType||k.einheit_typ,total), old=sv.textContent;
-      if(old!==txt){
-        sv.textContent=txt;
-        if(old!==''&&!reduced){ sv.classList.remove('pulse'); void sv.offsetWidth; sv.classList.add('pulse'); }
-      }
-    }
+    if(!(page&&page.summary&&k&&k.objekt_varianten)) return;
+    var done=steps.filter(isDone).length, n=k.objekt_varianten.length;
+    /* Links: Summe der erledigten Karten (beige) — Werte exakt wie auf den Karten */
+    var total=0;
+    for(var i=0;i<steps.length;i++){ if(isDone(steps[i])){ var v=k.objekt_varianten[i%n]; if(v&&typeof v.wert==='number') total+=v.wert; } }
+    total=Math.round(total*100)/100;
+    var valEl=root.querySelector('.tss-bar__val');
+    if(valEl) valEl.textContent=fmt(page.summaryType||k.einheit_typ,total);
+    /* Mitte: Fortschritt DIESES Schritt-Blocks */
+    var pct=steps.length?Math.round(done/steps.length*100):0;
+    var fill=root.querySelector('.tss-bar__fill'); if(fill) fill.style.width=pct+'%';
+    var mc=root.querySelector('.tss-bar__mid-cap');
+    if(mc) mc.innerHTML='<span>Diese Lektion</span><span><b>'+pct+' %</b> · '+done+'/'+steps.length+'</span>';
+    /* Rechts: Backoffice-Gesamt (rot) — auf allen Balken der Seite synchron */
+    refreshGlobals();
   }
 
   /* Tron-Neon-Sweep: startet unten links, läuft in beide Richtungen, trifft sich oben rechts */
@@ -2615,7 +2639,7 @@
         c.classList.add('on');
         setTimeout(function(){ c.style.transitionDelay=''; },(i%4)*130+900);
       });
-      var sum=root.querySelector('.tss-sum'); if(sum) setTimeout(function(){ sum.classList.add('on'); },420);
+      var bar=root.querySelector('.tss-bar'); if(bar) setTimeout(function(){ bar.classList.add('on'); },420);
       io.disconnect();
     },{threshold:.25});
     io.observe(root);
