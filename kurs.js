@@ -198,7 +198,7 @@
   var IMG_SLICED="https://tastyrob123.github.io/kurs/img/anim/tomate-sliced.png";
   var IMG_STACK ="https://tastyrob123.github.io/kurs/img/anim/tomate-stack.png";
   var CSS=`
-  #tsd4{width:min(1000px,95vw);margin:-10px auto 84px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;opacity:0;transform:translateY(20px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+  #tsd4{width:min(1000px,95vw);margin:20px auto 60px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;opacity:0;transform:translateY(20px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
   #tsd4.in{opacity:1;transform:none}
   #tsd4 .tsd4-head{text-align:center;margin:0 0 104px}
   #tsd4 .tsd4-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:#9e947f;margin:0 0 12px}
@@ -251,6 +251,10 @@
   #tsd4 .tsd4-foot .f-main{font-size:14px;color:rgba(255,255,255,.62);margin:0 0 6px}
   #tsd4 .tsd4-foot .f-main .g{color:#9e947f}
   #tsd4 .tsd4-foot .f-sub{font-size:10px;color:rgba(255,255,255,.26);margin:0}
+  /* Beschreibungs-Absatz unter der Animation (Text aus dem Notion-Intro hierher gezogen) */
+  #tsd4 .tsd4-desc{max-width:700px;margin:44px auto 0;text-align:center;font-size:16px;line-height:1.65;color:rgba(255,255,255,.74)}
+  /* Original-Notion-Absatz "Jede einzelne Zutat buendelt" + die 4 leeren Text-Spacer + die leere Rest-Spalte im Intro ausblenden — Text lebt jetzt in .tsd4-desc unter der Animation, damit rutscht alles darueber natuerlich nach oben */
+  #block-397b9546553480b38ea2c6249770ed89,#block-39bb9546553480b2a3dac60d493abdae,#block-39bb9546553480d6821be64987faefaa,#block-39bb9546553480bd9f4cdefa67b13599,#block-396b9546553480eeaef5d96a000077f7,#block-395b95465534809eb290d1066e21f264{display:none!important}
   @media(max-width:820px){
     #tsd4{margin-top:24px}
     #tsd4 .tsd4-stage{grid-template-columns:1fr;gap:0;max-width:420px;margin:0 auto}
@@ -275,6 +279,7 @@
         '<div class="tsd4-eq"><svg viewBox="0 0 26 14"><path d="M2 5 H20 M2 9 H20 M17 2 L23 7 L17 12"/></svg></div>'+
         '<div class="tsd4-card tsd4-result"><div class="tsd4-fruit is-stack"><img src="'+IMG_STACK+'" alt="Zwei Tomatenscheiben" loading="lazy"></div><p class="c-eye">Portionspreis</p><p class="r-val" data-target="0.384">0,00 €</p><p class="r-formula">120 g × 3,20 €/kg</p></div>'+
       '</div>'+
+      '<p class="tsd4-desc">Jede einzelne Zutat bündelt dabei sämtliche relevanten Informationen an einem Ort – von Einkaufspreisen über Nährwerte bis hin zu den Allergenen. So hast du für jede Zutat alles Wichtige auf einen Blick und musst die Angaben nicht mehr an mehreren Stellen zusammensuchen.</p>'+
       '<div class="tsd4-foot"><p class="f-main">→ Der fertige Baustein geht so in <span class="g">jedes Rezept</span> — Preis und Menge in einem.</p><p class="f-sub">Zahlen = Beispielwerte. Einwaage aus deiner Zutaten-Tabelle, Einkaufspreis illustrativ.</p></div>';
     return root;
   }
