@@ -1727,6 +1727,107 @@
 })();
 
 /* ============================================================
+   inventurliste — MacBook-Scroll-Kachel "Mein Inventar" (#tsiv)
+   Zwischen dem oberen Fortschritts-Balken und der Überschrift
+   „Was uns jetzt noch fehlt". Muster = die „Live Beispiel"-
+   Kachel von /mehrwert-zielbild (#tsmb): links ein anklickbarer
+   MacBook (Cover = pc.png, „Mein Inventar"-Galerie), Klick →
+   großer PC (leerer MacBook-Frame) → Screen scrollt den langen
+   Avocado-Detail-Screenshot. Nur auf /inventurliste.
+   Bilder (catbox, wie #tsmb): Cover = r8ef2f.png (pc.png) ·
+   Scroll = 5hhr5b.png (avocado.png) · Frame (geteilt mit #tsmb)
+   = oj1wa9.png. Repo-Archiv: img/inventurliste/{pc,avocado}.png.
+   ============================================================ */
+(function(){
+  if(window.__tsiv) return; window.__tsiv=true;
+  var FRAME="https://files.catbox.moe/oj1wa9.png";
+  var COVER="https://files.catbox.moe/r8ef2f.png";
+  var SHOT="https://files.catbox.moe/5hhr5b.png";
+  var CSS=[
+    '#tsiv-root{--tsiv-gold:#9e947f;--tsiv-ease:cubic-bezier(.16,1,.3,1);width:min(1000px,95vw);margin:8px auto 40px;display:flex;flex-direction:column;align-items:center;gap:8px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;opacity:0;transform:translateY(20px);transition:opacity .8s var(--tsiv-ease),transform .9s var(--tsiv-ease);}',
+    '#tsiv-root.in{opacity:1;transform:none;}',
+    '#tsiv-root .tsiv-tile{position:relative;width:100%;max-width:560px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 18px 44px rgba(0,0,0,.5));transition:transform .5s var(--tsiv-ease),filter .5s var(--tsiv-ease);}',
+    '#tsiv-root .tsiv-tile:hover{transform:translateY(-4px) scale(1.02);animation:tsivHeartbeat 2.6s var(--tsiv-ease) infinite;}',
+    '@keyframes tsivHeartbeat{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(158,148,127,.14));}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(158,148,127,.30));}}',
+    '#tsiv-root .tsiv-tile:active{transform:scale(.99);transition-duration:.12s;}',
+    '#tsiv-root .tsiv-cover{width:100%;height:auto;display:block;pointer-events:none;user-select:none;}',
+    '#tsiv-root .tsiv-caption{width:100%;text-align:center;font-size:15px;font-weight:600;letter-spacing:.005em;color:#fff;margin-top:6px;}',
+    '#tsiv-root .tsiv-caption .tsiv-accent{color:var(--tsiv-gold);}',
+    '#tsiv-root .tsiv-hint{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.32);animation:tsivHint 2.5s ease-in-out infinite;}',
+    '@keyframes tsivHint{0%,100%{opacity:.4}50%{opacity:.8}}',
+    '#tsiv-lb{position:fixed;inset:0;z-index:99999;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(5,6,11,.92);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);padding:32px;opacity:0;transition:opacity .24s cubic-bezier(.16,1,.3,1);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;}',
+    '#tsiv-lb.open{display:flex;opacity:1;}',
+    '#tsiv-lb .tsiv-inner{position:relative;width:100%;max-width:min(960px,calc(100vw - 64px));transform:scale(.92) translateY(24px);transition:transform .5s cubic-bezier(.16,1,.3,1);}',
+    '#tsiv-lb.open .tsiv-inner{transform:scale(1) translateY(0);}',
+    '#tsiv-lb.full{padding:0;}',
+    '#tsiv-lb.full .tsiv-inner{max-width:100vw;}',
+    '#tsiv-lb .tsiv-mockup{position:relative;width:100%;aspect-ratio:1366/768;filter:drop-shadow(0 30px 80px rgba(0,0,0,.6)) drop-shadow(0 10px 30px rgba(0,0,0,.5));}',
+    '#tsiv-lb .tsiv-frame{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;user-select:none;}',
+    '#tsiv-lb .tsiv-screen{position:absolute;top:3.65%;left:12.22%;width:73.06%;height:83.85%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;z-index:3;border-radius:3px;background:#191919;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.14) transparent;}',
+    '#tsiv-lb .tsiv-screen::-webkit-scrollbar{width:5px;}',
+    '#tsiv-lb .tsiv-screen::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:4px;}',
+    '#tsiv-lb .tsiv-screen img{width:100%;display:block;}',
+    '#tsiv-lb .tsiv-closehint{margin-top:22px;font-size:12px;letter-spacing:.1em;color:rgba(255,255,255,.32);text-align:center;}',
+    '#tsiv-lb.full .tsiv-closehint{display:none;}',
+    '#tsiv-lb .tsiv-btn{position:absolute;top:16px;z-index:10;width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.55);cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);transition:background .2s,color .2s;}',
+    '#tsiv-lb .tsiv-btn:hover{background:rgba(255,255,255,.16);color:#fff;}',
+    '#tsiv-lb .tsiv-expand{left:16px;}#tsiv-lb .tsiv-closex{right:16px;}',
+    '@media(prefers-reduced-motion:reduce){#tsiv-root,#tsiv-root *,#tsiv-lb *{animation:none!important;transition-duration:.01ms!important;}#tsiv-root{opacity:1;transform:none;}}'
+  ].join('');
+  function injectCSS(){ if(document.getElementById('tsiv-css'))return; var s=document.createElement('style'); s.id='tsiv-css'; s.textContent=CSS; document.head.appendChild(s); }
+  function shut(){ var lb=document.getElementById('tsiv-lb'); if(!lb)return; lb.classList.remove('open','full'); document.body.style.overflow=''; }
+  function ensureLb(){
+    var lb=document.getElementById('tsiv-lb'); if(lb) return lb;
+    lb=document.createElement('div'); lb.id='tsiv-lb';
+    lb.innerHTML='<button class="tsiv-btn tsiv-expand" title="Vollbild" aria-label="Vollbild"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="tsiv-btn tsiv-closex" title="Schließen" aria-label="Schließen"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 4.5l9 9M13.5 4.5l-9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><div class="tsiv-inner"><div class="tsiv-mockup"><img class="tsiv-frame" src="'+FRAME+'" alt="MacBook"><div class="tsiv-screen"><img src="'+SHOT+'" alt="Avocado — Zutaten-Detailseite"></div></div></div><div class="tsiv-closehint">✕ Klicke daneben oder ESC zum Schließen</div>';
+    document.body.appendChild(lb);
+    var inner=lb.querySelector('.tsiv-inner');
+    lb.querySelector('.tsiv-closex').addEventListener('click',shut);
+    lb.querySelector('.tsiv-expand').addEventListener('click',function(e){ e.stopPropagation(); lb.classList.toggle('full'); });
+    inner.addEventListener('click',function(e){ e.stopPropagation(); });
+    lb.addEventListener('click',function(e){ if(e.target===lb) shut(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') shut(); });
+    return lb;
+  }
+  function openLb(){ var lb=ensureLb(); lb.classList.add('open'); lb.classList.remove('full'); document.body.style.overflow='hidden'; var sc=lb.querySelector('.tsiv-screen'); if(sc) sc.scrollTop=0; }
+  function buildTile(){
+    var root=document.createElement('div'); root.id='tsiv-root';
+    root.innerHTML='<div class="tsiv-tile" role="button" tabindex="0" aria-label="Mein Inventar vergrößern"><img class="tsiv-cover" src="'+COVER+'" alt="Mein Inventar — DB Inventurliste" fetchpriority="high" decoding="async"></div><div class="tsiv-caption">Mein Inventar<span class="tsiv-accent"> – Live Beispiel</span></div><div class="tsiv-hint">Klicke zum Vergrößern</div>';
+    var tile=root.querySelector('.tsiv-tile');
+    tile.addEventListener('click',openLb);
+    tile.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(); } });
+    return root;
+  }
+  function reveal(root){
+    var io=new IntersectionObserver(function(en){ if(en[0].isIntersecting){ root.classList.add('in'); io.disconnect(); } },{threshold:.2});
+    io.observe(root);
+  }
+  function findHeading(){
+    var hs=document.querySelectorAll('.page__inventurliste .notion-heading, .page__inventurliste h1, .page__inventurliste h2');
+    for(var i=0;i<hs.length;i++){ if(/Was uns jetzt noch fehlt/i.test(hs[i].textContent||'')) return hs[i]; }
+    return null;
+  }
+  function mount(){
+    if(!/\/inventurliste\/?$/.test(location.pathname)){ var e=document.getElementById('tsiv-root'); if(e&&e.parentNode)e.parentNode.removeChild(e); var l=document.getElementById('tsiv-lb'); if(l&&l.parentNode)l.parentNode.removeChild(l); return; }
+    if(document.getElementById('tsiv-root')) return;
+    var h=findHeading(); if(!h) return;
+    var block=h.closest('[id^="block-"]')||h;
+    injectCSS();
+    var root=buildTile();
+    block.parentNode.insertBefore(root, block);
+    reveal(root);
+  }
+  function boot(){
+    var tries=0;
+    var iv=setInterval(function(){ tries++; mount(); if(document.getElementById('tsiv-root')||tries>60) clearInterval(iv); },300);
+    new MutationObserver(function(){ if(!document.getElementById('tsiv-root')) mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
+
+/* ---- */
+
+/* ============================================================
    inventurliste — #tsdb0 Scroll-Animation "DB 0 : Inventurliste"
    Ersetzt den Screenshot (Heading + Ansichts-Tabs) durch natives,
    scroll-getriggertes Element: Reveal + wandernde Glas-Pille durch
@@ -2794,12 +2895,12 @@
     var css = `
     #tsFlowRoot{ width:100%; margin:8px 0; }
     #tsFlowRoot *{ box-sizing:border-box; }
-    #tsFlowRoot .tsflow-section{ position:relative; overflow:hidden; padding:56px 8px 52px; background:transparent; }
+    #tsFlowRoot .tsflow-section{ position:relative; overflow:hidden; padding:16px 8px 52px; background:transparent; }
     #tsFlowRoot .tsflow-section::before{ content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:1200px; height:720px; background:radial-gradient(ellipse at center, rgba(150,175,255,.05) 0%, transparent 62%); pointer-events:none; }
     #tsFlowRoot .tsflow-canvas{ position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; }
     #tsFlowRoot .tsflow-inner{ position:relative; z-index:1; max-width:1080px; margin:0 auto; }
     #tsFlowRoot .tsflow-header{ text-align:center; margin-bottom:46px; }
-    #tsFlowRoot .tsflow-title{ font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif; font-size:clamp(27px,3.5vw,41px); font-weight:600; letter-spacing:-.02em; color:#fff; line-height:1.14; margin:0 0 14px; }
+    #tsFlowRoot .tsflow-title{ font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif; font-size:clamp(27px,3.5vw,41px); font-weight:600; letter-spacing:-.02em; color:#fff; line-height:1.14; margin:0 0 54px; }
     /* Intro-Textblock der Seite darueber: zentriert + etwas nach unten in den Zwischenraum */
     .tsflow-intro-block{ margin-top:70px !important; }
     .tsflow-intro-block, .tsflow-intro-block .notion-text, .tsflow-intro-block p, .tsflow-intro-block .notion-semantic-string{ text-align:center !important; }
