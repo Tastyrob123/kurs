@@ -248,11 +248,11 @@
   #tsd4 .tsd4-result .r-formula{font-size:12px;color:rgba(255,255,255,.5)}
   /* Fussnote */
   #tsd4 .tsd4-foot{text-align:center;margin:34px auto 0;max-width:640px}
-  #tsd4 .tsd4-foot .f-main{font-size:14px;color:rgba(255,255,255,.62);margin:0 0 6px}
+  #tsd4 .tsd4-foot .f-main{font-size:15px;color:rgba(255,255,255,.85);margin:0 0 6px}
   #tsd4 .tsd4-foot .f-main .g{color:#9e947f}
-  #tsd4 .tsd4-foot .f-sub{font-size:10px;color:rgba(255,255,255,.26);margin:0}
+  #tsd4 .tsd4-foot .f-sub{font-size:11.5px;color:rgba(255,255,255,.5);margin:0}
   /* Beschreibungs-Absatz unter der Animation (Text aus dem Notion-Intro hierher gezogen) */
-  #tsd4 .tsd4-desc{max-width:700px;margin:44px auto 0;text-align:center;font-size:16px;line-height:1.65;color:rgba(255,255,255,.74)}
+  #tsd4 .tsd4-desc{max-width:700px;margin:44px auto 0;text-align:center;font-size:16px;line-height:1.65;color:#fff}
   /* Original-Notion-Absatz "Jede einzelne Zutat buendelt" + die 4 leeren Text-Spacer + die leere Rest-Spalte im Intro ausblenden — Text lebt jetzt in .tsd4-desc unter der Animation, damit rutscht alles darueber natuerlich nach oben */
   #block-397b9546553480b38ea2c6249770ed89,#block-39bb9546553480b2a3dac60d493abdae,#block-39bb9546553480d6821be64987faefaa,#block-39bb9546553480bd9f4cdefa67b13599,#block-396b9546553480eeaef5d96a000077f7,#block-395b95465534809eb290d1066e21f264{display:none!important}
   @media(max-width:820px){
