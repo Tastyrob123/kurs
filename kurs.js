@@ -3929,6 +3929,7 @@
 
 
 
+
 /* ============================================================================
    #tscover — Zutaten-DB-Erklär-Animation (Seite /zutatenliste)
    Sitzt DIREKT unter dem Warenkorb + Einwaage-Balken (#tsshop--db4_zutaten).
@@ -4225,20 +4226,16 @@
   }
   function mount(){
     if(!on()){ var e=document.getElementById('tscover'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
-    /* WICHTIG: erst prüfen, ob schon montiert — VOR jeder teuren Marker-Suche.
-       Sonst würde markerCol() bei jeder Animations-DOM-Mutation laufen (Main-Thread-Storm). */
     if(document.getElementById('tscover')) return;
-    var m=markerCol();
+    /* Die Animation mutiert jeden Frame das DOM. In einer Notion-SPALTE bekämpft
+       super.so's React-Reconciler diese Mutationen (Endlos-Krieg -> Freeze). Deshalb
+       mountet die Animation IMMER stabil außerhalb der Spalten (unter dem Warenkorb).
+       Marker-Zeile wird — falls vorhanden — nur ausgeblendet, NICHT bespielt. */
+    var m=markerCol(); if(m) hideMarker(m.marker);
+    var a=anchor(); if(!a||!a.parentNode) return;
     var root=build();
-    if(m){
-      root.classList.add('tsc--col');
-      hideMarker(m.marker);
-      m.col.insertBefore(root, m.col.firstChild);
-    } else {
-      var a=anchor(); if(!a||!a.parentNode) return;
-      root.classList.add('tsc--full');
-      a.parentNode.insertBefore(root, a.nextSibling);
-    }
+    root.classList.add('tsc--full');
+    a.parentNode.insertBefore(root, a.nextSibling);
     trigger(root);
   }
   function boot(){
