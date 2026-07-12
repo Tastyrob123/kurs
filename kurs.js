@@ -3374,3 +3374,101 @@
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
+
+/* ============================================================
+   modul-2 — DB-Kachel-Raster "#tslmod" (18 Karten)
+   Ersetzt das native Notion-Collection-Gallery-Raster (Block
+   block-38fb…) durch die tsl-card-Komponente wie auf
+   /inventurliste (#tslink) — aber OHNE Footer. Aufbau je Karte:
+   T-Logo + Nummer (oben rechts) + Kicker + Titel (Lineal TS) +
+   1-Zeilen-Beschreibung. Motiv = 3:2-JPEG (object-fit:contain,
+   Bildschwarz verschmilzt mit #04050a), Scrim leicht reduziert
+   ggü. #tslink (dunklere Motive), Champagner-Gold-Heartbeat-Glow.
+   Bilder: img/modul2/*.jpg via GitHub Pages. Links = jeweilige
+   Kurs-Unterseite (interner Wechsel, kein neuer Tab).
+   ============================================================ */
+(function(){
+  if(window.__tslmod) return; window.__tslmod=true;
+  function on(){ return /\/modul-2-das-notion-ai-backoffice-system\/?$/.test(location.pathname); }
+  var BASE='https://tastyrob123.github.io/kurs/img/modul2/';
+  var LOGO='https://files.catbox.moe/au80tp.png';
+  var GLOW='199,180,137';
+  var BLK='block-38fb95465534800bafb6c04f03af102b';
+  var CARDS=[
+   ['01','Überblick','Mehrwert & Zielbild','Das fertige Gericht vor Augen — worauf die nächsten Schritte hinarbeiten.','/mehrwert-zielbild','mehrwert-zielbild.jpg'],
+   ['02','Datenbank','DB 0 · Inventurliste','Dein Warenbestand als Basis — jede Zutat mit ihrem Preis.','/inventurliste','inventurliste.jpg'],
+   ['03','Datenbank','DB I–III · Lieferanten','Lieferanten, Ansprechpartner & Verträge — die Quelle jeder Einkaufszeile.','/lieferpartner-ansprechpartner-lieferantenvertrge','lieferanten.jpg'],
+   ['04','Datenbank','DB IV · Zutaten','Zieht ihre Preise direkt aus deiner Inventurliste.','/zutatenliste','zutaten.jpg'],
+   ['05','Datenbank','DB V · Rezepturen','Jede Rezeptur rechnet sich aus den Zutaten — automatisch.','/rezepturen','rezepturen.jpg'],
+   ['06','Datenbank','DB VI · GK & Löhne','Gemein- und Personalkosten, sauber auf die Gerichte verteilt.','/gemeinkosten-mitarbeiterlhne','gemeinkosten-loehne.jpg'],
+   ['07','Datenbank','DB VII · Allergene','Jede Zutat kennt ihre Allergene — die Kennzeichnung schreibt sich selbst.','/allergene-bersicht','allergene.jpg'],
+   ['08','Datenbank','DB VIII · Gerichte & Getränke','Der finale Schritt — alles läuft im Gericht zusammen, auf den Cent.','/gerichte-getrnke-finaler-schritt','gerichte.jpg'],
+   ['09','Interface','Interface-Bau','Grundstruktur & Widgets — dein System bekommt ein Gesicht.','/interface-bau-grundstruktur-widgets','interface.jpg'],
+   ['10','Interface','Food-/Drinksquartier','Inhalte und Interface für Speisen und Getränke an einem Ort.','/food-drinksquartier-inhalte-interface','food-drinks.jpg'],
+   ['11','Kalkulation','Menükalkulation','Menüs und Catering — kalkuliert bis auf die letzte Position.','/menkalkulation-catering-rechner','menuekalkulation.jpg'],
+   ['12','Kennzahlen','Key Metrics','Deine wichtigsten Zahlen auf einen Blick — live aus dem System.','/key-metrics','key-metrics.jpg'],
+   ['13','Betrieb','Operations Area','Der operative Kern — Abläufe, Checklisten, Tagesgeschäft.','/operations-area','operations.jpg'],
+   ['14','Abschluss','Vision Frame','Der Abschluss des Building-Prozesses — dein Bild vom Ganzen.','/vision-frame-abschluss-des-building-prozesses','vision-frame.jpg'],
+   ['15','KI','Notion AI','Wie KI dein System mitdenken lässt — konkret und im Alltag.','/notion-ai-fr-unser-system','notion-ai.jpg'],
+   ['16','Skalierung','Multistandort','Das System auf mehrere Standorte erweitern — optional.','/multistandort-erweiterung-optional','multistandort.jpg'],
+   ['17','Dynamik','Dynamisches System','Automationen und Feinschliff — das System bleibt in Bewegung.','/system-lebendiger-machen','dynamic-system.jpg'],
+   ['18','Praxis','Allgemeine Tipps','Kniffe und Empfehlungen aus der Praxis — zum Weiterbauen.','/allgemeine-tipps','allgemeine-tipps.jpg']
+  ];
+  var CSS=`
+  #tslmod{width:min(1080px,95vw);margin:34px auto 30px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
+  #tslmod *{box-sizing:border-box}
+  #tslmod .tsl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  #tslmod a.tsl-card{position:relative;display:block;overflow:hidden;text-align:center;text-decoration:none;color:inherit;-webkit-tap-highlight-color:transparent;border-radius:16px;padding:30px 24px 26px;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0));border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85);opacity:0;transform:translateY(18px);will-change:transform,box-shadow;transition:opacity .6s ease,transform .7s cubic-bezier(.22,1,.36,1),border-color .4s ease,box-shadow .5s ease}
+  #tslmod .tsl-bg{position:absolute;inset:0;z-index:0;border-radius:inherit;overflow:hidden;background:#04050a;pointer-events:none}
+  #tslmod .tsl-bg img{width:100%;height:100%;object-fit:contain;object-position:center;display:block}
+  #tslmod .tsl-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0)),radial-gradient(96% 86% at 50% 62%,rgba(4,5,10,.5) 0%,rgba(4,5,10,.28) 48%,rgba(4,5,10,.06) 78%,rgba(4,5,10,0) 100%)}
+  #tslmod .tsl-num,#tslmod .tsl-logo,#tslmod .tsl-k,#tslmod .tsl-h,#tslmod .tsl-t{position:relative;z-index:2}
+  #tslmod a.tsl-card.on{opacity:1;transform:translateY(0)}
+  #tslmod a.tsl-card:hover{transform:translateY(-4px);border-color:rgba(${GLOW},.5);animation:tslmod-hb 2.6s cubic-bezier(.4,0,.3,1) infinite}
+  #tslmod a.tsl-card:focus-visible{outline:2px solid rgba(${GLOW},.7);outline-offset:4px}
+  #tslmod .tsl-num{position:absolute;top:24px;right:24px;font-size:.7rem;font-weight:500;letter-spacing:.2em;color:rgba(199,180,137,.55)}
+  #tslmod .tsl-logo{display:block;height:32px;width:auto;margin:2px auto 16px}
+  #tslmod .tsl-k{display:block;font-size:.56rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin-bottom:8px;text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 8px rgba(0,0,0,.8)}
+  #tslmod .tsl-h{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1.22rem;font-weight:600;letter-spacing:-.012em;line-height:1.15;color:#fff;margin:0 0 11px;text-shadow:0 0 4px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,.95),0 3px 14px rgba(0,0,0,.9),0 6px 34px rgba(0,0,0,.8)}
+  #tslmod .tsl-t{color:rgba(255,255,255,.66);font-size:.84rem;line-height:1.55;margin:0 auto;max-width:32ch;text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 10px rgba(0,0,0,.85),0 4px 22px rgba(0,0,0,.7)}
+  @keyframes tslmod-hb{0%{box-shadow:0 4px 14px rgba(${GLOW},.10),0 0 14px rgba(${GLOW},.10)}18%{box-shadow:0 6px 22px rgba(${GLOW},.30),0 0 46px rgba(${GLOW},.34)}32%{box-shadow:0 5px 18px rgba(${GLOW},.16),0 0 26px rgba(${GLOW},.18)}46%{box-shadow:0 6px 20px rgba(${GLOW},.26),0 0 40px rgba(${GLOW},.28)}72%,100%{box-shadow:0 4px 14px rgba(${GLOW},.10),0 0 14px rgba(${GLOW},.10)}}
+  @media(max-width:980px){#tslmod .tsl-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:640px){#tslmod .tsl-grid{grid-template-columns:1fr}}
+  @media(prefers-reduced-motion:reduce){#tslmod a.tsl-card{opacity:1;transform:none;transition:none}#tslmod a.tsl-card:hover{transform:none;animation:none;box-shadow:0 0 26px rgba(${GLOW},.25)}}
+  `;
+  function injectCSS(){ if(document.getElementById('tslmod-css'))return; var s=document.createElement('style'); s.id='tslmod-css'; s.textContent=CSS; document.head.appendChild(s); }
+  function build(){
+    var root=document.createElement('div'); root.id='tslmod';
+    root.innerHTML='<div class="tsl-grid">'+CARDS.map(function(c){
+      return '<a class="tsl-card" href="'+c[4]+'" style="--g:'+GLOW+'"><span class="tsl-bg" aria-hidden="true"><img src="'+BASE+c[5]+'" alt="" loading="lazy"></span><span class="tsl-num">'+c[0]+'</span><img class="tsl-logo" src="'+LOGO+'" alt="Tasty Studios" loading="lazy"><span class="tsl-k">'+c[1]+'</span><h3 class="tsl-h">'+c[2]+'</h3><p class="tsl-t">'+c[3]+'</p></a>';
+    }).join('')+'</div>';
+    return root;
+  }
+  function setup(root){
+    var cards=[].slice.call(root.querySelectorAll('.tsl-card'));
+    var io=new IntersectionObserver(function(e){
+      if(!e[0].isIntersecting) return;
+      cards.forEach(function(c,i){ c.style.transitionDelay=(i*0.06)+'s'; c.classList.add('on'); setTimeout(function(){ c.style.transitionDelay=''; }, i*60+900); });
+      io.disconnect();
+    },{threshold:.05});
+    io.observe(root);
+  }
+  function mount(){
+    if(!on()){ var e=document.getElementById('tslmod'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    var blk=document.getElementById(BLK); if(!blk) return;
+    var gal=blk.querySelector('.notion-collection-gallery');
+    if(gal) gal.style.display='none';
+    if(document.getElementById('tslmod')) return;
+    if(!gal) return;
+    injectCSS();
+    var root=build();
+    gal.parentNode.insertBefore(root, gal.nextSibling);
+    setup(root);
+  }
+  function boot(){
+    var tries=0;
+    var iv=setInterval(function(){ tries++; mount(); if(tries>60) clearInterval(iv); },300);
+    new MutationObserver(function(){ mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
