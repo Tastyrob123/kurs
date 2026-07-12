@@ -3931,6 +3931,7 @@
 
 
 
+
 /* ============================================================================
    #tscover — Zutaten-DB-Erklär-Animationen (Seite /zutatenliste)
    Vollbreite, ZWEI Panels nebeneinander (stapeln auf Mobil). Mount stabil unter
@@ -4038,6 +4039,8 @@
   #tscover .tsc-done{position:absolute;top:12px;right:12px;z-index:6;display:flex;align-items:center;gap:6px;padding:5px 11px 5px 8px;border-radius:999px;background:rgba(143,203,170,.16);box-shadow:inset 0 0 0 1px rgba(143,203,170,.45);color:#bfe6d1;font-size:11.5px;font-weight:600;opacity:0;transform:translateY(-6px) scale(.9)}
   #tscover .tsc-win.finished .tsc-done{animation:tsc-pop .5s cubic-bezier(.34,1.56,.64,1) forwards}
   #tscover .tsc-done .dot{width:16px;height:16px;border-radius:50%;background:rgba(143,203,170,.95);color:#0b1512;display:flex;align-items:center;justify-content:center}
+  /* Panel B: Toolbar belegt oben rechts (Neu ▾) -> kein Eck-Badge (Kollision); Fertig zeigt die Schritt-Leiste */
+  #tscover [data-panel="B"] .tsc-done{display:none}
 
   /* ---------- Panel B: Vorlage/Galerie ---------- */
   #tscover .tscb-bar{display:flex;align-items:center;gap:12px;padding:12px clamp(16px,1.5vw,22px);border-bottom:1px solid rgba(255,255,255,.07)}
