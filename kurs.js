@@ -965,7 +965,7 @@
 (function(){
   if(window.__tsTone) return; window.__tsTone=true;
   function toneLastWord(h){
-    if(h.dataset.tsToned) return;
+    if(h.querySelector('.ts-accent')) return;   /* self-healing: schon getont & Span intakt -> überspringen */
     var txt=(h.textContent||'').trim(); if(!txt) return;
     var last=txt.split(/\s+/).pop(); if(!last||last.length<2) return;
     var w=document.createTreeWalker(h,NodeFilter.SHOW_TEXT,null),node,target=null;
@@ -976,10 +976,14 @@
     var sp=document.createElement('span'); sp.className='ts-accent'; sp.textContent=last;
     var f=document.createDocumentFragment();
     if(b)f.appendChild(document.createTextNode(b)); f.appendChild(sp); if(a)f.appendChild(document.createTextNode(a));
-    target.parentNode.replaceChild(f,target); h.dataset.tsToned='1';
+    target.parentNode.replaceChild(f,target);
   }
   function run(){ document.querySelectorAll('.notion-root h1.notion-heading').forEach(toneLastWord); }
-  run(); setTimeout(run,600); setTimeout(run,1500);
+  run();
+  /* dauerhafter, debounced Observer: React kann die H1 spät mounten oder den Span strippen -> immer wieder nachziehen */
+  var t=null;
+  new MutationObserver(function(){ if(t) return; t=setTimeout(function(){ t=null; run(); },200); })
+    .observe(document.documentElement,{childList:true,subtree:true});
 })();
 
 /* ---- */
