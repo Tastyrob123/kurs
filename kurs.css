@@ -114,6 +114,15 @@ section.notion-tabs {
 }
 .page__zutatenliste #block-38eb95465534806c976fd2de291efe63,
 .page__zutatenliste #block-395b9546553480348711f50bf37904b3{ text-align:center !important; }
+/* „Die Lösung"-Textblock (DB IV): volle Breite + mittig zentriert; erster Absatz etwas größer/dicker */
+.page__zutatenliste #block-396b954655348094a0adeef95dc70260,
+.page__zutatenliste #block-396b9546553480379c61d128ceb7d519{ display:none !important; }
+.page__zutatenliste #block-396b954655348052b9a2fb7f1a982933{ width:100% !important; flex:1 1 100% !important; max-width:100% !important; margin:0 !important; }
+.page__zutatenliste #block-38eb9546553480fea559e458d25dd0da,
+.page__zutatenliste #block-39bb9546553480798567e737ddc31848,
+.page__zutatenliste #block-39bb9546553480cda6ffe5537b0064e5,
+.page__zutatenliste #block-39bb95465534808894afe13c66381759{ text-align:center !important; }
+.page__zutatenliste #block-38eb9546553480fea559e458d25dd0da{ font-size:18px !important; font-weight:600 !important; }
 .page__zutatenliste #block-395b9546553480fcb4a0f065b83ee656{ margin-bottom:12px !important; }
 .page__zutatenliste #block-396b954655348098ae30f9bff07fa068{ display:flex !important; align-items:flex-start !important; }
 .page__zutatenliste #block-396b954655348098ae30f9bff07fa068 > .notion-column{
