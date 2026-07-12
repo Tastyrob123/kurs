@@ -2326,14 +2326,14 @@
     { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_ansprechpartner',
       marker:/Hauptansprechpartner/,
       eyebrow:'Der Warenkorb · DB II',
-      title:'Deine Ansprechpartner. <span>An einem Ort.</span>',
+      title:'Deine Ansprechpartner. <span>In einer Übersicht.</span>',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB II ist die Jahresrückvergütung.<br>Um zu starten: / → neue Tabellenansicht / Datenbank → DB II : Ansprechpartner Übersicht.',
       summary:'Jahresrückvergütung', cta:'Paket auswählen', ctaDone:'Paket gewählt', chain:true },
     /* Drittes Regal auf derselben Seite: DB III Lieferverträge (Marker eindeutig = Vertragsbezeichnung) */
     { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_vertraege',
       marker:/Vertragsbezeichnung/,
       eyebrow:'Der Warenkorb · DB III',
-      title:'Deine Lieferverträge. <span>An einem Ort.</span>',
+      title:'Deine Lieferverträge. <span>Sauber dokumentiert.</span>',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB III ist der Vertragswert.',
       summary:'Vertragsvolumina', cta:'Vertrag abschließen', ctaDone:'Vertrag geschlossen', chain:true }
   ];
@@ -2349,7 +2349,7 @@
   #tsshop .tss-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#9e947f;box-shadow:0 0 12px rgba(158,148,127,.7)}
   #tsshop .tss-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(32px,4.4vw,52px);font-weight:600;letter-spacing:-.02em;line-height:1.1;color:#fff;margin:0 0 12px}
   #tsshop .tss-title span{color:#c7b489}
-  #tsshop .tss-sub{font-size:15px;color:rgba(255,255,255,.42);max-width:600px;margin:0 auto;line-height:1.6}
+  #tsshop .tss-sub{font-size:15px;color:#e1e1e1;max-width:600px;margin:0 auto;line-height:1.6}
   /* Fortschritts-Balken unter dem Warenkorb — edles Glas-Panel: links Summe (Champagner, dick),
      Mitte grüner Fortschritts-Track mit Glow+Sheen, rechts Backoffice-Gesamt (rot). */
   #tsshop .tss-bar{display:flex;align-items:center;gap:clamp(18px,3vw,44px);max-width:880px;margin:clamp(28px,3.6vh,52px) auto 0;padding:20px clamp(22px,2.6vw,32px);border-radius:18px;background:linear-gradient(165deg,rgba(255,255,255,.06),rgba(255,255,255,.018) 60%,rgba(255,255,255,.006));border:1px solid rgba(255,255,255,.08);box-shadow:0 24px 60px -34px rgba(0,0,0,.85),inset 0 1px 0 rgba(255,255,255,.07);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;transform:translateY(14px);transition:opacity .8s ease,transform .9s cubic-bezier(.22,1,.36,1)}
