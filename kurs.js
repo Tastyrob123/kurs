@@ -378,13 +378,18 @@
 
   function mount(){
     if(!on()) return;
-    var colList=document.getElementById('block-39bb95465534808a93b8c33efe76ff62');
-    if(!colList) return;
+    /* An der STABILEN Content-Block-ID ankern ("Dein Backoffice…"-Absatz): die umschließenden
+       .notion-column-list-Wrapper vergeben instabile IDs (super.so/Notion re-generiert sie pro Render),
+       darum NICHT auf die Wrapper-ID verlassen. */
+    var para=document.getElementById('block-397b9546553480dfa291d21d2b5e7456');
+    if(!para) return;
+    var anchor=para.closest('.notion-column-list') || para.closest('.notion-column') || para;
+    if(!anchor || !anchor.parentNode) return;
     var ex=document.getElementById('tsm2build');
     if(ex && ex.isConnected) return;                 // schon montiert
     if(ex && ex.parentNode) ex.parentNode.removeChild(ex);
     var el=build();
-    colList.parentNode.insertBefore(el, colList.nextSibling);
+    anchor.parentNode.insertBefore(el, anchor.nextSibling);
     sequence(el);
   }
 
