@@ -314,24 +314,20 @@
     finance:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M5 20h14'/><path d='M7 20v-6'/><path d='M12 20V8'/><path d='M17 20v-9'/></svg>",
     metrics:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M4 14a8 8 0 0 1 16 0'/><path d='M12 14l4-3'/><circle cx='12' cy='14' r='1'/></svg>",
     ops:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M4 8h10'/><circle cx='17' cy='8' r='2.4'/><path d='M20 16H10'/><circle cx='7' cy='16' r='2.4'/></svg>",
-    vision:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12s3.2-6 9-6 9 6 9 6-3.2 6-9 6-9-6-9-6z'/><circle cx='12' cy='12' r='2.2'/></svg>",
-    inv:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='4' width='7' height='7' rx='1.4'/><rect x='13' y='4' width='7' height='7' rx='1.4'/><rect x='4' y='13' width='7' height='7' rx='1.4'/><rect x='13' y='13' width='7' height='7' rx='1.4'/></svg>",
-    supply:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M3 7h11v8H3z'/><path d='M14 10h4l3 3v2h-7z'/><circle cx='7' cy='17' r='1.8'/><circle cx='17.5' cy='17' r='1.8'/></svg>",
-    ingr:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3c3.5 3 5 6 5 9a5 5 0 0 1-10 0c0-3 1.5-6 5-9z'/></svg>",
-    recipe:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><rect x='5' y='3' width='14' height='18' rx='2'/><path d='M9 8h6'/><path d='M9 12h6'/><path d='M9 16h4'/></svg>",
-    dish:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M4 12a8 8 0 0 1 16 0'/><path d='M3 12h18'/><path d='M12 4v-.5'/></svg>",
-    calc:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><rect x='5' y='3' width='14' height='18' rx='2'/><path d='M8 7h8'/><circle cx='9' cy='12' r='.6'/><circle cx='12' cy='12' r='.6'/><circle cx='15' cy='12' r='.6'/><circle cx='9' cy='16' r='.6'/><circle cx='12' cy='16' r='.6'/></svg>",
-    done:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M4 12a8 8 0 0 1 16 0'/><path d='M3 12h18'/><path d='M8.5 9.5l2.2 2.3 4-4'/></svg>"
+    vision:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12s3.2-6 9-6 9 6 9 6-3.2 6-9 6-9-6-9-6z'/><circle cx='12' cy='12' r='2.2'/></svg>"
   };
   var AREAS=[['food','Foodquartier',1],['drinks','Drinksquartier',1],['finance','Finance Studio',1],
              ['metrics','Key Metrics',0],['ops','Operations Area',0],['vision','Vision Frame',0]];
-  var STEPS=[['inv','Inventar'],['supply','Lieferpartner'],['ingr','Zutaten'],['recipe','Rezepturen'],
-             ['dish','Gerichte'],['calc','Kalkulation'],['done','Vollkalkuliertes Gericht']];
+  /* 7 Fundament-Schritte als DB-Cover-Kacheln (Bilder im Repo unter img/modul2/, via GitHub Pages geladen) */
+  var IMGBASE="https://tastyrob123.github.io/kurs/img/modul2/";
+  var STEPS=[['Inventar','inventurliste.jpg'],['Lieferpartner','lieferanten.jpg'],['Zutaten','zutaten.jpg'],
+             ['Rezepturen','rezepturen.jpg'],['Gerichte','gerichte.jpg'],['Kalkulation','menuekalkulation.jpg'],
+             ['Vollkalkuliertes Gericht','dynamic-system.jpg']];
 
   function build(){
     var el=document.createElement('div'); el.id='tsm2build'; el.setAttribute('data-phase','0');
     var areasH=AREAS.map(function(a,i){ return "<div class='tb-area' data-hot='"+a[2]+"' style='transition-delay:"+(i*70)+"ms'><span class='tb-ic'>"+IC[a[0]]+"</span><span class='tb-al'>"+a[1]+"</span></div>"; }).join('');
-    var stepsH=STEPS.map(function(s){ return "<div class='tb-step'><div class='tb-brick'>"+IC[s[0]]+"</div><div class='tb-sl'>"+s[1]+"</div></div>"; }).join('');
+    var stepsH=STEPS.map(function(s){ return "<div class='tb-step'><div class='tb-brick'><img src='"+IMGBASE+s[1]+"' alt='' loading='lazy'></div><div class='tb-sl'>"+s[0]+"</div></div>"; }).join('');
     el.innerHTML="<div class='tb-stage'><div class='tb-grain'></div><div class='tb-glow'></div>"+
       "<div class='tb-inner'>"+
       "<div class='tb-eyebrow'>Dein Backoffice</div>"+
