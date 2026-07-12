@@ -1748,6 +1748,7 @@
       '<img class="ts-hero__img" alt="DB VI–VII — Gemeinkosten & Löhne" src="'+IMG+'">'+
       '<div class="ts-hero__text">'+
         '<img class="ts-hero__logo" alt="Tasty Studios" src="'+LOGO+'">'+
+        '<div class="ts-hero__eyebrow">Lektion 2.5</div>'+
         '<h1 class="ts-hero__title">DB VI – VII :<br><span class="ts-gold">GK und Löhne</span></h1>'+
       '</div>';
     var nr=sc.querySelector(".notion-root");
