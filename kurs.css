@@ -346,18 +346,16 @@ canvas[style*="2147483647"]{ display:none !important; }
   font-weight:600 !important; letter-spacing:-.01em !important;
   font-size:clamp(1.7rem,3.4vw,2.2rem) !important; line-height:1.2 !important; }
 .page__modul-2-das-notion-ai-backoffice-system .ts-m2-gold{ color:#9e947f !important; }
-/* Fließtext unter den Section-Headings ("Die meisten Betriebe…" + "Dein Backoffice gliedert…")
-   auf Intro-Größe/-Zeilenabstand angeglichen (1.2rem / 1.65). Ausrichtung bleibt linksbündig. */
+/* Fließtext-Sektion unter den Section-Headings ("Die meisten Betriebe…", "Dein Backoffice gliedert…"
+   + Nachsatz "Am Ende weißt du…") — alle drei Absätze zentriert und auf EINE Größe (1.2rem / 1.65)
+   vereinheitlicht. Der Nachsatz war vorher bewusst kleiner (0.9rem, linksbündig); jetzt gleichgezogen. */
 .page__modul-2-das-notion-ai-backoffice-system #block-397b954655348040869edf77e108dcd1,
 .page__modul-2-das-notion-ai-backoffice-system #block-397b954655348040869edf77e108dcd1 .notion-text__content,
 .page__modul-2-das-notion-ai-backoffice-system #block-397b9546553480dfa291d21d2b5e7456,
-.page__modul-2-das-notion-ai-backoffice-system #block-397b9546553480dfa291d21d2b5e7456 .notion-text__content{
-  font-size:1.2rem !important; line-height:1.65 !important; }
-/* Sub-Text "Am Ende weißt du für jedes einzelne Gericht auf den Cent…" bewusst kleiner als der
-   Fließtext (1.2rem) — liest sich als leiser Beleg-Nachsatz unter dem Haupt-Absatz. */
+.page__modul-2-das-notion-ai-backoffice-system #block-397b9546553480dfa291d21d2b5e7456 .notion-text__content,
 .page__modul-2-das-notion-ai-backoffice-system #block-39bb95465534804fa389fc21e10e8b85,
 .page__modul-2-das-notion-ai-backoffice-system #block-39bb95465534804fa389fc21e10e8b85 .notion-text__content{
-  font-size:0.9rem !important; line-height:1.6 !important; }
+  text-align:center !important; font-size:1.2rem !important; line-height:1.65 !important; }
 /* Standalone-Section-Heading "Was du am Ende hast." — Display-Schrift Lineal TS wie die beiden
    Spalten-Headings; höher gesetzt (margin-top 36px→8px). Wort "Ende hast" wird per JS in
    .ts-m2-gold gewrappt → beige (siehe kurs.js __tsm2). */
