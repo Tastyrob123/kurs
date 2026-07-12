@@ -3894,3 +3894,213 @@
   new MutationObserver(function(){ if(_t) return; _t=setTimeout(function(){ _t=null; apply(); },200); })
     .observe(document.documentElement,{childList:true,subtree:true});
 })();
+
+/* ============================================================================
+   #tscover — Notion-Coveransicht-Erklär-Animation (Seite /zutatenliste)
+   Sitzt DIREKT unter dem Warenkorb + Einwaage-Balken (#tsshop--db4_zutaten).
+   Zeigt, wie in der Zutat „Spinat" die zwei Größeneinheiten-Cover in der
+   Notion-Ansicht „Verwendete Größeneinheiten" entstehen: + Neue Seite →
+   leere Karte → Cover zieht ein → Titel wird getippt → Häkchen.
+   Stil: Tasty-Studios-Rahmen (Champagner-Eyebrow/Titel, Foot) + authentisches
+   Notion-Dark-Mockup (Muster wie #tsiv/#tsmac-Mockups). Accents kanonisch:
+   Gold #c7b489 · Champagner #d8c9ab · Erledigt-Grün rgba(143,203,170).
+   Werte = Beispielwerte aus Roberts Notion-Screenshot.
+   ============================================================================ */
+(function(){
+  if(window.__tscover) return; window.__tscover=true;
+  var IMG='https://tastyrob123.github.io/kurs/img/zutaten/spinat.jpg';
+  var reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function on(){ return /\/zutatenliste\/?$/.test(location.pathname); }
+
+  var CSS=`
+  #tscover{width:100vw;max-width:100vw;margin:clamp(26px,3.4vh,44px) 0 clamp(44px,6vh,72px);margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 clamp(20px,4vw,56px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
+  #tscover *{box-sizing:border-box}
+  #tscover .tsc-inner{max-width:1040px;margin:0 auto}
+  #tscover .tsc-head{text-align:center;margin-bottom:clamp(24px,3vh,38px)}
+  #tscover .tsc-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin-bottom:12px}
+  #tscover .tsc-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#9e947f;box-shadow:0 0 12px rgba(158,148,127,.7)}
+  #tscover .tsc-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(28px,3.9vw,46px);font-weight:600;letter-spacing:-.02em;line-height:1.1;color:#fff;margin:0 0 12px}
+  #tscover .tsc-title span{color:#c7b489}
+  #tscover .tsc-sub{font-size:15px;color:#e1e1e1;max-width:620px;margin:0 auto;line-height:1.6}
+
+  #tscover .tsc-stage{position:relative;max-width:720px;margin:0 auto;perspective:1400px}
+  #tscover .tsc-win{position:relative;border-radius:16px;overflow:hidden;background:#191919;border:1px solid rgba(255,255,255,.09);
+    box-shadow:0 40px 90px -46px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.02),inset 0 1px 0 rgba(255,255,255,.05);
+    opacity:0;transform:translateY(22px) scale(.985);transition:opacity .8s ease,transform .9s cubic-bezier(.16,1,.3,1)}
+  #tscover.on .tsc-win{opacity:1;transform:none}
+  #tscover .tsc-winglow{position:absolute;left:0;right:0;top:0;height:120px;pointer-events:none;background:radial-gradient(120% 100% at 50% 0,rgba(199,180,137,.10),transparent 70%)}
+  #tscover .tsc-pad{padding:clamp(18px,3vw,30px) clamp(18px,3.4vw,34px) clamp(20px,3.4vw,32px)}
+
+  #tscover .tsc-props{display:flex;flex-wrap:wrap;gap:8px 22px;margin-bottom:16px;opacity:.5}
+  #tscover .tsc-prop{display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(255,255,255,.62)}
+  #tscover .tsc-prop svg{flex:0 0 auto;color:rgba(255,255,255,.42)}
+  #tscover .tsc-prop b{color:rgba(255,255,255,.9);font-weight:600;font-variant-numeric:tabular-nums}
+  #tscover .tsc-rule{height:1px;background:rgba(255,255,255,.08);margin:0 0 18px}
+
+  #tscover .tsc-sec{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+  #tscover .tsc-pill{display:inline-flex;align-items:center;gap:10px;padding:7px 14px 7px 11px;border-radius:999px;background:#2b2b2b;font-size:14.5px;font-weight:600;color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+  #tscover .tsc-radio{width:16px;height:16px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(255,255,255,.85);position:relative}
+  #tscover .tsc-radio::after{content:"";position:absolute;inset:4px;border-radius:50%;background:#fff}
+  #tscover .tsc-tools{display:flex;align-items:center;gap:16px;color:rgba(255,255,255,.5)}
+
+  #tscover .tsc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  #tscover .tsc-card{position:relative;border-radius:11px;overflow:hidden;background:#212121;box-shadow:inset 0 0 0 1px rgba(255,255,255,.055),0 12px 30px -22px rgba(0,0,0,.9);
+    opacity:0;transform:translateY(14px) scale(.96);transform-origin:bottom center}
+  #tscover .tsc-card.in{animation:tsc-cardin .6s cubic-bezier(.16,1,.3,1) forwards}
+  @keyframes tsc-cardin{to{opacity:1;transform:none}}
+  #tscover .tsc-cover{position:relative;aspect-ratio:1.92/1;overflow:hidden;background:#161616}
+  #tscover .tsc-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.12);opacity:0;clip-path:inset(0 0 100% 0)}
+  #tscover .tsc-card.reveal img{animation:tsc-reveal 1.05s cubic-bezier(.4,0,.2,1) forwards}
+  @keyframes tsc-reveal{0%{opacity:0;clip-path:inset(0 0 100% 0);transform:scale(1.12)}12%{opacity:1}100%{opacity:1;clip-path:inset(0 0 0 0);transform:scale(1)}}
+  #tscover .tsc-scan{position:absolute;left:0;right:0;top:0;height:34%;pointer-events:none;opacity:0;
+    background:linear-gradient(180deg,transparent,rgba(199,180,137,.28) 70%,rgba(255,255,255,.55));box-shadow:0 2px 14px rgba(199,180,137,.5)}
+  #tscover .tsc-card.reveal .tsc-scan{animation:tsc-scan 1.05s cubic-bezier(.4,0,.2,1) forwards}
+  @keyframes tsc-scan{0%{opacity:0;transform:translateY(-40%)}12%{opacity:.9}88%{opacity:.9}100%{opacity:0;transform:translateY(300%)}}
+  #tscover .tsc-ph{position:absolute;inset:0;background:linear-gradient(100deg,#1c1c1c 30%,#262626 50%,#1c1c1c 70%);background-size:220% 100%;animation:tsc-shim 1.3s linear infinite}
+  #tscover .tsc-card.reveal .tsc-ph{opacity:0;transition:opacity .3s ease}
+  @keyframes tsc-shim{0%{background-position:120% 0}100%{background-position:-120% 0}}
+  #tscover .tsc-cap{padding:11px 14px 13px;display:flex;align-items:center;min-height:44px}
+  #tscover .tsc-label{font-size:14.5px;font-weight:600;color:#fff;white-space:nowrap;line-height:1}
+  #tscover .tsc-caret{display:inline-block;width:1.5px;height:15px;margin-left:1px;background:#c7b489;vertical-align:-2px;opacity:0}
+  #tscover .tsc-card.typing .tsc-caret{opacity:1;animation:tsc-blink .9s step-end infinite}
+  @keyframes tsc-blink{50%{opacity:0}}
+  #tscover .tsc-check{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:rgba(143,203,170,.94);color:#0b1512;box-shadow:0 4px 16px rgba(143,203,170,.45);opacity:0;transform:scale(.4)}
+  #tscover .tsc-card.done .tsc-check{animation:tsc-pop .5s cubic-bezier(.34,1.56,.64,1) forwards}
+  @keyframes tsc-pop{to{opacity:1;transform:scale(1)}}
+
+  #tscover .tsc-new{position:relative;margin-top:16px;display:flex;align-items:center;gap:9px;padding:11px 14px;border-radius:9px;font-size:14px;color:rgba(255,255,255,.44);box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}
+  #tscover .tsc-new .plus{font-size:17px;line-height:1;color:rgba(255,255,255,.55)}
+  #tscover .tsc-new.press{animation:tsc-press .45s ease}
+  @keyframes tsc-press{40%{background:rgba(255,255,255,.06)}100%{background:transparent}}
+  #tscover .tsc-ripple{position:absolute;left:26px;top:50%;width:8px;height:8px;border-radius:50%;transform:translate(-50%,-50%) scale(0);background:rgba(199,180,137,.55);opacity:0;pointer-events:none}
+  #tscover .tsc-new.press .tsc-ripple{animation:tsc-ripple .6s ease-out}
+  @keyframes tsc-ripple{0%{opacity:.7;transform:translate(-50%,-50%) scale(0)}100%{opacity:0;transform:translate(-50%,-50%) scale(9)}}
+
+  #tscover .tsc-cursor{position:absolute;left:0;top:0;width:22px;height:22px;z-index:20;pointer-events:none;filter:drop-shadow(0 3px 5px rgba(0,0,0,.6));opacity:0;transition:opacity .4s ease;will-change:transform}
+  #tscover.on .tsc-cursor{opacity:1}
+  #tscover .tsc-cursor.click{animation:tsc-cclick .4s ease}
+  @keyframes tsc-cclick{40%{transform:scale(.82)}100%{transform:scale(1)}}
+
+  #tscover .tsc-foot{text-align:center;margin-top:20px;font-size:12.5px;color:rgba(255,255,255,.4);letter-spacing:.01em}
+  #tscover .tsc-foot b{color:rgba(216,201,171,.9);font-weight:600}
+
+  @media(max-width:600px){
+    #tscover .tsc-grid{grid-template-columns:1fr}
+    #tscover .tsc-props{gap:6px 16px}#tscover .tsc-prop{font-size:11.5px}
+    #tscover .tsc-pill{font-size:13px}#tscover .tsc-label{font-size:13.5px}
+    #tscover .tsc-cover{aspect-ratio:2.1/1}
+  }
+  @media(prefers-reduced-motion:reduce){
+    #tscover .tsc-win{opacity:1;transform:none;transition:none}
+    #tscover .tsc-card{opacity:1;transform:none;animation:none}
+    #tscover .tsc-card img{opacity:1;clip-path:none;transform:none;animation:none}
+    #tscover .tsc-ph,#tscover .tsc-scan,#tscover .tsc-caret{display:none}
+    #tscover .tsc-cursor{display:none}
+    #tscover .tsc-card .tsc-check{opacity:1;transform:none;animation:none}
+  }`;
+
+  var CURSOR='<svg viewBox="0 0 24 24" width="22" height="22" fill="none"><path d="M5 3l4.5 15 2.3-6.2 6.2-2.3z" fill="#fff" stroke="#0b0d14" stroke-width="1.3" stroke-linejoin="round"/></svg>';
+  var CHECK='<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.2 4.2L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function propRow(){
+    var chk='<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.2 4.2L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var items=[['Kalorien','230'],['Protein','30'],['Fett','4'],['Kohlenhydrate','36']];
+    return items.map(function(it){return '<span class="tsc-prop">'+chk+it[0]+' <b>'+it[1]+'</b></span>';}).join('');
+  }
+  function card(i,label,pos){
+    return '<div class="tsc-card" data-i="'+i+'" data-label="'+label+'">'+
+      '<div class="tsc-cover"><div class="tsc-ph"></div><div class="tsc-scan"></div><img src="'+IMG+'" alt="'+label+'" style="object-position:'+pos+'" loading="lazy"></div>'+
+      '<div class="tsc-check">'+CHECK+'</div>'+
+      '<div class="tsc-cap"><span class="tsc-label"></span><span class="tsc-caret"></span></div></div>';
+  }
+  function build(){
+    if(!document.getElementById('tscover-css')){ var s=document.createElement('style'); s.id='tscover-css'; s.textContent=CSS; document.head.appendChild(s); }
+    var root=document.createElement('section'); root.id='tscover';
+    root.innerHTML=
+      '<div class="tsc-inner">'+
+        '<div class="tsc-head">'+
+          '<span class="tsc-eyebrow">Notion · Coveransicht</span>'+
+          '<h2 class="tsc-title">So entstehen die <span>Größeneinheiten</span>.</h2>'+
+          '<p class="tsc-sub">In jeder Zutat legst du eine Galerie als Coveransicht an — sie zeigt dir pro Zutat die Größeneinheiten, die du verwendest. Sieh zu, wie die Cover Karte für Karte entstehen.</p>'+
+        '</div>'+
+        '<div class="tsc-stage">'+
+          '<div class="tsc-win"><div class="tsc-winglow"></div>'+
+            '<div class="tsc-pad">'+
+              '<div class="tsc-props">'+propRow()+'</div>'+
+              '<div class="tsc-rule"></div>'+
+              '<div class="tsc-sec">'+
+                '<div class="tsc-pill"><span class="tsc-radio"></span>Verwendete Größeneinheiten</div>'+
+                '<div class="tsc-tools">'+
+                  '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
+                  '<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 7h10M18 7h2M4 17h2M10 17h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="16" cy="7" r="2.1" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="17" r="2.1" stroke="currentColor" stroke-width="1.6"/></svg>'+
+                '</div>'+
+              '</div>'+
+              '<div class="tsc-grid">'+card(0,'40g Baby Spinat','center')+card(1,'60g Spinat','center 40%')+'</div>'+
+              '<div class="tsc-new"><span class="tsc-ripple"></span><span class="plus">+</span> Neue Seite</div>'+
+            '</div>'+
+          '</div>'+
+          '<div class="tsc-cursor">'+CURSOR+'</div>'+
+        '</div>'+
+        '<div class="tsc-foot">Beispiel: Zutat <b>Spinat</b> mit zwei Größeneinheiten · Werte illustrativ.</div>'+
+      '</div>';
+    return root;
+  }
+
+  var timers=[];
+  function clearAll(){ timers.forEach(clearTimeout); timers=[]; }
+  function at(ms,fn){ timers.push(setTimeout(fn,ms)); }
+  function typeInto(card,text,done){
+    var el=card.querySelector('.tsc-label'); el.textContent=''; card.classList.add('typing'); var i=0;
+    (function tick(){ if(i<=text.length){ el.textContent=text.slice(0,i); i++; at(58+Math.random()*40,tick); } else { card.classList.remove('typing'); if(done)done(); } })();
+  }
+  function moveCursor(root,x,y,dur){ var c=root.querySelector('.tsc-cursor'); c.style.transition='transform '+dur+'ms cubic-bezier(.5,0,.2,1)'; c.style.transform='translate('+x+'px,'+y+'px)'; }
+  function pos(root,el,dx,dy){ var sr=root.querySelector('.tsc-stage').getBoundingClientRect(); var er=el.getBoundingClientRect(); return [er.left-sr.left+(dx||0), er.top-sr.top+(dy||0)]; }
+
+  function play(root){
+    if(reduced){ root.classList.add('on'); [].forEach.call(root.querySelectorAll('.tsc-card'),function(c){ c.querySelector('.tsc-label').textContent=c.dataset.label; c.classList.add('done'); }); return; }
+    clearAll();
+    var cards=root.querySelectorAll('.tsc-card'), cursor=root.querySelector('.tsc-cursor'), newbtn=root.querySelector('.tsc-new'),
+        stage=root.querySelector('.tsc-stage');
+    root.classList.add('on');
+    [].forEach.call(cards,function(c){ c.classList.remove('in','reveal','done','typing'); c.querySelector('.tsc-label').textContent=''; });
+    var sw=stage.getBoundingClientRect().width, sh=stage.getBoundingClientRect().height;
+    cursor.style.transition='none'; cursor.style.transform='translate('+(sw*0.72)+'px,'+(sh+40)+'px)';
+
+    function makeCard(idx,text,delay0,after){
+      var c=cards[idx], p=pos(root,newbtn,34,20);
+      at(delay0+0,function(){ moveCursor(root,p[0],p[1],700); });
+      at(delay0+800,function(){ cursor.classList.add('click'); newbtn.classList.add('press'); });
+      at(delay0+980,function(){ cursor.classList.remove('click'); newbtn.classList.remove('press'); c.classList.add('in'); });
+      at(delay0+1120,function(){ var pc=pos(root,c,c.offsetWidth*0.5,26); moveCursor(root,pc[0],pc[1],560); });
+      at(delay0+1480,function(){ c.classList.add('reveal'); });
+      at(delay0+2620,function(){ var pl=pos(root,c,18,c.offsetHeight-20); moveCursor(root,pl[0],pl[1],420); typeInto(c,text,function(){ c.classList.add('done'); if(after)after(); }); });
+    }
+    makeCard(0,'40g Baby Spinat',600,function(){
+      makeCard(1,'60g Spinat',700,function(){
+        at(700,function(){ moveCursor(root,sw*0.78,sh+40,700); });
+        at(4200,function(){ play(root); });
+      });
+    });
+  }
+
+  function anchor(){ return document.getElementById('tsshop--db4_zutaten'); }
+  function mount(){
+    if(!on()){ var e=document.getElementById('tscover'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    if(document.getElementById('tscover')) return;
+    var a=anchor(); if(!a||!a.parentNode) return;
+    var root=build();
+    a.parentNode.insertBefore(root, a.nextSibling);
+    var played=false;
+    if('IntersectionObserver' in window){
+      var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting&&!played){ played=true; play(root); } }); },{threshold:.3});
+      io.observe(root);
+    } else { play(root); }
+    var r=root.getBoundingClientRect(); if(r.top<innerHeight&&r.bottom>0){ played=true; play(root); }
+  }
+  function boot(){
+    var tries=0; var iv=setInterval(function(){ tries++; mount(); if(tries>40)clearInterval(iv); },300);
+    new MutationObserver(function(){ mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
