@@ -2247,23 +2247,25 @@
   #tsshop .tss-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(32px,4.4vw,52px);font-weight:600;letter-spacing:-.02em;line-height:1.1;color:#fff;margin:0 0 12px}
   #tsshop .tss-title span{color:#c7b489}
   #tsshop .tss-sub{font-size:15px;color:rgba(255,255,255,.42);max-width:600px;margin:0 auto;line-height:1.6}
-  /* Gesamt-Summe der im Einkaufswagen liegenden Karten — rote Lineal-Zahl + weißes Label */
-  /* Fortschritts-Balken unter dem Warenkorb: links Summe (beige, dick), Mitte Block-Fortschritt, rechts Backoffice-Gesamt (rot) */
-  #tsshop .tss-bar{display:flex;align-items:center;gap:clamp(16px,3vw,40px);max-width:860px;margin:clamp(26px,3.5vh,48px) auto 0;padding:16px clamp(18px,2.4vw,26px);border-radius:16px;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.09);opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .8s cubic-bezier(.22,1,.36,1)}
+  /* Fortschritts-Balken unter dem Warenkorb — edles Glas-Panel: links Summe (Champagner, dick),
+     Mitte grüner Fortschritts-Track mit Glow+Sheen, rechts Backoffice-Gesamt (rot). */
+  #tsshop .tss-bar{display:flex;align-items:center;gap:clamp(18px,3vw,44px);max-width:880px;margin:clamp(28px,3.6vh,52px) auto 0;padding:20px clamp(22px,2.6vw,32px);border-radius:18px;background:linear-gradient(165deg,rgba(255,255,255,.06),rgba(255,255,255,.018) 60%,rgba(255,255,255,.006));border:1px solid rgba(255,255,255,.08);box-shadow:0 24px 60px -34px rgba(0,0,0,.85),inset 0 1px 0 rgba(255,255,255,.07);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;transform:translateY(14px);transition:opacity .8s ease,transform .9s cubic-bezier(.22,1,.36,1)}
   #tsshop .tss-bar.on{opacity:1;transform:none}
-  #tsshop .tss-bar__side{flex:0 0 auto;min-width:104px}
+  #tsshop .tss-bar__side{flex:0 0 auto;min-width:112px}
   #tsshop .tss-bar__left{text-align:left}
   #tsshop .tss-bar__right{text-align:right}
-  #tsshop .tss-bar__val{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:clamp(22px,2.6vw,32px);font-weight:700;letter-spacing:-.01em;line-height:1;color:#c7b489;font-variant-numeric:tabular-nums}
-  #tsshop .tss-bar__global{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:clamp(22px,2.6vw,32px);font-weight:700;letter-spacing:-.01em;line-height:1;color:#E5484D;font-variant-numeric:tabular-nums}
-  #tsshop .tss-bar__cap{font-size:11.5px;font-weight:500;letter-spacing:.02em;color:rgba(255,255,255,.55);margin-top:8px;white-space:nowrap}
+  #tsshop .tss-bar__val{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:clamp(23px,2.7vw,33px);font-weight:700;letter-spacing:-.012em;line-height:1;color:#d8c9ab;font-variant-numeric:tabular-nums}
+  #tsshop .tss-bar__global{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:clamp(23px,2.7vw,33px);font-weight:700;letter-spacing:-.012em;line-height:1;color:#E5484D;font-variant-numeric:tabular-nums}
+  #tsshop .tss-bar__cap{font-size:9.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin-top:10px;white-space:nowrap}
   #tsshop .tss-bar__mid{flex:1 1 auto;min-width:0}
-  #tsshop .tss-bar__track{height:8px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
-  #tsshop .tss-bar__fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#9e947f,#d8c9ab);transition:width .6s cubic-bezier(.22,1,.36,1)}
-  #tsshop .tss-bar__mid-cap{display:flex;justify-content:space-between;gap:10px;margin-top:9px;font-size:11.5px;font-weight:500;letter-spacing:.02em;color:rgba(255,255,255,.45)}
-  #tsshop .tss-bar__mid-cap b{color:rgba(255,255,255,.82);font-weight:600}
-  @media(max-width:640px){#tsshop .tss-bar{flex-direction:column;align-items:stretch;gap:16px;text-align:center}#tsshop .tss-bar__left,#tsshop .tss-bar__right{text-align:center}#tsshop .tss-bar__side{min-width:0}#tsshop .tss-bar__cap{white-space:normal}}
-  @media(prefers-reduced-motion:reduce){#tsshop .tss-bar{opacity:1;transform:none;transition:none}#tsshop .tss-bar__fill{transition:none}}
+  #tsshop .tss-bar__track{position:relative;height:6px;border-radius:99px;background:rgba(255,255,255,.08);box-shadow:inset 0 1px 2px rgba(0,0,0,.45);overflow:hidden}
+  #tsshop .tss-bar__fill{position:relative;height:100%;width:0;border-radius:99px;overflow:hidden;background:linear-gradient(90deg,#5FAE88,#9FD3B9);box-shadow:0 0 10px rgba(143,203,170,.5),inset 0 1px 0 rgba(255,255,255,.3);transition:width .7s cubic-bezier(.22,1,.36,1)}
+  #tsshop .tss-bar__fill::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.42),transparent);transform:translateX(-100%);animation:tss-sheen 3.4s ease-in-out infinite}
+  @keyframes tss-sheen{0%{transform:translateX(-100%)}55%,100%{transform:translateX(100%)}}
+  #tsshop .tss-bar__mid-cap{display:flex;justify-content:space-between;gap:12px;margin-top:11px;font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+  #tsshop .tss-bar__mid-cap b{color:rgba(216,201,171,.9);font-weight:700}
+  @media(max-width:640px){#tsshop .tss-bar{flex-direction:column;align-items:stretch;gap:18px;text-align:center}#tsshop .tss-bar__left,#tsshop .tss-bar__right{text-align:center}#tsshop .tss-bar__side{min-width:0}#tsshop .tss-bar__cap{white-space:normal}}
+  @media(prefers-reduced-motion:reduce){#tsshop .tss-bar{opacity:1;transform:none;transition:none}#tsshop .tss-bar__fill{transition:none}#tsshop .tss-bar__fill::after{animation:none;display:none}}
   #tsshop .tss-shelf{position:relative}
   #tsshop .tss-track{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 2px 22px;scrollbar-width:none;-ms-overflow-style:none;overscroll-behavior-x:contain}
   #tsshop .tss-track::-webkit-scrollbar{display:none}
