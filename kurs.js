@@ -1931,13 +1931,18 @@
     '#tsiv-root{--tsiv-gold:#9e947f;--tsiv-ease:cubic-bezier(.16,1,.3,1);width:min(1000px,95vw);margin:8px auto 40px;display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4.5vw,60px);align-items:center;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;opacity:0;transform:translateY(20px);transition:opacity .8s var(--tsiv-ease),transform .9s var(--tsiv-ease);}',
     '#tsiv-root.in{opacity:1;transform:none;}',
     '#tsiv-root .tsiv-textslot{min-width:0;min-height:1px;}',
+    '#tsiv-root .tsiv-textslot .tsiv-lead{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;font-size:clamp(1.32rem,2vw,1.6rem);font-weight:600;letter-spacing:-.012em;line-height:1.22;color:#fff;margin:0 0 18px;}',
+    '#tsiv-root .tsiv-textslot .tsiv-lead .tsiv-accent{color:var(--tsiv-gold);}',
+    '#tsiv-root .tsiv-textslot p:not(.tsiv-lead){font-size:.95rem;line-height:1.7;color:rgba(255,255,255,.62);margin:0 0 14px;}',
+    '#tsiv-root .tsiv-textslot p:last-child{margin-bottom:0;}',
+    '.tsiv-hide{display:none !important;}',
     '#tsiv-root .tsiv-unit{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;}',
-    '@media(max-width:900px){#tsiv-root{grid-template-columns:1fr;}#tsiv-root .tsiv-textslot{display:none;}}',
+    '@media(max-width:900px){#tsiv-root{grid-template-columns:1fr;}#tsiv-root .tsiv-textslot{text-align:left;max-width:560px;margin:0 auto;}}',
     '#tsiv-root .tsiv-tile{position:relative;width:100%;max-width:520px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 18px 44px rgba(0,0,0,.5));transition:transform .5s var(--tsiv-ease),filter .5s var(--tsiv-ease);}',
     '#tsiv-root .tsiv-tile:hover{transform:translateY(-4px) scale(1.02);animation:tsivHeartbeat 2.6s var(--tsiv-ease) infinite;}',
     '@keyframes tsivHeartbeat{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(158,148,127,.14));}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(158,148,127,.30));}}',
     '#tsiv-root .tsiv-tile:active{transform:scale(.99);transition-duration:.12s;}',
-    '#tsiv-root .tsiv-cover{width:100%;height:auto;display:block;pointer-events:none;user-select:none;}',
+    '#tsiv-root .tsiv-cover{width:100%;height:auto;aspect-ratio:831/522;display:block;pointer-events:none;user-select:none;}',
     '#tsiv-root .tsiv-caption{width:100%;text-align:center;font-size:15px;font-weight:600;letter-spacing:.005em;color:#fff;margin-top:6px;}',
     '#tsiv-root .tsiv-caption .tsiv-accent{color:var(--tsiv-gold);}',
     '#tsiv-root .tsiv-hint{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.32);animation:tsivHint 2.5s ease-in-out infinite;}',
@@ -1979,7 +1984,7 @@
   function openLb(){ var lb=ensureLb(); lb.classList.add('open'); lb.classList.remove('full'); document.body.style.overflow='hidden'; var sc=lb.querySelector('.tsiv-screen'); if(sc) sc.scrollTop=0; }
   function buildTile(){
     var root=document.createElement('div'); root.id='tsiv-root';
-    root.innerHTML='<div class="tsiv-textslot" aria-hidden="true"></div><div class="tsiv-unit"><div class="tsiv-tile" role="button" tabindex="0" aria-label="Mein Inventar vergrößern"><img class="tsiv-cover" src="'+COVER+'" alt="Mein Inventar — DB Inventurliste" fetchpriority="high" decoding="async"></div><div class="tsiv-caption">Mein Inventar<span class="tsiv-accent"> – Live Beispiel</span></div><div class="tsiv-hint">Klicke zum Vergrößern</div></div>';
+    root.innerHTML='<div class="tsiv-textslot"></div><div class="tsiv-unit"><div class="tsiv-tile" role="button" tabindex="0" aria-label="Mein Inventar vergrößern"><img class="tsiv-cover" src="'+COVER+'" alt="Mein Inventar — DB Inventurliste" fetchpriority="high" decoding="async"></div><div class="tsiv-caption">Mein Inventar<span class="tsiv-accent"> – Live Beispiel</span></div><div class="tsiv-hint">Klicke zum Vergrößern</div></div>';
     var tile=root.querySelector('.tsiv-tile');
     tile.addEventListener('click',openLb);
     tile.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(); } });
@@ -1995,20 +2000,58 @@
     for(var i=0;i<hs.length;i++){ if(/Was uns jetzt noch fehlt/i.test(hs[i].textContent||'')) return hs[i]; }
     return null;
   }
-  /* Eine Node vor der Überschrift „Was uns jetzt noch fehlt": #tsiv-root ist selbst
-     ein 2-Spalten-Grid — linke Hälfte frei (Platz für Roberts Notion-Text), MacBook rechts. */
+  /* Roberts Notion-Text (Lead + 2 Absätze) für die linke Slot-Spalte. Block-IDs primär,
+     Phrasen als Fallback — so überlebt es sowohl Copy-Edits (ID) als auch Block-Neuanlage (Phrase). */
+  var LEAD_ID='block-39bb95465534804e9a9ed9762f5b2e6f';
+  var B1_ID='block-39bb954655348057b301cf325b5c1016';
+  var B2_ID='block-39bb9546553480f6bca8e98e15d3eaa2';
+  var SPACER_ID='block-39bb95465534806493f0fd96d5d1edcd';
+  function findByPhrase(ph){
+    var els=document.querySelectorAll('.page__inventurliste p.notion-text, .page__inventurliste .notion-text__content');
+    for(var i=0;i<els.length;i++){ if((els[i].textContent||'').trim().indexOf(ph)===0) return els[i]; }
+    return null;
+  }
+  function hideBlock(el){ if(!el)return; var w=(el.id&&/^block-/.test(el.id))?el:(el.closest('[id^="block-"]')||el); if(w) w.classList.add('tsiv-hide'); }
+  function makeLead(text){
+    var p=document.createElement('p'); p.className='tsiv-lead';
+    var m=(text||'').match(/^([\s\S]*\s)(\S+)$/);
+    if(m){ p.appendChild(document.createTextNode(m[1])); var s=document.createElement('span'); s.className='tsiv-accent'; s.textContent=m[2]; p.appendChild(s); }
+    else p.textContent=text||'';
+    return p;
+  }
+  function makeP(text){ var p=document.createElement('p'); p.textContent=(text||'').trim(); return p; }
+  /* Klont den echten Notion-Text in die Slot-Spalte neben das MacBook und versteckt die
+     Originale — Notion bleibt Text-SSOT, kein Duplikat. Idempotent (slot.__filled). */
+  function fillText(){
+    var root=document.getElementById('tsiv-root'); if(!root) return;
+    var slot=root.querySelector('.tsiv-textslot'); if(!slot || slot.__filled) return;
+    var lead=document.getElementById(LEAD_ID) || findByPhrase('Deine fertige Datenbank');
+    var b1=document.getElementById(B1_ID) || findByPhrase('So kann deine Inventurliste');
+    var b2=document.getElementById(B2_ID) || findByPhrase('Außerdem werden wir in der Lektion');
+    if(!lead || !b1 || !b2) return; /* auf Notion-Hydration warten */
+    slot.appendChild(makeLead((lead.textContent||'').trim()));
+    slot.appendChild(makeP(b1.textContent));
+    slot.appendChild(makeP(b2.textContent));
+    slot.__filled=true;
+    hideBlock(lead);
+    var sp=document.getElementById(SPACER_ID); if(sp) sp.classList.add('tsiv-hide');
+    var col=b1.closest('.notion-column-list'); if(col){ col.classList.add('tsiv-hide'); } else { hideBlock(b1); hideBlock(b2); }
+  }
+  /* #tsiv-root ist selbst ein 2-Spalten-Grid: links Roberts Notion-Text, rechts das MacBook. */
   function mount(){
     if(!/\/inventurliste\/?$/.test(location.pathname)){
       ['tsiv-root','tsiv-lb'].forEach(function(id){ var e=document.getElementById(id); if(e&&e.parentNode)e.parentNode.removeChild(e); });
       return;
     }
-    if(document.getElementById('tsiv-root')) return;
     var h=findHeading(); if(!h) return;
-    var block=h.closest('[id^="block-"]')||h;
-    injectCSS();
-    var root=buildTile();
-    block.parentNode.insertBefore(root, block);
-    reveal(root);
+    if(!document.getElementById('tsiv-root')){
+      var block=h.closest('[id^="block-"]')||h;
+      injectCSS();
+      var root=buildTile();
+      block.parentNode.insertBefore(root, block);
+      reveal(root);
+    }
+    fillText();
   }
   function boot(){
     var tries=0;
