@@ -3938,21 +3938,24 @@
 
 
 
+
 /* ============================================================================
    #tscover — Zutaten-DB-Erklär-Animationen (Seite /zutatenliste)
-   Vollbreite, ZWEI Panels nebeneinander (stapeln auf Mobil). Mount stabil unter
-   dem Warenkorb+Einwaage-Balken (#tsshop--db4_zutaten) — NIE in eine Notion-
-   Spalte (dort bekämpft super.so's Reconciler animierte DOM-Mutationen -> Freeze).
+   ZWEI getrennte Vollbreite-Blöcke, je: Animation LINKS + Textpanel RECHTS.
+   - Block A „Neue Größeneinheit anlegen": Zutat duplizieren -> umbenennen
+     (80g Spinat) -> Portionsgröße (1 Kg -> 80 g) -> Hauptzutat-„X" entfernen.
+   - Block B „Galerie mit Cover als Vorlage": Neu ▾ -> Neue Vorlage -> /Datenbank
+     -> DB IV : Zutaten verknüpfen -> Galerie + Seiten-Cover -> Als Standard.
 
-   Panel A — „Größeneinheit anlegen": Zutat duplizieren -> umbenennen (80g Spinat)
-     -> Portionsgröße (1 Kg -> 80 g) -> bei Hauptzutat das „X" entfernen.
-   Panel B — „Vorlage mit Cover anlegen": Neu ▾ -> Neue Vorlage -> / Datenbank
-     (Tabellenansicht) -> DB IV : Zutaten verknüpfen -> Galerie + Seiten-Cover
-     -> Als Standard festlegen.
+   Platzierung über Notion-Marker (Vollbreite-Textzeile, NICHT in einer Spalte):
+     `groesse-animation`  -> Block A   ·   `vorlage-animation` -> Block B
+   Ohne Marker: Fallback = Block A direkt unter dem Warenkorb (#tsshop--db4_zutaten),
+   Block B direkt danach. Animation läuft VOLLBREITE (stabil) — nie in einer Notion-
+   Spalte (dort Reconciler-Krieg -> Freeze). Der Text rechts liegt daher im Modul.
 
-   Stil: Tasty-Studios-Rahmen + authentisches Notion-Dark-Mockup. Accents
-   kanonisch: Gold #c7b489 · Champagner #d8c9ab · Erledigt-Grün rgba(143,203,170).
-   Werte = Beispielwerte (illustrativ).
+   Stil: Tasty-Studios + Notion-Dark-Mockup. Accents: Gold #c7b489 · Champagner
+   #d8c9ab · Erledigt-Grün rgba(143,203,170). Werte = Beispielwerte.
+   TEXT RECHTS = Platzhalter — Robert liefert den finalen Text.
    ============================================================================ */
 (function(){
   if(window.__tscover) return; window.__tscover=true;
@@ -3961,145 +3964,142 @@
   function on(){ return /\/zutatenliste\/?$/.test(location.pathname); }
 
   var CSS=`
-  #tscover{width:100%;margin:clamp(26px,3.4vh,44px) 0 clamp(44px,6vh,72px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
-  #tscover.tsc--full{width:100vw;max-width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 clamp(20px,4vw,56px)}
-  #tscover *{box-sizing:border-box}
-  #tscover .tsc-inner{max-width:1240px;margin:0 auto}
-  #tscover .tsc-sec{text-align:center;margin-bottom:clamp(26px,3.4vh,40px)}
-  #tscover .tsc-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin-bottom:12px}
-  #tscover .tsc-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#9e947f;box-shadow:0 0 12px rgba(158,148,127,.7)}
-  #tscover .tsc-h2{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(28px,3.6vw,44px);font-weight:600;letter-spacing:-.02em;line-height:1.1;color:#fff;margin:0 0 12px}
-  #tscover .tsc-h2 span{color:#c7b489}
-  #tscover .tsc-lead{font-size:15px;color:#e1e1e1;max-width:660px;margin:0 auto;line-height:1.6}
+  .tscb{width:100vw;max-width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:clamp(30px,4vh,52px) clamp(20px,4vw,56px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
+  .tscb *{box-sizing:border-box}
+  .tscb .tscb-in{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,4vw,64px);align-items:center}
+  .tscb.rev .tscb-in{direction:rtl}
+  .tscb.rev .tscb-in>*{direction:ltr}
+  @media(max-width:900px){.tscb .tscb-in{grid-template-columns:1fr;gap:30px}.tscb.rev .tscb-in{direction:ltr}}
 
-  #tscover .tsc-duo{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,2.6vw,44px);align-items:start}
-  @media(max-width:960px){#tscover .tsc-duo{grid-template-columns:1fr;gap:44px}}
-  #tscover .tscp{min-width:0}
-  #tscover .tscp-head{text-align:center;margin-bottom:16px}
-  #tscover .tscp-eye{font-size:.58rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:#9e947f}
-  #tscover .tscp-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(19px,1.7vw,24px);font-weight:600;letter-spacing:-.015em;color:#fff;margin:6px 0 0}
-  #tscover .tscp-title span{color:#c7b489}
+  /* --- Textpanel rechts --- */
+  .tscb .tsx{min-width:0}
+  .tscb .tsx-eye{display:inline-flex;align-items:center;gap:9px;font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin-bottom:14px}
+  .tscb .tsx-eye::before{content:"";width:7px;height:7px;border-radius:50%;background:#9e947f;box-shadow:0 0 12px rgba(158,148,127,.7)}
+  .tscb .tsx-h{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(26px,2.7vw,38px);font-weight:600;letter-spacing:-.02em;line-height:1.12;color:#fff;margin:0 0 16px}
+  .tscb .tsx-h span{color:#c7b489}
+  .tscb .tsx-p{font-size:15.5px;line-height:1.7;color:#dcdcdc;margin:0 0 14px;max-width:520px}
+  .tscb .tsx-ph{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(199,180,137,.5);margin-top:6px}
 
-  /* Schritt-Leiste */
-  #tscover .tsc-steps{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:14px auto 0}
-  #tscover .tsc-step{display:flex;align-items:center;gap:7px;padding:6px 11px 6px 6px;border-radius:999px;font-size:11.5px;font-weight:500;color:rgba(255,255,255,.42);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);transition:color .4s ease,box-shadow .4s ease,background .4s ease}
-  #tscover .tsc-step .n{width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;background:rgba(255,255,255,.1);color:rgba(255,255,255,.55);transition:all .4s ease}
-  #tscover .tsc-step .n svg{opacity:0;width:10px;height:10px}
-  #tscover .tsc-step.active{color:#fff;background:rgba(199,180,137,.10);box-shadow:inset 0 0 0 1px rgba(199,180,137,.5)}
-  #tscover .tsc-step.active .n{background:#c7b489;color:#0b0d14}
-  #tscover .tsc-step.done{color:rgba(255,255,255,.72)}
-  #tscover .tsc-step.done .n{background:rgba(143,203,170,.92);color:#0b1512}
-  #tscover .tsc-step.done .n .num{display:none}
-  #tscover .tsc-step.done .n svg{opacity:1}
-
-  #tscover .tsc-stage{position:relative;margin:18px auto 0}
-  #tscover .tsc-win{position:relative;border-radius:16px;overflow:hidden;background:#191919;border:1px solid rgba(255,255,255,.09);box-shadow:0 40px 90px -46px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.02),inset 0 1px 0 rgba(255,255,255,.05);opacity:0;transform:translateY(22px) scale(.985);transition:opacity .8s ease,transform .9s cubic-bezier(.16,1,.3,1)}
-  #tscover .tscp.on .tsc-win{opacity:1;transform:none}
-  #tscover .tsc-cursor{position:absolute;left:0;top:0;width:21px;height:21px;z-index:20;pointer-events:none;filter:drop-shadow(0 3px 5px rgba(0,0,0,.6));opacity:0;transition:opacity .4s ease;will-change:transform}
-  #tscover .tscp.on .tsc-cursor{opacity:1}
-  #tscover .tsc-cursor.click{animation:tsc-cclick .4s ease}
+  /* --- Animation links --- */
+  .tscb .tsc-anim{min-width:0}
+  .tscb .tscp-head{text-align:left;margin-bottom:14px}
+  .tscb .tscp-eye{font-size:.58rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:#9e947f}
+  .tscb .tscp-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(20px,1.8vw,26px);font-weight:600;letter-spacing:-.015em;color:#fff;margin:6px 0 0}
+  .tscb .tscp-title span{color:#c7b489}
+  .tscb .tsc-steps{display:flex;gap:6px;justify-content:flex-start;flex-wrap:wrap;margin:14px 0 0}
+  .tscb .tsc-step{display:flex;align-items:center;gap:7px;padding:6px 11px 6px 6px;border-radius:999px;font-size:11.5px;font-weight:500;color:rgba(255,255,255,.42);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);transition:color .4s ease,box-shadow .4s ease,background .4s ease}
+  .tscb .tsc-step .n{width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;background:rgba(255,255,255,.1);color:rgba(255,255,255,.55);transition:all .4s ease}
+  .tscb .tsc-step .n svg{opacity:0;width:10px;height:10px}
+  .tscb .tsc-step.active{color:#fff;background:rgba(199,180,137,.10);box-shadow:inset 0 0 0 1px rgba(199,180,137,.5)}
+  .tscb .tsc-step.active .n{background:#c7b489;color:#0b0d14}
+  .tscb .tsc-step.done{color:rgba(255,255,255,.72)}
+  .tscb .tsc-step.done .n{background:rgba(143,203,170,.92);color:#0b1512}
+  .tscb .tsc-step.done .n .num{display:none}
+  .tscb .tsc-step.done .n svg{opacity:1}
+  .tscb .tsc-stage{position:relative;margin:18px 0 0}
+  .tscb .tsc-win{position:relative;border-radius:16px;overflow:hidden;background:#191919;border:1px solid rgba(255,255,255,.09);box-shadow:0 40px 90px -46px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.02),inset 0 1px 0 rgba(255,255,255,.05);opacity:0;transform:translateY(22px) scale(.985);transition:opacity .8s ease,transform .9s cubic-bezier(.16,1,.3,1)}
+  .tscb.on .tsc-win{opacity:1;transform:none}
+  .tscb .tsc-cursor{position:absolute;left:0;top:0;width:21px;height:21px;z-index:20;pointer-events:none;filter:drop-shadow(0 3px 5px rgba(0,0,0,.6));opacity:0;transition:opacity .4s ease;will-change:transform}
+  .tscb.on .tsc-cursor{opacity:1}
+  .tscb .tsc-cursor.click{animation:tsc-cclick .4s ease}
   @keyframes tsc-cclick{40%{transform:scale(.8)}100%{transform:scale(1)}}
   @keyframes tsc-blink{50%{opacity:0}}
   @keyframes tsc-pop{to{opacity:1;transform:none}}
 
-  /* ---------- Panel A: Detailkarte ---------- */
-  #tscover .tsc-cover{position:relative;height:92px;overflow:hidden;background:#0f0f0f}
-  #tscover .tsc-cover img{width:100%;height:100%;object-fit:cover;object-position:center 42%;display:block}
-  #tscover .tsc-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(25,25,25,.85))}
-  #tscover .tsc-pad{padding:14px clamp(16px,1.5vw,24px) 20px}
-  #tscover .tsc-titlerow{display:flex;align-items:center;gap:10px;margin:-38px 0 3px;position:relative;z-index:2}
-  #tscover .tsc-logo{width:24px;height:24px;flex:0 0 auto;border-radius:6px;background:#111;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.5)}
-  #tscover .tsc-h1{position:relative;display:inline-flex;align-items:center;font-size:21px;font-weight:700;letter-spacing:-.015em;color:#fff;padding:2px 6px;margin-left:-6px;border-radius:6px;transition:box-shadow .3s ease,background .3s ease}
-  #tscover .tsc-h1.editing{background:rgba(255,255,255,.04);box-shadow:0 0 0 1.5px rgba(199,180,137,.6)}
-  #tscover .tsc-h1 .caret,#tscover .tsc-vbox .caret{display:inline-block;width:2px;height:18px;margin-left:1px;background:#c7b489;opacity:0;vertical-align:middle}
-  #tscover .tsc-h1.editing .caret,#tscover .tsc-vbox.editing .caret{opacity:1;animation:tsc-blink .9s step-end infinite}
-  #tscover .tsc-meta{font-size:12px;color:rgba(255,255,255,.34);margin:0 0 14px 1px}
-  #tscover .tsc-rule{height:1px;background:rgba(255,255,255,.08);margin:0 0 14px}
-  #tscover .tsc-prop{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:center;min-height:32px;padding:2px 0}
-  #tscover .tsc-plabel{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.55)}
-  #tscover .tsc-plabel svg{flex:0 0 auto;color:rgba(255,255,255,.38)}
-  #tscover .tsc-pval{font-size:13px;color:rgba(255,255,255,.92)}
-  #tscover .tsc-vbox{display:inline-flex;align-items:center;min-width:70px;padding:3px 9px;border-radius:6px;transition:box-shadow .3s ease,background .3s ease}
-  #tscover .tsc-vbox.editing{background:rgba(255,255,255,.04);box-shadow:0 0 0 1.5px rgba(199,180,137,.6)}
-  #tscover .tsc-hi{transition:background .5s ease;border-radius:7px;margin:0 -8px;padding:0 8px}
-  #tscover .tsc-hi.flash{background:rgba(199,180,137,.09)}
-  #tscover .tsc-tags{display:flex;align-items:center;gap:6px;min-height:24px}
-  #tscover .tsc-tag{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 4px 0 9px;border-radius:5px;background:rgba(255,255,255,.11);font-size:12.5px;font-weight:500;color:#e6e6e6;transform-origin:left center;transition:opacity .35s ease,transform .35s cubic-bezier(.34,1.56,.64,1)}
-  #tscover .tsc-tag.out{opacity:0;transform:scale(.5)}
-  #tscover .tsc-tagx{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:4px;color:rgba(255,255,255,.55);transition:background .2s ease}
-  #tscover .tsc-tagx svg{width:9px;height:9px}
-  #tscover .tsc-tag.hit .tsc-tagx{background:rgba(255,255,255,.22);color:#fff}
-  #tscover .tsc-ph{font-size:12.5px;color:rgba(255,255,255,.3);opacity:0;transition:opacity .4s ease .1s;position:absolute}
-  #tscover .tsc-tags.empty .tsc-ph{opacity:1;position:static}
-  #tscover .tsc-menu{position:absolute;z-index:8;min-width:196px;padding:6px;border-radius:11px;background:#252525;border:1px solid rgba(255,255,255,.10);box-shadow:0 20px 50px -12px rgba(0,0,0,.75);opacity:0;transform:translateY(-6px) scale(.97);transform-origin:top left;pointer-events:none;transition:opacity .2s ease,transform .22s cubic-bezier(.16,1,.3,1)}
-  #tscover .tsc-menu.on{opacity:1;transform:none}
-  #tscover .tsc-mi{display:flex;align-items:center;gap:10px;padding:7px 9px;border-radius:7px;font-size:13px;color:rgba(255,255,255,.82)}
-  #tscover .tsc-mi svg{flex:0 0 auto;color:rgba(255,255,255,.5)}
-  #tscover .tsc-mi .kbd{margin-left:auto;font-size:11px;color:rgba(255,255,255,.34)}
-  #tscover .tsc-mi .chev{margin-left:auto;color:rgba(255,255,255,.4)}
-  #tscover .tsc-mi.dup.hit{background:rgba(199,180,137,.16);color:#fff}
-  #tscover .tsc-mdiv{height:1px;background:rgba(255,255,255,.09);margin:5px 4px}
-  #tscover .tsc-ghost{position:absolute;inset:0;z-index:5;border-radius:16px;background:rgba(199,180,137,.06);box-shadow:0 0 0 1.5px rgba(199,180,137,.4);opacity:0;pointer-events:none}
-  #tscover .tsc-ghost.go{animation:tsc-ghost .7s cubic-bezier(.16,1,.3,1)}
+  /* Panel A Detailkarte */
+  .tscb .tsc-cover{position:relative;height:92px;overflow:hidden;background:#0f0f0f}
+  .tscb .tsc-cover img{width:100%;height:100%;object-fit:cover;object-position:center 42%;display:block}
+  .tscb .tsc-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(25,25,25,.85))}
+  .tscb .tsc-pad{padding:14px clamp(16px,1.5vw,24px) 20px}
+  .tscb .tsc-titlerow{display:flex;align-items:center;gap:10px;margin:-38px 0 3px;position:relative;z-index:2}
+  .tscb .tsc-logo{width:24px;height:24px;flex:0 0 auto;border-radius:6px;background:#111;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+  .tscb .tsc-h1{position:relative;display:inline-flex;align-items:center;font-size:21px;font-weight:700;letter-spacing:-.015em;color:#fff;padding:2px 6px;margin-left:-6px;border-radius:6px;transition:box-shadow .3s ease,background .3s ease}
+  .tscb .tsc-h1.editing{background:rgba(255,255,255,.04);box-shadow:0 0 0 1.5px rgba(199,180,137,.6)}
+  .tscb .tsc-h1 .caret,.tscb .tsc-vbox .caret{display:inline-block;width:2px;height:18px;margin-left:1px;background:#c7b489;opacity:0;vertical-align:middle}
+  .tscb .tsc-h1.editing .caret,.tscb .tsc-vbox.editing .caret{opacity:1;animation:tsc-blink .9s step-end infinite}
+  .tscb .tsc-meta{font-size:12px;color:rgba(255,255,255,.34);margin:0 0 14px 1px}
+  .tscb .tsc-rule{height:1px;background:rgba(255,255,255,.08);margin:0 0 14px}
+  .tscb .tsc-prop{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:center;min-height:32px;padding:2px 0}
+  .tscb .tsc-plabel{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.55)}
+  .tscb .tsc-plabel svg{flex:0 0 auto;color:rgba(255,255,255,.38)}
+  .tscb .tsc-pval{font-size:13px;color:rgba(255,255,255,.92)}
+  .tscb .tsc-vbox{display:inline-flex;align-items:center;min-width:70px;padding:3px 9px;border-radius:6px;transition:box-shadow .3s ease,background .3s ease}
+  .tscb .tsc-vbox.editing{background:rgba(255,255,255,.04);box-shadow:0 0 0 1.5px rgba(199,180,137,.6)}
+  .tscb .tsc-hi{transition:background .5s ease;border-radius:7px;margin:0 -8px;padding:0 8px}
+  .tscb .tsc-hi.flash{background:rgba(199,180,137,.09)}
+  .tscb .tsc-tags{display:flex;align-items:center;gap:6px;min-height:24px}
+  .tscb .tsc-tag{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 4px 0 9px;border-radius:5px;background:rgba(255,255,255,.11);font-size:12.5px;font-weight:500;color:#e6e6e6;transform-origin:left center;transition:opacity .35s ease,transform .35s cubic-bezier(.34,1.56,.64,1)}
+  .tscb .tsc-tag.out{opacity:0;transform:scale(.5)}
+  .tscb .tsc-tagx{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:4px;color:rgba(255,255,255,.55);transition:background .2s ease}
+  .tscb .tsc-tagx svg{width:9px;height:9px}
+  .tscb .tsc-tag.hit .tsc-tagx{background:rgba(255,255,255,.22);color:#fff}
+  .tscb .tsc-tph{font-size:12.5px;color:rgba(255,255,255,.3);opacity:0;transition:opacity .4s ease .1s;position:absolute}
+  .tscb .tsc-tags.empty .tsc-tph{opacity:1;position:static}
+  .tscb .tsc-menu{position:absolute;z-index:8;min-width:196px;padding:6px;border-radius:11px;background:#252525;border:1px solid rgba(255,255,255,.10);box-shadow:0 20px 50px -12px rgba(0,0,0,.75);opacity:0;transform:translateY(-6px) scale(.97);transform-origin:top left;pointer-events:none;transition:opacity .2s ease,transform .22s cubic-bezier(.16,1,.3,1)}
+  .tscb .tsc-menu.on{opacity:1;transform:none}
+  .tscb .tsc-mi{display:flex;align-items:center;gap:10px;padding:7px 9px;border-radius:7px;font-size:13px;color:rgba(255,255,255,.82)}
+  .tscb .tsc-mi svg{flex:0 0 auto;color:rgba(255,255,255,.5)}
+  .tscb .tsc-mi .kbd{margin-left:auto;font-size:11px;color:rgba(255,255,255,.34)}
+  .tscb .tsc-mi .chev{margin-left:auto;color:rgba(255,255,255,.4)}
+  .tscb .tsc-mi.dup.hit{background:rgba(199,180,137,.16);color:#fff}
+  .tscb .tsc-mdiv{height:1px;background:rgba(255,255,255,.09);margin:5px 4px}
+  .tscb .tsc-ghost{position:absolute;inset:0;z-index:5;border-radius:16px;background:rgba(199,180,137,.06);box-shadow:0 0 0 1.5px rgba(199,180,137,.4);opacity:0;pointer-events:none}
+  .tscb .tsc-ghost.go{animation:tsc-ghost .7s cubic-bezier(.16,1,.3,1)}
   @keyframes tsc-ghost{0%{opacity:0;transform:translate(0,0) scale(1)}30%{opacity:1}100%{opacity:0;transform:translate(14px,18px) scale(.985)}}
-  #tscover .tsc-done{position:absolute;top:12px;right:12px;z-index:6;display:flex;align-items:center;gap:6px;padding:5px 11px 5px 8px;border-radius:999px;background:rgba(143,203,170,.16);box-shadow:inset 0 0 0 1px rgba(143,203,170,.45);color:#bfe6d1;font-size:11.5px;font-weight:600;opacity:0;transform:translateY(-6px) scale(.9)}
-  #tscover .tsc-win.finished .tsc-done{animation:tsc-pop .5s cubic-bezier(.34,1.56,.64,1) forwards}
-  #tscover .tsc-done .dot{width:16px;height:16px;border-radius:50%;background:rgba(143,203,170,.95);color:#0b1512;display:flex;align-items:center;justify-content:center}
-  /* Panel B: Toolbar belegt oben rechts (Neu ▾) -> kein Eck-Badge (Kollision); Fertig zeigt die Schritt-Leiste */
-  #tscover [data-panel="B"] .tsc-done{display:none}
+  .tscb .tsc-done{position:absolute;top:12px;right:12px;z-index:6;display:flex;align-items:center;gap:6px;padding:5px 11px 5px 8px;border-radius:999px;background:rgba(143,203,170,.16);box-shadow:inset 0 0 0 1px rgba(143,203,170,.45);color:#bfe6d1;font-size:11.5px;font-weight:600;opacity:0;transform:translateY(-6px) scale(.9)}
+  .tscb .tsc-win.finished .tsc-done{animation:tsc-pop .5s cubic-bezier(.34,1.56,.64,1) forwards}
+  .tscb .tsc-done .dot{width:16px;height:16px;border-radius:50%;background:rgba(143,203,170,.95);color:#0b1512;display:flex;align-items:center;justify-content:center}
+  .tscb[data-block="B"] .tsc-done{display:none}
 
-  /* ---------- Panel B: Vorlage/Galerie ---------- */
-  #tscover .tscb-bar{display:flex;align-items:center;gap:12px;padding:12px clamp(16px,1.5vw,22px);border-bottom:1px solid rgba(255,255,255,.07)}
-  #tscover .tscb-tools{display:flex;align-items:center;gap:13px;color:rgba(255,255,255,.4)}
-  #tscover .tscb-neu{margin-left:auto;display:inline-flex;align-items:center;height:30px;padding:0 12px;border-radius:7px 0 0 7px;background:#2d6ae0;color:#fff;font-size:13.5px;font-weight:600}
-  #tscover .tscb-neuv{display:inline-flex;align-items:center;justify-content:center;height:30px;width:26px;border-radius:0 7px 7px 0;background:#2d6ae0;box-shadow:inset 1px 0 0 rgba(255,255,255,.18);color:#fff;position:relative}
-  #tscover .tscb-neuv.hit{background:#255ec9}
-  #tscover .tscb-drop{position:absolute;right:clamp(16px,1.5vw,22px);top:52px;z-index:9;width:240px;padding:8px;border-radius:12px;background:#252525;border:1px solid rgba(255,255,255,.10);box-shadow:0 22px 55px -12px rgba(0,0,0,.8);opacity:0;transform:translateY(-6px) scale(.97);transform-origin:top right;pointer-events:none;transition:opacity .2s ease,transform .22s cubic-bezier(.16,1,.3,1)}
-  #tscover .tscb-drop.on{opacity:1;transform:none}
-  #tscover .tscb-drophd{font-size:13px;font-weight:600;color:#fff;padding:4px 8px 2px}
-  #tscover .tscb-dropsub{font-size:11.5px;color:rgba(255,255,255,.42);padding:0 8px 8px;line-height:1.4}
-  #tscover .tscb-dropdiv{height:1px;background:rgba(255,255,255,.09);margin:4px 4px 6px}
-  #tscover .tscb-mi{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:7px;font-size:13px;color:rgba(255,255,255,.82)}
-  #tscover .tscb-mi svg{flex:0 0 auto;color:rgba(255,255,255,.5)}
-  #tscover .tscb-mi.hit{background:rgba(199,180,137,.16);color:#fff}
-  #tscover .tscb-stage{position:relative;padding:16px clamp(16px,1.5vw,22px) 18px;min-height:236px}
-  #tscover .tscb-config{position:absolute;left:clamp(16px,1.5vw,22px);right:clamp(16px,1.5vw,22px);top:16px;opacity:1;transition:opacity .5s ease}
-  #tscover .tscb-config.gone{opacity:0;pointer-events:none}
-  #tscover .tscb-row{display:flex;align-items:center;gap:9px;margin-bottom:12px;opacity:0;transform:translateY(6px);transition:opacity .45s ease,transform .45s cubic-bezier(.16,1,.3,1)}
-  #tscover .tscb-row.show{opacity:1;transform:none}
-  #tscover .tscb-slash{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:rgba(255,255,255,.9);background:rgba(255,255,255,.05);border-radius:7px;padding:8px 11px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07);width:100%}
-  #tscover .tscb-slash .cmd{color:#c7b489}
-  #tscover .tscb-slash .caret{display:inline-block;width:2px;height:14px;margin-left:1px;background:#c7b489;vertical-align:-2px;opacity:0}
-  #tscover .tscb-slash.typing .caret{opacity:1;animation:tsc-blink .9s step-end infinite}
-  #tscover .tscb-chip{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border-radius:7px;background:rgba(199,180,137,.12);box-shadow:inset 0 0 0 1px rgba(199,180,137,.4);font-size:12.5px;font-weight:600;color:#e6dcc4}
-  #tscover .tscb-chip svg{color:#c7b489}
-  #tscover .tscb-lay{display:flex;gap:7px}
-  #tscover .tscb-lc{display:flex;flex-direction:column;align-items:center;gap:5px;width:58px;padding:9px 0;border-radius:9px;background:rgba(255,255,255,.03);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);font-size:10.5px;color:rgba(255,255,255,.5);transition:all .35s ease}
-  #tscover .tscb-lc svg{color:rgba(255,255,255,.55)}
-  #tscover .tscb-lc.sel{background:rgba(45,106,224,.14);box-shadow:inset 0 0 0 1.5px #4b82e6;color:#fff}
-  #tscover .tscb-lc.sel svg{color:#7aa6f2}
-  #tscover .tscb-prev{display:inline-flex;align-items:center;gap:8px;padding:6px 11px;border-radius:7px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);font-size:12px;color:rgba(255,255,255,.7)}
-  #tscover .tscb-prev b{color:#d8c9ab;font-weight:600}
-  #tscover .tscb-gal{position:absolute;left:clamp(16px,1.5vw,22px);right:clamp(16px,1.5vw,22px);top:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px;opacity:0;transform:translateY(8px);transition:opacity .55s ease,transform .6s cubic-bezier(.16,1,.3,1);pointer-events:none}
-  #tscover .tscb-gal.show{opacity:1;transform:none}
-  #tscover .tscb-gc{border-radius:9px;overflow:hidden;background:#212121;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);opacity:0;transform:scale(.94)}
-  #tscover .tscb-gc.in{animation:tsc-cardin .5s cubic-bezier(.16,1,.3,1) forwards}
+  /* Panel B Vorlage/Galerie */
+  .tscb .tscbb-bar{display:flex;align-items:center;gap:12px;padding:12px clamp(16px,1.5vw,22px);border-bottom:1px solid rgba(255,255,255,.07)}
+  .tscb .tscbb-tools{display:flex;align-items:center;gap:13px;color:rgba(255,255,255,.4)}
+  .tscb .tscbb-neu{margin-left:auto;display:inline-flex;align-items:center;height:30px;padding:0 12px;border-radius:7px 0 0 7px;background:#2d6ae0;color:#fff;font-size:13.5px;font-weight:600}
+  .tscb .tscbb-neuv{display:inline-flex;align-items:center;justify-content:center;height:30px;width:26px;border-radius:0 7px 7px 0;background:#2d6ae0;box-shadow:inset 1px 0 0 rgba(255,255,255,.18);color:#fff}
+  .tscb .tscbb-neuv.hit{background:#255ec9}
+  .tscb .tscbb-drop{position:absolute;right:clamp(16px,1.5vw,22px);top:52px;z-index:9;width:240px;padding:8px;border-radius:12px;background:#252525;border:1px solid rgba(255,255,255,.10);box-shadow:0 22px 55px -12px rgba(0,0,0,.8);opacity:0;transform:translateY(-6px) scale(.97);transform-origin:top right;pointer-events:none;transition:opacity .2s ease,transform .22s cubic-bezier(.16,1,.3,1)}
+  .tscb .tscbb-drop.on{opacity:1;transform:none}
+  .tscb .tscbb-drophd{font-size:13px;font-weight:600;color:#fff;padding:4px 8px 2px}
+  .tscb .tscbb-dropsub{font-size:11.5px;color:rgba(255,255,255,.42);padding:0 8px 8px;line-height:1.4}
+  .tscb .tscbb-dropdiv{height:1px;background:rgba(255,255,255,.09);margin:4px 4px 6px}
+  .tscb .tscbb-mi{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:7px;font-size:13px;color:rgba(255,255,255,.82)}
+  .tscb .tscbb-mi svg{flex:0 0 auto;color:rgba(255,255,255,.5)}
+  .tscb .tscbb-mi.hit{background:rgba(199,180,137,.16);color:#fff}
+  .tscb .tscbb-stage{position:relative;padding:16px clamp(16px,1.5vw,22px) 18px;min-height:236px}
+  .tscb .tscbb-config{position:absolute;left:clamp(16px,1.5vw,22px);right:clamp(16px,1.5vw,22px);top:16px;opacity:1;transition:opacity .5s ease}
+  .tscb .tscbb-config.gone{opacity:0;pointer-events:none}
+  .tscb .tscbb-row{display:flex;align-items:center;gap:9px;margin-bottom:12px;opacity:0;transform:translateY(6px);transition:opacity .45s ease,transform .45s cubic-bezier(.16,1,.3,1)}
+  .tscb .tscbb-row.show{opacity:1;transform:none}
+  .tscb .tscbb-slash{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:rgba(255,255,255,.9);background:rgba(255,255,255,.05);border-radius:7px;padding:8px 11px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07);width:100%}
+  .tscb .tscbb-slash .cmd{color:#c7b489}
+  .tscb .tscbb-slash .caret{display:inline-block;width:2px;height:14px;margin-left:1px;background:#c7b489;vertical-align:-2px;opacity:0}
+  .tscb .tscbb-slash.typing .caret{opacity:1;animation:tsc-blink .9s step-end infinite}
+  .tscb .tscbb-chip{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border-radius:7px;background:rgba(199,180,137,.12);box-shadow:inset 0 0 0 1px rgba(199,180,137,.4);font-size:12.5px;font-weight:600;color:#e6dcc4}
+  .tscb .tscbb-chip svg{color:#c7b489}
+  .tscb .tscbb-lay{display:flex;gap:7px}
+  .tscb .tscbb-lc{display:flex;flex-direction:column;align-items:center;gap:5px;width:58px;padding:9px 0;border-radius:9px;background:rgba(255,255,255,.03);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);font-size:10.5px;color:rgba(255,255,255,.5);transition:all .35s ease}
+  .tscb .tscbb-lc svg{color:rgba(255,255,255,.55)}
+  .tscb .tscbb-lc.sel{background:rgba(45,106,224,.14);box-shadow:inset 0 0 0 1.5px #4b82e6;color:#fff}
+  .tscb .tscbb-lc.sel svg{color:#7aa6f2}
+  .tscb .tscbb-prev{display:inline-flex;align-items:center;gap:8px;padding:6px 11px;border-radius:7px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);font-size:12px;color:rgba(255,255,255,.7)}
+  .tscb .tscbb-prev b{color:#d8c9ab;font-weight:600}
+  .tscb .tscbb-gal{position:absolute;left:clamp(16px,1.5vw,22px);right:clamp(16px,1.5vw,22px);top:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px;opacity:0;transform:translateY(8px);transition:opacity .55s ease,transform .6s cubic-bezier(.16,1,.3,1);pointer-events:none}
+  .tscb .tscbb-gal.show{opacity:1;transform:none}
+  .tscb .tscbb-gc{border-radius:9px;overflow:hidden;background:#212121;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);opacity:0;transform:scale(.94)}
+  .tscb .tscbb-gc.in{animation:tsc-cardin .5s cubic-bezier(.16,1,.3,1) forwards}
   @keyframes tsc-cardin{to{opacity:1;transform:none}}
-  #tscover .tscb-gc .im{height:62px;background:#141414;overflow:hidden}
-  #tscover .tscb-gc .im img{width:100%;height:100%;object-fit:cover;object-position:center 42%;display:block}
-  #tscover .tscb-gc .lb{padding:7px 10px 9px;font-size:12px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  #tscover .tscb-gc.newp{display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.4);font-size:12px;background:transparent;box-shadow:inset 0 0 0 1px rgba(255,255,255,.09);min-height:99px}
-
-  #tscover .tsc-foot{text-align:center;margin-top:22px;font-size:12.5px;color:rgba(255,255,255,.4)}
-  #tscover .tsc-foot b{color:rgba(216,201,171,.9);font-weight:600}
+  .tscb .tscbb-gc .im{height:62px;background:#141414;overflow:hidden}
+  .tscb .tscbb-gc .im img{width:100%;height:100%;object-fit:cover;object-position:center 42%;display:block}
+  .tscb .tscbb-gc .lb{padding:7px 10px 9px;font-size:12px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tscb .tscbb-gc.newp{display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.4);font-size:12px;background:transparent;box-shadow:inset 0 0 0 1px rgba(255,255,255,.09);min-height:99px}
 
   @media(prefers-reduced-motion:reduce){
-    #tscover .tsc-win{opacity:1;transform:none;transition:none}
-    #tscover .tsc-cursor,#tscover .tsc-menu,#tscover .tsc-drop,#tscover .tscb-drop,#tscover .tsc-ghost{display:none}
-    #tscover .tsc-h1 .caret,#tscover .tsc-vbox .caret,#tscover .tscb-slash .caret{display:none}
-    #tscover .tsc-win .tsc-done{opacity:1;transform:none;animation:none}
-    #tscover .tscb-config{opacity:0}#tscover .tscb-gal{opacity:1;transform:none}#tscover .tscb-gc{opacity:1;transform:none;animation:none}
-    #tscover .tsc-step{color:rgba(255,255,255,.72)}#tscover .tsc-step .n svg{opacity:1}#tscover .tsc-step .n .num{display:none}#tscover .tsc-step .n{background:rgba(143,203,170,.92);color:#0b1512}
+    .tscb .tsc-win{opacity:1;transform:none;transition:none}
+    .tscb .tsc-cursor,.tscb .tsc-menu,.tscb .tscbb-drop,.tscb .tsc-ghost{display:none}
+    .tscb .tsc-h1 .caret,.tscb .tsc-vbox .caret,.tscb .tscbb-slash .caret{display:none}
+    .tscb .tsc-win .tsc-done{opacity:1;transform:none;animation:none}
+    .tscb .tscbb-config{opacity:0}.tscb .tscbb-gal{opacity:1;transform:none}.tscb .tscbb-gc{opacity:1;transform:none;animation:none}
+    .tscb .tsc-step{color:rgba(255,255,255,.72)}.tscb .tsc-step .n svg{opacity:1}.tscb .tsc-step .n .num{display:none}.tscb .tsc-step .n{background:rgba(143,203,170,.92);color:#0b1512}
   }`;
 
   var CURSOR='<svg viewBox="0 0 24 24" width="21" height="21" fill="none"><path d="M5 3l4.5 15 2.3-6.2 6.2-2.3z" fill="#fff" stroke="#0b0d14" stroke-width="1.3" stroke-linejoin="round"/></svg>';
@@ -4114,12 +4114,15 @@
   var TBL='<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="1.6" stroke="currentColor" stroke-width="1.6"/><path d="M3 9h18M3 14h18M9 4v16" stroke="currentColor" stroke-width="1.6"/></svg>';
   var BRD='<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="5" height="16" rx="1.4" stroke="currentColor" stroke-width="1.6"/><rect x="10" y="4" width="5" height="11" rx="1.4" stroke="currentColor" stroke-width="1.6"/><rect x="17" y="4" width="4" height="14" rx="1.4" stroke="currentColor" stroke-width="1.6"/></svg>';
   function svgSm(p){ return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none">'+p+'</svg>'; }
-
   function step(n,label){ return '<div class="tsc-step" data-step="'+n+'"><span class="n"><span class="num">'+n+'</span>'+CK+'</span>'+label+'</div>'; }
+  function txtPanel(t){
+    var body=(t.body||[]).map(function(p){return '<p class="tsx-p">'+p+'</p>';}).join('');
+    return '<div class="tsx"><div class="tsx-eye">'+t.eyebrow+'</div><h3 class="tsx-h">'+t.h+'</h3>'+body+'<div class="tsx-ph">Platzhalter · Text folgt von Robert</div></div>';
+  }
 
   /* ---------- Panel A markup ---------- */
   function menuItem(icon,label,right,cls){ return '<div class="tsc-mi '+(cls||'')+'">'+icon+'<span>'+label+'</span>'+(right||'')+'</div>'; }
-  function panelA(){
+  function animA(){
     var chev='<span class="chev">›</span>';
     var menu='<div class="tsc-menu">'+
       menuItem(WRENCH,'Eigenschaft bearbeiten',chev)+
@@ -4129,8 +4132,8 @@
       '<div class="tsc-mdiv"></div>'+
       menuItem(svgSm('<rect x="8" y="8" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M4 15V5a1 1 0 011-1h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>'),'Duplizieren','<span class="kbd">⌘D</span>','dup')+
     '</div>';
-    return '<div class="tscp" data-panel="A">'+
-      '<div class="tscp-head"><div class="tscp-eye">Schritt-für-Schritt</div><h3 class="tscp-title">Neue <span>Größeneinheit</span> anlegen</h3>'+
+    return '<div class="tsc-anim">'+
+      '<div class="tscp-head"><div class="tscp-eye">Schritt-für-Schritt · in Notion</div><h4 class="tscp-title">Neue <span>Größeneinheit</span> anlegen</h4>'+
         '<div class="tsc-steps">'+step(1,'Duplizieren')+step(2,'Umbenennen')+step(3,'Portionsgröße')+step(4,'Hauptzutat')+'</div></div>'+
       '<div class="tsc-stage">'+
         '<div class="tsc-win">'+
@@ -4141,7 +4144,7 @@
             '<div class="tsc-meta">Details anzeigen · Kommentar hinzufügen</div>'+
             '<div class="tsc-rule"></div>'+
             '<div class="tsc-prop tsc-hi" data-row="portion"><span class="tsc-plabel">'+WRENCH+'Portionsgröße</span><span class="tsc-pval"><span class="tsc-vbox"><span class="tsc-vtxt">1 Kg</span><span class="caret"></span></span></span></div>'+
-            '<div class="tsc-prop tsc-hi" data-row="haupt"><span class="tsc-plabel">'+WRENCH+'Hauptzutat</span><span class="tsc-pval"><span class="tsc-tags"><span class="tsc-tag">X<span class="tsc-tagx">'+XI+'</span></span><span class="tsc-ph">Option auswählen</span></span></span></div>'+
+            '<div class="tsc-prop tsc-hi" data-row="haupt"><span class="tsc-plabel">'+WRENCH+'Hauptzutat</span><span class="tsc-pval"><span class="tsc-tags"><span class="tsc-tag">X<span class="tsc-tagx">'+XI+'</span></span><span class="tsc-tph">Option auswählen</span></span></span></div>'+
             '<div class="tsc-prop"><span class="tsc-plabel">'+FORK+'Kategorie</span><span class="tsc-pval" style="opacity:.6">Blattgemüse</span></div>'+
             menu+
           '</div>'+
@@ -4152,82 +4155,76 @@
   }
 
   /* ---------- Panel B markup ---------- */
-  function galCard(label){ return '<div class="tscb-gc"><div class="im"><img src="'+IMG+'" alt="'+label+'"></div><div class="lb">'+label+'</div></div>'; }
-  function panelB(){
+  function galCard(label){ return '<div class="tscbb-gc"><div class="im"><img src="'+IMG+'" alt="'+label+'"></div><div class="lb">'+label+'</div></div>'; }
+  function animB(){
     var barTools=[svgSm('<path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>'),
       svgSm('<path d="M7 4v16m0 0l-3-3m3 3l3-3M17 20V4m0 0l-3 3m3-3l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>'),
       svgSm('<path d="M13 3L4 14h7l-1 7 9-11h-7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>'),
       svgSm('<circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.7"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>')].join('');
-    var drop='<div class="tscb-drop">'+
-      '<div class="tscb-drophd">Vorlagen für DB IV : Zutaten</div>'+
-      '<div class="tscb-dropsub">Erstelle eine wiederverwendbare Seitenvorlage für diese Datenbank.</div>'+
-      '<div class="tscb-dropdiv"></div>'+
-      '<div class="tscb-mi" data-mi="neu">'+svgSm('<path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>')+'<span>Neue Vorlage</span></div>'+
-      '<div class="tscb-mi" data-mi="std">'+FLAG+'<span>Als Standard festlegen</span></div>'+
+    var drop='<div class="tscbb-drop">'+
+      '<div class="tscbb-drophd">Vorlagen für DB IV : Zutaten</div>'+
+      '<div class="tscbb-dropsub">Erstelle eine wiederverwendbare Seitenvorlage für diese Datenbank.</div>'+
+      '<div class="tscbb-dropdiv"></div>'+
+      '<div class="tscbb-mi" data-mi="neu">'+svgSm('<path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>')+'<span>Neue Vorlage</span></div>'+
+      '<div class="tscbb-mi" data-mi="std">'+FLAG+'<span>Als Standard festlegen</span></div>'+
     '</div>';
-    return '<div class="tscp" data-panel="B">'+
-      '<div class="tscp-head"><div class="tscp-eye">Vorlage einrichten</div><h3 class="tscp-title">Galerie mit <span>Cover</span> als Vorlage</h3>'+
+    return '<div class="tsc-anim">'+
+      '<div class="tscp-head"><div class="tscp-eye">Vorlage einrichten · in Notion</div><h4 class="tscp-title">Galerie mit <span>Cover</span> als Vorlage</h4>'+
         '<div class="tsc-steps">'+step(1,'Neue Vorlage')+step(2,'Datenbank')+step(3,'Galerie + Cover')+step(4,'Als Standard')+'</div></div>'+
       '<div class="tsc-stage">'+
         '<div class="tsc-win">'+
-          '<div class="tsc-done"><span class="dot">'+CK+'</span>Als Standard</div>'+
-          '<div class="tscb-bar"><div class="tscb-tools">'+barTools+'</div><span class="tscb-neu">Neu</span><span class="tscb-neuv">'+svgSm('<path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>')+'</span></div>'+
+          '<div class="tscbb-bar"><div class="tscbb-tools">'+barTools+'</div><span class="tscbb-neu">Neu</span><span class="tscbb-neuv">'+svgSm('<path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>')+'</span></div>'+
           drop+
-          '<div class="tscb-stage">'+
-            '<div class="tscb-config">'+
-              '<div class="tscb-row" data-r="slash"><div class="tscb-slash"><span class="cmd">/</span><span class="tscb-cmdtxt"></span><span class="caret"></span></div></div>'+
-              '<div class="tscb-row" data-r="link"><div class="tscb-chip">'+DB+'<span>DB IV : Zutaten verknüpft</span></div></div>'+
-              '<div class="tscb-row" data-r="lay"><div class="tscb-lay">'+
-                '<div class="tscb-lc" data-l="t">'+TBL+'Tabelle</div>'+
-                '<div class="tscb-lc" data-l="b">'+BRD+'Board</div>'+
-                '<div class="tscb-lc" data-l="g">'+GAL+'Galerie</div>'+
+          '<div class="tscbb-stage">'+
+            '<div class="tscbb-config">'+
+              '<div class="tscbb-row" data-r="slash"><div class="tscbb-slash"><span class="cmd">/</span><span class="tscbb-cmdtxt"></span><span class="caret"></span></div></div>'+
+              '<div class="tscbb-row" data-r="link"><div class="tscbb-chip">'+DB+'<span>DB IV : Zutaten verknüpft</span></div></div>'+
+              '<div class="tscbb-row" data-r="lay"><div class="tscbb-lay">'+
+                '<div class="tscbb-lc" data-l="t">'+TBL+'Tabelle</div><div class="tscbb-lc" data-l="b">'+BRD+'Board</div><div class="tscbb-lc" data-l="g">'+GAL+'Galerie</div>'+
               '</div></div>'+
-              '<div class="tscb-row" data-r="prev"><div class="tscb-prev">Kartenvorschau · <b>Seiten-Cover</b></div></div>'+
+              '<div class="tscbb-row" data-r="prev"><div class="tscbb-prev">Kartenvorschau · <b>Seiten-Cover</b></div></div>'+
             '</div>'+
-            '<div class="tscb-gal">'+galCard('80g Spinat')+galCard('Spinat')+galCard('20g Spinat')+'<div class="tscb-gc newp">+ Neue Seite</div></div>'+
+            '<div class="tscbb-gal">'+galCard('80g Spinat')+galCard('Spinat')+galCard('20g Spinat')+'<div class="tscbb-gc newp">+ Neue Seite</div></div>'+
           '</div>'+
         '</div>'+
         '<div class="tsc-cursor">'+CURSOR+'</div>'+
       '</div></div>';
   }
 
-  function build(){
+  var BLOCKS=[
+    { key:'A', marker:'groesse-animation', anim:animA, play:function(el){playA(el);},
+      txt:{ eyebrow:'Warum das so läuft', h:'Jede Größe ist <span>eine eigene Zutat</span>.',
+        body:['Platzhalter — hier kommt dein Erklärtext rechts neben die Animation.','Statt jede Portionsgröße neu anzulegen, duplizierst du die Hauptzutat und passt nur Name, Portionsgröße und die Hauptzutat-Markierung an.'] } },
+    { key:'B', marker:'vorlage-animation', anim:animB, play:function(el){playB(el);},
+      txt:{ eyebrow:'Einmal einrichten', h:'Jede Zutat als <span>Galerie mit Cover</span>.',
+        body:['Platzhalter — hier kommt dein Erklärtext rechts neben die Animation.','Eine Vorlage mit voreingestellter Galerie- und Coveransicht zeigt dir in jeder Zutat sofort ihre Größeneinheiten — als Standard gesetzt, gilt sie automatisch für jede neue Seite.'] } }
+  ];
+
+  function buildBlock(cfg){
     if(!document.getElementById('tscover-css')){ var s=document.createElement('style'); s.id='tscover-css'; s.textContent=CSS; document.head.appendChild(s); }
-    var root=document.createElement('section'); root.id='tscover';
-    root.innerHTML='<div class="tsc-inner">'+
-      '<div class="tsc-sec"><span class="tsc-eyebrow">Notion · Zutaten-Datenbank</span>'+
-        '<h2 class="tsc-h2">So baust du deine <span>Zutaten</span> auf.</h2>'+
-        '<p class="tsc-lead">Zwei Handgriffe: eine neue Größeneinheit einer Zutat anlegen — und eine Vorlage, die jede Zutat automatisch als Galerie mit Cover zeigt.</p></div>'+
-      '<div class="tsc-duo">'+panelA()+panelB()+'</div>'+
-      '<div class="tsc-foot">Beispiel-Datenbank „DB IV : Zutaten" · Werte illustrativ.</div>'+
-    '</div>';
-    return root;
+    var sec=document.createElement('section'); sec.className='tscb'; sec.id='tscb-'+cfg.key; sec.setAttribute('data-block',cfg.key);
+    sec.innerHTML='<div class="tscb-in">'+cfg.anim()+txtPanel(cfg.txt)+'</div>';
+    return sec;
   }
 
-  /* ---------- Timing-Helfer ---------- */
-  function mkClock(){ var timers=[]; return {
-    at:function(ms,fn){ timers.push(setTimeout(fn,ms)); },
-    clear:function(){ timers.forEach(clearTimeout); timers.length=0; }
-  }; }
+  /* ---------- Timing ---------- */
+  function mkClock(){ var timers=[]; return { at:function(ms,fn){ timers.push(setTimeout(fn,ms)); }, clear:function(){ timers.forEach(clearTimeout); timers.length=0; } }; }
   function typeInto(clock,el,text,speed,done){ el.textContent=''; var i=0; (function tick(){ if(i<=text.length){ el.textContent=text.slice(0,i); i++; clock.at((speed||60)+Math.random()*35,tick); } else if(done) done(); })(); }
   function moveCursor(cur,x,y,dur){ cur.style.transition='transform '+dur+'ms cubic-bezier(.5,0,.2,1)'; cur.style.transform='translate('+x+'px,'+y+'px)'; }
   function relPos(stage,el,dx,dy){ var sr=stage.getBoundingClientRect(), er=el.getBoundingClientRect(); return [er.left-sr.left+(dx||0), er.top-sr.top+(dy||0)]; }
   function setStep(p,n,state){ var el=p.querySelector('.tsc-step[data-step="'+n+'"]'); if(!el)return; el.classList.remove('active','done'); if(state)el.classList.add(state); }
 
-  /* ---------- Panel A Ablauf ---------- */
   function playA(p){
-    if(p.__clock) p.__clock.clear();
-    var clock=mkClock(); p.__clock=clock;
+    if(p.__clock) p.__clock.clear(); var clock=mkClock(); p.__clock=clock;
     var stage=p.querySelector('.tsc-stage'), win=p.querySelector('.tsc-win'), cursor=p.querySelector('.tsc-cursor'),
         menu=p.querySelector('.tsc-menu'), ghost=p.querySelector('.tsc-ghost'),
         h1=p.querySelector('.tsc-h1'), h1txt=p.querySelector('.tsc-h1txt'),
         pRow=p.querySelector('[data-row="portion"]'), vbox=pRow.querySelector('.tsc-vbox'), vtxt=pRow.querySelector('.tsc-vtxt'),
         hRow=p.querySelector('[data-row="haupt"]'), tags=hRow.querySelector('.tsc-tags'), tag=hRow.querySelector('.tsc-tag'), tagx=hRow.querySelector('.tsc-tagx');
     p.classList.add('on');
-    function reset(){ h1txt.textContent='Spinat'; h1.classList.remove('editing'); vtxt.textContent='1 Kg'; vbox.classList.remove('editing');
-      tag.classList.remove('out','hit'); tags.classList.remove('empty'); win.classList.remove('finished'); menu.classList.remove('on');
-      [1,2,3,4].forEach(function(n){ setStep(p,n,null); }); pRow.classList.remove('flash'); hRow.classList.remove('flash'); }
-    reset();
+    h1txt.textContent='Spinat'; h1.classList.remove('editing'); vtxt.textContent='1 Kg'; vbox.classList.remove('editing');
+    tag.classList.remove('out','hit'); tags.classList.remove('empty'); win.classList.remove('finished'); menu.classList.remove('on');
+    [1,2,3,4].forEach(function(n){ setStep(p,n,null); }); pRow.classList.remove('flash'); hRow.classList.remove('flash');
     if(reduced){ setStep(p,1,'done');setStep(p,2,'done');setStep(p,3,'done');setStep(p,4,'done'); h1txt.textContent='80g Spinat'; vtxt.textContent='80 g'; tag.classList.add('out'); tags.classList.add('empty'); win.classList.add('finished'); return; }
     var at=clock.at, sw=stage.getBoundingClientRect().width, sh=stage.getBoundingClientRect().height;
     cursor.style.transition='none'; cursor.style.transform='translate('+(sw*0.7)+'px,'+(sh+40)+'px)';
@@ -4254,45 +4251,38 @@
     at(12200,function(){ clock.clear(); playA(p); });
   }
 
-  /* ---------- Panel B Ablauf ---------- */
   function playB(p){
-    if(p.__clock) p.__clock.clear();
-    var clock=mkClock(); p.__clock=clock; var at=clock.at;
+    if(p.__clock) p.__clock.clear(); var clock=mkClock(); p.__clock=clock; var at=clock.at;
     var stage=p.querySelector('.tsc-stage'), win=p.querySelector('.tsc-win'), cursor=p.querySelector('.tsc-cursor'),
-        neuv=p.querySelector('.tscb-neuv'), drop=p.querySelector('.tscb-drop'),
-        miNeu=p.querySelector('.tscb-mi[data-mi="neu"]'), miStd=p.querySelector('.tscb-mi[data-mi="std"]'),
-        config=p.querySelector('.tscb-config'),
-        rSlash=p.querySelector('.tscb-row[data-r="slash"]'), cmdtxt=p.querySelector('.tscb-cmdtxt'), slashBox=p.querySelector('.tscb-slash'),
-        rLink=p.querySelector('.tscb-row[data-r="link"]'), rLay=p.querySelector('.tscb-row[data-r="lay"]'), rPrev=p.querySelector('.tscb-row[data-r="prev"]'),
-        lcG=p.querySelector('.tscb-lc[data-l="g"]'), gal=p.querySelector('.tscb-gal'), gcs=p.querySelectorAll('.tscb-gc');
+        neuv=p.querySelector('.tscbb-neuv'), drop=p.querySelector('.tscbb-drop'),
+        miNeu=p.querySelector('.tscbb-mi[data-mi="neu"]'), miStd=p.querySelector('.tscbb-mi[data-mi="std"]'),
+        config=p.querySelector('.tscbb-config'),
+        rSlash=p.querySelector('.tscbb-row[data-r="slash"]'), cmdtxt=p.querySelector('.tscbb-cmdtxt'), slashBox=p.querySelector('.tscbb-slash'),
+        rLink=p.querySelector('.tscbb-row[data-r="link"]'), rLay=p.querySelector('.tscbb-row[data-r="lay"]'), rPrev=p.querySelector('.tscbb-row[data-r="prev"]'),
+        lcG=p.querySelector('.tscbb-lc[data-l="g"]'), gal=p.querySelector('.tscbb-gal'), gcs=p.querySelectorAll('.tscbb-gc');
     p.classList.add('on');
-    function reset(){ [1,2,3,4].forEach(function(n){ setStep(p,n,null); }); drop.classList.remove('on'); miNeu.classList.remove('hit'); miStd.classList.remove('hit');
-      config.classList.remove('gone'); [rSlash,rLink,rLay,rPrev].forEach(function(r){ r.classList.remove('show'); }); cmdtxt.textContent=''; slashBox.classList.remove('typing');
-      lcG.classList.remove('sel'); gal.classList.remove('show'); [].forEach.call(gcs,function(c){ c.classList.remove('in'); }); win.classList.remove('finished'); }
-    reset();
-    if(reduced){ setStep(p,1,'done');setStep(p,2,'done');setStep(p,3,'done');setStep(p,4,'done'); config.classList.add('gone'); gal.classList.add('show'); [].forEach.call(gcs,function(c){ c.classList.add('in'); }); lcG.classList.add('sel'); win.classList.add('finished'); return; }
+    [1,2,3,4].forEach(function(n){ setStep(p,n,null); }); drop.classList.remove('on'); miNeu.classList.remove('hit'); miStd.classList.remove('hit');
+    config.classList.remove('gone'); [rSlash,rLink,rLay,rPrev].forEach(function(r){ r.classList.remove('show'); }); cmdtxt.textContent=''; slashBox.classList.remove('typing');
+    lcG.classList.remove('sel'); gal.classList.remove('show'); [].forEach.call(gcs,function(c){ c.classList.remove('in'); });
+    if(reduced){ setStep(p,1,'done');setStep(p,2,'done');setStep(p,3,'done');setStep(p,4,'done'); config.classList.add('gone'); gal.classList.add('show'); [].forEach.call(gcs,function(c){ c.classList.add('in'); }); lcG.classList.add('sel'); return; }
     var sw=stage.getBoundingClientRect().width, sh=stage.getBoundingClientRect().height;
     cursor.style.transition='none'; cursor.style.transform='translate('+(sw*0.5)+'px,'+(sh+40)+'px)';
-    /* 1) Neu ▾ -> Neue Vorlage */
     at(400,function(){ setStep(p,1,'active'); var q=relPos(stage,neuv,7,7); moveCursor(cursor,q[0],q[1],680); });
     at(1120,function(){ neuv.classList.add('hit'); cursor.classList.add('click'); });
     at(1260,function(){ cursor.classList.remove('click'); neuv.classList.remove('hit'); drop.classList.add('on'); });
     at(1500,function(){ var q=relPos(stage,miNeu,22,10); moveCursor(cursor,q[0],q[1],460); });
     at(2000,function(){ miNeu.classList.add('hit'); cursor.classList.add('click'); });
     at(2160,function(){ cursor.classList.remove('click'); drop.classList.remove('on'); setStep(p,1,'done'); });
-    /* 2) / Datenbank -> verknüpfen */
     at(2420,function(){ setStep(p,2,'active'); rSlash.classList.add('show'); var q=relPos(stage,slashBox,30,12); moveCursor(cursor,q[0],q[1],460); });
     at(2820,function(){ slashBox.classList.add('typing'); typeInto(clock,cmdtxt,'Datenbank – Tabellenansicht',44); });
     at(4200,function(){ slashBox.classList.remove('typing'); rLink.classList.add('show'); });
     at(4700,function(){ setStep(p,2,'done'); });
-    /* 3) Galerie + Cover */
     at(4950,function(){ setStep(p,3,'active'); rLay.classList.add('show'); });
     at(5350,function(){ var q=relPos(stage,lcG,28,20); moveCursor(cursor,q[0],q[1],500); });
     at(5900,function(){ cursor.classList.add('click'); lcG.classList.add('sel'); });
     at(6040,function(){ cursor.classList.remove('click'); });
     at(6300,function(){ rPrev.classList.add('show'); });
     at(6800,function(){ setStep(p,3,'done'); });
-    /* 4) Ergebnis-Galerie + Als Standard */
     at(7050,function(){ config.classList.add('gone'); });
     at(7350,function(){ setStep(p,4,'active'); gal.classList.add('show'); [].forEach.call(gcs,function(c,i){ clock.at(i*130,function(){ c.classList.add('in'); }); }); });
     at(8100,function(){ var q=relPos(stage,neuv,7,7); moveCursor(cursor,q[0],q[1],520); });
@@ -4300,32 +4290,50 @@
     at(8840,function(){ cursor.classList.remove('click'); neuv.classList.remove('hit'); drop.classList.add('on'); });
     at(9100,function(){ var q=relPos(stage,miStd,22,10); moveCursor(cursor,q[0],q[1],440); });
     at(9600,function(){ miStd.classList.add('hit'); cursor.classList.add('click'); });
-    at(9760,function(){ cursor.classList.remove('click'); drop.classList.remove('on'); win.classList.add('finished'); setStep(p,4,'done'); });
+    at(9760,function(){ cursor.classList.remove('click'); drop.classList.remove('on'); setStep(p,4,'done'); });
     at(10100,function(){ moveCursor(cursor,sw*0.5,sh+40,700); });
     at(13600,function(){ clock.clear(); playB(p); });
   }
 
-  function trigger(root){
-    if(root.__trig) return; root.__trig=true;
-    var played=false;
-    function go(){ if(played)return; played=true; var pa=root.querySelector('[data-panel="A"]'), pb=root.querySelector('[data-panel="B"]'); if(pa)playA(pa); if(pb)playB(pb); }
-    if('IntersectionObserver' in window){ var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting) go(); }); },{threshold:.15}); io.observe(root); }
+  function trigger(sec,cfg){
+    if(sec.__trig) return; sec.__trig=true;
+    var played=false, panel=sec.querySelector('.tsc-anim');
+    function go(){ if(played)return; played=true; cfg.play(panel); }
+    if('IntersectionObserver' in window){ var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting) go(); }); },{threshold:.12}); io.observe(sec); }
     else go();
-    var r=root.getBoundingClientRect(); if(r.top<innerHeight&&r.bottom>0) go();
-    setTimeout(go,1400);
+    var r=sec.getBoundingClientRect(); if(r.top<innerHeight&&r.bottom>0) go();
+    setTimeout(go,1500);
   }
 
-  function anchor(){ return document.getElementById('tsshop--db4_zutaten'); }
+  /* Marker (Vollbreite-Textzeile, NICHT in einer Spalte) */
+  function findMarker(marker){
+    var els=document.querySelectorAll('.notion-text');
+    for(var i=0;i<els.length;i++){
+      if((els[i].textContent||'').trim().toLowerCase()===marker && !els[i].closest('.notion-column')){
+        var blk=els[i].closest('[data-block-id]')||els[i].closest('[id^="block-"]')||els[i];
+        return blk;
+      }
+    }
+    return null;
+  }
+  function anchorShop(){ return document.getElementById('tsshop--db4_zutaten'); }
+  function mountBlock(cfg, fallbackAfter){
+    if(document.getElementById('tscb-'+cfg.key)) return document.getElementById('tscb-'+cfg.key);
+    var mk=findMarker(cfg.marker), sec=buildBlock(cfg);
+    if(mk && mk.parentNode){ mk.style.display='none'; mk.parentNode.insertBefore(sec, mk.nextSibling); }
+    else if(fallbackAfter && fallbackAfter.parentNode){ fallbackAfter.parentNode.insertBefore(sec, fallbackAfter.nextSibling); }
+    else return null;
+    trigger(sec,cfg);
+    return sec;
+  }
   function mount(){
-    if(!on()){ var e=document.getElementById('tscover'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
-    if(document.getElementById('tscover')) return;
-    var a=anchor(); if(!a||!a.parentNode) return;
-    var root=build(); root.classList.add('tsc--full');
-    a.parentNode.insertBefore(root, a.nextSibling);
-    trigger(root);
+    if(!on()){ ['A','B'].forEach(function(k){ var e=document.getElementById('tscb-'+k); if(e&&e.parentNode)e.parentNode.removeChild(e); }); return; }
+    var shop=anchorShop();
+    var a=mountBlock(BLOCKS[0], shop);
+    mountBlock(BLOCKS[1], a||shop);
   }
   function boot(){
-    var tries=0; var iv=setInterval(function(){ tries++; mount(); if(tries>40)clearInterval(iv); },300);
+    var tries=0; var iv=setInterval(function(){ tries++; mount(); if(tries>50)clearInterval(iv); },300);
     new MutationObserver(function(){ mount(); }).observe(document.documentElement,{childList:true,subtree:true});
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
