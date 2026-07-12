@@ -123,8 +123,13 @@ section.notion-tabs {
 .page__zutatenliste #block-39bb9546553480cda6ffe5537b0064e5,
 .page__zutatenliste #block-39bb95465534808894afe13c66381759{ text-align:center !important; }
 .page__zutatenliste #block-38eb9546553480fea559e458d25dd0da{ font-size:18px !important; font-weight:600 !important; }
+/* Abstand über „Die Lösung" verringern: leere Filler-Absätze am Ende der „Das Problem"-Spalte ausblenden + kontrollierter Abstand */
+.page__zutatenliste #block-39bb95465534806186cbcbb0348e8e6b,
+.page__zutatenliste #block-397b9546553480e9b786e9d41c5e5a79,
+.page__zutatenliste #block-397b954655348040977bd774bd3e5dab{ display:none !important; }
+.page__zutatenliste #block-396b9546553480a5b5a4d06877f1543c{ margin-top:40px !important; }
 .page__zutatenliste #block-395b9546553480fcb4a0f065b83ee656{ margin-bottom:12px !important; }
-.page__zutatenliste #block-396b954655348098ae30f9bff07fa068{ display:flex !important; align-items:flex-start !important; }
+.page__zutatenliste #block-396b954655348098ae30f9bff07fa068{ display:flex !important; align-items:flex-start !important; max-width:1320px !important; margin-left:auto !important; margin-right:auto !important; }
 .page__zutatenliste #block-396b954655348098ae30f9bff07fa068 > .notion-column{
   display:block !important; max-width:none !important; flex:0 0 auto !important; margin:0 !important;
   width:calc((100% - var(--column-spacing, 46px)) * 0.5) !important;
