@@ -1311,6 +1311,43 @@
 
 /* ---- */
 
+/* zutatenliste — H1 "Wofür eine Zutaten DB ?" : ganze Zeile in Lineal TS,
+   Phrase "Zutaten DB" beige via .ts-accent (#9e947f). super.so liefert den
+   Notion-Text teils halb-gesynct ("Wofür eine Zuta ") -> JS erzwingt die
+   finale Darstellung (Notion bleibt Text-SSOT). Block-ID-Anker, selbstheilend,
+   ueberschreibt auch den generischen Letztes-Wort-Toner __tsTone. */
+(function(){
+  if(window.__tsZdbHead) return; window.__tsZdbHead=true;
+  var ID='block-395b9546553480fcb4a0f065b83ee656';
+  var BLACK='Wofür eine ', ACCENT='Zutaten DB', TAIL=' ?';
+  function injectCSS(){
+    if(document.getElementById('tszdb-css')) return;
+    var s=document.createElement('style'); s.id='tszdb-css';
+    s.textContent='#'+ID+'{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;font-weight:600}';
+    document.head.appendChild(s);
+  }
+  function norm(s){ return (s||'').replace(/\s+/g,' ').trim(); }
+  function tone(){
+    var el=document.getElementById(ID); if(!el) return;
+    var want=norm(BLACK+ACCENT+TAIL);
+    var sp=el.querySelector('.ts-accent');
+    if(sp && norm(sp.textContent)===norm(ACCENT) && norm(el.textContent)===want) return; /* schon korrekt -> nichts tun (verhindert Ping-Pong) */
+    while(el.firstChild) el.removeChild(el.firstChild);
+    el.appendChild(document.createTextNode(BLACK));
+    var s=document.createElement('span'); s.className='ts-accent'; s.textContent=ACCENT;
+    el.appendChild(s);
+    el.appendChild(document.createTextNode(TAIL));
+  }
+  function apply(){ injectCSS(); tone(); }
+  apply();
+  document.addEventListener('DOMContentLoaded', apply);
+  var _t=null;
+  new MutationObserver(function(){ if(_t) return; _t=setTimeout(function(){ _t=null; apply(); },200); })
+    .observe(document.documentElement,{childList:true,subtree:true});
+})();
+
+/* ---- */
+
 (function(){
   return; /* Lesson-Stats auf /zutatenliste entfernt (Robert 2026-07-13) — die #tsd4-Erklaer-Animation uebernimmt diese Position. Kennzahlen bleiben SSOT in der Vault-Lektionsdatei. Zum Reaktivieren dieses return entfernen. */
   var ANCHOR='block-396b954655348098ae30f9bff07fa068';
