@@ -1856,7 +1856,7 @@
   if(window.__tsgk) return; window.__tsgk=true;
   var GLOW='199,180,137';
   var CSS=`
-  #tsgk{width:min(1000px,95vw);margin:34px auto 30px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
+  #tsgk{width:100%;max-width:100%;margin:34px auto 30px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
   #tsgk *{box-sizing:border-box}
   #tsgk .tsgk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
   #tsgk .tsgk-card{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;border-radius:16px;padding:26px 18px 22px;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0));border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85);opacity:0;transform:translateY(18px) scale(.985);will-change:transform,opacity;transition:border-color .4s ease,box-shadow .5s ease}
