@@ -4330,3 +4330,114 @@
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
+
+/* ============================================================
+   #tszmac — MacBook-Scroll (zutatenliste), Muster wie #ts2mac
+   (Lieferpartner). STATISCHE Kachel (nur CSS-Hover) -> darf in
+   einer Notion-Spalte leben (kein Reconciler-Krieg).
+   Robert legt ein 2-Spalten-Layout an: LINKS sein Text, RECHTS
+   eine Zeile mit dem Marker `zutat-laptop`. Der Laptop ersetzt
+   den Marker in DER Spalte -> Laptop rechts, Text links.
+   Klick auf den PC -> Lightbox mit langem Screenshot zum Scrollen.
+   Bilder: img/zutaten-mac/pc.png (freigestellt) + scroll.jpg.
+   ============================================================ */
+(function(){
+  if(window.__tszmac) return; window.__tszmac=true;
+  var PATH=/\/zutatenliste\/?$/;
+  var MARKER='zutat-laptop';
+  var FRAME='https://files.catbox.moe/oj1wa9.png';   /* leerer MacBook-Rahmen (wie #ts2mac) */
+  var IMG='https://tastyrob123.github.io/kurs/img/zutaten-mac/pc.png';
+  var SHOT='https://tastyrob123.github.io/kurs/img/zutaten-mac/scroll.jpg';
+  var CAP='Meine Zutaten · DB-Ansicht';
+
+  var CSS=`
+  .tszmac-incol{display:flex;flex-direction:column;justify-content:center;align-items:center}
+  .tszmac-pc{width:100%;display:flex;flex-direction:column;align-items:center;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif}
+  .tszmac-tile{width:100%;max-width:540px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 18px 44px rgba(0,0,0,.5));transition:transform .5s cubic-bezier(.16,1,.3,1),filter .5s cubic-bezier(.16,1,.3,1)}
+  .tszmac-tile img{width:100%;height:auto;display:block}
+  .tszmac-tile:hover,.tszmac-tile:focus-visible{transform:translateY(-4px) scale(1.02);animation:tszmacHb 2.6s cubic-bezier(.16,1,.3,1) infinite;outline:none}
+  @keyframes tszmacHb{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(158,148,127,.14))}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(158,148,127,.30))}}
+  .tszmac-tile:active{transform:scale(.99);transition-duration:.12s}
+  .tszmac-cap{width:100%;text-align:center;font-size:15px;font-weight:600;letter-spacing:.005em;color:#fff;margin-top:14px}
+  .tszmac-cap .g{color:#9e947f}
+  .tszmac-hint{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.32);margin-top:6px;animation:tszmacHint 2.5s ease-in-out infinite}
+  @keyframes tszmacHint{0%,100%{opacity:.4}50%{opacity:.8}}
+  #tszmac-lb{position:fixed;inset:0;z-index:99999;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(5,6,11,.92);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:clamp(16px,4vw,40px);opacity:0;transition:opacity .3s ease;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif}
+  #tszmac-lb.open{display:flex;opacity:1}
+  #tszmac-lb .tszmac-inner{position:relative;width:100%;max-width:min(960px,calc(100vw - 48px));transform:scale(.92) translateY(24px);transition:transform .5s cubic-bezier(.16,1,.3,1)}
+  #tszmac-lb.open .tszmac-inner{transform:none}
+  #tszmac-lb.full .tszmac-inner{max-width:100vw}
+  #tszmac-lb .tszmac-mockup{position:relative;width:100%;aspect-ratio:1366/768;filter:drop-shadow(0 30px 80px rgba(0,0,0,.6)) drop-shadow(0 10px 30px rgba(0,0,0,.5))}
+  #tszmac-lb .tszmac-fr{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;user-select:none}
+  #tszmac-lb .tszmac-screen{position:absolute;top:3.65%;left:12.22%;width:73.06%;height:83.85%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;z-index:3;border-radius:3px;background:#191919;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.16) transparent}
+  #tszmac-lb .tszmac-screen::-webkit-scrollbar{width:5px}
+  #tszmac-lb .tszmac-screen::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border-radius:4px}
+  #tszmac-lb .tszmac-screen img{width:100%;display:block}
+  #tszmac-lb .tszmac-closehint{margin-top:20px;font-size:12px;letter-spacing:.1em;color:rgba(255,255,255,.32);text-align:center}
+  #tszmac-lb.full .tszmac-closehint{display:none}
+  #tszmac-lb .tszmac-btn{position:absolute;top:16px;z-index:10;width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.6);cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);transition:background .2s,color .2s}
+  #tszmac-lb .tszmac-btn:hover{background:rgba(255,255,255,.16);color:#fff}
+  #tszmac-lb .tszmac-expand{left:16px}#tszmac-lb .tszmac-closex{right:16px}
+  @media(prefers-reduced-motion:reduce){.tszmac-tile,.tszmac-tile:hover{animation:none;transition:none}.tszmac-hint{animation:none}}
+  `;
+  function injectCSS(){ if(document.getElementById('tszmac-css'))return; var s=document.createElement('style'); s.id='tszmac-css'; s.textContent=CSS; document.head.appendChild(s); }
+  function shutFull(){ var lb=document.getElementById('tszmac-lb'); if(lb) lb.classList.remove('open','full'); document.body.style.overflow=''; }
+  function ensureLb(){
+    var lb=document.getElementById('tszmac-lb'); if(lb) return lb;
+    lb=document.createElement('div'); lb.id='tszmac-lb';
+    lb.innerHTML='<button class="tszmac-btn tszmac-expand" title="Vollbild" aria-label="Vollbild"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="tszmac-btn tszmac-closex" title="Schließen" aria-label="Schließen"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 4.5l9 9M13.5 4.5l-9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><div class="tszmac-inner"><div class="tszmac-mockup"><img class="tszmac-fr" src="'+FRAME+'" alt="MacBook"><div class="tszmac-screen"><img src="'+SHOT+'" alt="'+CAP+'"></div></div></div><div class="tszmac-closehint">✕ Klicke daneben oder ESC zum Schließen</div>';
+    document.body.appendChild(lb);
+    var inner=lb.querySelector('.tszmac-inner');
+    lb.querySelector('.tszmac-closex').addEventListener('click',shutFull);
+    lb.querySelector('.tszmac-expand').addEventListener('click',function(e){ e.stopPropagation(); lb.classList.toggle('full'); });
+    inner.addEventListener('click',function(e){ e.stopPropagation(); });
+    lb.addEventListener('click',function(e){ if(e.target===lb) shutFull(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') shutFull(); });
+    return lb;
+  }
+  function openLb(){ var lb=ensureLb(); lb.classList.add('open'); lb.classList.remove('full'); document.body.style.overflow='hidden'; var sc=lb.querySelector('.tszmac-screen'); if(sc) sc.scrollTop=0; }
+  function buildPc(){
+    var pc=document.createElement('div'); pc.className='tszmac-pc';
+    pc.innerHTML='<div class="tszmac-tile" role="button" tabindex="0" aria-label="'+CAP+' vergrößern"><img src="'+IMG+'" alt="'+CAP+'" loading="lazy" decoding="async"></div>'
+      +'<div class="tszmac-cap">'+CAP+'<span class="g"> – Live Beispiel</span></div>'
+      +'<div class="tszmac-hint">Klicke zum Vergrößern</div>';
+    var tile=pc.querySelector('.tszmac-tile');
+    tile.addEventListener('click',openLb);
+    tile.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(); } });
+    return pc;
+  }
+  /* leere Blatt-Zeile mit MARKER-Text -> ihre Notion-Spalte ist das Ziel */
+  function markerCol(){
+    var lists=document.querySelectorAll('.notion-column-list');
+    for(var L=0;L<lists.length;L++){
+      var all=lists[L].querySelectorAll('.notion-text');
+      for(var i=0;i<all.length;i++){
+        if((all[i].textContent||'').trim().toLowerCase()===MARKER){
+          var col=all[i].closest('.notion-column'); if(!col) continue;
+          var mk=all[i]; while(mk.parentElement && mk.parentElement!==col) mk=mk.parentElement;
+          return { col:col, marker:(mk&&mk!==col)?mk:all[i] };
+        }
+      }
+    }
+    return null;
+  }
+  function mount(){
+    if(!PATH.test(location.pathname)){ var r=document.getElementById('tszmac-lb'); if(r&&r.parentNode)r.parentNode.removeChild(r); return; }
+    injectCSS();
+    /* schon montiert und noch im DOM? dann nichts tun (selbstheilend, falls React die Spalte neu rendert) */
+    var existing=document.querySelector('.tszmac-pc'); if(existing && existing.closest('.notion-column')) return;
+    var m=markerCol(); if(!m) return;
+    var col=m.col, tgt=col.querySelector('.notion-column__content')||col;
+    if(tgt.querySelector('.tszmac-pc')) return;
+    col.classList.add('tszmac-incol');
+    if(m.marker && m.marker.classList && !m.marker.classList.contains('notion-column') && !m.marker.classList.contains('notion-column-list')) m.marker.style.display='none';
+    var list=col.closest('.notion-column-list'); if(list) list.style.alignItems='center';
+    tgt.appendChild(buildPc());
+  }
+  function boot(){
+    var tries=0;
+    var iv=setInterval(function(){ tries++; mount(); if(tries>80) clearInterval(iv); },300);
+    new MutationObserver(function(){ mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
