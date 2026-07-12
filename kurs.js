@@ -4085,6 +4085,7 @@
 
 
 
+
 /* ============================================================================
    #tscover — Zutaten-DB-Erklär-Animationen (Seite /zutatenliste)
    ZWEI getrennte Vollbreite-Blöcke, je: Animation LINKS + Textpanel RECHTS.
@@ -4130,7 +4131,10 @@
   .tscb .tsx-eye::before{content:"";width:7px;height:7px;border-radius:50%;background:#9e947f;box-shadow:0 0 12px rgba(158,148,127,.7)}
   .tscb .tsx-h{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(26px,2.7vw,38px);font-weight:600;letter-spacing:-.02em;line-height:1.12;color:#fff;margin:0 0 16px}
   .tscb .tsx-h span{color:#c7b489}
-  .tscb .tsx-p{font-size:15.5px;line-height:1.7;color:#dcdcdc;margin:0 0 14px;max-width:520px}
+  .tscb .tsx-p{font-size:15.5px;line-height:1.7;color:#dcdcdc;margin:0 0 16px;max-width:520px}
+  .tscb .tsx-p b{color:#fff;font-weight:600}
+  .tscb .tsx-left .tsx-p{max-width:560px}
+  .tscb .tsx-left .tsx-p:last-child{margin-bottom:0}
   .tscb .tsx-ph{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(199,180,137,.5);margin-top:6px}
 
   /* --- Animation links --- */
@@ -4272,6 +4276,13 @@
     var body=(t.body||[]).map(function(p){return '<p class="tsx-p">'+p+'</p>';}).join('');
     return '<div class="tsx"><div class="tsx-eye">'+t.eyebrow+'</div><h3 class="tsx-h">'+t.h+'</h3>'+body+'<div class="tsx-ph">Platzhalter · Text folgt von Robert</div></div>';
   }
+  /* Block-A-Linkstext: Roberts 3 Intro-Absätze (aus Notion übernommen, im Modul gepflegt) */
+  var PARAS_A=[
+    'Kurz gesagt: <b>Die Zutat wird einmal gepflegt, aber beliebig oft verwendet.</b>',
+    'In diesem Schritt übersetzen wir das Inventarprodukt in diese verarbeitbare Einheit – zum Beispiel vom gelieferten Gebinde hin zu Gramm, Milliliter oder Stück.',
+    'Öffne hierzu zunächst deine Notion AI Backoffice Startseite, erstelle eine neue Seite die du „DB Zutaten" nennst, einen „Zurück" Button und eine neue Tabelle / Datenbankansicht → Name : „DB IV : Zutaten" :'
+  ];
+  function txtBig(paras){ return '<div class="tsx tsx-left">'+paras.map(function(p){return '<p class="tsx-p">'+p+'</p>';}).join('')+'</div>'; }
 
   /* ---------- Panel A markup ---------- */
   function menuItem(icon,label,right,cls){ return '<div class="tsc-mi '+(cls||'')+'">'+icon+'<span>'+label+'</span>'+(right||'')+'</div>'; }
@@ -4345,7 +4356,7 @@
   }
 
   var BLOCKS=[
-    { key:'A', mode:'center', marker:'groesse-animation', anim:animA, play:function(el){playA(el);} },
+    { key:'A', mode:'textleft', marker:'groesse-animation', anim:animA, play:function(el){playA(el);}, paras:PARAS_A },
     { key:'B', mode:'split', marker:'vorlage-animation', anim:animB, play:function(el){playB(el);},
       txt:{ eyebrow:'Einmal einrichten', h:'Jede Zutat als <span>Galerie mit Cover</span>.',
         body:['Platzhalter — hier kommt dein Erklärtext rechts neben die Animation.','Eine Vorlage mit voreingestellter Galerie- und Coveransicht zeigt dir in jeder Zutat sofort ihre Größeneinheiten — als Standard gesetzt, gilt sie automatisch für jede neue Seite.'] } }
@@ -4356,6 +4367,8 @@
     var sec=document.createElement('section'); sec.className='tscb'; sec.id='tscb-'+cfg.key; sec.setAttribute('data-block',cfg.key);
     sec.innerHTML = cfg.mode==='center'
       ? '<div class="tscb-in center">'+cfg.anim()+'</div>'
+      : cfg.mode==='textleft'
+      ? '<div class="tscb-in">'+txtBig(cfg.paras)+cfg.anim()+'</div>'
       : '<div class="tscb-in">'+cfg.anim()+txtPanel(cfg.txt)+'</div>';
     return sec;
   }
@@ -4512,6 +4525,14 @@
       le.style.setProperty('line-height','1.7','important');
       var ss=le.querySelectorAll('strong');
       for(var si=0;si<ss.length;si++){ ss[si].style.setProperty('font-weight', si===0?'700':'400','important'); }
+      /* „Die Lösung" auf volle Breite (seine Notion-Spalte auf 100%) */
+      var loCol=le.closest('.notion-column');
+      if(loCol){ loCol.style.setProperty('width','100%','important'); loCol.style.setProperty('flex','1 1 100%','important'); loCol.style.setProperty('max-width','100%','important'); }
+      /* die 3 Intro-Absätze ausblenden — sie stehen jetzt LINKS im Block neben der Animation */
+      var HIDE=['kurz gesagt','in diesem schritt übersetzen','öffne hierzu zunächst'];
+      var nt=document.querySelectorAll('.notion-text');
+      for(var ni=0;ni<nt.length;ni++){ var tt=(nt[ni].textContent||'').trim().toLowerCase();
+        for(var h=0;h<HIDE.length;h++){ if(tt.indexOf(HIDE[h])===0){ var blk=nt[ni].closest('[id^="block-"]')||nt[ni]; blk.style.setProperty('display','none','important'); } } }
     }
     var shop=anchorShop();
     if(needA) mountBlock(BLOCKS[0], (lo&&lo.block)||shop);
