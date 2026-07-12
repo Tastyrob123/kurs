@@ -264,57 +264,11 @@
 
 /* ---- */
 
-/* modul-2 — Section-Headings: "Herzstück"/"bauen" beige (Lineal-Schrift kommt aus kurs.css)
-   + Animation "Das lebende System" in der rechten Spalte neben dem Intro-Absatz.
-   Story-Loop: (0) verstreute Tools ohne Memory → (1) ein System, das mitdenkt →
-   (2) jedes Gericht auf den Cent → (3) Einkaufspreis steigt, sofort sichtbar. */
+/* modul-2 — Section-Headings: das Wort "Herzstück" bzw. "bauen" beige (Lineal-Schrift kommt aus kurs.css).
+   Wird per JS in .ts-m2-gold gewrappt, selbstheilend via debounced Observer (Muster wie toneLastWord). */
 (function(){
   if(window.__tsm2) return; window.__tsm2 = true;
   function on(){ return /\/modul-2-das-notion-ai-backoffice-system\/?$/.test(location.pathname); }
-
-  /* Orbital-Bühne einmalig bauen: 4 Tool-Nodes auf einer Krone um den Core (280/196), Linien fließen in den Core. */
-  var CX=280, CY=196, R=150;
-  var NODES=[{name:'Excel',a:201,c:'#6fae86'},{name:'Word',a:249,c:'#6f9bd1'},{name:'Notion',a:291,c:'#d6d0c4'},{name:'ChatGPT',a:339,c:'#74b3a1'}];
-  function pt(a,r){ var rad=a*Math.PI/180; return [CX+Math.cos(rad)*r, CY+Math.sin(rad)*r]; }
-  var lines='', nodeEls='';
-  NODES.forEach(function(n,i){
-    var p=pt(n.a,R), lx=p[0].toFixed(1), ly=p[1].toFixed(1);
-    var d='M'+lx+' '+ly+' Q '+((+lx+CX)/2).toFixed(1)+' '+((+ly+CY)/2-14).toFixed(1)+' '+CX+' '+CY;
-    lines+='<path class="tsm2-base" d="'+d+'"/><path class="tsm2-pulse" d="'+d+'" style="animation-delay:'+(i*0.7)+'s"/>';
-    var lp=pt(n.a, R+22);
-    var anchor=(lp[0]<CX-10)?'end':(lp[0]>CX+10?'start':'middle');
-    nodeEls+='<g class="tsm2-node" style="--nc:'+n.c+';--dx:'+((p[0]-CX)*0.14).toFixed(1)+'px;--dy:'+((p[1]-CY)*0.14).toFixed(1)+'px;transition-delay:'+(i*0.09)+'s">'+
-        '<circle class="tsm2-node__halo" cx="'+lx+'" cy="'+ly+'" r="11"/>'+
-        '<circle class="tsm2-node__dot" cx="'+lx+'" cy="'+ly+'" r="3.4"/>'+
-        '<text class="tsm2-node__t" x="'+lp[0].toFixed(1)+'" y="'+(lp[1]+3).toFixed(1)+'" text-anchor="'+anchor+'">'+n.name.toUpperCase()+'</text>'+
-      '</g>';
-  });
-  var HTML =
-    '<div class="tsm2-stage" data-phase="0">'+
-      '<div class="tsm2-glow"></div>'+
-      '<svg class="tsm2-svg" viewBox="0 0 560 470" preserveAspectRatio="xMidYMid meet">'+
-        '<defs>'+
-          '<linearGradient id="tsm2lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d8c9ab" stop-opacity="0"/><stop offset="1" stop-color="#d8c9ab" stop-opacity=".9"/></linearGradient>'+
-          '<radialGradient id="tsm2rg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#c7b489" stop-opacity=".9"/><stop offset="1" stop-color="#c7b489" stop-opacity="0"/></radialGradient>'+
-        '</defs>'+
-        '<g class="tsm2-rings">'+
-          '<circle cx="280" cy="196" r="150" class="tsm2-ring"/>'+
-          '<circle cx="280" cy="196" r="108" class="tsm2-ring tsm2-ring--2"/>'+
-          '<circle cx="280" cy="196" r="66" class="tsm2-ring tsm2-ring--3"/>'+
-        '</g>'+
-        '<g class="tsm2-spin"><circle cx="280" cy="46" r="2.4" class="tsm2-speck"/></g>'+
-        '<circle cx="280" cy="196" r="150" class="tsm2-wave"/>'+
-        '<g class="tsm2-lines">'+lines+'</g>'+
-        nodeEls+
-      '</svg>'+
-      '<div class="tsm2-core"><span class="tsm2-logo"></span><span class="tsm2-core__label">Backoffice</span></div>'+
-      '<div class="tsm2-read">'+
-        '<div class="tsm2-read__ey">Wareneinsatz &middot; pro Gericht</div>'+
-        '<div class="tsm2-read__num"><b id="tsm2num">0,00</b><i>&euro;</i></div>'+
-        '<div class="tsm2-read__db"><u>DB I</u><u>DB II</u><u>DB III</u></div>'+
-      '</div>'+
-      '<div class="tsm2-cap"><span id="tsm2cap">Verstreut. Ohne Struktur.</span></div>'+
-    '</div>';
 
   function wrapWord(id, word){
     var el=document.getElementById(id); if(!el) return;
@@ -330,62 +284,17 @@
     }
   }
 
-  var played=false;   // Story läuft nur EINMAL; danach bleibt der Endzustand stehen
-
-  /* Endzustand direkt setzen (für Re-Mount nach React-Rerender, ohne erneutes Abspielen) */
-  function setFinal(){
-    var stage=document.querySelector('#tsm2sys .tsm2-stage');
-    if(!stage) return;
-    stage.setAttribute('data-phase','3'); stage.classList.add('tsm2-done');
-    var n=document.getElementById('tsm2num'); if(n) n.textContent='3,71';
-    var c=document.getElementById('tsm2cap'); if(c) c.textContent='Preis steigt? Du siehst es sofort.';
-  }
-
-  function runOnce(){
-    var stage=document.querySelector('#tsm2sys .tsm2-stage');
-    var numEl=document.getElementById('tsm2num');
-    var capEl=document.getElementById('tsm2cap');
-    var wave=document.querySelector('#tsm2sys .tsm2-wave');
-    if(!stage||!numEl||!capEl) return;
-    if(window.__tsm2timer) clearTimeout(window.__tsm2timer);
-    function fmt(v){ return v.toFixed(2).replace('.',','); }
-    function count(from,to,ms){ var t0=null; function step(ts){ if(!t0)t0=ts; var p=Math.min(1,(ts-t0)/ms); var e=1-Math.pow(1-p,3); numEl.textContent=fmt(from+(to-from)*e); if(p<1) requestAnimationFrame(step); } requestAnimationFrame(step); }
-    function cap(txt){ capEl.style.opacity=0; capEl.style.transform='translateY(6px)'; setTimeout(function(){ capEl.textContent=txt; capEl.style.opacity=1; capEl.style.transform='none'; },350); }
-    function pulse(){ if(!wave) return; wave.classList.remove('go'); void wave.getBoundingClientRect(); wave.classList.add('go'); }
-    var seq=[
-      {p:'0',cap:'Verstreut. Ohne Struktur.',dur:2600,act:function(){ numEl.textContent='0,00'; }},
-      {p:'1',cap:'Ein System, das mitdenkt.',dur:2700,act:function(){}},
-      {p:'2',cap:'Jedes Gericht — auf den Cent.',dur:2900,act:function(){ count(0,3.47,1400); }},
-      {p:'3',cap:'Preis steigt? Du siehst es sofort.',dur:0,act:function(){ setTimeout(function(){ pulse(); count(3.47,3.71,1000); },600); }}
-    ];
-    var i=0;
-    function tick(){
-      var st=seq[i]; stage.setAttribute('data-phase',st.p); cap(st.cap); st.act();
-      if(i < seq.length-1){ window.__tsm2timer=setTimeout(function(){ i++; tick(); }, st.dur); }
-      else { window.__tsm2timer=setTimeout(function(){ stage.classList.add('tsm2-done'); played=true; }, 2000); }
-    }
-    tick();
-  }
-
-  function mount(){
+  function apply(){
     if(!on()) return;
     wrapWord('block-397b9546553480b18f14f64a88c4e98e','Herzstück');
     wrapWord('block-397b95465534806b9ed5d5ede61dd474','bauen');
-    var col=document.getElementById('block-39bb9546553480b5baecc6e6c754fffd');
-    if(!col) return;
-    var ex=document.getElementById('tsm2sys');
-    if(ex && col.contains(ex)) return;            // schon montiert
-    if(ex && ex.parentNode) ex.parentNode.removeChild(ex);
-    var root=document.createElement('div'); root.id='tsm2sys'; root.innerHTML=HTML;
-    col.appendChild(root);
-    if(played) setFinal(); else runOnce();        // nach dem Durchlauf nie wieder abspielen
   }
 
-  mount();
-  document.addEventListener('DOMContentLoaded', mount);
-  /* debounced Observer (wie toneLastWord): React kann Spalte/Heading spät mounten oder den Span strippen -> nachziehen */
+  apply();
+  document.addEventListener('DOMContentLoaded', apply);
+  /* debounced Observer (wie toneLastWord): React kann Heading spät mounten oder den Span strippen -> nachziehen */
   var _t=null;
-  new MutationObserver(function(){ if(_t) return; _t=setTimeout(function(){ _t=null; mount(); },200); })
+  new MutationObserver(function(){ if(_t) return; _t=setTimeout(function(){ _t=null; apply(); },200); })
     .observe(document.documentElement,{childList:true,subtree:true});
 })();
 

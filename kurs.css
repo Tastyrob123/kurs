@@ -340,6 +340,7 @@ canvas[style*="2147483647"]{ display:none !important; }
 .page__modul-2-das-notion-ai-backoffice-system #block-397b9546553480dfa291d21d2b5e7456 .notion-text__content{
   font-size:1.2rem !important; line-height:1.65 !important; }
 
+<<<<<<< Updated upstream
 /* ===== BLOCK 9 · Modul 2 · Animation "Das lebende System" (rechte Spalte, blendet in den Seiten-Hintergrund) =====
    Orbital-System mit leuchtendem Tasty-Logo als Core (statt Kugel). Läuft EINMAL durch
    (dormant → System zündet → Kosten auf den Cent → Live-Preispuls) und bleibt dann im
@@ -481,6 +482,8 @@ canvas[style*="2147483647"]{ display:none !important; }
   #tsm2build .tb-track .tb-fill{transform:scaleX(1) !important;}
   #tsm2build .tb-caption{opacity:1 !important;}}
 
+=======
+>>>>>>> Stashed changes
 /* ===== BLOCK 9 · Mehrwert & Zielbild (Hero) ===== */
 .page__mehrwert-zielbild .ts-hero{
   position:relative; width:min(1180px, 94vw); margin:76px auto 10px; text-align:center; isolation:isolate;
