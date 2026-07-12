@@ -157,7 +157,7 @@
    rezepturen — Hero "DB V : Rezepturen" (Muster: zutatenliste-Hero DB IV)
    ============================================================ */
 (function(){
-  var IMG="https://files.catbox.moe/m88du6.png"; /* 3-Laptop-Cover Rezepturen freigestellt auf TRANSPARENT (kein Rechteck auf dem Seitenverlauf), breit gerahmt (aus Meine Rezepte.png) */
+  var IMG="https://files.catbox.moe/7qzb0p.png"; /* 3-Laptop-Cover Rezepturen: transparent (RGBA) + 2x nachgeschaerft (Lanczos+Unsharp, kein AI), 2720px fuer Retina-Schaerfe, breit gerahmt (aus Meine Rezepte.png) */
   var LOGO="https://files.catbox.moe/au80tp.png";
   function on(){ return /\/rezepturen\/?$/.test(location.pathname); }
   function mount(){
