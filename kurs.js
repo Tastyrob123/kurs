@@ -154,24 +154,59 @@
 })();
 
 /* ============================================================
+   rezepturen — Hero "DB V : Rezepturen" (Muster: zutatenliste-Hero DB IV)
+   ============================================================ */
+(function(){
+  var IMG="https://files.catbox.moe/agqjws.png"; /* 3-Laptop-Cover Rezepturen (Meine Rezepte.png) */
+  var LOGO="https://files.catbox.moe/au80tp.png";
+  function on(){ return /\/rezepturen\/?$/.test(location.pathname); }
+  function mount(){
+    if(!on()) return;
+    var sc=document.querySelector(".super-content");
+    if(!sc) return;
+    if(document.querySelector(".ts-hero")) return;
+    var hero=document.createElement("div");
+    hero.className="ts-hero";
+    hero.innerHTML=
+      '<img class="ts-hero__img" alt="DB V — Rezepturen" src="'+IMG+'">'+
+      '<div class="ts-hero__text">'+
+        '<img class="ts-hero__logo" alt="Tasty Studios" src="'+LOGO+'">'+
+        '<div class="ts-hero__eyebrow">Lektion 2.4</div>'+
+        '<h1 class="ts-hero__title">DB V : <span class="ts-gold">Rezepturen</span></h1>'+
+      '</div>';
+    var nr=sc.querySelector(".notion-root");
+    if(nr) sc.insertBefore(hero, nr); else sc.appendChild(hero);
+    Array.prototype.forEach.call(sc.querySelectorAll('.notion-image img[src*="logo_vektor"]'),
+      function(img){ var blk=img.closest(".notion-image"); if(blk) blk.style.display="none"; });
+    var nh=document.querySelector(".notion-header.page"); if(nh) nh.style.display="none";
+  }
+  mount();
+  document.addEventListener("DOMContentLoaded", mount);
+  new MutationObserver(mount).observe(document.documentElement,{childList:true,subtree:true});
+})();
+
+/* ============================================================
    zutatenliste — DB IV Erklaer-Animation "Die Zutat zieht sich ihren Preis"
-   Inventurliste (DB 0) --Relation--> Zutat (DB IV, Einwaage) = Portionspreis.
-   Stil nach #tsflow / #tsiv. Mount nach dem Intro-Text, vor dem Warenkorb.
+   Inventurliste (DB 0, ganze Tomate) --Relation--> Zutat (DB IV, in Scheiben, Einwaage)
+   = Portionspreis (2 gestapelte Scheiben). Roh -> verarbeitet -> portioniert.
+   Stil nach #tsflow / #tsiv. Mount an der (entfernten) Stats-Position, vor "Zutaten als Bausteinkonzept".
    Zahlen = Beispielwerte (Einwaage 120 g aus SSOT; Einkaufspreis 3,20 EUR/kg Platzhalter).
    ============================================================ */
 (function(){
   if(window.__tsd4) return; window.__tsd4=true;
-  var IMG="https://tastyrob123.github.io/kurs/img/anim/tomate-3d.png";
+  var IMG_WHOLE ="https://tastyrob123.github.io/kurs/img/anim/tomate-3d.png";
+  var IMG_SLICED="https://tastyrob123.github.io/kurs/img/anim/tomate-sliced.png";
+  var IMG_STACK ="https://tastyrob123.github.io/kurs/img/anim/tomate-stack.png";
   var CSS=`
-  #tsd4{width:min(1000px,95vw);margin:52px auto 40px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;opacity:0;transform:translateY(20px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+  #tsd4{width:min(1000px,95vw);margin:8px auto 44px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;opacity:0;transform:translateY(20px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
   #tsd4.in{opacity:1;transform:none}
-  #tsd4 .tsd4-head{text-align:center;margin:0 0 34px}
+  #tsd4 .tsd4-head{text-align:center;margin:0 0 46px}
   #tsd4 .tsd4-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:#9e947f;margin:0 0 12px}
   #tsd4 .tsd4-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#9e947f;box-shadow:0 0 12px rgba(158,148,127,.7)}
   #tsd4 .tsd4-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;font-size:clamp(1.5rem,3vw,2.1rem);font-weight:600;letter-spacing:-.02em;line-height:1.15;margin:0;color:#fff}
   #tsd4 .tsd4-title .g{color:#9e947f}
   #tsd4 .tsd4-stage{display:grid;grid-template-columns:1fr auto 1.15fr auto 1fr;align-items:center;gap:0}
-  #tsd4 .tsd4-card{position:relative;border-radius:14px;padding:20px;background:rgba(255,255,255,.035);border:1px solid rgba(158,148,127,.28);opacity:0;transform:translateY(14px) scale(.97);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1),border-color .6s ease,box-shadow .6s ease}
+  #tsd4 .tsd4-card{position:relative;border-radius:14px;padding:56px 20px 20px;background:rgba(255,255,255,.035);border:1px solid rgba(158,148,127,.28);opacity:0;transform:translateY(14px) scale(.97);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1),border-color .6s ease,box-shadow .6s ease}
   #tsd4 .tsd4-card.lit{opacity:1;transform:none}
   #tsd4 .tsd4-card .c-eye{font-size:10px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin:0 0 10px}
   #tsd4 .tsd4-card .c-name{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:20px;font-weight:600;letter-spacing:-.01em;color:#fff;margin:0 0 14px}
@@ -183,11 +218,15 @@
   #tsd4 .tsd4-row .v.muted{color:rgba(255,255,255,.6);font-weight:500}
   #tsd4 .tsd4-row .v.gold{color:#9e947f;font-weight:700;font-size:15px}
   #tsd4 .tsd4-note{font-size:10px;color:rgba(255,255,255,.28);margin:10px 0 0}
-  #tsd4 .tsd4-zutat{border-color:rgba(158,148,127,.5);padding-top:56px}
+  /* Schwebendes Motiv auf jeder Karte */
+  #tsd4 .tsd4-fruit{position:absolute;top:-42px;left:50%;height:100px;transform:translateX(-50%) scale(.4);opacity:0;pointer-events:none;filter:drop-shadow(0 15px 20px rgba(0,0,0,.55)) drop-shadow(0 4px 10px rgba(0,0,0,.4));transition:opacity .6s ease,transform .7s cubic-bezier(.34,1.56,.64,1)}
+  #tsd4 .tsd4-card.lit .tsd4-fruit{opacity:1;transform:translateX(-50%) scale(1)}
+  #tsd4 .tsd4-fruit img{height:100%;width:auto;display:block}
+  #tsd4 .tsd4-fruit.is-sliced{height:82px;top:-30px}
+  #tsd4 .tsd4-fruit.is-stack{height:98px;top:-40px}
+  #tsd4 .tsd4-zutat{border-color:rgba(158,148,127,.5)}
   #tsd4 .tsd4-zutat.lit{box-shadow:0 24px 60px rgba(0,0,0,.45)}
-  #tsd4 .tsd4-tomato{position:absolute;top:-46px;left:50%;width:118px;height:118px;transform:translateX(-50%) scale(.4);opacity:0;pointer-events:none;filter:drop-shadow(0 16px 22px rgba(0,0,0,.55)) drop-shadow(0 4px 10px rgba(0,0,0,.4));transition:opacity .6s ease,transform .7s cubic-bezier(.34,1.56,.64,1)}
-  #tsd4 .tsd4-zutat.lit .tsd4-tomato{opacity:1;transform:translateX(-50%) scale(1)}
-  #tsd4 .tsd4-tomato img{width:100%;height:100%;object-fit:contain;display:block}
+  /* Connector 1 (Relation, mit wandernder Kugel) */
   #tsd4 .tsd4-conn{position:relative;width:clamp(56px,7vw,92px);height:2px;align-self:center;margin-top:8px}
   #tsd4 .tsd4-conn .line{position:absolute;inset:0;border-top:2px dashed rgba(158,148,127,.45);opacity:0;transition:opacity .4s ease}
   #tsd4 .tsd4-conn.on .line{opacity:1}
@@ -197,28 +236,31 @@
   #tsd4 .tsd4-conn .clabel{position:absolute;top:-30px;left:50%;transform:translateX(-50%);text-align:center;white-space:nowrap;font-size:9.5px;letter-spacing:.5px;color:#9e947f;opacity:0;transition:opacity .4s ease}
   #tsd4 .tsd4-conn .clabel small{display:block;color:rgba(158,148,127,.65);font-size:8.5px;letter-spacing:.2px;margin-top:1px}
   #tsd4 .tsd4-conn.on .clabel{opacity:1}
+  /* Connector 2 (=) */
   #tsd4 .tsd4-eq{display:flex;align-items:center;justify-content:center;width:clamp(40px,5vw,64px);opacity:0;transition:opacity .5s ease}
   #tsd4 .tsd4-eq.on{opacity:1}
   #tsd4 .tsd4-eq svg{width:26px;height:14px;overflow:visible}
   #tsd4 .tsd4-eq path{stroke:#9e947f;stroke-width:2;fill:none;stroke-linecap:round}
+  /* Ergebnis-Chip */
   #tsd4 .tsd4-result{text-align:center;background:rgba(158,148,127,.09);border-color:rgba(158,148,127,.55)}
   #tsd4 .tsd4-result .c-eye{color:#9e947f}
   #tsd4 .tsd4-result .r-val{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:clamp(1.8rem,4vw,2.4rem);font-weight:700;letter-spacing:-.02em;color:#fff;margin:6px 0 8px;line-height:1}
   #tsd4 .tsd4-result .r-formula{font-size:12px;color:rgba(255,255,255,.5)}
-  #tsd4 .tsd4-foot{text-align:center;margin:30px auto 0;max-width:640px}
+  /* Fussnote */
+  #tsd4 .tsd4-foot{text-align:center;margin:34px auto 0;max-width:640px}
   #tsd4 .tsd4-foot .f-main{font-size:14px;color:rgba(255,255,255,.62);margin:0 0 6px}
   #tsd4 .tsd4-foot .f-main .g{color:#9e947f}
   #tsd4 .tsd4-foot .f-sub{font-size:10px;color:rgba(255,255,255,.26);margin:0}
   @media(max-width:820px){
+    #tsd4{margin-top:24px}
     #tsd4 .tsd4-stage{grid-template-columns:1fr;gap:0;max-width:420px;margin:0 auto}
-    #tsd4 .tsd4-conn{width:2px;height:clamp(38px,8vw,52px);margin:6px auto;border-top:0}
+    #tsd4 .tsd4-conn{width:2px;height:clamp(44px,9vw,58px);margin:8px auto;border-top:0}
     #tsd4 .tsd4-conn .line{border-top:0;border-left:2px dashed rgba(158,148,127,.45)}
     #tsd4 .tsd4-conn .ball{top:0;left:50%;transition:top .85s cubic-bezier(.5,0,.2,1),transform .3s ease}
     #tsd4 .tsd4-conn.go .ball{left:50%;top:100%}
     #tsd4 .tsd4-conn .clabel{top:50%;left:auto;right:-8px;transform:translate(100%,-50%);text-align:left}
-    #tsd4 .tsd4-eq{width:auto;height:34px;margin:4px auto}
+    #tsd4 .tsd4-eq{width:auto;height:40px;margin:6px auto}
     #tsd4 .tsd4-eq svg{transform:rotate(90deg)}
-    #tsd4 .tsd4-zutat{padding-top:60px}
   }
   `;
   function injectCSS(){ if(document.getElementById('tsd4-css'))return; var s=document.createElement('style'); s.id='tsd4-css'; s.textContent=CSS; document.head.appendChild(s); }
@@ -227,20 +269,20 @@
     root.innerHTML=
       '<div class="tsd4-head"><div class="tsd4-eyebrow">So entsteht ein Baustein</div><h2 class="tsd4-title">Die Zutat zieht sich ihren <span class="g">Preis.</span></h2></div>'+
       '<div class="tsd4-stage">'+
-        '<div class="tsd4-card tsd4-inv"><p class="c-eye">DB 0 · Inventurliste</p><p class="c-name">Tomaten</p><div class="c-div"></div><div class="tsd4-row"><span class="k">Einkaufspreis</span><span class="v">3,20 €/kg</span></div><p class="tsd4-note">Beispielwert</p></div>'+
+        '<div class="tsd4-card tsd4-inv"><div class="tsd4-fruit is-whole"><img src="'+IMG_WHOLE+'" alt="Tomate" loading="lazy"></div><p class="c-eye">DB 0 · Inventurliste</p><p class="c-name">Tomaten</p><div class="c-div"></div><div class="tsd4-row"><span class="k">Einkaufspreis</span><span class="v">3,20 €/kg</span></div><p class="tsd4-note">Beispielwert</p></div>'+
         '<div class="tsd4-conn"><div class="clabel">Relation<small>zieht den Preis</small></div><div class="line"></div><div class="ball"></div></div>'+
-        '<div class="tsd4-card tsd4-zutat"><div class="tsd4-tomato"><img src="'+IMG+'" alt="Tomate" loading="lazy"></div><p class="c-eye">DB IV · Zutat</p><p class="c-name">Tomate</p><div class="c-div"></div><div class="tsd4-row"><span class="k">Preis (aus DB 0)</span><span class="v muted">3,20 €/kg</span></div><div class="tsd4-row"><span class="k">Einwaage</span><span class="v gold">120 g</span></div></div>'+
+        '<div class="tsd4-card tsd4-zutat"><div class="tsd4-fruit is-sliced"><img src="'+IMG_SLICED+'" alt="Tomate in Scheiben" loading="lazy"></div><p class="c-eye">DB IV · Zutat</p><p class="c-name">Tomate</p><div class="c-div"></div><div class="tsd4-row"><span class="k">Preis (aus DB 0)</span><span class="v muted">3,20 €/kg</span></div><div class="tsd4-row"><span class="k">Einwaage</span><span class="v gold">120 g</span></div></div>'+
         '<div class="tsd4-eq"><svg viewBox="0 0 26 14"><path d="M2 5 H20 M2 9 H20 M17 2 L23 7 L17 12"/></svg></div>'+
-        '<div class="tsd4-card tsd4-result"><p class="c-eye">Portionspreis</p><p class="r-val" data-target="0.384">0,00 €</p><p class="r-formula">120 g × 3,20 €/kg</p></div>'+
+        '<div class="tsd4-card tsd4-result"><div class="tsd4-fruit is-stack"><img src="'+IMG_STACK+'" alt="Zwei Tomatenscheiben" loading="lazy"></div><p class="c-eye">Portionspreis</p><p class="r-val" data-target="0.384">0,00 €</p><p class="r-formula">120 g × 3,20 €/kg</p></div>'+
       '</div>'+
       '<div class="tsd4-foot"><p class="f-main">→ Der fertige Baustein geht so in <span class="g">jedes Rezept</span> — Preis und Menge in einem.</p><p class="f-sub">Zahlen = Beispielwerte. Einwaage aus deiner Zutaten-Tabelle, Einkaufspreis illustrativ.</p></div>';
     return root;
   }
   function countUp(el){ var target=parseFloat(el.getAttribute('data-target'))||0, dur=850, t0=null; function step(now){ if(t0===null)t0=now; var p=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-p,3), val=target*e; el.textContent=val.toFixed(2).replace('.',',')+' €'; if(p<1)requestAnimationFrame(step); } requestAnimationFrame(step); }
   function play(root){ if(root.__played)return; root.__played=true; var inv=root.querySelector('.tsd4-inv'), conn=root.querySelector('.tsd4-conn'), zutat=root.querySelector('.tsd4-zutat'), eq=root.querySelector('.tsd4-eq'), result=root.querySelector('.tsd4-result'), rval=result.querySelector('.r-val'); root.classList.add('in'); setTimeout(function(){ inv.classList.add('lit'); },220); setTimeout(function(){ conn.classList.add('on'); },820); setTimeout(function(){ conn.classList.add('go'); },980); setTimeout(function(){ zutat.classList.add('lit'); },1620); setTimeout(function(){ eq.classList.add('on'); result.classList.add('lit'); },2060); setTimeout(function(){ countUp(rval); },2260); }
-  function findAnchor(){ var a=document.getElementById('block-396b95465534802096b6d1f00ce611dc'); if(a) return a; var n=document.querySelectorAll('.notion-text'); for(var i=0;i<n.length;i++){ if(n[i].textContent && n[i].textContent.indexOf('übersetzen wir das Inventarprodukt')>-1) return n[i].closest('[id^="block-"]')||n[i]; } return null; }
+  function findAnchor(){ var a=document.getElementById('block-396b954655348098ae30f9bff07fa068'); if(a) return a; var n=document.querySelectorAll('h1.notion-heading'); for(var i=0;i<n.length;i++){ if((n[i].textContent||'').trim().indexOf('Zutaten als Bausteinkonzept')===0) return n[i].closest('.notion-column-list')||n[i].closest('[id^="block-"]')||n[i]; } return null; }
   function inView(el){ var r=el.getBoundingClientRect(); return r.top < (window.innerHeight*0.7) && r.bottom > (window.innerHeight*0.3); }
-  function mount(){ if(!/\/zutatenliste\/?$/.test(location.pathname)){ var e=document.getElementById('tsd4'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; } if(document.getElementById('tsd4')) return; var a=findAnchor(); if(!a) return; injectCSS(); var root=build(); a.parentNode.insertBefore(root, a.nextSibling); var io=new IntersectionObserver(function(ev){ if(ev[0].isIntersecting){ play(root); io.disconnect(); } },{threshold:.35}); io.observe(root); if(inView(root)) play(root); }
+  function mount(){ if(!/\/zutatenliste\/?$/.test(location.pathname)){ var e=document.getElementById('tsd4'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; } if(document.getElementById('tsd4')) return; var a=findAnchor(); if(!a) return; injectCSS(); var root=build(); a.parentNode.insertBefore(root, a); var io=new IntersectionObserver(function(ev){ if(ev[0].isIntersecting){ play(root); io.disconnect(); } },{threshold:.35}); io.observe(root); if(inView(root)) play(root); }
   mount();
   document.addEventListener("DOMContentLoaded", mount);
   new MutationObserver(mount).observe(document.documentElement,{childList:true,subtree:true});
