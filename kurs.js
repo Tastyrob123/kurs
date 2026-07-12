@@ -845,6 +845,41 @@
 
 /* ---- */
 
+/* mehrwert-zielbild — "Das Zielbild: was ein fertiges Gericht dir zeigt."-Absatz (strong):
+   Phrase "was ein fertiges Gericht dir zeigt." in .ts-accent (beige) wrappen; Klasse ts-mwz-goal setzen
+   (groß/mittig/Lineal via kurs.css). Absatz per Text gefunden, nicht per Block-ID (driftsicher).
+   Selbstheilend (Muster wie toneLastWord/ts-m2-gold): React kann den Span strippen -> nachziehen. */
+(function(){
+  if(window.__tsMwzGoal) return; window.__tsMwzGoal = true;
+  function on(){ return /\/mehrwert-zielbild\/?$/.test(location.pathname); }
+  var PHRASE='was ein fertiges Gericht dir zeigt.';
+  var FULL='Das Zielbild: '+PHRASE;
+  function apply(){
+    if(!on()) return;
+    var scope=document.querySelector('.page__mehrwert-zielbild'); if(!scope) return;
+    var el=null, ps=scope.querySelectorAll('.notion-text, p');
+    for(var j=0;j<ps.length;j++){ if((ps[j].textContent||'').trim()===FULL){ el=ps[j]; break; } }
+    if(!el) return;
+    el.classList.add('ts-mwz-goal');
+    var strong=el.querySelector('strong')||el;
+    if(strong.querySelector('.ts-accent')) return;   /* schon getont & Span intakt */
+    var w=document.createTreeWalker(strong, NodeFilter.SHOW_TEXT), n;
+    while(n=w.nextNode()){
+      var i=n.nodeValue.indexOf(PHRASE);
+      if(i>-1){ var after=n.splitText(i); after.splitText(PHRASE.length);
+        var span=document.createElement('span'); span.className='ts-accent'; span.textContent=PHRASE;
+        after.parentNode.replaceChild(span, after); return; }
+    }
+  }
+  apply();
+  document.addEventListener('DOMContentLoaded', apply);
+  var _t=null;
+  new MutationObserver(function(){ if(_t) return; _t=setTimeout(function(){ _t=null; apply(); },200); })
+    .observe(document.documentElement,{childList:true,subtree:true});
+})();
+
+/* ---- */
+
 (function(){
   if (window.__tsmwzlead) return; window.__tsmwzlead = true;
 

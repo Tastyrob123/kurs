@@ -727,6 +727,10 @@ details > summary {
 /* mehrwert-zielbild — Intro-H2 "Die sechs Bereiche…" größer (trifft nur diese eine H2 vor dem Raster, nie H1/Fließtext) */
 .page__mehrwert-zielbild h2.notion-heading.ts-mz-center{ font-size:clamp(1.7rem,3.6vw,2.15rem); line-height:1.16; }
 
+/* mehrwert-zielbild — "Das Zielbild: was ein fertiges Gericht dir zeigt."-Absatz groß, mittig, Lineal TS; Phrase "was ein fertiges Gericht dir zeigt." beige via .ts-accent. Klasse ts-mwz-goal + Phrase-Split in kurs.js (__tsMwzGoal), driftsicher ohne Block-ID */
+.page__mehrwert-zielbild .ts-mwz-goal{ text-align:center; margin:34px 0 14px; }
+.page__mehrwert-zielbild .ts-mwz-goal strong{ display:block; font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif; font-weight:600; letter-spacing:-.02em; font-size:clamp(1.7rem,3.6vw,2.15rem); line-height:1.16; color:#fff; }
+
 /* mehrwert-zielbild — "Du siehst…"-Vierspalter: mehr Luft oben/unten */
 .page__mehrwert-zielbild #block-398b9546553480e4bf74c90f15b0f5f5{ margin-top:40px; margin-bottom:40px; }
 
