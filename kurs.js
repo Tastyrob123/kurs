@@ -2250,7 +2250,8 @@
   /* Gesamt-Summe der im Einkaufswagen liegenden Karten — rote Lineal-Zahl + weißes Label */
   #tsshop .tss-sum{text-align:center;margin-top:clamp(28px,4vh,50px);opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .8s cubic-bezier(.22,1,.36,1)}
   #tsshop .tss-sum.on{opacity:1;transform:none}
-  #tsshop .tss-sum-val{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(34px,5.2vw,62px);font-weight:400;letter-spacing:-.018em;line-height:1;color:#E5484D;font-variant-numeric:tabular-nums;display:inline-block}
+  /* System-Font (SF Pro Display) statt Lineal TS: Lineal ist nur als 600er-Schnitt eingebunden und ignoriert font-weight — echter Light-Schnitt (300) geht nur über die System-Font */
+  #tsshop .tss-sum-val{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:clamp(28px,3.6vw,46px);font-weight:300;letter-spacing:-.01em;line-height:1;color:#E5484D;font-variant-numeric:tabular-nums;display:inline-block}
   #tsshop .tss-sum-val.pulse{animation:tss-sumpulse .6s cubic-bezier(.22,1,.36,1)}
   @keyframes tss-sumpulse{0%{transform:scale(1)}32%{transform:scale(1.09)}100%{transform:scale(1)}}
   #tsshop .tss-sum-label{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(15px,1.7vw,21px);font-weight:500;letter-spacing:.005em;color:#fff;margin-top:12px}
