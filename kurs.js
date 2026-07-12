@@ -4023,6 +4023,7 @@
 
 
 
+
 /* ============================================================================
    #tscover — Zutaten-DB-Erklär-Animationen (Seite /zutatenliste)
    ZWEI getrennte Vollbreite-Blöcke, je: Animation LINKS + Textpanel RECHTS.
@@ -4304,9 +4305,12 @@
   function moveCursor(cur,x,y,dur){ cur.style.transition='transform '+dur+'ms cubic-bezier(.5,0,.2,1)'; cur.style.transform='translate('+x+'px,'+y+'px)'; }
   function relPos(stage,el,dx,dy){ var sr=stage.getBoundingClientRect(), er=el.getBoundingClientRect(); return [er.left-sr.left+(dx||0), er.top-sr.top+(dy||0)]; }
   function setStep(p,n,state){ var el=p.querySelector('.tsc-step[data-step="'+n+'"]'); if(!el)return; el.classList.remove('active','done'); if(state)el.classList.add(state); }
+  /* super.so setzt teils !important-Regeln, die unsere Stylesheet-Regeln schlagen -> Sichtbarkeit inline erzwingen */
+  function reveal(p){ var w=p.querySelector('.tsc-win'); if(w){ w.style.setProperty('opacity','1','important'); w.style.setProperty('transform','none','important'); } var c=p.querySelector('.tsc-cursor'); if(c) c.style.setProperty('opacity','1','important'); }
 
   function playA(p){
     if(p.__clock) p.__clock.clear(); var clock=mkClock(); p.__clock=clock;
+    reveal(p);
     var stage=p.querySelector('.tsc-stage'), win=p.querySelector('.tsc-win'), cursor=p.querySelector('.tsc-cursor'),
         menu=p.querySelector('.tsc-menu'), ghost=p.querySelector('.tsc-ghost'),
         h1=p.querySelector('.tsc-h1'), h1txt=p.querySelector('.tsc-h1txt'),
@@ -4344,6 +4348,7 @@
 
   function playB(p){
     if(p.__clock) p.__clock.clear(); var clock=mkClock(); p.__clock=clock; var at=clock.at;
+    reveal(p);
     var stage=p.querySelector('.tsc-stage'), win=p.querySelector('.tsc-win'), cursor=p.querySelector('.tsc-cursor'),
         neuv=p.querySelector('.tscbb-neuv'), drop=p.querySelector('.tscbb-drop'),
         miNeu=p.querySelector('.tscbb-mi[data-mi="neu"]'), miStd=p.querySelector('.tscbb-mi[data-mi="std"]'),
@@ -4409,8 +4414,16 @@
   }
   function anchorShop(){ return document.getElementById('tsshop--db4_zutaten'); }
   function findLoesung(){
+    var root=document.querySelector('article.notion-root')||document.body;
     var all=document.querySelectorAll('.notion-text');
-    for(var i=0;i<all.length;i++){ if((all[i].textContent||'').trim().indexOf('Die Lösung')===0){ return { el:all[i], block:(all[i].closest('[id^="block-"]')||all[i]) }; } }
+    for(var i=0;i<all.length;i++){
+      if((all[i].textContent||'').trim().indexOf('Die Lösung')===0){
+        /* Anker MUSS auf notion-root-Ebene liegen (außerhalb evtl. Notion-Spalte),
+           sonst landet die animierte Karte in einer Spalte -> Reconciler-Freeze. */
+        var node=all[i]; while(node.parentElement && node.parentElement!==root) node=node.parentElement;
+        return { el:all[i], block:(node.parentElement===root?node:(all[i].closest('[id^="block-"]')||all[i])) };
+      }
+    }
     return null;
   }
   function mountBlock(cfg, anchorAfter){
@@ -4430,7 +4443,14 @@
     var needA=!document.getElementById('tscb-A'), needB=!document.getElementById('tscb-B'), needLo=!document.querySelector('.tsc-loesung');
     if(!needA && !needB && !needLo) return;
     var lo=(needLo||needA) ? findLoesung() : null;
-    if(needLo && lo && lo.el && lo.el.classList) lo.el.classList.add('tsc-loesung');
+    if(needLo && lo && lo.el){
+      var le=lo.el; le.classList.add('tsc-loesung');
+      le.style.setProperty('font-size','16px','important');
+      le.style.setProperty('font-weight','400','important');
+      le.style.setProperty('line-height','1.7','important');
+      var ss=le.querySelectorAll('strong');
+      for(var si=0;si<ss.length;si++){ ss[si].style.setProperty('font-weight', si===0?'700':'400','important'); }
+    }
     var shop=anchorShop();
     if(needA) mountBlock(BLOCKS[0], (lo&&lo.block)||shop);
     if(needB) mountBlock(BLOCKS[1], shop);
