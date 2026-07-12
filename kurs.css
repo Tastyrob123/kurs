@@ -329,7 +329,8 @@ canvas[style*="2147483647"]{ display:none !important; }
 .page__modul-2-das-notion-ai-backoffice-system #block-397b95465534806b9ed5d5ede61dd474,
 .page__modul-2-das-notion-ai-backoffice-system #block-397b95465534806b9ed5d5ede61dd474 .notion-semantic-string{
   font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif !important;
-  font-weight:600 !important; letter-spacing:-.01em !important; }
+  font-weight:600 !important; letter-spacing:-.01em !important;
+  font-size:clamp(1.7rem,3.4vw,2.2rem) !important; line-height:1.2 !important; }
 .page__modul-2-das-notion-ai-backoffice-system .ts-m2-gold{ color:#9e947f !important; }
 
 /* ===== BLOCK 9 · Modul 2 · Animation "Das lebende System" (rechte Spalte neben dem Intro-Absatz) =====
