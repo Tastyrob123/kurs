@@ -4189,6 +4189,7 @@
 
 
 
+
 /* ============================================================================
    #tscover — Zutaten-DB-Erklär-Animationen (Seite /zutatenliste)
    ZWEI getrennte Vollbreite-Blöcke, je: Animation LINKS + Textpanel RECHTS.
@@ -4502,7 +4503,11 @@
     var at=clock.at, sw=stage.getBoundingClientRect().width, sh=stage.getBoundingClientRect().height;
     cursor.style.transition='none'; cursor.style.transform='translate('+(sw*0.7)+'px,'+(sh+40)+'px)';
     at(400,function(){ setStep(p,1,'active'); var q=relPos(stage,h1,36,6); moveCursor(cursor,q[0],q[1],700); });
-    at(1150,function(){ var tr=relPos(stage,p.querySelector('.tsc-titlerow'),16,40); menu.style.left=tr[0]+'px'; menu.style.top=tr[1]+'px'; menu.classList.add('on'); });
+    at(1150,function(){ var tr=relPos(stage,p.querySelector('.tsc-titlerow'),16,34); menu.style.left=tr[0]+'px'; menu.style.top=tr[1]+'px'; menu.classList.add('on');
+      /* Menü darf nie unten aus der Karte ragen -> dynamisch hochklemmen */
+      var wr=win.getBoundingClientRect(), mr=menu.getBoundingClientRect(); var over=mr.bottom-(wr.bottom-12);
+      if(over>0) menu.style.top=(tr[1]-over)+'px';
+    });
     at(1400,function(){ var dup=menu.querySelector('.tsc-mi.dup'); var q=relPos(stage,dup,24,12); moveCursor(cursor,q[0],q[1],540); });
     at(1980,function(){ menu.querySelector('.tsc-mi.dup').classList.add('hit'); cursor.classList.add('click'); });
     at(2120,function(){ cursor.classList.remove('click'); });
