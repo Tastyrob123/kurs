@@ -1107,7 +1107,9 @@
   var PAGES = [
     { re:/\/mehrwert-zielbild\/?$/, href:'/inventurliste' },
     { re:/\/inventurliste\/?$/,     href:'/lieferpartner-ansprechpartner-lieferantenvertrge' },
-    { re:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, href:'/zutatenliste' }
+    { re:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, href:'/zutatenliste' },
+    { re:/\/zutatenliste\/?$/,       href:'/rezepturen' },
+    { re:/\/rezepturen\/?$/,         href:'/gemeinkosten-mitarbeiterlhne' }
   ];
   function pageHref(){
     for(var i=0;i<PAGES.length;i++){ if(PAGES[i].re.test(location.pathname)) return PAGES[i].href; }
@@ -2800,6 +2802,32 @@
         { name:'Butter',        wert:15,  img:'https://tastyrob123.github.io/kurs/img/zutaten/paprika-rot.jpg' },
         { name:'Thymian',       wert:3,   img:'https://tastyrob123.github.io/kurs/img/zutaten/avocado.jpg' }
       ]},
+    { kachel_id:'db5_rezepturen', kachel_name:'Rezepturen', ist_produkt_kachel:true,
+      einheit:'Portionsgröße (g)', einheit_typ:'menge_g',
+      /* 21 Tasty-Studios-Sirupe/Saucen (edle Gastro-Lagerung, schwarzes Studio, img/rezepturen, GitHub Pages) — Portionsgrößen = Beispielwerte */
+      objekt_varianten:[
+        { name:'Erdbeer-Sirup',         wert:25, img:'https://tastyrob123.github.io/kurs/img/rezepturen/erdbeer-sirup.jpg' },
+        { name:'Rote-Bete-Sauce',       wert:60, img:'https://tastyrob123.github.io/kurs/img/rezepturen/rote-bete-sauce.jpg' },
+        { name:'Hibiskus-Sirup',        wert:20, img:'https://tastyrob123.github.io/kurs/img/rezepturen/hibiskus-sirup.jpg' },
+        { name:'Mango-Sauce',           wert:50, img:'https://tastyrob123.github.io/kurs/img/rezepturen/mango-sauce.jpg' },
+        { name:'Karotten-Ingwer-Sirup', wert:22, img:'https://tastyrob123.github.io/kurs/img/rezepturen/karotten-ingwer-sirup.jpg' },
+        { name:'Aprikosen-Coulis',      wert:40, img:'https://tastyrob123.github.io/kurs/img/rezepturen/aprikosen-coulis.jpg' },
+        { name:'Zitronensirup',         wert:18, img:'https://tastyrob123.github.io/kurs/img/rezepturen/zitronensirup.jpg' },
+        { name:'Passionsfrucht-Sauce',  wert:45, img:'https://tastyrob123.github.io/kurs/img/rezepturen/passionsfrucht-sauce.jpg' },
+        { name:'Curry-Mango-Dip',       wert:50, img:'https://tastyrob123.github.io/kurs/img/rezepturen/curry-mango-dip.jpg' },
+        { name:'Basilikum-Pesto',       wert:30, img:'https://tastyrob123.github.io/kurs/img/rezepturen/basilikum-pesto.jpg' },
+        { name:'Minzsirup',             wert:15, img:'https://tastyrob123.github.io/kurs/img/rezepturen/minzsirup.jpg' },
+        { name:'Matcha-Sirup',          wert:20, img:'https://tastyrob123.github.io/kurs/img/rezepturen/matcha-sirup.jpg' },
+        { name:'Kiwi-Limetten-Sauce',   wert:45, img:'https://tastyrob123.github.io/kurs/img/rezepturen/kiwi-limetten-sauce.jpg' },
+        { name:'Blaubeer-Sauce',        wert:55, img:'https://tastyrob123.github.io/kurs/img/rezepturen/blaubeer-sauce.jpg' },
+        { name:'Holunderblüten-Sirup',  wert:20, img:'https://tastyrob123.github.io/kurs/img/rezepturen/holunderblueten-sirup.jpg' },
+        { name:'Lavendel-Sirup',        wert:15, img:'https://tastyrob123.github.io/kurs/img/rezepturen/lavendel-sirup.jpg' },
+        { name:'Butterfly-Pea-Sirup',   wert:18, img:'https://tastyrob123.github.io/kurs/img/rezepturen/butterfly-pea-sirup.jpg' },
+        { name:'Himbeer-Coulis',        wert:40, img:'https://tastyrob123.github.io/kurs/img/rezepturen/himbeer-coulis.jpg' },
+        { name:'Rhabarber-Sirup',       wert:25, img:'https://tastyrob123.github.io/kurs/img/rezepturen/rhabarber-sirup.jpg' },
+        { name:'Karamellsirup',         wert:35, img:'https://tastyrob123.github.io/kurs/img/rezepturen/karamellsirup.jpg' },
+        { name:'Schokoladensauce',      wert:40, img:'https://tastyrob123.github.io/kurs/img/rezepturen/schokoladensauce.jpg' }
+      ]},
     { kachel_id:'db13_lieferanten', kachel_name:'Lieferpartner', ist_produkt_kachel:true,
       einheit:'Mindestbelieferung (€)', einheit_typ:'preis',
       /* 13 Tasty-Studios-Fahrzeugbilder (img/lieferpartner, GitHub Pages) — Werte = Beispielwerte */
@@ -2909,6 +2937,15 @@
       title:'Deine Zutaten. <span>Gramm für Gramm.</span>',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB IV ist die Portionsgröße.',
       summary:'Einwaage', chain:true },
+    /* DB V Rezepturen — Phasen liegen hier in einem Tab-Widget (.notion-tabs, 4 Phasen),
+       nicht in einer .notion-column-list → container-Selector + marker (nur die Phasen-
+       Tabs tragen "Grundgerüst", die zweite Finance-Erweiterung-Tabgruppe nicht). */
+    { path:/\/rezepturen\/?$/, kachel:'db5_rezepturen',
+      container:'.notion-tabs', marker:/Grundgerüst/,
+      eyebrow:'Der Warenkorb · DB V',
+      title:'Deine Rezepturen. <span>Portion für Portion.</span>',
+      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB V ist die Portionsgröße.',
+      summary:'Portionsmenge', chain:true },
     { path:/\/inventurliste\/?$/, kachel:'db0_inventurliste',
       eyebrow:'Der Warenkorb · DB 0',
       title:'Deine Inventurliste. <span>Schritt für Schritt.</span>',
@@ -3094,11 +3131,15 @@
 
   /* ---- Schritte aus den Notion-Toggles der Phasen-Sektion lesen ---- */
   function doneKey(txt){ return 'done-'+((txt||'').replace(/[‣\s]/g,'').slice(0,40)); }
-  function findPhases(marker){
-    var lists=document.querySelectorAll('.notion-column-list'), cand=null;
+  function findPhases(marker,sel){
+    var lists=document.querySelectorAll(sel||'.notion-column-list'), cand=null;
     for(var i=0;i<lists.length;i++){
       var t=lists[i].textContent||'';
-      if(t.indexOf('Phase I')>-1&&t.indexOf('Schritt')>-1&&(!marker||marker.test(t))){ if(!cand||cand.contains(lists[i])) cand=lists[i]; }
+      /* Standard-Regal verlangt "Phase I"+"Schritt". Bei eigenem container-Selector
+         (z. B. Tab-Widget .notion-tabs auf /rezepturen) reicht "Phase I"+marker —
+         dort steht das Wort "Schritt" nicht im Container-Text. */
+      var ok=t.indexOf('Phase I')>-1&&(sel?true:t.indexOf('Schritt')>-1)&&(!marker||marker.test(t));
+      if(ok){ if(!cand||cand.contains(lists[i])) cand=lists[i]; }
     }
     return cand;
   }
@@ -3158,7 +3199,7 @@
      Nenner = Summe der bekannten Schrittzahlen (auch noch nicht besuchte Seiten
      zählen mit). Zähler = erledigte Schritte = localStorage-Keys "done-…"='1'
      (dieselben Keys, die das Karten-/Checkbox-System setzt → immer aktuell). */
-  var BACKOFFICE={ db0_inventurliste:16, db13_lieferanten:13, db13_ansprechpartner:10, db13_vertraege:13, db4_zutaten:30 };
+  var BACKOFFICE={ db0_inventurliste:16, db13_lieferanten:13, db13_ansprechpartner:10, db13_vertraege:13, db4_zutaten:30, db5_rezepturen:23 };
   function backofficeTotal(){ var t=0; for(var kk in BACKOFFICE){ if(BACKOFFICE.hasOwnProperty(kk)) t+=BACKOFFICE[kk]; } return t; }
   function backofficeDone(){ var d=0; try{ for(var i=0;i<localStorage.length;i++){ var key=localStorage.key(i); if(key&&key.slice(0,5)==='done-'&&localStorage.getItem(key)==='1') d++; } }catch(e){} return d; }
   function backofficePct(){ var t=backofficeTotal(), d=Math.min(backofficeDone(),t); return t>0?Math.round(d/t*100):0; }
@@ -3370,7 +3411,7 @@
   }
   function rootIdFor(page){ return 'tsshop--'+(page.kachel||'x'); }
   function mountPage(page){
-    var list=findPhases(page.marker); if(!list) return;
+    var list=findPhases(page.marker,page.container); if(!list) return;
     /* Original-Phasen verstecken (Notion bleibt SSOT) — auch nach React-Re-Render */
     if(list.style.display!=='none') list.style.display='none';
     var rootId=rootIdFor(page), existing=document.getElementById(rootId);
