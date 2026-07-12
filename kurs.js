@@ -1841,6 +1841,130 @@
 
 /* ---- */
 
+/* ============================================================
+   gemeinkosten-mitarbeiterlhne — "Was sind Gemeinkosten?"
+   Animiertes Kostenblock-Grid (#tsgk) ersetzt die 8er-Bullet-
+   liste (Muster: #tslink/inventurliste — Glaskarten, Champagner-
+   Gold-Glow, Lineal-TS-Labels). Reveal per Keyframe-Animation
+   + inView-Polling (nicht transition/IO — s. Kommentar unten,
+   busy Super.so-Seite). Stagger-Reveal (.on -> .done), Icon-
+   Linien zeichnen sich (stroke-dashoffset, pathLength=1).
+   reduced-motion = alles statisch. Kategorien = SSOT Lektion 2.5.
+   ============================================================ */
+(function(){
+  if(window.__tsgk) return; window.__tsgk=true;
+  var GLOW='199,180,137';
+  var CSS=`
+  #tsgk{width:min(1000px,95vw);margin:34px auto 30px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
+  #tsgk *{box-sizing:border-box}
+  #tsgk .tsgk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  #tsgk .tsgk-card{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;border-radius:16px;padding:26px 18px 22px;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0));border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85);opacity:0;transform:translateY(18px) scale(.985);will-change:transform,opacity;transition:border-color .4s ease,box-shadow .5s ease}
+  /* Reveal = Keyframe-Animation (NICHT transition): auf dieser busy Super.so-Seite
+     bleiben class-getriggerte Transitions haengen. .on setzt zusaetzlich den End-
+     zustand direkt, damit der Inhalt nie von der Animation abhaengt. */
+  #tsgk .tsgk-card.on{opacity:1;transform:none;animation:tsgk-rise .7s cubic-bezier(.22,1,.36,1) both;animation-delay:var(--d,0s)}
+  #tsgk .tsgk-card.on.done{animation:none}
+  #tsgk .tsgk-card.on.done:hover{border-color:rgba(var(--g),.5);transform:translateY(-4px);animation:tsgk-hb 2.6s cubic-bezier(.4,0,.3,1) infinite}
+  #tsgk .tsgk-ic{position:relative;width:52px;height:52px;display:flex;align-items:center;justify-content:center;border-radius:50%;margin-bottom:14px;background:radial-gradient(circle at 50% 38%,rgba(var(--g),.16),rgba(var(--g),.04) 70%,transparent);border:1px solid rgba(var(--g),.32);box-shadow:inset 0 0 12px rgba(var(--g),.10)}
+  #tsgk .tsgk-ic svg{width:26px;height:26px;display:block}
+  #tsgk .tsgk-ic path,#tsgk .tsgk-ic circle,#tsgk .tsgk-ic line,#tsgk .tsgk-ic polyline,#tsgk .tsgk-ic rect{stroke:#d8c9ab;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}
+  #tsgk .tsgk-card.on .tsgk-ic path,#tsgk .tsgk-card.on .tsgk-ic circle,#tsgk .tsgk-card.on .tsgk-ic line,#tsgk .tsgk-card.on .tsgk-ic polyline,#tsgk .tsgk-card.on .tsgk-ic rect{stroke-dashoffset:0;animation:tsgk-draw .9s cubic-bezier(.65,0,.35,1) both;animation-delay:calc(var(--d,0s) + .16s)}
+  #tsgk .tsgk-h{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1rem;font-weight:600;letter-spacing:-.006em;line-height:1.2;color:#fff;margin:0}
+  #tsgk .tsgk-s{display:block;margin-top:5px;font-size:.72rem;letter-spacing:.04em;color:rgba(255,255,255,.5)}
+  @keyframes tsgk-rise{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
+  @keyframes tsgk-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+  @keyframes tsgk-hb{0%{box-shadow:0 4px 14px rgba(var(--g),.10),0 0 14px rgba(var(--g),.10)}18%{box-shadow:0 6px 22px rgba(var(--g),.30),0 0 46px rgba(var(--g),.34)}32%{box-shadow:0 5px 18px rgba(var(--g),.16),0 0 26px rgba(var(--g),.18)}46%{box-shadow:0 6px 20px rgba(var(--g),.26),0 0 40px rgba(var(--g),.28)}72%,100%{box-shadow:0 4px 14px rgba(var(--g),.10),0 0 14px rgba(var(--g),.10)}}
+  @media(max-width:860px){#tsgk .tsgk-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:460px){#tsgk .tsgk-grid{grid-template-columns:repeat(2,1fr);gap:12px}#tsgk .tsgk-card{padding:22px 12px 18px}}
+  #tsgk .tsgk-card.on.done .tsgk-ic path,#tsgk .tsgk-card.on.done .tsgk-ic circle,#tsgk .tsgk-card.on.done .tsgk-ic line,#tsgk .tsgk-card.on.done .tsgk-ic polyline,#tsgk .tsgk-card.on.done .tsgk-ic rect{animation:none}
+  @media(prefers-reduced-motion:reduce){#tsgk .tsgk-card,#tsgk .tsgk-card.on{opacity:1;transform:none;animation:none}#tsgk .tsgk-card.on.done:hover{transform:none;animation:none;box-shadow:0 0 26px rgba(var(--g),.22)}#tsgk .tsgk-ic path,#tsgk .tsgk-ic circle,#tsgk .tsgk-ic line,#tsgk .tsgk-ic polyline,#tsgk .tsgk-ic rect,#tsgk .tsgk-card.on .tsgk-ic path,#tsgk .tsgk-card.on .tsgk-ic circle,#tsgk .tsgk-card.on .tsgk-ic line,#tsgk .tsgk-card.on .tsgk-ic polyline,#tsgk .tsgk-card.on .tsgk-ic rect{stroke-dashoffset:0;animation:none}}
+  `;
+  /* Icons: minimal 24er-Linien, pathLength=1 damit die Zeichen-Animation
+     unabhaengig von der echten Pfadlaenge sauber laeuft. */
+  var I={
+    reinigung:'<svg viewBox="0 0 24 24"><path pathLength="1" d="M12 3v3"/><path pathLength="1" d="M12 3l2 1.4-2 1.2-2-1.2z"/><path pathLength="1" d="M6.5 20.5l1-9a1.5 1.5 0 0 1 1.5-1.3h6a1.5 1.5 0 0 1 1.5 1.3l1 9a1.2 1.2 0 0 1-1.2 1.3H7.7a1.2 1.2 0 0 1-1.2-1.3z"/><path pathLength="1" d="M9.2 13.5h5.6"/></svg>',
+    versicherung:'<svg viewBox="0 0 24 24"><path pathLength="1" d="M12 3l7 2.4v5.2c0 4.4-3 7.6-7 9.4-4-1.8-7-5-7-9.4V5.4z"/><path pathLength="1" d="M9 12l2.2 2.2L15.2 10"/></svg>',
+    verwaltung:'<svg viewBox="0 0 24 24"><rect pathLength="1" x="5.5" y="3.5" width="13" height="17" rx="2"/><path pathLength="1" d="M9 8h6"/><path pathLength="1" d="M9 12h6"/><path pathLength="1" d="M9 16h4"/></svg>',
+    instandhaltung:'<svg viewBox="0 0 24 24"><path pathLength="1" d="M14.5 6.3a3.8 3.8 0 0 0-4.9 4.9l-5.2 5.2a1.7 1.7 0 0 0 2.4 2.4l5.2-5.2a3.8 3.8 0 0 0 4.9-4.9l-2.3 2.3-2-.4-.4-2z"/></svg>',
+    miete:'<svg viewBox="0 0 24 24"><path pathLength="1" d="M4.5 20.5V10l7.5-5 7.5 5v10.5"/><path pathLength="1" d="M4.5 20.5h15"/><rect pathLength="1" x="9.5" y="13" width="5" height="7.5"/></svg>',
+    abschreibung:'<svg viewBox="0 0 24 24"><path pathLength="1" d="M4 5v14h16"/><polyline pathLength="1" points="7,9 11,13 14,10 19,15.5"/><path pathLength="1" d="M19 12v3.5h-3.5"/></svg>',
+    marketing:'<svg viewBox="0 0 24 24"><path pathLength="1" d="M4 10v4h3l7 4V6l-7 4z"/><path pathLength="1" d="M17.5 9a4 4 0 0 1 0 6"/></svg>',
+    sonstige:'<svg viewBox="0 0 24 24"><circle pathLength="1" cx="6" cy="12" r="1.4"/><circle pathLength="1" cx="12" cy="12" r="1.4"/><circle pathLength="1" cx="18" cy="12" r="1.4"/></svg>'
+  };
+  var CARDS=[
+    ['Reinigungskosten','Reinigungsfirma',I.reinigung],
+    ['Versicherungen','',I.versicherung],
+    ['Verwaltung','',I.verwaltung],
+    ['Instandhaltung','',I.instandhaltung],
+    ['Miete & Kaution','',I.miete],
+    ['Abschreibungen','',I.abschreibung],
+    ['Marketing','',I.marketing],
+    ['Sonstige Kosten','',I.sonstige]
+  ];
+  function injectCSS(){ if(document.getElementById('tsgk-css'))return; var s=document.createElement('style'); s.id='tsgk-css'; s.textContent=CSS; document.head.appendChild(s); }
+  function build(){
+    var root=document.createElement('div'); root.id='tsgk';
+    root.innerHTML='<div class="tsgk-grid">'+CARDS.map(function(c){
+      return '<div class="tsgk-card" style="--g:'+GLOW+'"><span class="tsgk-ic" aria-hidden="true">'+c[2]+'</span><h3 class="tsgk-h">'+c[0]+(c[1]?'<span class="tsgk-s">'+c[1]+'</span>':'')+'</h3></div>';
+    }).join('')+'</div>';
+    return root;
+  }
+  function play(root){
+    if(root.__played) return; root.__played=true;
+    var cards=[].slice.call(root.querySelectorAll('.tsgk-card'));
+    cards.forEach(function(c,i){
+      c.style.setProperty('--d',(i*0.09)+'s');
+      c.classList.add('on');
+      /* nach Entrance 'done' setzen: friert Endzustand ein + gibt Hover frei (kein Replay) */
+      setTimeout(function(){ c.classList.add('done'); }, i*90+1000);
+    });
+  }
+  function inView(el){ var r=el.getBoundingClientRect(); var vh=window.innerHeight||document.documentElement.clientHeight; return r.top < vh-60 && r.bottom > 0; }
+  function setup(root){
+    /* IntersectionObserver ist auf dieser busy Super.so-Seite unzuverlaessig
+       (Main-Thread saturiert) — deshalb robustes inView-Polling + Scroll-Fallback
+       als primaerer Trigger, IO nur als Zusatz. Inhalt nie animationsabhaengig. */
+    var io=new IntersectionObserver(function(e){ if(e[0].isIntersecting){ play(root); io.disconnect(); } },{threshold:.2});
+    io.observe(root);
+    function cleanup(){ window.removeEventListener('scroll',onScroll); clearInterval(poll); }
+    function onScroll(){ if(inView(root)){ play(root); cleanup(); } }
+    window.addEventListener('scroll',onScroll,{passive:true});
+    var poll=setInterval(function(){ if(root.__played){ clearInterval(poll); return; } if(inView(root)){ play(root); cleanup(); } },250);
+    setTimeout(function(){ clearInterval(poll); },15000);
+    if(inView(root)) play(root);
+  }
+  function findList(){
+    var ps=document.querySelectorAll('.page__gemeinkosten-mitarbeiterlhne .notion-text');
+    for(var i=0;i<ps.length;i++){
+      if(/Wenn wir von Gemeinkosten sprechen/.test(ps[i].textContent||'')){
+        var el=ps[i].nextElementSibling;
+        while(el){ if(el.matches&&el.matches('ul.notion-bulleted-list')) return el; el=el.nextElementSibling; }
+      }
+    }
+    var uls=document.querySelectorAll('.page__gemeinkosten-mitarbeiterlhne ul.notion-bulleted-list');
+    for(var j=0;j<uls.length;j++){ var tx=uls[j].textContent||''; if(/Reinigungskosten/.test(tx)&&/Sonstige Kosten/.test(tx)) return uls[j]; }
+    return null;
+  }
+  function mount(){
+    if(!/\/gemeinkosten-mitarbeiterlhne\/?$/.test(location.pathname)){ var e=document.getElementById('tsgk'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    if(document.getElementById('tsgk')) return;
+    var ul=findList(); if(!ul) return;
+    injectCSS();
+    ul.style.display='none';
+    var root=build();
+    ul.parentNode.insertBefore(root, ul.nextSibling);
+    setup(root);
+  }
+  function boot(){
+    var tries=0;
+    var iv=setInterval(function(){ tries++; mount(); if(tries>40) clearInterval(iv); },300);
+    new MutationObserver(function(){ mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
+
+/* ---- */
+
 (function(){
   var IMG="https://files.catbox.moe/ecvbxi.webp";
   var LOGO="https://files.catbox.moe/au80tp.png";
