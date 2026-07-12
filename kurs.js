@@ -186,7 +186,7 @@
 })();
 
 /* ============================================================
-   gerichte-getrnke-finaler-schritt — Hero "DB IX : Gerichte & Getränke" (Muster: rezepturen-Hero DB V)
+   gerichte-getrnke-finaler-schritt — Hero "DB VIII : Gerichte & Getränke" (Muster: rezepturen-Hero DB V)
    ============================================================ */
 (function(){
   var IMG="https://files.catbox.moe/cou55t.png"; /* 3-Laptop-Cover Gerichte & Getränke: weisser Hintergrund per Edge-Flood-Fill entfernt (transparent RGBA, kein AI) + 2x nachgeschaerft (Lanczos+Unsharp), 2732px fuer Retina-Schaerfe (aus Gerichte.png) */
@@ -200,11 +200,11 @@
     var hero=document.createElement("div");
     hero.className="ts-hero";
     hero.innerHTML=
-      '<img class="ts-hero__img" alt="DB IX — Gerichte & Getränke" src="'+IMG+'">'+
+      '<img class="ts-hero__img" alt="DB VIII — Gerichte & Getränke" src="'+IMG+'">'+
       '<div class="ts-hero__text">'+
         '<img class="ts-hero__logo" alt="Tasty Studios" src="'+LOGO+'">'+
         '<div class="ts-hero__eyebrow">L 2.7</div>'+
-        '<h1 class="ts-hero__title">DB IX : <span class="ts-gold">Gerichte &amp; Getränke</span></h1>'+
+        '<h1 class="ts-hero__title">DB VIII : <span class="ts-gold">Gerichte &amp; Getränke</span></h1>'+
       '</div>';
     var nr=sc.querySelector(".notion-root");
     if(nr) sc.insertBefore(hero, nr); else sc.appendChild(hero);
