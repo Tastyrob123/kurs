@@ -3932,6 +3932,7 @@
 
 
 
+
 /* ============================================================================
    #tscover — Zutaten-DB-Erklär-Animationen (Seite /zutatenliste)
    Vollbreite, ZWEI Panels nebeneinander (stapeln auf Mobil). Mount stabil unter
@@ -4210,7 +4211,8 @@
 
   /* ---------- Panel A Ablauf ---------- */
   function playA(p){
-    var clock=mkClock();
+    if(p.__clock) p.__clock.clear();
+    var clock=mkClock(); p.__clock=clock;
     var stage=p.querySelector('.tsc-stage'), win=p.querySelector('.tsc-win'), cursor=p.querySelector('.tsc-cursor'),
         menu=p.querySelector('.tsc-menu'), ghost=p.querySelector('.tsc-ghost'),
         h1=p.querySelector('.tsc-h1'), h1txt=p.querySelector('.tsc-h1txt'),
@@ -4249,7 +4251,8 @@
 
   /* ---------- Panel B Ablauf ---------- */
   function playB(p){
-    var clock=mkClock(), at=clock.at;
+    if(p.__clock) p.__clock.clear();
+    var clock=mkClock(); p.__clock=clock; var at=clock.at;
     var stage=p.querySelector('.tsc-stage'), win=p.querySelector('.tsc-win'), cursor=p.querySelector('.tsc-cursor'),
         neuv=p.querySelector('.tscb-neuv'), drop=p.querySelector('.tscb-drop'),
         miNeu=p.querySelector('.tscb-mi[data-mi="neu"]'), miStd=p.querySelector('.tscb-mi[data-mi="std"]'),
@@ -4298,6 +4301,7 @@
   }
 
   function trigger(root){
+    if(root.__trig) return; root.__trig=true;
     var played=false;
     function go(){ if(played)return; played=true; var pa=root.querySelector('[data-panel="A"]'), pb=root.querySelector('[data-panel="B"]'); if(pa)playA(pa); if(pb)playB(pb); }
     if('IntersectionObserver' in window){ var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting) go(); }); },{threshold:.15}); io.observe(root); }
