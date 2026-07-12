@@ -198,9 +198,9 @@
   var IMG_SLICED="https://tastyrob123.github.io/kurs/img/anim/tomate-sliced.png";
   var IMG_STACK ="https://tastyrob123.github.io/kurs/img/anim/tomate-stack.png";
   var CSS=`
-  #tsd4{width:min(1000px,95vw);margin:-74px auto 40px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;opacity:0;transform:translateY(20px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+  #tsd4{width:min(1000px,95vw);margin:-10px auto 40px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;opacity:0;transform:translateY(20px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
   #tsd4.in{opacity:1;transform:none}
-  #tsd4 .tsd4-head{text-align:center;margin:0 0 60px}
+  #tsd4 .tsd4-head{text-align:center;margin:0 0 104px}
   #tsd4 .tsd4-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:#9e947f;margin:0 0 12px}
   #tsd4 .tsd4-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#9e947f;box-shadow:0 0 12px rgba(158,148,127,.7)}
   #tsd4 .tsd4-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;font-size:clamp(1.5rem,3vw,2.1rem);font-weight:600;letter-spacing:-.02em;line-height:1.15;margin:0;color:#fff}
