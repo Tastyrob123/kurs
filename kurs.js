@@ -309,7 +309,7 @@
     #tsEcoRoot .net-section::before { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:1400px; height:1000px; background: radial-gradient(ellipse at center, rgba(199,180,137,.05) 0%, transparent 60%); pointer-events:none; }
     #tsEcoRoot .net-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
     #tsEcoRoot .net-header { text-align: center; margin-bottom: 8px; }
-    #tsEcoRoot .net-title { font-size: clamp(30px,4.4vw,52px); font-weight:800; letter-spacing:-.03em; color:#fff; line-height:1.1; margin:0 0 12px; }
+    #tsEcoRoot .net-title { font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif; font-size: clamp(30px,4.4vw,52px); font-weight:600; letter-spacing:-.03em; color:#fff; line-height:1.1; margin:0 0 12px; }
     #tsEcoRoot .net-title span { color:#c7b489; }
     #tsEcoRoot .net-sub { font-size:17px; color:rgba(255,255,255,.42); max-width:560px; margin:0 auto; line-height:1.65; }
     #tsEcoRoot .eco-canvas-wrap { position:relative; width:100%; max-width:1100px; margin:8px auto 0; aspect-ratio:1100/560; }  /* ★3 Grafik enger an Header */
@@ -832,8 +832,8 @@
   #tsl{width:100vw;max-width:100vw;margin:44px 0 10px;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 clamp(20px,4vw,56px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
   #tsl *{box-sizing:border-box}
   #tsl .tsl-head{text-align:center;margin:0 auto 66px}
-  #tsl .tsl-eyebrow{display:inline-block;font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin:0 0 14px}
-  #tsl .tsl-title{font-size:clamp(30px,5vw,46px);font-weight:600;letter-spacing:-.02em;line-height:1.05;margin:0}
+  #tsl .tsl-eyebrow{display:inline-block;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin:0 0 14px}
+  #tsl .tsl-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(30px,5vw,46px);font-weight:600;letter-spacing:-.02em;line-height:1.05;margin:0}
   #tsl .tsl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,3vw,40px);max-width:1180px;margin:0 auto;justify-items:center}
   #tsl .tsl-cell{opacity:0;transform:translateY(22px);filter:blur(8px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1),filter .9s cubic-bezier(.16,1,.3,1);transition-delay:calc(var(--i) * 140ms);width:100%;max-width:250px}
   #tsl .tsl-cell.in{opacity:1;transform:translateY(0);filter:blur(0)}
@@ -1207,7 +1207,7 @@
   #tsdb{width:100%;max-width:900px;margin:30px auto 12px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
   #tsdb *{box-sizing:border-box}
   #tsdb .tsdb-head{text-align:center;margin-bottom:28px}
-  #tsdb .tsdb-title{font-size:clamp(24px,3.2vw,36px);font-weight:800;letter-spacing:-.02em;line-height:1.12;color:#fff;margin:0 0 10px}
+  #tsdb .tsdb-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(24px,3.2vw,36px);font-weight:600;letter-spacing:-.02em;line-height:1.12;color:#fff;margin:0 0 10px}
   #tsdb .tsdb-title span{color:#c7b489}
   #tsdb .tsdb-sub{font-size:15px;color:rgba(255,255,255,.42);max-width:520px;margin:0 auto;line-height:1.6}
   #tsdb .tsdb-chart{position:relative;padding:4px 0}
