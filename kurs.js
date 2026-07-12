@@ -3100,10 +3100,12 @@
   if(window.__ts2mac) return; window.__ts2mac=true;
   var PATH=/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/;
   var BASE='https://tastyrob123.github.io/kurs/img/lieferpartner-mac/';
+  var SCROLL=BASE+'scroll/';
+  var FRAME='https://files.catbox.moe/oj1wa9.png'; /* leerer MacBook-Rahmen wie #tsmb */
   var MACS=[
-    { after:'tsshop--db13_lieferanten',     side:'left',  img:BASE+'lieferpartner-uebersicht.png', cap:'Lieferpartner-Übersicht' },
-    { after:'tsshop--db13_ansprechpartner', side:'right', img:BASE+'ansprechpartner-galerie.png',   cap:'Ansprechpartner-Galerie' },
-    { after:'tsshop--db13_vertraege',       side:'right', img:BASE+'vertraege-datenbank.png',        cap:'Verträge-Datenbank' }
+    { after:'tsshop--db13_lieferanten',     side:'left',  img:BASE+'lieferpartner-uebersicht.png', shot:SCROLL+'lieferpartner.jpg',   cap:'Lieferpartner-Übersicht' },
+    { after:'tsshop--db13_ansprechpartner', side:'right', img:BASE+'ansprechpartner-galerie.png',   shot:SCROLL+'ansprechpartner.jpg', cap:'Ansprechpartner-Galerie' },
+    { after:'tsshop--db13_vertraege',       side:'left',  img:BASE+'vertraege-datenbank.png',        shot:SCROLL+'vertraege.jpg',      cap:'Verträge-Datenbank' }
   ];
   var CSS = `
   .ts2mac-row{width:100%;max-width:1180px;margin:clamp(30px,4vh,58px) auto 0;padding:0 clamp(16px,3vw,40px);display:flex;align-items:center;gap:clamp(20px,4vw,64px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;box-sizing:border-box}
@@ -3118,29 +3120,42 @@
   .ts2mac-cap .g{color:#9e947f}
   .ts2mac-hint{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.32);margin-top:6px;animation:ts2macHint 2.5s ease-in-out infinite}
   @keyframes ts2macHint{0%,100%{opacity:.4}50%{opacity:.8}}
-  #ts2mac-lb{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;background:rgba(5,6,11,.92);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:clamp(16px,4vw,52px);opacity:0;transition:opacity .3s ease}
+  #ts2mac-lb{position:fixed;inset:0;z-index:99999;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(5,6,11,.92);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:clamp(16px,4vw,40px);opacity:0;transition:opacity .3s ease}
   #ts2mac-lb.open{display:flex;opacity:1}
-  #ts2mac-lb .ts2mac-stage{width:100%;max-width:min(1180px,calc(100vw - 48px));transform:scale(.94);transition:transform .45s cubic-bezier(.16,1,.3,1)}
-  #ts2mac-lb.open .ts2mac-stage{transform:scale(1)}
-  #ts2mac-lb .ts2mac-stage img{width:100%;height:auto;display:block;filter:drop-shadow(0 40px 120px rgba(0,0,0,.6))}
-  #ts2mac-lb__close{position:absolute;top:22px;right:28px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s}
-  #ts2mac-lb__close:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.5)}
+  #ts2mac-lb .ts2mac-inner{position:relative;width:100%;max-width:min(960px,calc(100vw - 48px));transform:scale(.92) translateY(24px);transition:transform .5s cubic-bezier(.16,1,.3,1)}
+  #ts2mac-lb.open .ts2mac-inner{transform:none}
+  #ts2mac-lb.full .ts2mac-inner{max-width:100vw}
+  #ts2mac-lb .ts2mac-mockup{position:relative;width:100%;aspect-ratio:1366/768;filter:drop-shadow(0 30px 80px rgba(0,0,0,.6)) drop-shadow(0 10px 30px rgba(0,0,0,.5))}
+  #ts2mac-lb .ts2mac-fr{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;user-select:none}
+  #ts2mac-lb .ts2mac-screen{position:absolute;top:3.65%;left:12.22%;width:73.06%;height:83.85%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;z-index:1;border-radius:3px;background:#191919;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.16) transparent}
+  #ts2mac-lb .ts2mac-screen::-webkit-scrollbar{width:5px}
+  #ts2mac-lb .ts2mac-screen::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border-radius:4px}
+  #ts2mac-lb .ts2mac-screen img{width:100%;display:block}
+  #ts2mac-lb .ts2mac-closehint{margin-top:20px;font-size:12px;letter-spacing:.1em;color:rgba(255,255,255,.32);text-align:center}
+  #ts2mac-lb.full .ts2mac-closehint{display:none}
+  #ts2mac-lb .ts2mac-btn{position:absolute;top:16px;z-index:10;width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.6);cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);transition:background .2s,color .2s}
+  #ts2mac-lb .ts2mac-btn:hover{background:rgba(255,255,255,.16);color:#fff}
+  #ts2mac-lb .ts2mac-expand{left:16px}#ts2mac-lb .ts2mac-closex{right:16px}
   @media(max-width:820px){.ts2mac-row,.ts2mac-row.right{flex-direction:column}.ts2mac-txt{display:none}}
   @media(prefers-reduced-motion:reduce){.ts2mac-tile,.ts2mac-tile:hover{animation:none;transition:none}.ts2mac-hint{animation:none}}
   `;
   function injectCSS(){ if(document.getElementById('ts2mac-css'))return; var s=document.createElement('style'); s.id='ts2mac-css'; s.textContent=CSS; document.head.appendChild(s); }
   function shut(){ var lb=document.getElementById('ts2mac-lb'); if(lb) lb.classList.remove('open'); document.body.style.overflow=''; }
+  function shutFull(){ var lb=document.getElementById('ts2mac-lb'); if(lb) lb.classList.remove('open','full'); document.body.style.overflow=''; }
   function ensureLb(){
     var lb=document.getElementById('ts2mac-lb'); if(lb) return lb;
     lb=document.createElement('div'); lb.id='ts2mac-lb';
-    lb.innerHTML='<button id="ts2mac-lb__close" aria-label="Schließen">✕</button><div class="ts2mac-stage"><img alt=""></div>';
+    lb.innerHTML='<button class="ts2mac-btn ts2mac-expand" title="Vollbild" aria-label="Vollbild"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="ts2mac-btn ts2mac-closex" title="Schließen" aria-label="Schließen"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 4.5l9 9M13.5 4.5l-9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><div class="ts2mac-inner"><div class="ts2mac-mockup"><img class="ts2mac-fr" src="'+FRAME+'" alt="MacBook"><div class="ts2mac-screen"><img alt=""></div></div></div><div class="ts2mac-closehint">✕ Klicke daneben oder ESC zum Schließen</div>';
     document.body.appendChild(lb);
-    lb.querySelector('#ts2mac-lb__close').addEventListener('click',shut);
-    lb.addEventListener('click',function(e){ if(e.target===lb) shut(); });
-    document.addEventListener('keydown',function(e){ if(e.key==='Escape') shut(); });
+    var inner=lb.querySelector('.ts2mac-inner');
+    lb.querySelector('.ts2mac-closex').addEventListener('click',shutFull);
+    lb.querySelector('.ts2mac-expand').addEventListener('click',function(e){ e.stopPropagation(); lb.classList.toggle('full'); });
+    inner.addEventListener('click',function(e){ e.stopPropagation(); });
+    lb.addEventListener('click',function(e){ if(e.target===lb) shutFull(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') shutFull(); });
     return lb;
   }
-  function openLb(src,alt){ var lb=ensureLb(); var img=lb.querySelector('.ts2mac-stage img'); img.src=src; img.alt=alt||''; lb.classList.add('open'); document.body.style.overflow='hidden'; }
+  function openLb(shot,alt){ var lb=ensureLb(); var img=lb.querySelector('.ts2mac-screen img'); img.src=shot; img.alt=alt||''; lb.classList.add('open'); lb.classList.remove('full'); document.body.style.overflow='hidden'; var sc=lb.querySelector('.ts2mac-screen'); if(sc) sc.scrollTop=0; }
   function buildRow(m){
     var row=document.createElement('div'); row.className='ts2mac-row'+(m.side==='right'?' right':''); row.id='ts2mac--'+m.after;
     var pc=document.createElement('div'); pc.className='ts2mac-cell ts2mac-pc';
@@ -3150,8 +3165,8 @@
     var txt=document.createElement('div'); txt.className='ts2mac-cell ts2mac-txt';
     row.appendChild(pc); row.appendChild(txt);
     var tile=pc.querySelector('.ts2mac-tile');
-    tile.addEventListener('click',function(){ openLb(m.img,m.cap); });
-    tile.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(m.img,m.cap); } });
+    tile.addEventListener('click',function(){ openLb(m.shot,m.cap); });
+    tile.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(m.shot,m.cap); } });
     return row;
   }
   function mount(){
