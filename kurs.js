@@ -2211,7 +2211,8 @@
   #tsmiss .tsm-item{opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
   #tsmiss.in .tsm-item{opacity:1;transform:none}
   #tsmiss .tsm-p{color:rgba(255,255,255,.62);font-size:.95rem;line-height:1.7;margin:0 0 14px;max-width:none}
-  #tsmiss .tsm-emph2{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1.45rem;font-weight:600;letter-spacing:-.012em;text-align:center;color:#fff;margin:20px 0 16px;padding:0}
+  #tsmiss .tsm-emph2{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1.45rem;font-weight:600;letter-spacing:-.012em;text-align:center;color:#fff;margin:2px 0 16px !important;padding:0}
+  #tsmiss .tsm-emph2 .tsm-eg{color:#9e947f}
   #tsmiss .tsm-ol{margin:0;padding-left:1.6em}
   #tsmiss .tsm-ol li{color:rgba(255,255,255,.62);font-size:.92rem;line-height:1.7;margin:0 0 10px;padding:10px 14px;border-radius:12px;transition:color .45s ease,background .5s ease,box-shadow .5s ease}
   #tsmiss .tsm-ol li::marker{color:rgba(255,255,255,.35);font-weight:600}
@@ -2326,6 +2327,8 @@
     L.appendChild(db0);
     function addClone(el,cls){ if(!el)return; var c=stripIds(el.cloneNode(true)); c.className+=' '+cls+' tsm-item'; R.appendChild(c); el.classList.add('tsm-hide'); }
     addClone(p2,'tsm-p'); addClone(h2,'tsm-emph2'); addClone(ol,'tsm-ol');
+    var emph=R.querySelector('.tsm-emph2'); /* letztes Wort "Anzeige" beige (#9e947f), parallel zu "DB 0 : Inventurliste" links */
+    if(emph && !emph.querySelector('.tsm-eg')) emph.innerHTML=(emph.textContent||'').replace(/(\S+)(\s*)$/,'<span class="tsm-eg">$1</span>$2');
     var items=R.querySelectorAll('.tsm-item');
     for(var i=0;i<items.length;i++) items[i].style.transitionDelay=(i*0.12)+'s';
     var io=new IntersectionObserver(function(e){
