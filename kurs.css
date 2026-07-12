@@ -942,3 +942,10 @@ details > summary {
   line-height:1.1 !important;
   color:#fff !important;
 }
+
+/* lieferpartner · die drei Sortiment/Ansprechpartner/Verträge-Sektionen: Text-+Überschriften-
+   Spalte oben ausrichten statt vertikal zentriert (align-items:center der Zeile), damit
+   Überschrift + Text bündig mit der Bildoberkante starten und etwas höher sitzen. */
+.page__lieferpartner-ansprechpartner-lieferantenvertrge #block-39bb954655348093a05fd72ae1072505,
+.page__lieferpartner-ansprechpartner-lieferantenvertrge #block-39bb9546553480749d12da55b8cde52e,
+.page__lieferpartner-ansprechpartner-lieferantenvertrge #block-39bb9546553480dfbcbfd037cc1020a6{ align-self:flex-start !important; }
