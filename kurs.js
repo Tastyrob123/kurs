@@ -2429,7 +2429,7 @@
       marker:/Kundennummer/,
       eyebrow:'Der Warenkorb · DB I',
       title:'Deine Lieferpartner. <span>An einem Ort.</span>',
-      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB I ist die Mindestbelieferung.',
+      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB I ist die Mindestbelieferung.<br>Um zu starten: / → neue Tabellenansicht / Datenbank → DB I : Lieferpartner Übersicht.',
       summary:'Transportkosten', cta:'Tour buchen', ctaDone:'Tour gebucht', chain:true },
     /* Zweites Regal auf derselben Seite: DB II Ansprechpartner (Marker eindeutig = Hauptansprechpartner) */
     { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_ansprechpartner',
@@ -2443,7 +2443,7 @@
       marker:/Vertragsbezeichnung/,
       eyebrow:'Der Warenkorb · DB III',
       title:'Deine Lieferverträge. <span>Sauber dokumentiert.</span>',
-      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB III ist der Vertragswert.',
+      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB III ist der Vertragswert.<br>Um zu starten: / → neue Tabellenansicht / Datenbank → DB III : Lieferverträge Übersicht.',
       summary:'Vertragsvolumina', cta:'Vertrag abschließen', ctaDone:'Vertrag geschlossen', chain:true }
   ];
 
