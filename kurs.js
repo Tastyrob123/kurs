@@ -3563,3 +3563,45 @@
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
+
+/* ---- */
+
+/* lieferpartner-ansprechpartner-lieferantenvertrge — drei Notion-H3 zweifarbig:
+   letzter Teil beige via .ts-accent (#9e947f), Muster wie __tsMwzGoal (kein CSS-Delta,
+   .ts-accent global). Heading 2 wird zudem inhaltlich von „…als Supporter" auf
+   „…immer erreichbar." gesetzt (Notion-Text bleibt Text-SSOT; JS erzwingt die finale
+   Darstellung). Block-ID-Anker + Text-Fallback, selbstheilend (React kann Text/Span
+   strippen -> debounced Observer zieht nach). */
+(function(){
+  if(window.__tsLavHead) return; window.__tsLavHead=true;
+  function on(){ return /\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/.test(location.pathname); }
+  var HEADS=[
+    { id:'block-39bb95465534804084b8e000f830141a', find:'Gute Sortimentserfassung', black:'Gute Sortimentserfassung ', accent:'ist der Schlüssel.' },
+    { id:'block-39bb95465534804c91e1c913ae8bd6e2', find:'Deine Ansprechpartner',    black:'Deine Ansprechpartner ',    accent:'immer erreichbar.' },
+    { id:'block-39bb9546553480429c8bfc2036324c10', find:'Vertraglich abgesicherte',  black:'Vertraglich abgesicherte ', accent:'Warenflüsse' }
+  ];
+  function norm(s){ return (s||'').replace(/\s+/g,' ').trim(); }
+  function find(h){
+    var el=document.getElementById(h.id);
+    if(el && el.tagName && el.tagName.charAt(0)==='H') return el;
+    var hs=document.querySelectorAll('.page__lieferpartner-ansprechpartner-lieferantenvertrge h3.notion-heading');
+    for(var i=0;i<hs.length;i++){ if(norm(hs[i].textContent).indexOf(h.find)===0) return hs[i]; }
+    return null;
+  }
+  function tone(h){
+    var el=find(h); if(!el) return;
+    var want=norm(h.black+h.accent);
+    var sp=el.querySelector('.ts-accent');
+    if(sp && norm(sp.textContent)===norm(h.accent) && norm(el.textContent)===want) return; /* schon gesetzt */
+    while(el.firstChild) el.removeChild(el.firstChild);
+    el.appendChild(document.createTextNode(h.black));
+    var s=document.createElement('span'); s.className='ts-accent'; s.textContent=h.accent;
+    el.appendChild(s);
+  }
+  function apply(){ if(!on()) return; for(var i=0;i<HEADS.length;i++) tone(HEADS[i]); }
+  apply();
+  document.addEventListener('DOMContentLoaded', apply);
+  var _t=null;
+  new MutationObserver(function(){ if(_t) return; _t=setTimeout(function(){ _t=null; apply(); },200); })
+    .observe(document.documentElement,{childList:true,subtree:true});
+})();
