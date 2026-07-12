@@ -803,3 +803,15 @@ details > summary {
   margin-left:auto !important;
   margin-right:auto !important;
 }
+
+/* "3 Datenbanken." — so groß wie der Shop-Titel (.tss-title) + Lineal-Display-Schrift.
+   NUR diese Block-ID (alle Schritt-Überschriften sind ebenfalls h2.notion-heading!). */
+.page__lieferpartner-ansprechpartner-lieferantenvertrge #block-38eb954655348031acbbfdea8d4e04e4,
+.page__lieferpartner-ansprechpartner-lieferantenvertrge #block-38eb954655348031acbbfdea8d4e04e4 .notion-semantic-string{
+  font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif !important;
+  font-size:clamp(32px,4.4vw,52px) !important;
+  font-weight:600 !important;
+  letter-spacing:-.02em !important;
+  line-height:1.1 !important;
+  color:#fff !important;
+}

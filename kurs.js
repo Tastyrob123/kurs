@@ -2906,7 +2906,7 @@
     .tsflow-intro-block, .tsflow-intro-block .notion-text, .tsflow-intro-block p, .tsflow-intro-block .notion-semantic-string{ text-align:center !important; }
     .tsflow-intro-block .notion-text{ max-width:820px; margin-left:auto !important; margin-right:auto !important; }
     #tsFlowRoot .tsflow-title span{ color:#c7b489; }
-    #tsFlowRoot .tsflow-sub{ font-size:17.5px; color:rgba(255,255,255,.44); max-width:660px; margin:0 auto; line-height:1.65; }
+    #tsFlowRoot .tsflow-sub{ font-size:16px; color:#e1e1e1; max-width:660px; margin:0 auto; line-height:1.6; }
 
     #tsFlowRoot .tsflow-track{ display:flex; align-items:flex-start; justify-content:center; gap:0; }
     #tsFlowRoot .tsflow-node{ flex:0 0 auto; width:168px; text-align:center; opacity:0; transform:translateY(16px) scale(.94); transition:opacity .55s ease, transform .55s cubic-bezier(.34,1.56,.64,1); }
