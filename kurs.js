@@ -3102,15 +3102,23 @@
   var BASE='https://tastyrob123.github.io/kurs/img/lieferpartner-mac/';
   var SCROLL=BASE+'scroll/';
   var FRAME='https://files.catbox.moe/oj1wa9.png'; /* leerer MacBook-Rahmen wie #tsmb */
+  /* col: leere Notion-Spalte im 2-Spalten-Layout neben dem Erklärtext — der PC wird DORT platziert
+     (echter Nachbar, gleiche Höhe, mittig). Ohne col (Verträge = kein 2-Spalten-Layout, Text volle
+     Breite): Fallback = eigenes volles Band via side. */
   var MACS=[
-    { after:'tsshop--db13_lieferanten',     side:'right', img:BASE+'lieferpartner-uebersicht.png', shot:SCROLL+'lieferpartner.jpg',   cap:'Lieferpartner-Übersicht' },
-    { after:'tsshop--db13_ansprechpartner', side:'left',  img:BASE+'ansprechpartner-galerie.png',   shot:SCROLL+'ansprechpartner.jpg', cap:'Ansprechpartner-Galerie' },
+    { after:'tsshop--db13_lieferanten',     col:'block-39bb954655348092b69cec1441abcc6e', img:BASE+'lieferpartner-uebersicht.png', shot:SCROLL+'lieferpartner.jpg',   cap:'Lieferpartner-Übersicht' },
+    { after:'tsshop--db13_ansprechpartner', col:'block-39bb95465534801e9c8add95f1979a5e', img:BASE+'ansprechpartner-galerie.png',   shot:SCROLL+'ansprechpartner.jpg', cap:'Ansprechpartner-Galerie' },
     { after:'tsshop--db13_vertraege',       side:'right', img:BASE+'vertraege-datenbank.png',        shot:SCROLL+'vertraege.jpg',      cap:'Verträge-Datenbank' }
   ];
   var CSS = `
   .ts2mac-row{width:100%;max-width:1180px;margin:clamp(30px,4vh,58px) auto 0;padding:0 clamp(16px,3vw,40px);display:flex;align-items:center;gap:clamp(20px,4vw,64px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;box-sizing:border-box}
   .ts2mac-row.right{flex-direction:row-reverse}
   .ts2mac-row .ts2mac-cell{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center}
+  /* PC direkt in einer leeren Notion-Spalte (neben dem Erklärtext) */
+  .ts2mac-incol{display:flex;flex-direction:column;justify-content:center;align-items:center}
+  .ts2mac-incol .ts2mac-pc{width:100%;display:flex;flex-direction:column;align-items:center}
+  /* Text-Spalte + PC-Spalte vertikal mittig zueinander (Lieferpartner- & Ansprechpartner-Column-List) */
+  #block-39bb9546553480dbae23db8a4b9592a6,#block-39bb9546553480248c0ac0e7ae493112{align-items:center}
   .ts2mac-tile{width:100%;max-width:520px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 18px 44px rgba(0,0,0,.5));transition:transform .5s cubic-bezier(.16,1,.3,1),filter .5s cubic-bezier(.16,1,.3,1)}
   .ts2mac-tile img{width:100%;height:auto;display:block}
   .ts2mac-tile:hover,.ts2mac-tile:focus-visible{transform:translateY(-4px) scale(1.02);animation:ts2macHb 2.6s cubic-bezier(.16,1,.3,1) infinite;outline:none}
@@ -3156,26 +3164,39 @@
     return lb;
   }
   function openLb(shot,alt){ var lb=ensureLb(); var img=lb.querySelector('.ts2mac-screen img'); img.src=shot; img.alt=alt||''; lb.classList.add('open'); lb.classList.remove('full'); document.body.style.overflow='hidden'; var sc=lb.querySelector('.ts2mac-screen'); if(sc) sc.scrollTop=0; }
-  function buildRow(m){
-    var row=document.createElement('div'); row.className='ts2mac-row'+(m.side==='right'?' right':''); row.id='ts2mac--'+m.after;
+  function buildPc(m){
     var pc=document.createElement('div'); pc.className='ts2mac-cell ts2mac-pc';
     pc.innerHTML='<div class="ts2mac-tile" role="button" tabindex="0" aria-label="'+m.cap+' vergrößern"><img src="'+m.img+'" alt="'+m.cap+'" loading="lazy" decoding="async"></div>'
       +'<div class="ts2mac-cap">'+m.cap+'<span class="g"> – Live Beispiel</span></div>'
       +'<div class="ts2mac-hint">Klicke zum Vergrößern</div>';
-    var txt=document.createElement('div'); txt.className='ts2mac-cell ts2mac-txt';
-    row.appendChild(pc); row.appendChild(txt);
     var tile=pc.querySelector('.ts2mac-tile');
     tile.addEventListener('click',function(){ openLb(m.shot,m.cap); });
     tile.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(m.shot,m.cap); } });
+    return pc;
+  }
+  function buildRow(m){
+    var row=document.createElement('div'); row.className='ts2mac-row'+(m.side==='right'?' right':''); row.id='ts2mac--'+m.after;
+    var txt=document.createElement('div'); txt.className='ts2mac-cell ts2mac-txt';
+    row.appendChild(buildPc(m)); row.appendChild(txt);
     return row;
   }
   function mount(){
     if(!PATH.test(location.pathname)){ var r=document.getElementById('ts2mac-lb'); if(r&&r.parentNode)r.parentNode.removeChild(r); return; }
     injectCSS();
     MACS.forEach(function(m){
-      if(document.getElementById('ts2mac--'+m.after)) return;
-      var shop=document.getElementById(m.after); if(!shop) return;
-      shop.parentNode.insertBefore(buildRow(m), shop.nextSibling);
+      if(m.col){
+        /* PC in die leere Notion-Spalte neben den Text setzen (echter Nachbar). */
+        var col=document.getElementById(m.col); if(!col) return;
+        var tgt=col.querySelector('.notion-column__content')||col;
+        if(tgt.querySelector('.ts2mac-pc')) return;   /* Guard: kein Duplikat; selbstheilend falls React die Spalte neu rendert */
+        col.classList.add('ts2mac-incol');
+        tgt.appendChild(buildPc(m));
+      } else {
+        /* Fallback: eigenes volles Band nach dem Shop-Anker. */
+        if(document.getElementById('ts2mac--'+m.after)) return;
+        var shop=document.getElementById(m.after); if(!shop) return;
+        shop.parentNode.insertBefore(buildRow(m), shop.nextSibling);
+      }
     });
   }
   function boot(){
