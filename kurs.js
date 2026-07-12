@@ -3944,13 +3944,34 @@
 (function(){
   if(window.__tscover) return; window.__tscover=true;
   var IMG='https://tastyrob123.github.io/kurs/img/zutaten/spinat.jpg';
+  var MARKER='groessen-animation';   // Marker-Text in der linken Notion-Spalte -> Animation hängt sich dort ein
   var reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   function on(){ return /\/zutatenliste\/?$/.test(location.pathname); }
 
   var CSS=`
-  #tscover{width:100vw;max-width:100vw;margin:clamp(26px,3.4vh,44px) 0 clamp(44px,6vh,72px);margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 clamp(20px,4vw,56px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
+  #tscover{width:100%;margin:clamp(26px,3.4vh,44px) 0 clamp(44px,6vh,72px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
+  #tscover.tsc--full{width:100vw;max-width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 clamp(20px,4vw,56px)}
   #tscover *{box-sizing:border-box}
   #tscover .tsc-inner{max-width:1040px;margin:0 auto}
+  /* --- Spalten-Modus: kompakt, per Container-Queries an die Spaltenbreite gebunden --- */
+  #tscover.tsc--col{padding:0}
+  #tscover.tsc--col .tsc-inner{max-width:100%;container:tscc / inline-size}
+  #tscover.tsc--col .tsc-head{margin-bottom:18px}
+  #tscover.tsc--col .tsc-title{font-size:clamp(18px,6.4cqi,30px)}
+  #tscover.tsc--col .tsc-sub{font-size:clamp(11.5px,3cqi,15px);max-width:100%}
+  #tscover.tsc--col .tsc-steps{gap:6px;margin-top:16px}
+  #tscover.tsc--col .tsc-step{font-size:clamp(9.5px,2.5cqi,12.5px);padding:5px 10px 5px 6px;gap:6px}
+  #tscover.tsc--col .tsc-step .n{width:16px;height:16px;font-size:10px}
+  #tscover.tsc--col .tsc-stage{max-width:100%;margin-top:20px}
+  #tscover.tsc--col .tsc-pad{padding:clamp(13px,3.6cqi,26px)}
+  #tscover.tsc--col .tsc-h1{font-size:clamp(16px,5cqi,23px)}
+  #tscover.tsc--col .tsc-titlerow{margin-top:-34px}
+  #tscover.tsc--col .tsc-foot{font-size:clamp(10.5px,2.6cqi,12.5px)}
+  @container tscc (max-width:440px){
+    #tscover.tsc--col .tsc-prop{grid-template-columns:1fr;gap:2px;padding:5px 0}
+    #tscover.tsc--col .tsc-plabel{font-size:12.5px}
+    #tscover.tsc--col .tsc-menu{min-width:180px}
+  }
   #tscover .tsc-head{text-align:center;margin-bottom:clamp(22px,2.8vh,32px)}
   #tscover .tsc-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin-bottom:12px}
   #tscover .tsc-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#9e947f;box-shadow:0 0 12px rgba(158,148,127,.7)}
@@ -4174,18 +4195,47 @@
   }
 
   function anchor(){ return document.getElementById('tsshop--db4_zutaten'); }
-  function mount(){
-    if(!on()){ var e=document.getElementById('tscover'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
-    if(document.getElementById('tscover')) return;
-    var a=anchor(); if(!a||!a.parentNode) return;
-    var root=build();
-    a.parentNode.insertBefore(root, a.nextSibling);
+  /* linke Spalte finden: Notion-Block, dessen Text == MARKER */
+  function markerCol(){
+    var els=document.querySelectorAll('.notion-column-list .notion-text, .notion-column-list [class*="notion-"]');
+    for(var i=0;i<els.length;i++){
+      var t=(els[i].textContent||'').trim().toLowerCase();
+      if(t===MARKER){ var col=els[i].closest('.notion-column'); if(col) return { col:col, marker:els[i].closest('[data-block-id]')||els[i].closest('[id^="block-"]')||els[i] }; }
+    }
+    return null;
+  }
+  function trigger(root){
     var played=false;
     if('IntersectionObserver' in window){
       var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting&&!played){ played=true; play(root); } }); },{threshold:.25});
       io.observe(root);
     } else { play(root); }
     var r=root.getBoundingClientRect(); if(r.top<innerHeight&&r.bottom>0){ played=true; play(root); }
+  }
+  function mount(){
+    if(!on()){ var e=document.getElementById('tscover'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    var m=markerCol();
+    var existing=document.getElementById('tscover');
+    if(existing){
+      /* schon montiert — bei Bedarf in die Marker-Spalte umziehen (ohne Neuaufbau) */
+      if(m && !m.col.contains(existing)){
+        existing.classList.remove('tsc--full'); existing.classList.add('tsc--col');
+        if(m.marker) m.marker.style.display='none';
+        m.col.insertBefore(existing, m.col.firstChild);
+      }
+      return;
+    }
+    var root=build();
+    if(m){
+      root.classList.add('tsc--col');
+      if(m.marker) m.marker.style.display='none';
+      m.col.insertBefore(root, m.col.firstChild);
+    } else {
+      var a=anchor(); if(!a||!a.parentNode) return;
+      root.classList.add('tsc--full');
+      a.parentNode.insertBefore(root, a.nextSibling);
+    }
+    trigger(root);
   }
   function boot(){
     var tries=0; var iv=setInterval(function(){ tries++; mount(); if(tries>40)clearInterval(iv); },300);
