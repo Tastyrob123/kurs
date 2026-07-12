@@ -3928,6 +3928,7 @@
 })();
 
 
+
 /* ============================================================================
    #tscover — Zutaten-DB-Erklär-Animation (Seite /zutatenliste)
    Sitzt DIREKT unter dem Warenkorb + Einwaage-Balken (#tsshop--db4_zutaten).
@@ -4201,10 +4202,10 @@
   function markerCol(){
     var lists=document.querySelectorAll('.notion-column-list');
     for(var L=0;L<lists.length;L++){
-      var all=lists[L].querySelectorAll('*');
+      var all=lists[L].querySelectorAll('.notion-text, .notion-callout, .notion-quote');
       for(var i=0;i<all.length;i++){
         var el=all[i];
-        if(el.childElementCount===0 && (el.textContent||'').trim().toLowerCase()===MARKER){
+        if((el.textContent||'').trim().toLowerCase()===MARKER){
           var col=el.closest('.notion-column'); if(!col) continue;
           var mk=el; while(mk.parentElement && mk.parentElement!==col) mk=mk.parentElement;
           return { col:col, marker:(mk&&mk!==col)?mk:el };
@@ -4224,17 +4225,10 @@
   }
   function mount(){
     if(!on()){ var e=document.getElementById('tscover'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    /* WICHTIG: erst prüfen, ob schon montiert — VOR jeder teuren Marker-Suche.
+       Sonst würde markerCol() bei jeder Animations-DOM-Mutation laufen (Main-Thread-Storm). */
+    if(document.getElementById('tscover')) return;
     var m=markerCol();
-    var existing=document.getElementById('tscover');
-    if(existing){
-      /* schon montiert — bei Bedarf in die Marker-Spalte umziehen (ohne Neuaufbau) */
-      if(m && !m.col.contains(existing)){
-        existing.classList.remove('tsc--full'); existing.classList.add('tsc--col');
-        hideMarker(m.marker);
-        m.col.insertBefore(existing, m.col.firstChild);
-      }
-      return;
-    }
     var root=build();
     if(m){
       root.classList.add('tsc--col');
