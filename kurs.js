@@ -391,6 +391,103 @@
 
 /* ---- */
 
+/* modul-2 — Full-Bleed-Animation "Sechs Bereiche. Ein Fundament in sieben Schritten."
+   Unter dem "Dein Backoffice gliedert sich…"-Absatz, edge-to-edge (CSS #tsm2build).
+   Act 1: sechs Bereiche steigen auf, Food/Drinks/Finance leuchten gold. Act 2: sieben Bausteine
+   fügen sich links→rechts in die Schiene, Gold-Linie wächst mit, End-Baustein pulst. Loop nur sichtbar
+   (IntersectionObserver), reduced-motion-Fallback in CSS. */
+(function(){
+  if(window.__tsm2build) return; window.__tsm2build = true;
+  function on(){ return /\/modul-2-das-notion-ai-backoffice-system\/?$/.test(location.pathname); }
+  var IC={
+    food:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M6 3v6a2 2 0 0 0 2 2 2 2 0 0 0 2-2V3'/><path d='M8 11v10'/><path d='M17 3c-1.4 0-2.2 2-2.2 4.6 0 2 .9 3 2.2 3.2V21'/></svg>",
+    drinks:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M6 4h12l-5 8v6'/><path d='M9 18h6'/><path d='M8.5 8h7'/></svg>",
+    finance:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M5 20h14'/><path d='M7 20v-6'/><path d='M12 20V8'/><path d='M17 20v-9'/></svg>",
+    metrics:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M4 14a8 8 0 0 1 16 0'/><path d='M12 14l4-3'/><circle cx='12' cy='14' r='1'/></svg>",
+    ops:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M4 8h10'/><circle cx='17' cy='8' r='2.4'/><path d='M20 16H10'/><circle cx='7' cy='16' r='2.4'/></svg>",
+    vision:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12s3.2-6 9-6 9 6 9 6-3.2 6-9 6-9-6-9-6z'/><circle cx='12' cy='12' r='2.2'/></svg>",
+    inv:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='4' width='7' height='7' rx='1.4'/><rect x='13' y='4' width='7' height='7' rx='1.4'/><rect x='4' y='13' width='7' height='7' rx='1.4'/><rect x='13' y='13' width='7' height='7' rx='1.4'/></svg>",
+    supply:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M3 7h11v8H3z'/><path d='M14 10h4l3 3v2h-7z'/><circle cx='7' cy='17' r='1.8'/><circle cx='17.5' cy='17' r='1.8'/></svg>",
+    ingr:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3c3.5 3 5 6 5 9a5 5 0 0 1-10 0c0-3 1.5-6 5-9z'/></svg>",
+    recipe:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><rect x='5' y='3' width='14' height='18' rx='2'/><path d='M9 8h6'/><path d='M9 12h6'/><path d='M9 16h4'/></svg>",
+    dish:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M4 12a8 8 0 0 1 16 0'/><path d='M3 12h18'/><path d='M12 4v-.5'/></svg>",
+    calc:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><rect x='5' y='3' width='14' height='18' rx='2'/><path d='M8 7h8'/><circle cx='9' cy='12' r='.6'/><circle cx='12' cy='12' r='.6'/><circle cx='15' cy='12' r='.6'/><circle cx='9' cy='16' r='.6'/><circle cx='12' cy='16' r='.6'/></svg>",
+    done:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M4 12a8 8 0 0 1 16 0'/><path d='M3 12h18'/><path d='M8.5 9.5l2.2 2.3 4-4'/></svg>"
+  };
+  var AREAS=[['food','Foodquartier',1],['drinks','Drinksquartier',1],['finance','Finance Studio',1],
+             ['metrics','Key Metrics',0],['ops','Operations Area',0],['vision','Vision Frame',0]];
+  var STEPS=[['inv','Inventar'],['supply','Lieferpartner'],['ingr','Zutaten'],['recipe','Rezepturen'],
+             ['dish','Gerichte'],['calc','Kalkulation'],['done','Vollkalkuliertes Gericht']];
+
+  function build(){
+    var el=document.createElement('div'); el.id='tsm2build'; el.setAttribute('data-phase','0');
+    var areasH=AREAS.map(function(a,i){ return "<div class='tb-area' data-hot='"+a[2]+"' style='transition-delay:"+(i*70)+"ms'><span class='tb-ic'>"+IC[a[0]]+"</span><span class='tb-al'>"+a[1]+"</span></div>"; }).join('');
+    var stepsH=STEPS.map(function(s){ return "<div class='tb-step'><div class='tb-brick'>"+IC[s[0]]+"</div><div class='tb-sl'>"+s[1]+"</div></div>"; }).join('');
+    el.innerHTML="<div class='tb-stage'><div class='tb-grain'></div><div class='tb-glow'></div>"+
+      "<div class='tb-inner'>"+
+      "<div class='tb-eyebrow'>Dein Backoffice</div>"+
+      "<h3 class='tb-title'>Sechs Bereiche. Ein Fundament in sieben Schritten.</h3>"+
+      "<div class='tb-areas'>"+areasH+"</div>"+
+      "<div class='tb-rail'><div class='tb-track'><span class='tb-fill'></span></div>"+stepsH+"</div>"+
+      "<div class='tb-caption'></div>"+
+      "</div></div>";
+    return el;
+  }
+
+  function sequence(el){
+    var fill=el.querySelector('.tb-fill'), cap=el.querySelector('.tb-caption');
+    var areas=[].slice.call(el.querySelectorAll('.tb-area'));
+    var steps=[].slice.call(el.querySelectorAll('.tb-step'));
+    var timers=[], running=false;
+    function T(fn,ms){ timers.push(setTimeout(fn,ms)); }
+    function clearT(){ timers.forEach(clearTimeout); timers=[]; }
+    function setCap(html){ cap.classList.remove('show'); T(function(){ cap.innerHTML=html; cap.classList.add('show'); },260); }
+    function reset(){ el.classList.remove('a-in'); fill.style.transform='scaleX(0)';
+      areas.forEach(function(a){ a.classList.remove('hot','dim'); });
+      steps.forEach(function(s){ s.classList.remove('in','fin'); }); cap.classList.remove('show'); }
+    function run(){
+      reset();
+      T(function(){ el.classList.add('a-in'); setCap('Sechs Bereiche greifen ineinander.'); },250);
+      T(function(){ areas.forEach(function(a){ a.classList.add(a.getAttribute('data-hot')==='1'?'hot':'dim'); });
+        setCap('Wir starten mit dem Fundament: <b>Food, Drinks &amp; Finance Studio</b>.'); },1750);
+      var base=3050;
+      T(function(){ setCap('Das Fundament — in sieben klaren Schritten.'); },base-150);
+      STEPS.forEach(function(s,i){
+        T(function(){ steps[i].classList.add('in'); fill.style.transform='scaleX('+(i/(STEPS.length-1))+')';
+          if(i===STEPS.length-1) steps[i].classList.add('fin'); },base+i*720);
+      });
+      var end=base+STEPS.length*720+300;
+      T(function(){ setCap('Nach jedem Schritt: <b>ein fertiger Baustein</b>.'); },end);
+      T(run, end+2600);
+    }
+    function start(){ if(running) return; running=true; run(); }
+    function stop(){ running=false; clearT(); reset(); }
+    start();                                          // sofort starten (robust, auch falls IO nie feuert)
+    /* IO nur zum Pausieren, wenn aus dem Viewport gescrollt (Performance); startet neu beim Zurückscrollen */
+    new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting) start(); else stop(); }); },{threshold:.12}).observe(el);
+  }
+
+  function mount(){
+    if(!on()) return;
+    var colList=document.getElementById('block-39bb95465534808a93b8c33efe76ff62');
+    if(!colList) return;
+    var ex=document.getElementById('tsm2build');
+    if(ex && ex.isConnected) return;                 // schon montiert
+    if(ex && ex.parentNode) ex.parentNode.removeChild(ex);
+    var el=build();
+    colList.parentNode.insertBefore(el, colList.nextSibling);
+    sequence(el);
+  }
+
+  mount();
+  document.addEventListener('DOMContentLoaded', mount);
+  var _tb=null;
+  new MutationObserver(function(){ if(_tb) return; _tb=setTimeout(function(){ _tb=null; mount(); },200); })
+    .observe(document.documentElement,{childList:true,subtree:true});
+})();
+
+/* ---- */
+
 (function(){
   var IMG="https://files.catbox.moe/botkum.webp";
   var LOGO="https://files.catbox.moe/au80tp.png";
