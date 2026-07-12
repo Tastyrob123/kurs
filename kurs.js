@@ -2371,9 +2371,9 @@
   #tsshop .tss-bar__side{flex:0 0 auto;min-width:112px}
   #tsshop .tss-bar__left{text-align:left}
   #tsshop .tss-bar__right{text-align:right}
-  #tsshop .tss-bar__val{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:clamp(23px,2.7vw,33px);font-weight:700;letter-spacing:-.012em;line-height:1;color:#d8c9ab;font-variant-numeric:tabular-nums}
+  #tsshop .tss-bar__val{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:clamp(23px,2.7vw,33px);font-weight:700;letter-spacing:-.012em;line-height:1;color:#fff;font-variant-numeric:tabular-nums}
   #tsshop .tss-bar__global{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:clamp(23px,2.7vw,33px);font-weight:700;letter-spacing:-.012em;line-height:1;color:#E5484D;font-variant-numeric:tabular-nums}
-  #tsshop .tss-bar__cap{font-size:9.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin-top:10px;white-space:nowrap}
+  #tsshop .tss-bar__cap{font-size:11px;font-weight:600;letter-spacing:.01em;color:#9e947f;margin-top:10px;white-space:nowrap}
   #tsshop .tss-bar__mid{flex:1 1 auto;min-width:0}
   #tsshop .tss-bar__track{position:relative;height:6px;border-radius:99px;background:rgba(255,255,255,.08);box-shadow:inset 0 1px 2px rgba(0,0,0,.45);overflow:hidden}
   #tsshop .tss-bar__fill{position:relative;height:100%;width:0;border-radius:99px;overflow:hidden;background:linear-gradient(90deg,#5FAE88,#9FD3B9);box-shadow:0 0 10px rgba(143,203,170,.5),inset 0 1px 0 rgba(255,255,255,.3);transition:width .7s cubic-bezier(.22,1,.36,1)}
