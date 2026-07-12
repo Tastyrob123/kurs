@@ -363,7 +363,10 @@ canvas[style*="2147483647"]{ display:none !important; }
    die Bau-Schiene, Gold-Linie wächst mit, End-Baustein "Vollkalkuliertes Gericht" pulst. JS: window.__tsm2build. ===== */
 #tsm2build{--gold:#c7b489;--gold2:#d8c9ab;--gold3:#efe6d2;--taupe:#9e947f;--ink:#05060b;
   position:relative;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
-  margin-top:64px;margin-bottom:24px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;color:#fff;}
+  margin-top:64px;margin-bottom:24px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;color:#fff;
+  /* opaker Seiten-Grund (#05060b) statt transparent: deckt den fixed-Blau-Glow der Seite in diesem Abschnitt ab
+     (entfernt die sichtbare blaue Kante), oben/unten gefedert für nahtlosen Übergang zum Rest der Seite. */
+  background:linear-gradient(180deg,rgba(5,6,11,0) 0%,#05060b 26%,#05060b 74%,rgba(5,6,11,0) 100%);}
 #tsm2build .tb-stage{position:relative;overflow:hidden;padding:64px 24px 72px;background:transparent;}
 #tsm2build .tb-grain{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
@@ -380,9 +383,10 @@ canvas[style*="2147483647"]{ display:none !important; }
 #tsm2build[data-phase] .tb-eyebrow,#tsm2build[data-phase] .tb-title{opacity:1;transform:none;}
 #tsm2build .tb-areas{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:0 auto 52px;max-width:1080px;}
 #tsm2build .tb-area{display:flex;align-items:center;justify-content:center;gap:10px;padding:11px 10px;border-radius:16px;
+  cursor:pointer;-webkit-appearance:none;appearance:none;font-family:inherit;color:inherit;
   background:rgba(255,255,255,.028);border:1px solid rgba(199,180,137,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
-  opacity:0;transform:translateY(16px) scale(.96);filter:blur(5px);
-  transition:opacity .8s ease,transform .9s cubic-bezier(.16,1,.3,1),filter .8s ease,border-color .7s ease,background .7s ease,box-shadow .7s ease;}
+  opacity:0;transform:translateY(16px) scale(.96);
+  transition:opacity .8s ease,transform .9s cubic-bezier(.16,1,.3,1),border-color .7s ease,background .7s ease,box-shadow .7s ease;}
 #tsm2build.a-in .tb-area{opacity:1;transform:none;filter:none;}
 #tsm2build .tb-area .tb-ic{width:22px;height:22px;color:var(--taupe);flex:0 0 auto;transition:color .7s ease,transform .7s ease;}
 #tsm2build .tb-area .tb-ic svg{width:100%;height:100%;display:block;}
@@ -391,14 +395,19 @@ canvas[style*="2147483647"]{ display:none !important; }
   box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 22px -6px rgba(199,180,137,.5);}
 #tsm2build .tb-area.hot .tb-ic{color:var(--gold3);transform:scale(1.06);}
 #tsm2build .tb-area.hot .tb-al{color:#fff;}
+#tsm2build.a-in .tb-area:hover{transform:translateY(-2px);border-color:rgba(199,180,137,.42);background:rgba(199,180,137,.07);}
+#tsm2build.a-in .tb-area:active{transform:translateY(-1px) scale(.985);}
+#tsm2build .tb-area:focus-visible{outline:2px solid rgba(216,201,171,.6);outline-offset:2px;}
 #tsm2build .tb-area.dim{opacity:.46;filter:saturate(.6);}
 #tsm2build .tb-rail{position:relative;display:grid;grid-template-columns:repeat(7,1fr);gap:10px;max-width:1040px;margin:0 auto;padding-top:8px;}
-#tsm2build .tb-track{position:absolute;left:7%;right:7%;top:47px;height:1.5px;background:rgba(199,180,137,.16);border-radius:2px;overflow:hidden;}
+/* Basis-Linie transparent: die Schiene ist NICHT vorab sichtbar — nur die Gold-Füllung (.tb-fill)
+   wächst mit den Kacheln herein. */
+#tsm2build .tb-track{position:absolute;left:7%;right:7%;top:47px;height:1.5px;background:transparent;border-radius:2px;overflow:hidden;}
 #tsm2build .tb-track .tb-fill{position:absolute;inset:0;transform-origin:left center;transform:scaleX(0);
   background:linear-gradient(90deg,var(--taupe),var(--gold2));transition:transform .62s cubic-bezier(.5,0,.2,1);}
 #tsm2build .tb-step{position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;
-  opacity:0;transform:translateY(16px) scale(.9);filter:blur(6px);
-  transition:opacity .7s ease,transform .8s cubic-bezier(.16,1,.3,1),filter .7s ease;}
+  opacity:0;transform:translateY(16px) scale(.94);
+  transition:opacity .55s ease,transform .7s cubic-bezier(.16,1,.3,1);}
 #tsm2build .tb-step.in{opacity:1;transform:none;filter:none;}
 #tsm2build .tb-brick{position:relative;width:112px;height:78px;max-width:100%;border-radius:15px;overflow:hidden;z-index:2;background:#04050a;
   border:1px solid rgba(199,180,137,.26);box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 14px 30px -18px rgba(0,0,0,.9);}

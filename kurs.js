@@ -338,7 +338,7 @@
   function build(){
     var el=document.createElement('div'); el.id='tsm2build'; el.setAttribute('data-phase','0');
     var areasH=AREAS.map(function(a,i){ return "<button type='button' class='tb-area' data-g='"+a[2]+"' style='transition-delay:"+(i*70)+"ms'><span class='tb-ic'>"+IC[a[0]]+"</span><span class='tb-al'>"+a[1]+"</span></button>"; }).join('');
-    var stepsH=''; for(var i=0;i<N;i++){ stepsH+="<div class='tb-step'><div class='tb-brick'><img alt='' loading='lazy'></div><div class='tb-sl'></div></div>"; }
+    var stepsH=''; for(var i=0;i<N;i++){ stepsH+="<div class='tb-step'><div class='tb-brick'><img alt='' loading='lazy' decoding='async'></div><div class='tb-sl'></div></div>"; }
     el.innerHTML="<div class='tb-stage'><div class='tb-grain'></div><div class='tb-glow'></div>"+
       "<div class='tb-inner'>"+
       "<div class='tb-eyebrow'>Dein Backoffice</div>"+
@@ -401,18 +401,20 @@
 
   function mount(){
     if(!on()) return;
-    /* An der STABILEN Content-Block-ID ankern ("Dein Backoffice…"-Absatz): die umschließenden
-       .notion-column-list-Wrapper vergeben instabile IDs (super.so/Notion re-generiert sie pro Render),
-       darum NICHT auf die Wrapper-ID verlassen. */
-    var para=document.getElementById('block-397b9546553480dfa291d21d2b5e7456');
-    if(!para) return;
-    var anchor=para.closest('.notion-column-list') || para.closest('.notion-column') || para;
-    if(!anchor || !anchor.parentNode) return;
+    /* ZWISCHEN Intro-Absatz und den 2-Spalten-Textblock (links "Warum…Herzstück"+Text, rechts
+       "Wie wir bauen"+Text) setzen: am STABILEN Intro-Content-Block ankern (Wrapper-IDs sind instabil,
+       super.so re-generiert sie pro Render) und die Animation als Top-Level-Element direkt HINTER dem
+       Intro (= VOR dem Textblock) einfügen — so liegen beide Textblöcke darunter. */
+    var intro=document.getElementById('block-397b95465534803a8f54d1ee1b7bd80c');
+    if(!intro) return;
+    var root=intro.closest('.notion-root'); if(!root) return;
+    var top=intro; while(top.parentElement && top.parentElement!==root){ top=top.parentElement; }
+    if(top.parentElement!==root) return;
     var ex=document.getElementById('tsm2build');
     if(ex && ex.isConnected) return;                 // schon montiert
     if(ex && ex.parentNode) ex.parentNode.removeChild(ex);
     var el=build();
-    anchor.parentNode.insertBefore(el, anchor.nextSibling);
+    root.insertBefore(el, top.nextSibling);
     sequence(el);
   }
 
