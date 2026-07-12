@@ -301,11 +301,12 @@
 
 /* ---- */
 
-/* modul-2 — Full-Bleed-Animation "Sechs Bereiche. Ein Fundament in sieben Schritten."
-   Unter dem "Dein Backoffice gliedert sich…"-Absatz, edge-to-edge (CSS #tsm2build).
-   Act 1: sechs Bereiche steigen auf, Food/Drinks/Finance leuchten gold. Act 2: sieben Bausteine
-   fügen sich links→rechts in die Schiene, Gold-Linie wächst mit, End-Baustein pulst. Loop nur sichtbar
-   (IntersectionObserver), reduced-motion-Fallback in CSS. */
+/* modul-2 — Full-Bleed-Animation "Sechs Bereiche · zwei Kachel-Sets" (CSS #tsm2build).
+   Zwei Gruppen: A=Fundament (Food/Drinks/Finance) mit 7 Kacheln, B=Ausbau (Metrics/Ops/Vision) mit 7 Kacheln.
+   START: A und B laufen EINMAL automatisch nacheinander durch (Bausteine fügen sich links→rechts ein,
+   Gold-Linie wächst mit), danach ruht es auf Gruppe A (erste 3 Bereiche gold). KEIN Endlos-Loop.
+   KLICK auf einen Bereich schaltet auf dessen Gruppe um und spielt deren 7 Kacheln einmal ein.
+   Bilder = DB-Cover (schwarze-Glas-Serie) aus img/modul2/ via GitHub Pages. reduced-motion → Ruhezustand A. */
 (function(){
   if(window.__tsm2build) return; window.__tsm2build = true;
   function on(){ return /\/modul-2-das-notion-ai-backoffice-system\/?$/.test(location.pathname); }
@@ -317,18 +318,27 @@
     ops:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M4 8h10'/><circle cx='17' cy='8' r='2.4'/><path d='M20 16H10'/><circle cx='7' cy='16' r='2.4'/></svg>",
     vision:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12s3.2-6 9-6 9 6 9 6-3.2 6-9 6-9-6-9-6z'/><circle cx='12' cy='12' r='2.2'/></svg>"
   };
-  var AREAS=[['food','Foodquartier',1],['drinks','Drinksquartier',1],['finance','Finance Studio',1],
-             ['metrics','Key Metrics',0],['ops','Operations Area',0],['vision','Vision Frame',0]];
-  /* 7 Fundament-Schritte als DB-Cover-Kacheln (Bilder im Repo unter img/modul2/, via GitHub Pages geladen) */
+  /* Bereiche mit Gruppen-Zuordnung: A=Fundament (klick → Set A), B=Ausbau (klick → Set B) */
+  var AREAS=[['food','Foodquartier','A'],['drinks','Drinksquartier','A'],['finance','Finance Studio','A'],
+             ['metrics','Key Metrics','B'],['ops','Operations Area','B'],['vision','Vision Frame','B']];
   var IMGBASE="https://tastyrob123.github.io/kurs/img/modul2/";
-  var STEPS=[['Inventar','inventurliste.jpg'],['Lieferpartner','lieferanten.jpg'],['Zutaten','zutaten.jpg'],
-             ['Rezepturen','rezepturen.jpg'],['Gerichte','gerichte.jpg'],['Kalkulation','menuekalkulation.jpg'],
-             ['Vollkalkuliertes Gericht','dynamic-system.jpg']];
+  var N=7;
+  /* Zwei Sets à 7 DB-Cover-Kacheln (label, bilddatei in img/modul2/) */
+  var SETS={
+    A:{cap:'Das Fundament: <b>Food, Drinks &amp; Finance Studio</b> — in sieben Schritten.',
+       tiles:[['Inventar','inventurliste.jpg'],['Lieferpartner','lieferanten.jpg'],['Zutaten','zutaten.jpg'],
+              ['Rezepturen','rezepturen.jpg'],['Gerichte','mehrwert-zielbild.jpg'],['Kalkulation','menuekalkulation.jpg'],
+              ['Menü','food-drinks.jpg']]},
+    B:{cap:'Der Ausbau: <b>Key Metrics, Operations &amp; Vision</b> — sieben weitere Bausteine.',
+       tiles:[['Operations Area','operations.jpg'],['Allergene','allergene.jpg'],['Gemeinkosten & Löhne','gemeinkosten-loehne.jpg'],
+              ['Key Metrics','key-metrics.jpg'],['Multi Standorte','multistandort.jpg'],['Vision Frame','vision-frame.jpg'],
+              ['Allgemeine Tipps','allgemeine-tipps.jpg']]}
+  };
 
   function build(){
     var el=document.createElement('div'); el.id='tsm2build'; el.setAttribute('data-phase','0');
-    var areasH=AREAS.map(function(a,i){ return "<div class='tb-area' data-hot='"+a[2]+"' style='transition-delay:"+(i*70)+"ms'><span class='tb-ic'>"+IC[a[0]]+"</span><span class='tb-al'>"+a[1]+"</span></div>"; }).join('');
-    var stepsH=STEPS.map(function(s){ return "<div class='tb-step'><div class='tb-brick'><img src='"+IMGBASE+s[1]+"' alt='' loading='lazy'></div><div class='tb-sl'>"+s[0]+"</div></div>"; }).join('');
+    var areasH=AREAS.map(function(a,i){ return "<button type='button' class='tb-area' data-g='"+a[2]+"' style='transition-delay:"+(i*70)+"ms'><span class='tb-ic'>"+IC[a[0]]+"</span><span class='tb-al'>"+a[1]+"</span></button>"; }).join('');
+    var stepsH=''; for(var i=0;i<N;i++){ stepsH+="<div class='tb-step'><div class='tb-brick'><img alt='' loading='lazy'></div><div class='tb-sl'></div></div>"; }
     el.innerHTML="<div class='tb-stage'><div class='tb-grain'></div><div class='tb-glow'></div>"+
       "<div class='tb-inner'>"+
       "<div class='tb-eyebrow'>Dein Backoffice</div>"+
@@ -344,33 +354,49 @@
     var fill=el.querySelector('.tb-fill'), cap=el.querySelector('.tb-caption');
     var areas=[].slice.call(el.querySelectorAll('.tb-area'));
     var steps=[].slice.call(el.querySelectorAll('.tb-step'));
-    var timers=[], running=false;
+    var imgs=steps.map(function(s){ return s.querySelector('img'); });
+    var labs=steps.map(function(s){ return s.querySelector('.tb-sl'); });
+    var timers=[], STEP_MS=470, introDone=false;
     function T(fn,ms){ timers.push(setTimeout(fn,ms)); }
     function clearT(){ timers.forEach(clearTimeout); timers=[]; }
-    function setCap(html){ cap.classList.remove('show'); T(function(){ cap.innerHTML=html; cap.classList.add('show'); },260); }
-    function reset(){ el.classList.remove('a-in'); fill.style.transform='scaleX(0)';
-      areas.forEach(function(a){ a.classList.remove('hot','dim'); });
-      steps.forEach(function(s){ s.classList.remove('in','fin'); }); cap.classList.remove('show'); }
-    function run(){
-      reset();
-      T(function(){ el.classList.add('a-in'); setCap('Sechs Bereiche greifen ineinander.'); },250);
-      T(function(){ areas.forEach(function(a){ a.classList.add(a.getAttribute('data-hot')==='1'?'hot':'dim'); });
-        setCap('Wir starten mit dem Fundament: <b>Food, Drinks &amp; Finance Studio</b>.'); },1750);
-      var base=3050;
-      T(function(){ setCap('Das Fundament — in sieben klaren Schritten.'); },base-150);
-      STEPS.forEach(function(s,i){
-        T(function(){ steps[i].classList.add('in'); fill.style.transform='scaleX('+(i/(STEPS.length-1))+')';
-          if(i===STEPS.length-1) steps[i].classList.add('fin'); },base+i*720);
-      });
-      var end=base+STEPS.length*720+300;
-      T(function(){ setCap('Nach jedem Schritt: <b>ein fertiger Baustein</b>.'); },end);
-      T(run, end+2600);
+    function setCap(html){ cap.classList.remove('show'); T(function(){ cap.innerHTML=html; cap.classList.add('show'); },240); }
+    function highlight(g){ areas.forEach(function(a){ a.classList.remove('hot','dim'); a.classList.add(a.getAttribute('data-g')===g?'hot':'dim'); }); }
+    function fillTiles(g){ var t=SETS[g].tiles; for(var i=0;i<N;i++){ imgs[i].src=IMGBASE+t[i][1]; labs[i].textContent=t[i][0]; } }
+    function hideSteps(){ steps.forEach(function(s){ s.classList.remove('in','fin'); }); fill.style.transform='scaleX(0)'; }
+    /* Gruppe g animiert einspielen: Fade-out → Bildwechsel → 7 Kacheln gestaffelt rein, Gold-Linie wächst. */
+    function playSet(g, delay, cb){
+      T(function(){ hideSteps(); highlight(g); setCap(SETS[g].cap); }, delay);
+      T(function(){ fillTiles(g); }, delay+420);
+      for(var i=0;i<N;i++){ (function(i){
+        T(function(){ steps[i].classList.add('in'); fill.style.transform='scaleX('+(i/(N-1))+')'; if(i===N-1) steps[i].classList.add('fin'); }, delay+520+i*STEP_MS);
+      })(i); }
+      var end=delay+520+N*STEP_MS+240;
+      if(cb) T(cb, end);
+      return end;
     }
-    function start(){ if(running) return; running=true; run(); }
-    function stop(){ running=false; clearT(); reset(); }
-    start();                                          // sofort starten (robust, auch falls IO nie feuert)
-    /* IO nur zum Pausieren, wenn aus dem Viewport gescrollt (Performance); startet neu beim Zurückscrollen */
-    new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting) start(); else stop(); }); },{threshold:.12}).observe(el);
+    /* Ruhezustand: Gruppe g als fertigen Block einblenden (kein Restagger) */
+    function settle(g, delay){
+      T(function(){ hideSteps(); highlight(g); setCap(SETS[g].cap); }, delay);
+      T(function(){ fillTiles(g); steps.forEach(function(s){ s.classList.add('in'); }); steps[N-1].classList.add('fin'); fill.style.transform='scaleX(1)'; }, delay+420);
+    }
+    /* START: A und B EINMAL nacheinander, danach Ruhe auf A. Kein Loop. */
+    function intro(){
+      if(introDone) return; introDone=true; clearT();
+      el.classList.add('a-in');
+      var dA=playSet('A', 600, null);
+      var dB=playSet('B', dA+800, null);
+      settle('A', dB+800);
+    }
+    /* Klick auf einen Bereich: dessen Gruppe umschalten + einmal einspielen */
+    function playOnce(g){ clearT(); el.classList.add('a-in'); playSet(g, 120, null); }
+    areas.forEach(function(a){ a.addEventListener('click', function(){ playOnce(a.getAttribute('data-g')); }); });
+
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){ el.classList.add('a-in'); settle('A', 0); return; }
+
+    /* einmal starten, sobald sichtbar (danach KEIN Auto-Neustart beim Zurückscrollen) */
+    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ io.disconnect(); intro(); } }); },{threshold:.2});
+    io.observe(el);
+    T(function(){ if(!introDone){ io.disconnect(); intro(); } }, 1400);   // Fallback, falls IO nie feuert
   }
 
   function mount(){
@@ -2342,6 +2368,149 @@
     io.observe(wrap);
     connect(wrap);
     tilt(wrap);
+  }
+  function boot(){
+    var tries=0;
+    var iv=setInterval(function(){ tries++; mount(); if(tries>60) clearInterval(iv); },300);
+    new MutationObserver(function(){ if(on()) mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
+
+/* ---- */
+
+/* ============================================================
+   lieferpartner — #tslpemp  "Empfehlung zur Einrichtung"
+   Klon des inventurliste-Empfehlungskastens (#tsdb0 + #tsmiss)
+   als EIN self-contained IIFE für die Seite /lieferpartner-
+   ansprechpartner-lieferantenvertrge. Linke Spalte = DB-
+   Animation (zyklisches Glas-Highlight durch DB I / DB II /
+   DB III, Sprache wie #tsdb0), rechte Spalte = Lineal-Heading
+   "Empfehlung zur Einrichtung" (letztes Wort beige) + Claude-
+   Code-Empfehlungstext. KEIN Connector (rechts keine Schritt-
+   Liste). Glas-Sprache identisch #tsmiss (--g:199,180,137,
+   Perspektiv-Entrance, Pointer-Tilt, Heartbeat, Gold-Top-Line).
+   Anker (Phrase-first, React-sicher): Notion-Marker
+   "+++ Empfehlung zur Nutzung +++" + Folgeabsatz "Lass Claude
+   Code…" (geklont, Originale nur .tslp-hide). "Somit…" wird
+   mittig gestylt (.tslp-i), "In der nächsten Lektion…" als
+   mittige Abschlusszeile (.tslp-mid). Box wird direkt UNTER
+   "Somit…" eingesetzt.
+   ============================================================ */
+(function(){
+  if(window.__tslpemp) return; window.__tslpemp=true;
+  var SLUG=/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/;
+  var PG='.page__lieferpartner-ansprechpartner-lieferantenvertrge';
+  var ICON='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1.5" y="2.5" width="13" height="11" rx="1.5"/><path d="M1.5 6.5h13M6.5 6.5v7"/></svg>';
+  var DBS=[['DB I','Lieferpartner'],['DB II','Ansprechpartner'],['DB III','Verträge']];
+  var CSS=`
+  ${PG} .tslp-i{max-width:820px;margin-left:auto !important;margin-right:auto !important;text-align:center !important;color:#fff !important}
+  ${PG} .tslp-mid{max-width:760px;margin-left:auto !important;margin-right:auto !important;margin-top:16px !important;text-align:center !important;color:rgba(255,255,255,.62) !important}
+  .tslp-hide{display:none !important}
+  #tslpemp{--g:199,180,137;--rx:0deg;--ry:0deg;position:relative;display:grid;grid-template-columns:minmax(280px,1fr) 1.35fr;gap:clamp(28px,4.5vw,56px);align-items:center;width:min(1000px,95vw);margin:26px auto 22px;padding:clamp(26px,4vw,44px) clamp(24px,4.5vw,50px);border-radius:20px;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0));border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85),0 0 14px rgba(var(--g),.08);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;transform-style:preserve-3d;will-change:transform;opacity:0;transform:perspective(1100px) rotateX(9deg) translateY(34px) scale(.97);transition:opacity .8s ease,transform .9s cubic-bezier(.16,1,.3,1)}
+  #tslpemp,#tslpemp *{box-sizing:border-box}
+  #tslpemp.in{opacity:1;transform:perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry))}
+  #tslpemp.live{transition:transform .16s ease-out,box-shadow .5s ease,border-color .4s ease}
+  #tslpemp.live:hover{border-color:rgba(var(--g),.4);animation:tslp-heartbeat 2.6s cubic-bezier(.4,0,.3,1) infinite}
+  #tslpemp::before{content:"";position:absolute;inset:0;border-radius:20px;background:radial-gradient(560px circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,.055),transparent 46%);opacity:0;transition:opacity .5s ease;pointer-events:none}
+  #tslpemp.live:hover::before{opacity:1}
+  #tslpemp::after{content:"";position:absolute;top:0;left:9%;right:9%;height:1px;background:linear-gradient(90deg,transparent,rgba(var(--g),.4),transparent);pointer-events:none}
+  #tslpemp .tslp-col{min-width:0;position:relative;z-index:1;transform:translateZ(22px)}
+  #tslpemp .db-hd{font-size:1.4rem;font-weight:700;letter-spacing:-.01em;line-height:1.2;margin:0 0 14px;color:#fff;opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+  #tslpemp .db-hd .g{color:#9e947f}
+  #tslpemp.in .db-hd{opacity:1;transform:none}
+  #tslpemp .db-row{display:flex;flex-direction:column;align-items:stretch;gap:6px;max-width:300px}
+  #tslpemp .tb{display:inline-flex;align-items:center;gap:9px;padding:11px 15px;border-radius:12px;font-size:.94rem;font-weight:600;color:rgba(255,255,255,.5);white-space:nowrap;opacity:0;transform:translateY(10px) scale(.97);transition:color .45s ease,background .5s ease,box-shadow .5s ease,opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
+  #tslpemp .tb svg{width:15px;height:15px;flex:none;opacity:.7}
+  #tslpemp .tb .num{color:#9e947f;font-variant-numeric:tabular-nums;opacity:.9}
+  #tslpemp.in .tb{opacity:1;transform:none}
+  #tslpemp.in .tb:nth-child(2){transition-delay:.10s}
+  #tslpemp.in .tb:nth-child(3){transition-delay:.20s}
+  #tslpemp .tb.on{color:#fff;background:rgba(255,255,255,.09);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),0 0 22px rgba(var(--g),.10)}
+  #tslpemp .tb.on svg{opacity:1}
+  #tslpemp .tb.on .num{opacity:1}
+  #tslpemp .tslp-item{opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+  #tslpemp.in .tslp-item{opacity:1;transform:none}
+  #tslpemp .emph{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1.45rem;font-weight:600;letter-spacing:-.012em;color:#fff;margin:0 0 14px;padding:0}
+  #tslpemp .emph .eg{color:#9e947f}
+  #tslpemp .p{color:rgba(255,255,255,.68);font-size:.98rem;line-height:1.72;margin:0;max-width:none}
+  @keyframes tslp-heartbeat{0%{box-shadow:0 4px 14px rgba(var(--g),.10),0 0 14px rgba(var(--g),.10)}18%{box-shadow:0 6px 22px rgba(var(--g),.30),0 0 46px rgba(var(--g),.34)}32%{box-shadow:0 5px 18px rgba(var(--g),.16),0 0 26px rgba(var(--g),.18)}46%{box-shadow:0 6px 20px rgba(var(--g),.26),0 0 40px rgba(var(--g),.28)}72%,100%{box-shadow:0 4px 14px rgba(var(--g),.10),0 0 14px rgba(var(--g),.10)}}
+  @media(max-width:900px){#tslpemp{grid-template-columns:1fr;gap:26px}#tslpemp .db-row{max-width:none}}
+  @media(max-width:720px){#tslpemp .db-hd{font-size:1.25rem}#tslpemp .tb{padding:10px 13px;font-size:.88rem}#tslpemp .emph{font-size:1.3rem}}
+  @media(prefers-reduced-motion:reduce){#tslpemp,#tslpemp.in{opacity:1;transform:none;transition:none}#tslpemp .db-hd,#tslpemp .tb,#tslpemp .tslp-item{opacity:1;transform:none;transition:none}#tslpemp.live:hover{animation:none;box-shadow:0 18px 44px -30px rgba(0,0,0,.85),0 0 26px rgba(var(--g),.22)}}
+  `;
+  function on(){ return SLUG.test(location.pathname); }
+  function injectCSS(){ if(document.getElementById('tslpemp-css'))return; var s=document.createElement('style'); s.id='tslpemp-css'; s.textContent=CSS; document.head.appendChild(s); }
+  function find(re){ var n=document.querySelectorAll(PG+' .notion-text'); for(var i=0;i<n.length;i++){ if(re.test(n[i].textContent||'')) return n[i]; } return null; }
+  function retext(){
+    var somit=find(/Somit haben wir nun/);
+    if(somit && !somit.classList.contains('tslp-i')) somit.classList.add('tslp-i');
+    var nx=find(/In der nächsten Lektion/);
+    if(nx && !nx.classList.contains('tslp-mid')) nx.classList.add('tslp-mid');
+    /* Originale (Marker + Claude-Text) sicher verstecken — bei jedem Tick, React-fest */
+    var marker=find(/Empfehlung zur Nutzung/);
+    if(marker && !marker.classList.contains('tslp-hide')) marker.classList.add('tslp-hide');
+    var claude=find(/Lass Claude Code/);
+    if(claude && document.getElementById('tslpemp') && !claude.classList.contains('tslp-hide')) claude.classList.add('tslp-hide');
+  }
+  function stripIds(el){ el.removeAttribute('id'); var q=el.querySelectorAll('[id]'); for(var i=0;i<q.length;i++)q[i].removeAttribute('id'); return el; }
+  function tilt(wrap){
+    if(!(window.matchMedia&&matchMedia('(hover: hover) and (pointer: fine)').matches)) return;
+    if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var raf=null, cx=0, cy=0;
+    wrap.addEventListener('mousemove',function(e){
+      cx=e.clientX; cy=e.clientY;
+      if(!wrap.classList.contains('live')||raf) return;
+      raf=requestAnimationFrame(function(){
+        raf=null;
+        var r=wrap.getBoundingClientRect();
+        var px=(cx-r.left)/r.width, py=(cy-r.top)/r.height;
+        wrap.style.setProperty('--ry',((px-.5)*5).toFixed(2)+'deg');
+        wrap.style.setProperty('--rx',((.5-py)*4).toFixed(2)+'deg');
+        wrap.style.setProperty('--mx',(px*100).toFixed(1)+'%');
+        wrap.style.setProperty('--my',(py*100).toFixed(1)+'%');
+      });
+    });
+    wrap.addEventListener('mouseleave',function(){
+      wrap.style.setProperty('--rx','0deg'); wrap.style.setProperty('--ry','0deg');
+    });
+  }
+  function cycle(wrap){
+    var tabs=[].slice.call(wrap.querySelectorAll('.tb')), idx=0, timer=null;
+    function move(){ tabs.forEach(function(x,i){ x.classList.toggle('on',i===idx); }); }
+    var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var io=new IntersectionObserver(function(e){
+      if(e[0].isIntersecting){ move(); if(!reduce&&!timer) timer=setInterval(function(){ idx=(idx+1)%tabs.length; move(); },2400); }
+      else if(timer){ clearInterval(timer); timer=null; }
+    },{threshold:.3});
+    io.observe(wrap);
+  }
+  function mount(){
+    if(!on()){ var e=document.getElementById('tslpemp'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    injectCSS(); retext();
+    if(document.getElementById('tslpemp')) return;
+    var somit=find(/Somit haben wir nun/);
+    var marker=find(/Empfehlung zur Nutzung/);
+    var claude=find(/Lass Claude Code/);
+    if(!somit||!marker||!claude) return;
+    var wrap=document.createElement('div'); wrap.id='tslpemp';
+    var L=document.createElement('div'); L.className='tslp-col';
+    var R=document.createElement('div'); R.className='tslp-col';
+    L.innerHTML='<div class="db-hd">DB I – III : <span class="g">Lieferanten</span></div>'+
+      '<div class="db-row">'+DBS.map(function(d){ return '<span class="tb">'+ICON+'<span class="num">'+d[0]+'</span> '+d[1]+'</span>'; }).join('')+'</div>';
+    var emph=document.createElement('div'); emph.className='emph tslp-item'; emph.innerHTML='Empfehlung zur <span class="eg">Einrichtung</span>';
+    var pClone=stripIds(claude.cloneNode(true)); pClone.className='p tslp-item';
+    R.appendChild(emph); R.appendChild(pClone);
+    wrap.appendChild(L); wrap.appendChild(R);
+    if(somit.nextSibling) somit.parentNode.insertBefore(wrap,somit.nextSibling); else somit.parentNode.appendChild(wrap);
+    claude.classList.add('tslp-hide');
+    var items=R.querySelectorAll('.tslp-item');
+    for(var i=0;i<items.length;i++) items[i].style.transitionDelay=(i*0.12+0.1)+'s';
+    var io=new IntersectionObserver(function(e){
+      if(e[0].isIntersecting){ wrap.classList.add('in'); setTimeout(function(){ wrap.classList.add('live'); },950); io.disconnect(); }
+    },{threshold:.25});
+    io.observe(wrap);
+    cycle(wrap); tilt(wrap);
   }
   function boot(){
     var tries=0;
