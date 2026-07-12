@@ -3108,7 +3108,7 @@
   var MACS=[
     { after:'tsshop--db13_lieferanten',     col:'block-39bb954655348092b69cec1441abcc6e', img:BASE+'lieferpartner-uebersicht.png', shot:SCROLL+'lieferpartner.jpg',   cap:'Lieferpartner-Übersicht' },
     { after:'tsshop--db13_ansprechpartner', col:'block-39bb95465534801e9c8add95f1979a5e', img:BASE+'ansprechpartner-galerie.png',   shot:SCROLL+'ansprechpartner.jpg', cap:'Ansprechpartner-Galerie' },
-    { after:'tsshop--db13_vertraege',       side:'right', img:BASE+'vertraege-datenbank.png',        shot:SCROLL+'vertraege.jpg',      cap:'Verträge-Datenbank' }
+    { after:'tsshop--db13_vertraege',       col:'block-39bb954655348006934fff07a63c709c', img:BASE+'vertraege-datenbank.png',        shot:SCROLL+'vertraege.jpg',      cap:'Verträge-Datenbank' }
   ];
   var CSS = `
   .ts2mac-row{width:100%;max-width:1180px;margin:clamp(30px,4vh,58px) auto 0;padding:0 clamp(16px,3vw,40px);display:flex;align-items:center;gap:clamp(20px,4vw,64px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;box-sizing:border-box}
@@ -3117,8 +3117,8 @@
   /* PC direkt in einer leeren Notion-Spalte (neben dem Erklärtext) */
   .ts2mac-incol{display:flex;flex-direction:column;justify-content:center;align-items:center}
   .ts2mac-incol .ts2mac-pc{width:100%;display:flex;flex-direction:column;align-items:center}
-  /* Text-Spalte + PC-Spalte vertikal mittig zueinander (Lieferpartner- & Ansprechpartner-Column-List) */
-  #block-39bb9546553480dbae23db8a4b9592a6,#block-39bb9546553480248c0ac0e7ae493112{align-items:center}
+  /* Text-Spalte + PC-Spalte vertikal mittig zueinander (Lieferpartner-, Ansprechpartner- & Verträge-Column-List) */
+  #block-39bb9546553480dbae23db8a4b9592a6,#block-39bb9546553480248c0ac0e7ae493112,#block-39bb9546553480c49415d3053a4f2de6{align-items:center}
   .ts2mac-tile{width:100%;max-width:520px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 18px 44px rgba(0,0,0,.5));transition:transform .5s cubic-bezier(.16,1,.3,1),filter .5s cubic-bezier(.16,1,.3,1)}
   .ts2mac-tile img{width:100%;height:auto;display:block}
   .ts2mac-tile:hover,.ts2mac-tile:focus-visible{transform:translateY(-4px) scale(1.02);animation:ts2macHb 2.6s cubic-bezier(.16,1,.3,1) infinite;outline:none}
