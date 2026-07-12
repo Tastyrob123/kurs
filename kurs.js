@@ -301,15 +301,15 @@
 
 /* ---- */
 
-/* modul-2 — Full-Bleed-Animation "Sechs Bereiche · zwei Kachel-Sets" (CSS #tsm2build).
-   Zwei Gruppen: A=Fundament (Food/Drinks/Finance) mit 7 Kacheln, B=Ausbau (Metrics/Ops/Vision) mit 7 Kacheln.
-   START: A und B laufen EINMAL automatisch nacheinander durch (Bausteine fügen sich links→rechts ein,
-   Gold-Linie wächst mit), danach ruht es auf Gruppe A (erste 3 Bereiche gold). KEIN Endlos-Loop.
-   KLICK auf einen Bereich schaltet auf dessen Gruppe um und spielt deren 7 Kacheln einmal ein.
-   Bilder = DB-Cover (schwarze-Glas-Serie) aus img/modul2/ via GitHub Pages. reduced-motion → Ruhezustand A. */
+/* modul-2 — ZWEI Full-Bleed-Animationen (.tsmb), aufgesplittet:
+   TEIL 1 "Fundament" (#tsm2build)  — ZWISCHEN Intro-Absatz und 2-Spalten-Textblock; Bereiche Food/Drinks/Finance + 7 Kacheln.
+   TEIL 2 "Ausbau"    (#tsm2build2) — UNTER dem 2-Spalten-Textblock, ÜBER "Was du am Ende hast"; Bereiche Key Metrics/Operations/Vision + 7 andere Kacheln.
+   Jede läuft EINMAL beim Scrollen in den Viewport (danach statisch → flüssig, KEINE Dauer-Animation, kein Loop, kein Klick).
+   Bilder = DB-Cover aus img/modul2/ via GitHub Pages. reduced-motion → sofort fertiger Zustand. */
 (function(){
   if(window.__tsm2build) return; window.__tsm2build = true;
   function on(){ return /\/modul-2-das-notion-ai-backoffice-system\/?$/.test(location.pathname); }
+  var IMGBASE="https://tastyrob123.github.io/kurs/img/modul2/", N=7;
   var IC={
     food:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M6 3v6a2 2 0 0 0 2 2 2 2 0 0 0 2-2V3'/><path d='M8 11v10'/><path d='M17 3c-1.4 0-2.2 2-2.2 4.6 0 2 .9 3 2.2 3.2V21'/></svg>",
     drinks:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M6 4h12l-5 8v6'/><path d='M9 18h6'/><path d='M8.5 8h7'/></svg>",
@@ -318,31 +318,29 @@
     ops:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M4 8h10'/><circle cx='17' cy='8' r='2.4'/><path d='M20 16H10'/><circle cx='7' cy='16' r='2.4'/></svg>",
     vision:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12s3.2-6 9-6 9 6 9 6-3.2 6-9 6-9-6-9-6z'/><circle cx='12' cy='12' r='2.2'/></svg>"
   };
-  /* Bereiche mit Gruppen-Zuordnung: A=Fundament (klick → Set A), B=Ausbau (klick → Set B) */
-  var AREAS=[['food','Foodquartier','A'],['drinks','Drinksquartier','A'],['finance','Finance Studio','A'],
-             ['metrics','Key Metrics','B'],['ops','Operations Area','B'],['vision','Vision Frame','B']];
-  var IMGBASE="https://tastyrob123.github.io/kurs/img/modul2/";
-  var N=7;
-  /* Zwei Sets à 7 DB-Cover-Kacheln (label, bilddatei in img/modul2/) */
-  var SETS={
-    A:{cap:'Das Fundament: <b>Food, Drinks &amp; Finance Studio</b> — in sieben Schritten.',
-       tiles:[['Inventar','inventurliste.jpg'],['Lieferpartner','lieferanten.jpg'],['Zutaten','zutaten.jpg'],
-              ['Rezepturen','rezepturen.jpg'],['Gerichte','mehrwert-zielbild.jpg'],['Kalkulation','menuekalkulation.jpg'],
-              ['Menü','food-drinks.jpg']]},
-    B:{cap:'Der Ausbau: <b>Key Metrics, Operations &amp; Vision</b> — sieben weitere Bausteine.',
-       tiles:[['Operations Area','operations.jpg'],['Allergene','allergene.jpg'],['Gemeinkosten & Löhne','gemeinkosten-loehne.jpg'],
-              ['Key Metrics','key-metrics.jpg'],['Multi Standorte','multistandort.jpg'],['Vision Frame','vision-frame.jpg'],
-              ['Allgemeine Tipps','allgemeine-tipps.jpg']]}
-  };
+  /* Zwei Teile: je 3 Bereiche ([icon,label]) + 7 Kacheln ([label,bild]).
+     anchor = stabiler Content-Block; place: 'afterIntro' = Top-Level hinter dem Intro | 'afterColList' = hinter dem 2-Spalten-Block. */
+  var PARTS=[
+    { id:'tsm2build', eyebrow:'Dein Backoffice', title:'Sechs Bereiche. Ein Fundament in sieben Schritten.',
+      cap:'Das Fundament: <b>Food, Drinks &amp; Finance Studio</b> — in sieben Schritten.',
+      areas:[['food','Foodquartier'],['drinks','Drinksquartier'],['finance','Finance Studio']],
+      tiles:[['Inventar','inventurliste.jpg'],['Lieferpartner','lieferanten.jpg'],['Zutaten','zutaten.jpg'],['Rezepturen','rezepturen.jpg'],['Gerichte','mehrwert-zielbild.jpg'],['Kalkulation','menuekalkulation.jpg'],['Menü','food-drinks.jpg']],
+      anchor:'block-397b95465534803a8f54d1ee1b7bd80c', place:'afterIntro' },
+    { id:'tsm2build2', eyebrow:'Der Ausbau', title:'Der Ausbau. Die nächsten 7 Schritte zum Backoffice.',
+      cap:'Der Ausbau: <b>Key Metrics, Operations &amp; Vision</b> — sieben weitere Bausteine.',
+      areas:[['metrics','Key Metrics'],['ops','Operations Area'],['vision','Vision Frame']],
+      tiles:[['Operations Area','operations.jpg'],['Allergene','allergene.jpg'],['Gemeinkosten & Löhne','gemeinkosten-loehne.jpg'],['Key Metrics','key-metrics.jpg'],['Multi Standorte','multistandort.jpg'],['Vision Frame','vision-frame.jpg'],['Allgemeine Tipps','allgemeine-tipps.jpg']],
+      anchor:'block-397b9546553480dfa291d21d2b5e7456', place:'afterColList' }
+  ];
 
-  function build(){
-    var el=document.createElement('div'); el.id='tsm2build'; el.setAttribute('data-phase','0');
-    var areasH=AREAS.map(function(a,i){ return "<button type='button' class='tb-area' data-g='"+a[2]+"' style='transition-delay:"+(i*70)+"ms'><span class='tb-ic'>"+IC[a[0]]+"</span><span class='tb-al'>"+a[1]+"</span></button>"; }).join('');
-    var stepsH=''; for(var i=0;i<N;i++){ stepsH+="<div class='tb-step'><div class='tb-brick'><img alt='' loading='lazy' decoding='async'></div><div class='tb-sl'></div></div>"; }
-    el.innerHTML="<div class='tb-stage'><div class='tb-grain'></div><div class='tb-glow'></div>"+
+  function build(cfg){
+    var el=document.createElement('div'); el.id=cfg.id; el.className='tsmb'; el.setAttribute('data-phase','0');
+    var areasH=cfg.areas.map(function(a,i){ return "<div class='tb-area hot' style='transition-delay:"+(i*70)+"ms'><span class='tb-ic'>"+IC[a[0]]+"</span><span class='tb-al'>"+a[1]+"</span></div>"; }).join('');
+    var stepsH=''; for(var i=0;i<N;i++){ stepsH+="<div class='tb-step'><div class='tb-brick'><img src='"+IMGBASE+cfg.tiles[i][1]+"' alt='' loading='lazy' decoding='async'></div><div class='tb-sl'>"+cfg.tiles[i][0]+"</div></div>"; }
+    el.innerHTML="<div class='tb-stage'><div class='tb-grain'></div>"+
       "<div class='tb-inner'>"+
-      "<div class='tb-eyebrow'>Dein Backoffice</div>"+
-      "<h3 class='tb-title'>Sechs Bereiche. Ein Fundament in sieben Schritten.</h3>"+
+      "<div class='tb-eyebrow'>"+cfg.eyebrow+"</div>"+
+      "<h3 class='tb-title'>"+cfg.title+"</h3>"+
       "<div class='tb-areas'>"+areasH+"</div>"+
       "<div class='tb-rail'><div class='tb-track'><span class='tb-fill'></span></div>"+stepsH+"</div>"+
       "<div class='tb-caption'></div>"+
@@ -350,78 +348,62 @@
     return el;
   }
 
-  function sequence(el){
+  function sequence(el, cfg){
     var fill=el.querySelector('.tb-fill'), cap=el.querySelector('.tb-caption');
-    var areas=[].slice.call(el.querySelectorAll('.tb-area'));
     var steps=[].slice.call(el.querySelectorAll('.tb-step'));
-    var imgs=steps.map(function(s){ return s.querySelector('img'); });
-    var labs=steps.map(function(s){ return s.querySelector('.tb-sl'); });
-    var timers=[], STEP_MS=470, introDone=false;
-    function T(fn,ms){ timers.push(setTimeout(fn,ms)); }
-    function clearT(){ timers.forEach(clearTimeout); timers=[]; }
-    function setCap(html){ cap.classList.remove('show'); T(function(){ cap.innerHTML=html; cap.classList.add('show'); },240); }
-    function highlight(g){ areas.forEach(function(a){ a.classList.remove('hot','dim'); a.classList.add(a.getAttribute('data-g')===g?'hot':'dim'); }); }
-    function fillTiles(g){ var t=SETS[g].tiles; for(var i=0;i<N;i++){ imgs[i].src=IMGBASE+t[i][1]; labs[i].textContent=t[i][0]; } }
-    function hideSteps(){ steps.forEach(function(s){ s.classList.remove('in','fin'); }); fill.style.transform='scaleX(0)'; }
-    /* Gruppe g animiert einspielen: Fade-out → Bildwechsel → 7 Kacheln gestaffelt rein, Gold-Linie wächst. */
-    function playSet(g, delay, cb){
-      T(function(){ hideSteps(); highlight(g); setCap(SETS[g].cap); }, delay);
-      T(function(){ fillTiles(g); }, delay+420);
-      for(var i=0;i<N;i++){ (function(i){
-        T(function(){ steps[i].classList.add('in'); fill.style.transform='scaleX('+(i/(N-1))+')'; if(i===N-1) steps[i].classList.add('fin'); }, delay+520+i*STEP_MS);
-      })(i); }
-      var end=delay+520+N*STEP_MS+240;
-      if(cb) T(cb, end);
-      return end;
-    }
-    /* Ruhezustand: Gruppe g als fertigen Block einblenden (kein Restagger) */
-    function settle(g, delay){
-      T(function(){ hideSteps(); highlight(g); setCap(SETS[g].cap); }, delay);
-      T(function(){ fillTiles(g); steps.forEach(function(s){ s.classList.add('in'); }); steps[N-1].classList.add('fin'); fill.style.transform='scaleX(1)'; }, delay+420);
-    }
-    /* START: A und B EINMAL nacheinander, danach Ruhe auf A. Kein Loop. */
-    function intro(){
-      if(introDone) return; introDone=true; clearT();
+    var STEP_MS=430, started=false, io=null;
+    /* EINMALIGER Aufbau: Bereiche steigen auf, dann 7 Kacheln gestaffelt rein, Gold-Linie wächst mit. */
+    function reveal(){
+      if(started) return; started=true; cleanup();
       el.classList.add('a-in');
-      var dA=playSet('A', 600, null);
-      var dB=playSet('B', dA+800, null);
-      settle('A', dB+800);
+      cap.innerHTML=cfg.cap; setTimeout(function(){ cap.classList.add('show'); }, 480);
+      for(var i=0;i<N;i++){ (function(i){
+        setTimeout(function(){ steps[i].classList.add('in'); fill.style.transform='scaleX('+(i/(N-1))+')'; if(i===N-1) steps[i].classList.add('fin'); }, 340+i*STEP_MS);
+      })(i); }
     }
-    /* Klick auf einen Bereich: dessen Gruppe umschalten + einmal einspielen */
-    function playOnce(g){ clearT(); el.classList.add('a-in'); playSet(g, 120, null); }
-    areas.forEach(function(a){ a.addEventListener('click', function(){ playOnce(a.getAttribute('data-g')); }); });
-
-    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){ el.classList.add('a-in'); settle('A', 0); return; }
-
-    /* einmal starten, sobald sichtbar (danach KEIN Auto-Neustart beim Zurückscrollen) */
-    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ io.disconnect(); intro(); } }); },{threshold:.2});
-    io.observe(el);
-    T(function(){ if(!introDone){ io.disconnect(); intro(); } }, 1400);   // Fallback, falls IO nie feuert
+    function cleanup(){ if(io) io.disconnect(); window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); }
+    function inView(){ var r=el.getBoundingClientRect(); return r.top < innerHeight*0.85 && r.bottom > 40; }
+    function onScroll(){ if(!started && inView()) reveal(); }
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      el.classList.add('a-in'); steps.forEach(function(s){ s.classList.add('in'); }); steps[N-1].classList.add('fin');
+      fill.style.transform='scaleX(1)'; cap.innerHTML=cfg.cap; cap.classList.add('show'); return;
+    }
+    /* Reveal, sobald in den Viewport gescrollt — IntersectionObserver + Scroll-Fallback (robust, auch falls IO gedrosselt).
+       Läuft genau EINMAL (cleanup nach reveal); kein Loop, keine Dauer-Last. */
+    if('IntersectionObserver' in window){
+      io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting) reveal(); }); },{threshold:.25});
+      io.observe(el);
+    }
+    window.addEventListener('scroll', onScroll, {passive:true});
+    window.addEventListener('resize', onScroll);
+    onScroll();   // initial: falls schon im Viewport (z.B. Teil 1 above-the-fold)
   }
 
-  function mount(){
-    if(!on()) return;
-    /* ZWISCHEN Intro-Absatz und den 2-Spalten-Textblock (links "Warum…Herzstück"+Text, rechts
-       "Wie wir bauen"+Text) setzen: am STABILEN Intro-Content-Block ankern (Wrapper-IDs sind instabil,
-       super.so re-generiert sie pro Render) und die Animation als Top-Level-Element direkt HINTER dem
-       Intro (= VOR dem Textblock) einfügen — so liegen beide Textblöcke darunter. */
-    var intro=document.getElementById('block-397b95465534803a8f54d1ee1b7bd80c');
-    if(!intro) return;
-    var root=intro.closest('.notion-root'); if(!root) return;
-    var top=intro; while(top.parentElement && top.parentElement!==root){ top=top.parentElement; }
-    if(top.parentElement!==root) return;
-    var ex=document.getElementById('tsm2build');
+  function mount(cfg){
+    var anchor=document.getElementById(cfg.anchor);
+    if(!anchor) return;
+    var ex=document.getElementById(cfg.id);
     if(ex && ex.isConnected) return;                 // schon montiert
     if(ex && ex.parentNode) ex.parentNode.removeChild(ex);
-    var el=build();
-    root.insertBefore(el, top.nextSibling);
-    sequence(el);
+    var parent, ref, el=build(cfg);
+    if(cfg.place==='afterIntro'){
+      var root=anchor.closest('.notion-root'); if(!root) return;
+      var top=anchor; while(top.parentElement && top.parentElement!==root){ top=top.parentElement; }
+      if(top.parentElement!==root) return;
+      parent=root; ref=top.nextSibling;
+    } else {                                          // afterColList: hinter den ganzen 2-Spalten-Block
+      var cl=anchor.closest('.notion-column-list'); if(!cl || !cl.parentNode) return;
+      parent=cl.parentNode; ref=cl.nextSibling;
+    }
+    parent.insertBefore(el, ref);
+    sequence(el, cfg);
   }
+  function mountAll(){ if(!on()) return; PARTS.forEach(mount); }
 
-  mount();
-  document.addEventListener('DOMContentLoaded', mount);
+  mountAll();
+  document.addEventListener('DOMContentLoaded', mountAll);
   var _tb=null;
-  new MutationObserver(function(){ if(_tb) return; _tb=setTimeout(function(){ _tb=null; mount(); },200); })
+  new MutationObserver(function(){ if(_tb) return; _tb=setTimeout(function(){ _tb=null; mountAll(); },200); })
     .observe(document.documentElement,{childList:true,subtree:true});
 })();
 
