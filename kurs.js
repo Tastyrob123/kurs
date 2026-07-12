@@ -4024,6 +4024,7 @@
 
 
 
+
 /* ============================================================================
    #tscover — Zutaten-DB-Erklär-Animationen (Seite /zutatenliste)
    ZWEI getrennte Vollbreite-Blöcke, je: Animation LINKS + Textpanel RECHTS.
@@ -4306,7 +4307,7 @@
   function relPos(stage,el,dx,dy){ var sr=stage.getBoundingClientRect(), er=el.getBoundingClientRect(); return [er.left-sr.left+(dx||0), er.top-sr.top+(dy||0)]; }
   function setStep(p,n,state){ var el=p.querySelector('.tsc-step[data-step="'+n+'"]'); if(!el)return; el.classList.remove('active','done'); if(state)el.classList.add(state); }
   /* super.so setzt teils !important-Regeln, die unsere Stylesheet-Regeln schlagen -> Sichtbarkeit inline erzwingen */
-  function reveal(p){ var w=p.querySelector('.tsc-win'); if(w){ w.style.setProperty('opacity','1','important'); w.style.setProperty('transform','none','important'); } var c=p.querySelector('.tsc-cursor'); if(c) c.style.setProperty('opacity','1','important'); }
+  function reveal(p){ var w=p.querySelector('.tsc-win'); if(w){ w.style.setProperty('transition','none','important'); w.style.setProperty('opacity','1','important'); w.style.setProperty('transform','none','important'); } var c=p.querySelector('.tsc-cursor'); if(c) c.style.setProperty('opacity','1','important'); }
 
   function playA(p){
     if(p.__clock) p.__clock.clear(); var clock=mkClock(); p.__clock=clock;
@@ -4457,7 +4458,8 @@
   }
   function boot(){
     var tries=0; var iv=setInterval(function(){ tries++; mount(); if(tries>50)clearInterval(iv); },300);
-    new MutationObserver(function(){ mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+    var _mt=null;
+    new MutationObserver(function(){ if(_mt)return; _mt=setTimeout(function(){ _mt=null; mount(); },250); }).observe(document.documentElement,{childList:true,subtree:true});
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
