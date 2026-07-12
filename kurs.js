@@ -4086,6 +4086,7 @@
 
 
 
+
 /* ============================================================================
    #tscover — Zutaten-DB-Erklär-Animationen (Seite /zutatenliste)
    ZWEI getrennte Vollbreite-Blöcke, je: Animation LINKS + Textpanel RECHTS.
@@ -4119,6 +4120,9 @@
   .tscb .tscb-in.center .tsc-steps{justify-content:center}
   .tscb .tscb-in.center .tsc-stage{max-width:640px;margin:20px auto 0}
   @media(max-width:900px){.tscb .tscb-in{grid-template-columns:1fr;gap:30px}}
+  /* Block A dicht unter „Die Lösung" (Leerraum der Spalte wegziehen) */
+  .tscb[data-block="A"]{padding-top:8px}
+  @media(min-width:901px){.tscb[data-block="A"]{padding-top:0;margin-top:-56px}}
 
   /* „Die Lösung"-Absatz entschärfen: kleiner + normal, nur „Die Lösung :" fett */
   .tsc-loesung,.tsc-loesung .notion-text__content,.tsc-loesung .notion-semantic-string{font-size:16px!important;font-weight:400!important;line-height:1.7!important}
