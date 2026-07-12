@@ -4084,6 +4084,7 @@
 
 
 
+
 /* ============================================================================
    #tscover — Zutaten-DB-Erklär-Animationen (Seite /zutatenliste)
    ZWEI getrennte Vollbreite-Blöcke, je: Animation LINKS + Textpanel RECHTS.
@@ -4465,7 +4466,8 @@
   function findMarker(marker){
     var els=document.querySelectorAll('.notion-text');
     for(var i=0;i<els.length;i++){
-      if((els[i].textContent||'').trim().toLowerCase()===marker && !els[i].closest('.notion-column')){
+      var t=(els[i].textContent||'').trim().toLowerCase().replace(/^[^a-z]+/,'').replace(/[^a-z-]+$/,'');
+      if(t===marker && !els[i].closest('.notion-column')){
         var blk=els[i].closest('[data-block-id]')||els[i].closest('[id^="block-"]')||els[i];
         return blk;
       }
@@ -4604,7 +4606,10 @@
     for(var L=0;L<lists.length;L++){
       var all=lists[L].querySelectorAll('.notion-text');
       for(var i=0;i<all.length;i++){
-        if((all[i].textContent||'').trim().toLowerCase()===MARKER){
+        /* tolerant: trim + lowercase + führende/abschließende Nicht-Marker-Zeichen weg
+           (Inline-Code, Punkt, Leerzeichen etc.) */
+        var t=(all[i].textContent||'').trim().toLowerCase().replace(/^[^a-z]+/,'').replace(/[^a-z-]+$/,'');
+        if(t===MARKER){
           var col=all[i].closest('.notion-column'); if(!col) continue;
           var mk=all[i]; while(mk.parentElement && mk.parentElement!==col) mk=mk.parentElement;
           return { col:col, marker:(mk&&mk!==col)?mk:all[i] };
