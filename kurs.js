@@ -274,7 +274,7 @@
 
   /* Orbital-Bühne einmalig bauen: 4 Tool-Nodes auf einer Krone um den Core (280/196), Linien fließen in den Core. */
   var CX=280, CY=196, R=150;
-  var NODES=[{name:'Excel',a:201},{name:'Word',a:249},{name:'Notion',a:291},{name:'ChatGPT',a:339}];
+  var NODES=[{name:'Excel',a:201,c:'#6fae86'},{name:'Word',a:249,c:'#6f9bd1'},{name:'Notion',a:291,c:'#d6d0c4'},{name:'ChatGPT',a:339,c:'#74b3a1'}];
   function pt(a,r){ var rad=a*Math.PI/180; return [CX+Math.cos(rad)*r, CY+Math.sin(rad)*r]; }
   var lines='', nodeEls='';
   NODES.forEach(function(n,i){
@@ -283,15 +283,14 @@
     lines+='<path class="tsm2-base" d="'+d+'"/><path class="tsm2-pulse" d="'+d+'" style="animation-delay:'+(i*0.7)+'s"/>';
     var lp=pt(n.a, R+22);
     var anchor=(lp[0]<CX-10)?'end':(lp[0]>CX+10?'start':'middle');
-    nodeEls+='<g class="tsm2-node" style="--dx:'+((p[0]-CX)*0.14).toFixed(1)+'px;--dy:'+((p[1]-CY)*0.14).toFixed(1)+'px;transition-delay:'+(i*0.09)+'s">'+
-        '<circle class="tsm2-node__halo" cx="'+lx+'" cy="'+ly+'" r="10"/>'+
-        '<circle class="tsm2-node__dot" cx="'+lx+'" cy="'+ly+'" r="3.2"/>'+
+    nodeEls+='<g class="tsm2-node" style="--nc:'+n.c+';--dx:'+((p[0]-CX)*0.14).toFixed(1)+'px;--dy:'+((p[1]-CY)*0.14).toFixed(1)+'px;transition-delay:'+(i*0.09)+'s">'+
+        '<circle class="tsm2-node__halo" cx="'+lx+'" cy="'+ly+'" r="11"/>'+
+        '<circle class="tsm2-node__dot" cx="'+lx+'" cy="'+ly+'" r="3.4"/>'+
         '<text class="tsm2-node__t" x="'+lp[0].toFixed(1)+'" y="'+(lp[1]+3).toFixed(1)+'" text-anchor="'+anchor+'">'+n.name.toUpperCase()+'</text>'+
       '</g>';
   });
   var HTML =
     '<div class="tsm2-stage" data-phase="0">'+
-      '<div class="tsm2-grain"></div>'+
       '<div class="tsm2-glow"></div>'+
       '<svg class="tsm2-svg" viewBox="0 0 560 470" preserveAspectRatio="xMidYMid meet">'+
         '<defs>'+
@@ -308,7 +307,7 @@
         '<g class="tsm2-lines">'+lines+'</g>'+
         nodeEls+
       '</svg>'+
-      '<div class="tsm2-core"><span class="tsm2-core__label">Backoffice</span></div>'+
+      '<div class="tsm2-core"><span class="tsm2-logo"></span><span class="tsm2-core__label">Backoffice</span></div>'+
       '<div class="tsm2-read">'+
         '<div class="tsm2-read__ey">Wareneinsatz &middot; pro Gericht</div>'+
         '<div class="tsm2-read__num"><b id="tsm2num">0,00</b><i>&euro;</i></div>'+
@@ -331,7 +330,18 @@
     }
   }
 
-  function runLoop(){
+  var played=false;   // Story läuft nur EINMAL; danach bleibt der Endzustand stehen
+
+  /* Endzustand direkt setzen (für Re-Mount nach React-Rerender, ohne erneutes Abspielen) */
+  function setFinal(){
+    var stage=document.querySelector('#tsm2sys .tsm2-stage');
+    if(!stage) return;
+    stage.setAttribute('data-phase','3'); stage.classList.add('tsm2-done');
+    var n=document.getElementById('tsm2num'); if(n) n.textContent='3,71';
+    var c=document.getElementById('tsm2cap'); if(c) c.textContent='Preis steigt? Du siehst es sofort.';
+  }
+
+  function runOnce(){
     var stage=document.querySelector('#tsm2sys .tsm2-stage');
     var numEl=document.getElementById('tsm2num');
     var capEl=document.getElementById('tsm2cap');
@@ -343,13 +353,17 @@
     function cap(txt){ capEl.style.opacity=0; capEl.style.transform='translateY(6px)'; setTimeout(function(){ capEl.textContent=txt; capEl.style.opacity=1; capEl.style.transform='none'; },350); }
     function pulse(){ if(!wave) return; wave.classList.remove('go'); void wave.getBoundingClientRect(); wave.classList.add('go'); }
     var seq=[
-      {p:'0',cap:'Verstreut. Ohne Struktur.',dur:2900,act:function(){ numEl.textContent='0,00'; }},
-      {p:'1',cap:'Ein System, das mitdenkt.',dur:2900,act:function(){}},
-      {p:'2',cap:'Jedes Gericht — auf den Cent.',dur:3000,act:function(){ count(0,3.47,1400); }},
-      {p:'3',cap:'Preis steigt? Du siehst es sofort.',dur:3200,act:function(){ setTimeout(function(){ pulse(); count(3.47,3.71,1000); },600); }}
+      {p:'0',cap:'Verstreut. Ohne Struktur.',dur:2600,act:function(){ numEl.textContent='0,00'; }},
+      {p:'1',cap:'Ein System, das mitdenkt.',dur:2700,act:function(){}},
+      {p:'2',cap:'Jedes Gericht — auf den Cent.',dur:2900,act:function(){ count(0,3.47,1400); }},
+      {p:'3',cap:'Preis steigt? Du siehst es sofort.',dur:0,act:function(){ setTimeout(function(){ pulse(); count(3.47,3.71,1000); },600); }}
     ];
     var i=0;
-    function tick(){ var st=seq[i]; stage.setAttribute('data-phase',st.p); cap(st.cap); st.act(); window.__tsm2timer=setTimeout(function(){ i=(i+1)%seq.length; tick(); }, st.dur); }
+    function tick(){
+      var st=seq[i]; stage.setAttribute('data-phase',st.p); cap(st.cap); st.act();
+      if(i < seq.length-1){ window.__tsm2timer=setTimeout(function(){ i++; tick(); }, st.dur); }
+      else { window.__tsm2timer=setTimeout(function(){ stage.classList.add('tsm2-done'); played=true; }, 2000); }
+    }
     tick();
   }
 
@@ -364,7 +378,7 @@
     if(ex && ex.parentNode) ex.parentNode.removeChild(ex);
     var root=document.createElement('div'); root.id='tsm2sys'; root.innerHTML=HTML;
     col.appendChild(root);
-    runLoop();
+    if(played) setFinal(); else runOnce();        // nach dem Durchlauf nie wieder abspielen
   }
 
   mount();
