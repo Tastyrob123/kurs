@@ -958,3 +958,16 @@ details > summary {
 .page__lieferpartner-ansprechpartner-lieferantenvertrge #block-39bb954655348093a05fd72ae1072505,
 .page__lieferpartner-ansprechpartner-lieferantenvertrge #block-39bb9546553480749d12da55b8cde52e,
 .page__lieferpartner-ansprechpartner-lieferantenvertrge #block-39bb9546553480dfbcbfd037cc1020a6{ align-self:flex-start !important; }
+
+/* lieferpartner · die drei Sektions-Überschriften (Sortiment/Ansprechpartner/Verträge) in der
+   Display-Schrift Lineal TS + etwas größer (statt 20px Inter). Nur font — Farbe unangetastet,
+   damit der beige .ts-accent-Teil beige bleibt. */
+.page__lieferpartner-ansprechpartner-lieferantenvertrge #block-39bb95465534804084b8e000f830141a,
+.page__lieferpartner-ansprechpartner-lieferantenvertrge #block-39bb95465534804c91e1c913ae8bd6e2,
+.page__lieferpartner-ansprechpartner-lieferantenvertrge #block-39bb9546553480429c8bfc2036324c10{
+  font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif !important;
+  font-weight:600 !important;
+  font-size:clamp(24px,2.4vw,30px) !important;
+  letter-spacing:-.02em !important;
+  line-height:1.15 !important;
+}
