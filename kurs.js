@@ -1732,6 +1732,37 @@
 
 /* ---- */
 
+/* gemeinkosten-mitarbeiterlhne — Hero "DB VI–VII : GK und Löhne" (Muster: inventurliste-Hero).
+   Bild = 3-Laptop-Cover (Finance Studio) freigestellt auf Transparenz (aus GK & Löhne.png). Text = HTML/CSS-Overlay. */
+(function(){
+  var IMG="https://files.catbox.moe/jwamne.webp";
+  var LOGO="https://files.catbox.moe/au80tp.png";
+  function on(){ return /\/gemeinkosten-mitarbeiterlhne\/?$/.test(location.pathname); }
+  function mount(){
+    if(!on()) return;
+    var sc=document.querySelector(".super-content");
+    if(!sc || sc.querySelector(".ts-hero")) return;
+    var hero=document.createElement("div");
+    hero.className="ts-hero";
+    hero.innerHTML=
+      '<img class="ts-hero__img" alt="DB VI–VII — Gemeinkosten & Löhne" src="'+IMG+'">'+
+      '<div class="ts-hero__text">'+
+        '<img class="ts-hero__logo" alt="Tasty Studios" src="'+LOGO+'">'+
+        '<h1 class="ts-hero__title">DB VI – VII : <span class="ts-gold">GK und Löhne</span></h1>'+
+      '</div>';
+    var nr=sc.querySelector(".notion-root");
+    if(nr) sc.insertBefore(hero, nr); else sc.appendChild(hero);
+    Array.prototype.forEach.call(sc.querySelectorAll('.notion-image img[src*="logo_vektor"]'),
+      function(img){ var blk=img.closest(".notion-image"); if(blk) blk.style.display="none"; });
+    var nh=document.querySelector(".notion-header.page"); if(nh) nh.style.display="none";
+  }
+  mount();
+  document.addEventListener("DOMContentLoaded", mount);
+  new MutationObserver(mount).observe(document.documentElement,{childList:true,subtree:true});
+})();
+
+/* ---- */
+
 (function(){
   var IMG="https://files.catbox.moe/ecvbxi.webp";
   var LOGO="https://files.catbox.moe/au80tp.png";
