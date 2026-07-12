@@ -2450,7 +2450,7 @@
   var reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var CSS=`
-  #tsshop{width:100vw;max-width:100vw;margin:clamp(84px,11vh,128px) 0 clamp(42px,6vh,72px);margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 clamp(20px,4vw,56px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
+  #tsshop{width:100vw;max-width:100vw;margin:clamp(44px,6vh,72px) 0 clamp(42px,6vh,72px);margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 clamp(20px,4vw,56px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
   #tsshop *{box-sizing:border-box}
   #tsshop .tss-inner{max-width:1280px;margin:0 auto}
   #tsshop .tss-head{text-align:center;margin-bottom:30px}
