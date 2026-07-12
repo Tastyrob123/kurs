@@ -303,9 +303,11 @@ canvas[style*="2147483647"]{ display:none !important; }
 
 /* ===== BLOCK 9 · Modul 2 · Text-Feinschliff ===== */
 .page__modul-2-das-notion-ai-backoffice-system #block-397b9546553480c4b81ce6d98b2c017d,
-.page__modul-2-das-notion-ai-backoffice-system #block-397b9546553480c4b81ce6d98b2c017d .notion-text__content{
+.page__modul-2-das-notion-ai-backoffice-system #block-397b9546553480c4b81ce6d98b2c017d .notion-text__content,
+.page__modul-2-das-notion-ai-backoffice-system #block-397b95465534803a8f54d1ee1b7bd80c{
   text-align:center !important; font-size:1.2rem !important; line-height:1.65 !important; }
-.page__modul-2-das-notion-ai-backoffice-system #block-397b9546553480c4b81ce6d98b2c017d{
+.page__modul-2-das-notion-ai-backoffice-system #block-397b9546553480c4b81ce6d98b2c017d,
+.page__modul-2-das-notion-ai-backoffice-system #block-397b95465534803a8f54d1ee1b7bd80c{
   max-width:820px !important; margin-left:auto !important; margin-right:auto !important; }
 .page__modul-2-das-notion-ai-backoffice-system #block-397b9546553480b18f14f64a88c4e98e,
 .page__modul-2-das-notion-ai-backoffice-system #block-397b95465534806b9ed5d5ede61dd474{
