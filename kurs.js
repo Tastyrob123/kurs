@@ -2804,8 +2804,9 @@
       ]},
     { kachel_id:'db5_rezepturen', kachel_name:'Rezepturen', ist_produkt_kachel:true,
       einheit:'Portionsgröße (g)', einheit_typ:'menge_g',
-      /* 21 Tasty-Studios-Sirupe/Saucen (edle Gastro-Lagerung, schwarzes Studio, img/rezepturen, GitHub Pages) — Portionsgrößen = Beispielwerte.
-         Reihenfolge bewusst farblich durchmischt (Rot/Orange/Grün/Blau/Braun abwechselnd), nicht nach Farbgruppen sortiert. */
+      /* 23 Tasty-Studios-Sirupe/Saucen (edle Gastro-Lagerung, schwarzes Studio, img/rezepturen, GitHub Pages) — Portionsgrößen = Beispielwerte.
+         23 einzigartige Bilder = 23 Karten (kein zyklisches Wiederholen). Reihenfolge bewusst farblich
+         durchmischt (Rot/Orange/Grün/Blau/Violett/Braun abwechselnd), nicht nach Farbgruppen sortiert. */
       objekt_varianten:[
         { name:'Erdbeer-Sirup',         wert:25, img:'https://tastyrob123.github.io/kurs/img/rezepturen/erdbeer-sirup.jpg' },
         { name:'Mango-Sauce',           wert:50, img:'https://tastyrob123.github.io/kurs/img/rezepturen/mango-sauce.jpg' },
@@ -2824,8 +2825,10 @@
         { name:'Matcha-Sirup',          wert:20, img:'https://tastyrob123.github.io/kurs/img/rezepturen/matcha-sirup.jpg' },
         { name:'Butterfly-Pea-Sirup',   wert:18, img:'https://tastyrob123.github.io/kurs/img/rezepturen/butterfly-pea-sirup.jpg' },
         { name:'Himbeer-Coulis',        wert:40, img:'https://tastyrob123.github.io/kurs/img/rezepturen/himbeer-coulis.jpg' },
+        { name:'Ahornsirup',            wert:25, img:'https://tastyrob123.github.io/kurs/img/rezepturen/ahornsirup.jpg' },
         { name:'Passionsfrucht-Sauce',  wert:45, img:'https://tastyrob123.github.io/kurs/img/rezepturen/passionsfrucht-sauce.jpg' },
         { name:'Kiwi-Limetten-Sauce',   wert:45, img:'https://tastyrob123.github.io/kurs/img/rezepturen/kiwi-limetten-sauce.jpg' },
+        { name:'Cassis-Sirup',          wert:18, img:'https://tastyrob123.github.io/kurs/img/rezepturen/cassis-sirup.jpg' },
         { name:'Rhabarber-Sirup',       wert:25, img:'https://tastyrob123.github.io/kurs/img/rezepturen/rhabarber-sirup.jpg' },
         { name:'Curry-Mango-Dip',       wert:50, img:'https://tastyrob123.github.io/kurs/img/rezepturen/curry-mango-dip.jpg' }
       ]},
