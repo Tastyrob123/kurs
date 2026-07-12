@@ -4087,6 +4087,7 @@
 
 
 
+
 /* ============================================================================
    #tscover — Zutaten-DB-Erklär-Animationen (Seite /zutatenliste)
    ZWEI getrennte Vollbreite-Blöcke, je: Animation LINKS + Textpanel RECHTS.
@@ -4301,8 +4302,7 @@
       menuItem(svgSm('<rect x="8" y="8" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M4 15V5a1 1 0 011-1h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>'),'Duplizieren','<span class="kbd">⌘D</span>','dup')+
     '</div>';
     return '<div class="tsc-anim">'+
-      '<div class="tscp-head"><div class="tscp-eye">Schritt-für-Schritt · in Notion</div><h4 class="tscp-title">Neue <span>Größeneinheit</span> anlegen</h4>'+
-        '<div class="tsc-steps">'+step(1,'Duplizieren')+step(2,'Umbenennen')+step(3,'Portionsgröße')+step(4,'Hauptzutat')+'</div></div>'+
+      '<div class="tscp-head"><div class="tsc-steps">'+step(1,'Duplizieren')+step(2,'Umbenennen')+step(3,'Portionsgröße')+step(4,'Hauptzutat')+'</div></div>'+
       '<div class="tsc-stage">'+
         '<div class="tsc-win">'+
           '<div class="tsc-done"><span class="dot">'+CK+'</span>Neue Größeneinheit</div>'+
@@ -4337,8 +4337,7 @@
       '<div class="tscbb-mi" data-mi="std">'+FLAG+'<span>Als Standard festlegen</span></div>'+
     '</div>';
     return '<div class="tsc-anim">'+
-      '<div class="tscp-head"><div class="tscp-eye">Vorlage einrichten · in Notion</div><h4 class="tscp-title">Galerie mit <span>Cover</span> als Vorlage</h4>'+
-        '<div class="tsc-steps">'+step(1,'Neue Vorlage')+step(2,'Datenbank')+step(3,'Galerie + Cover')+step(4,'Als Standard')+'</div></div>'+
+      '<div class="tscp-head"><div class="tsc-steps">'+step(1,'Neue Vorlage')+step(2,'Datenbank')+step(3,'Galerie + Cover')+step(4,'Als Standard')+'</div></div>'+
       '<div class="tsc-stage">'+
         '<div class="tsc-win">'+
           '<div class="tscbb-bar"><div class="tscbb-tools">'+barTools+'</div><span class="tscbb-neu">Neu</span><span class="tscbb-neuv">'+svgSm('<path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>')+'</span></div>'+
@@ -4540,7 +4539,8 @@
     }
     var shop=anchorShop();
     if(needA) mountBlock(BLOCKS[0], (lo&&lo.block)||shop);
-    if(needB) mountBlock(BLOCKS[1], shop);
+    /* Reihenfolge PC -> Galerie: Block B hinter den Laptop (#tszmac), sonst hinter den Shop */
+    if(needB){ var lap=document.querySelector('.tszmac-pc'); var lapList=lap?lap.closest('.notion-column-list'):null; mountBlock(BLOCKS[1], lapList||shop); }
   }
   function boot(){
     var tries=0; var iv=setInterval(function(){ tries++; mount(); if(tries>50)clearInterval(iv); },300);
@@ -4572,7 +4572,7 @@
   var CSS=`
   .tszmac-incol{display:flex;flex-direction:column;justify-content:center;align-items:center}
   .tszmac-pc{width:100%;display:flex;flex-direction:column;align-items:center;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif}
-  .tszmac-tile{width:100%;max-width:540px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 18px 44px rgba(0,0,0,.5));transition:transform .5s cubic-bezier(.16,1,.3,1),filter .5s cubic-bezier(.16,1,.3,1)}
+  .tszmac-tile{width:100%;max-width:600px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 18px 44px rgba(0,0,0,.5));transition:transform .5s cubic-bezier(.16,1,.3,1),filter .5s cubic-bezier(.16,1,.3,1)}
   .tszmac-tile img{width:100%;height:auto;display:block}
   .tszmac-tile:hover,.tszmac-tile:focus-visible{transform:translateY(-4px) scale(1.02);animation:tszmacHb 2.6s cubic-bezier(.16,1,.3,1) infinite;outline:none}
   @keyframes tszmacHb{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(158,148,127,.14))}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(158,148,127,.30))}}
