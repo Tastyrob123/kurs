@@ -332,6 +332,13 @@ canvas[style*="2147483647"]{ display:none !important; }
   font-weight:600 !important; letter-spacing:-.01em !important;
   font-size:clamp(1.7rem,3.4vw,2.2rem) !important; line-height:1.2 !important; }
 .page__modul-2-das-notion-ai-backoffice-system .ts-m2-gold{ color:#9e947f !important; }
+/* Fließtext unter den Section-Headings ("Die meisten Betriebe…" + "Dein Backoffice gliedert…")
+   auf Intro-Größe/-Zeilenabstand angeglichen (1.2rem / 1.65). Ausrichtung bleibt linksbündig. */
+.page__modul-2-das-notion-ai-backoffice-system #block-397b954655348040869edf77e108dcd1,
+.page__modul-2-das-notion-ai-backoffice-system #block-397b954655348040869edf77e108dcd1 .notion-text__content,
+.page__modul-2-das-notion-ai-backoffice-system #block-397b9546553480dfa291d21d2b5e7456,
+.page__modul-2-das-notion-ai-backoffice-system #block-397b9546553480dfa291d21d2b5e7456 .notion-text__content{
+  font-size:1.2rem !important; line-height:1.65 !important; }
 
 /* ===== BLOCK 9 · Modul 2 · Animation "Das lebende System" (rechte Spalte neben dem Intro-Absatz) =====
    Cinematisches Orbital-System: dormanter Zustand → Zündung des Backoffice-Cores → Kosten auf den Cent →
