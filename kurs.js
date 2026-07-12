@@ -2489,20 +2489,8 @@
   #tsshop .tss-bar__left{text-align:left}
   #tsshop .tss-bar__right{text-align:right}
   #tsshop .tss-bar__val{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:clamp(23px,2.7vw,33px);font-weight:700;letter-spacing:-.012em;line-height:1;color:#fff;font-variant-numeric:tabular-nums}
-  #tsshop .tss-bar__global{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:clamp(23px,2.7vw,33px);font-weight:700;letter-spacing:-.012em;line-height:1;color:#E5484D;font-variant-numeric:tabular-nums}
+  #tsshop .tss-bar__global{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:clamp(23px,2.7vw,33px);font-weight:700;letter-spacing:-.012em;line-height:1;color:#fff;font-variant-numeric:tabular-nums}
   #tsshop .tss-bar__cap{font-size:11px;font-weight:600;letter-spacing:.01em;color:#9e947f;margin-top:10px;white-space:nowrap}
-  /* Backoffice-Fortschritt als Logo-Füllstand (0%=leer, 100%=voll) mit weißem Leucht-Glow + Aufleuchten beim In-den-Warenkorb */
-  #tsshop .tsbo-wrap{position:relative;width:48px;height:48px;margin:0 auto 2px}
-  #tsshop .tsbo-glow{position:absolute;inset:-45%;border-radius:50%;pointer-events:none;background:radial-gradient(circle at 50% 55%,rgba(255,255,255,.9),rgba(210,228,255,.5) 35%,rgba(210,228,255,0) 70%);opacity:calc(.08 + var(--pct,0)/100*.55);filter:blur(5px);transition:opacity .8s ease}
-  #tsshop .tsbo{position:absolute;inset:0;-webkit-mask:url(https://tastyrob123.github.io/kurs/img/logo-mark.png) center/contain no-repeat;mask:url(https://tastyrob123.github.io/kurs/img/logo-mark.png) center/contain no-repeat}
-  #tsshop .tsbo__base{position:absolute;inset:0;background:rgba(255,255,255,.14)}
-  #tsshop .tsbo__fillwrap{position:absolute;left:0;right:0;bottom:0;height:calc(var(--pct,0)*1%);overflow:hidden;transition:height .85s cubic-bezier(.22,1,.36,1)}
-  #tsshop .tsbo__fill{position:absolute;left:0;bottom:0;width:48px;height:48px;background:linear-gradient(180deg,#fff,#eef5ff)}
-  #tsshop .tsbo-wrap.tsbo-pulse .tsbo-glow{animation:tsboPulseGlow .75s ease-out}
-  #tsshop .tsbo-wrap.tsbo-pulse .tsbo__fill{animation:tsboPulseFill .75s ease-out}
-  @keyframes tsboPulseGlow{0%{opacity:calc(.08 + var(--pct,0)/100*.55)}25%{opacity:1}100%{opacity:calc(.08 + var(--pct,0)/100*.55)}}
-  @keyframes tsboPulseFill{0%{filter:brightness(1)}25%{filter:brightness(1.9)}100%{filter:brightness(1)}}
-  @media(prefers-reduced-motion:reduce){#tsshop .tsbo-wrap.tsbo-pulse .tsbo-glow,#tsshop .tsbo-wrap.tsbo-pulse .tsbo__fill{animation:none}#tsshop .tsbo__fillwrap{transition:none}#tsshop .tsbo-glow{transition:none}}
   #tsshop .tss-bar__mid{flex:1 1 auto;min-width:0}
   #tsshop .tss-bar__track{position:relative;height:6px;border-radius:99px;background:rgba(255,255,255,.08);box-shadow:inset 0 1px 2px rgba(0,0,0,.45);overflow:hidden}
   #tsshop .tss-bar__fill{position:relative;height:100%;width:0;border-radius:99px;overflow:hidden;background:linear-gradient(90deg,#5FAE88,#9FD3B9);box-shadow:0 0 10px rgba(143,203,170,.5),inset 0 1px 0 rgba(255,255,255,.3);transition:width .7s cubic-bezier(.22,1,.36,1)}
@@ -2694,7 +2682,7 @@
       +(page.summary?'<div class="tss-bar">'
           +'<div class="tss-bar__side tss-bar__left"><div class="tss-bar__val"></div><div class="tss-bar__cap">'+page.summary+'</div></div>'
           +'<div class="tss-bar__mid"><div class="tss-bar__track"><div class="tss-bar__fill"></div></div><div class="tss-bar__mid-cap"></div></div>'
-          +'<div class="tss-bar__side tss-bar__right"><div class="tsbo-wrap" role="img" aria-label="0 % Backoffice"><div class="tsbo-glow"></div><div class="tsbo"><div class="tsbo__base"></div><div class="tsbo__fillwrap"><div class="tsbo__fill"></div></div></div></div><div class="tss-bar__cap">Backoffice</div></div>'
+          +'<div class="tss-bar__side tss-bar__right"><div class="tss-bar__global"></div><div class="tss-bar__cap">Backoffice</div></div>'
         +'</div>':'')
       +'</div>';
     return root;
@@ -2707,19 +2695,7 @@
   function backofficeTotal(){ var t=0; for(var kk in BACKOFFICE){ if(BACKOFFICE.hasOwnProperty(kk)) t+=BACKOFFICE[kk]; } return t; }
   function backofficeDone(){ var d=0; try{ for(var i=0;i<localStorage.length;i++){ var key=localStorage.key(i); if(key&&key.slice(0,5)==='done-'&&localStorage.getItem(key)==='1') d++; } }catch(e){} return d; }
   function backofficePct(){ var t=backofficeTotal(), d=Math.min(backofficeDone(),t); return t>0?Math.round(d/t*100):0; }
-  var _boLastDone=null;
-  function pulseMeters(){
-    var ws=document.querySelectorAll('.tsshop .tsbo-wrap');
-    for(var i=0;i<ws.length;i++){ (function(w){ w.classList.remove('tsbo-pulse'); void w.offsetWidth; w.classList.add('tsbo-pulse'); setTimeout(function(){ w.classList.remove('tsbo-pulse'); },820); })(ws[i]); }
-  }
-  function refreshGlobals(){
-    var pct=backofficePct(), done=backofficeDone();
-    var ws=document.querySelectorAll('.tsshop .tsbo-wrap');
-    for(var i=0;i<ws.length;i++){ ws[i].style.setProperty('--pct',pct); ws[i].setAttribute('aria-label',pct+' % Backoffice'); }
-    /* Aufleuchten, sobald ein Schritt NEU in irgendeinen Warenkorb gelegt wurde (done-Zahl steigt) */
-    if(_boLastDone!==null && done>_boLastDone) pulseMeters();
-    _boLastDone=done;
-  }
+  function refreshGlobals(){ var g=backofficePct()+' %', els=document.querySelectorAll('.tsshop .tss-bar__global'); for(var i=0;i<els.length;i++) els[i].textContent=g; }
   /* Live-Aktualisierung, wenn in einem anderen Tab ein Schritt erledigt wird */
   window.addEventListener('storage',function(e){ if(!e.key||e.key.slice(0,5)==='done-') refreshGlobals(); });
 
