@@ -264,7 +264,7 @@
 
 /* ---- */
 
-/* modul-2 — Section-Headings: das Wort "Herzstück" bzw. "bauen" beige (Lineal-Schrift kommt aus kurs.css).
+/* modul-2 — Section-Headings: die Wörter "Herzstück" / "bauen" / "Ende hast" beige (Lineal-Schrift kommt aus kurs.css).
    Wird per JS in .ts-m2-gold gewrappt, selbstheilend via debounced Observer (Muster wie toneLastWord). */
 (function(){
   if(window.__tsm2) return; window.__tsm2 = true;
@@ -288,6 +288,7 @@
     if(!on()) return;
     wrapWord('block-397b9546553480b18f14f64a88c4e98e','Herzstück');
     wrapWord('block-397b95465534806b9ed5d5ede61dd474','bauen');
+    wrapWord('block-397b95465534805e8d76e9befe98ed4f','Ende hast');
   }
 
   apply();
