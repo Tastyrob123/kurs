@@ -3927,6 +3927,7 @@
     .observe(document.documentElement,{childList:true,subtree:true});
 })();
 
+
 /* ============================================================================
    #tscover — Zutaten-DB-Erklär-Animation (Seite /zutatenliste)
    Sitzt DIREKT unter dem Warenkorb + Einwaage-Balken (#tsshop--db4_zutaten).
@@ -4195,15 +4196,24 @@
   }
 
   function anchor(){ return document.getElementById('tsshop--db4_zutaten'); }
-  /* linke Spalte finden: Notion-Block, dessen Text == MARKER */
+  /* linke Spalte finden: das BLATT-Element (ohne Kind-Elemente), dessen Text == MARKER.
+     marker = die direkte Kind-ZEILE der Spalte (die wird ausgeblendet) — NIE die Spalte selbst. */
   function markerCol(){
-    var els=document.querySelectorAll('.notion-column-list .notion-text, .notion-column-list [class*="notion-"]');
-    for(var i=0;i<els.length;i++){
-      var t=(els[i].textContent||'').trim().toLowerCase();
-      if(t===MARKER){ var col=els[i].closest('.notion-column'); if(col) return { col:col, marker:els[i].closest('[data-block-id]')||els[i].closest('[id^="block-"]')||els[i] }; }
+    var lists=document.querySelectorAll('.notion-column-list');
+    for(var L=0;L<lists.length;L++){
+      var all=lists[L].querySelectorAll('*');
+      for(var i=0;i<all.length;i++){
+        var el=all[i];
+        if(el.childElementCount===0 && (el.textContent||'').trim().toLowerCase()===MARKER){
+          var col=el.closest('.notion-column'); if(!col) continue;
+          var mk=el; while(mk.parentElement && mk.parentElement!==col) mk=mk.parentElement;
+          return { col:col, marker:(mk&&mk!==col)?mk:el };
+        }
+      }
     }
     return null;
   }
+  function hideMarker(mk){ if(mk && mk.classList && !mk.classList.contains('notion-column') && !mk.classList.contains('notion-column-list')) mk.style.display='none'; }
   function trigger(root){
     var played=false;
     if('IntersectionObserver' in window){
@@ -4220,7 +4230,7 @@
       /* schon montiert — bei Bedarf in die Marker-Spalte umziehen (ohne Neuaufbau) */
       if(m && !m.col.contains(existing)){
         existing.classList.remove('tsc--full'); existing.classList.add('tsc--col');
-        if(m.marker) m.marker.style.display='none';
+        hideMarker(m.marker);
         m.col.insertBefore(existing, m.col.firstChild);
       }
       return;
@@ -4228,7 +4238,7 @@
     var root=build();
     if(m){
       root.classList.add('tsc--col');
-      if(m.marker) m.marker.style.display='none';
+      hideMarker(m.marker);
       m.col.insertBefore(root, m.col.firstChild);
     } else {
       var a=anchor(); if(!a||!a.parentNode) return;
