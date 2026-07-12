@@ -1307,6 +1307,7 @@
 /* ---- */
 
 (function(){
+  return; /* Lesson-Stats auf /zutatenliste entfernt (Robert 2026-07-13) — die #tsd4-Erklaer-Animation uebernimmt diese Position. Kennzahlen bleiben SSOT in der Vault-Lektionsdatei. Zum Reaktivieren dieses return entfernen. */
   var ANCHOR='block-396b954655348098ae30f9bff07fa068';
   var items=[
     {num:'8', title:'Minuten', desc:'Kursdauer dieser Lektion.'},
