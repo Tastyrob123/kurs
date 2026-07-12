@@ -2889,6 +2889,46 @@
     { kachel_id:'db6_gk_loehne', kachel_name:'GK & Löhne', ist_produkt_kachel:true,
       einheit:'Stundenlohn (€/h)', einheit_typ:'preis',
       objekt_varianten:[{name:'Euro-Münzstapel'},{name:'Geldschein-Bündel'},{name:'Lohnzettel'},{name:'Portemonnaie'}]},
+    { kachel_id:'db6_gemeinkosten', kachel_name:'Gemeinkosten', ist_produkt_kachel:true,
+      einheit:'Kosten / Monat (€)', einheit_typ:'preis',
+      /* 15 Tasty-Studios-Gemeinkosten-Objekte (Low-Key, schwarzes Studio, img/gemeinkosten, GitHub Pages) — Monats-Kosten = Beispielwerte */
+      objekt_varianten:[
+        { name:'Strom',        wert:480,  img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/strom-gluehbirne.jpg' },
+        { name:'Gas',          wert:260,  img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/gas-gasbrenner.jpg' },
+        { name:'Wasser',       wert:140,  img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/wasser-wasserhahn.jpg' },
+        { name:'Heizung',      wert:320,  img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/heizung.jpg' },
+        { name:'Internet',     wert:60,   img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/internet-router.jpg' },
+        { name:'Stromzähler',  wert:25,   img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/stromzaehler.jpg' },
+        { name:'Brandschutz',  wert:45,   img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/brandschutz-feuerloescher.jpg' },
+        { name:'Wartung',      wert:180,  img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/wartung-werkzeug.jpg' },
+        { name:'Miete',        wert:2500, img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/miete-schluessel.jpg' },
+        { name:'Reinigung',    wert:350,  img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/reinigung-putzeimer.jpg' },
+        { name:'Entsorgung',   wert:120,  img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/entsorgung-muelltonne.jpg' },
+        { name:'Buchhaltung',  wert:280,  img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/buchhaltung-rechner.jpg' },
+        { name:'Lüftung',      wert:90,   img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/lueftung-ventilator.jpg' },
+        { name:'Telefon',      wert:40,   img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/telefon.jpg' },
+        { name:'Versicherung', wert:210,  img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/versicherung-schirm.jpg' }
+      ]},
+    { kachel_id:'db7_mitarbeiterloehne', kachel_name:'Mitarbeiterlöhne', ist_produkt_kachel:true,
+      einheit:'Produktivität (€/h)', einheit_typ:'eur_h',
+      /* 15 Tasty-Studios-Personal-Objekte (Personalkosten-Serie, Low-Key, img/mitarbeiterloehne, GitHub Pages) — Produktivität (Umsatz/Personalstunde) = Beispielwerte */
+      objekt_varianten:[
+        { name:'Zeiterfassung',    wert:55, img:'https://tastyrob123.github.io/kurs/img/mitarbeiterloehne/zeiterfassungsterminal.jpg' },
+        { name:'Kellnerbörse',     wert:70, img:'https://tastyrob123.github.io/kurs/img/mitarbeiterloehne/kellnerbrieftasche.jpg' },
+        { name:'Personalspind',    wert:45, img:'https://tastyrob123.github.io/kurs/img/mitarbeiterloehne/personalspind.jpg' },
+        { name:'Stechkarten',      wert:50, img:'https://tastyrob123.github.io/kurs/img/mitarbeiterloehne/stechkarten-kartenhalter.jpg' },
+        { name:'Logo-Anstecker',   wert:60, img:'https://tastyrob123.github.io/kurs/img/mitarbeiterloehne/logo-anstecker.jpg' },
+        { name:'Namensschild',     wert:65, img:'https://tastyrob123.github.io/kurs/img/mitarbeiterloehne/namensschild.jpg' },
+        { name:'Bonblock',         wert:75, img:'https://tastyrob123.github.io/kurs/img/mitarbeiterloehne/bonblock.jpg' },
+        { name:'Dienstplan',       wert:58, img:'https://tastyrob123.github.io/kurs/img/mitarbeiterloehne/dienstplan.jpg' },
+        { name:'Serviceschürze',   wert:68, img:'https://tastyrob123.github.io/kurs/img/mitarbeiterloehne/serviceschuerze.jpg' },
+        { name:'Arbeitsschuhe',    wert:48, img:'https://tastyrob123.github.io/kurs/img/mitarbeiterloehne/arbeitsschuhe.jpg' },
+        { name:'Lohnumschlag',     wert:52, img:'https://tastyrob123.github.io/kurs/img/mitarbeiterloehne/lohnumschlag.jpg' },
+        { name:'Ausweis',          wert:62, img:'https://tastyrob123.github.io/kurs/img/mitarbeiterloehne/ausweis-lanyard.jpg' },
+        { name:'Trinkgeld',        wert:80, img:'https://tastyrob123.github.io/kurs/img/mitarbeiterloehne/trinkgeldglas.jpg' },
+        { name:'Kochjacke',        wert:72, img:'https://tastyrob123.github.io/kurs/img/mitarbeiterloehne/kochjacke.jpg' },
+        { name:'Mitarbeiterhandbuch', wert:46, img:'https://tastyrob123.github.io/kurs/img/mitarbeiterloehne/mitarbeiterhandbuch.jpg' }
+      ]},
     { kachel_id:'db7_allergene', kachel_name:'Allergene', ist_produkt_kachel:true,
       einheit:'EU-Ziffer (1–14)', einheit_typ:'code',
       objekt_varianten:[{name:'Weizenähre'},{name:'Erdnuss'},{name:'Milchkanne'},{name:'Fisch'},{name:'Ei'},{name:'Sellerie'}]},
@@ -2924,6 +2964,7 @@
     if(typ==='preis'){ var p=v.toFixed(2).split('.'); return p[0].replace(/\B(?=(\d{3})+(?!\d))/g,'.')+','+p[1]+' €'; }
     if(typ==='menge_g')  return v+' g';
     if(typ==='menge_ml') return v+' ml';
+    if(typ==='eur_h')    return String(v).replace('.',',')+' €/h';
     if(typ==='prozent')  return String(v).replace('.',',')+' %';
     if(typ==='anzahl')   return String(v);
     if(typ==='code')     return 'Nr. '+v;
@@ -2950,6 +2991,20 @@
       title:'Deine Rezepturen. <span>Portion für Portion.</span>',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB V ist die Portionsgröße.',
       summary:'Portionsmenge', chain:true },
+    /* DB VI Gemeinkosten + DB VII Mitarbeiterlöhne — beide Abschnitte liegen als getrennte
+       Tab-Widgets (.notion-tabs) auf derselben Seite; marker trennt sie eindeutig. */
+    { path:/\/gemeinkosten-mitarbeiterlhne\/?$/, kachel:'db6_gemeinkosten',
+      container:'.notion-tabs', marker:/Gemeinkosten/,
+      eyebrow:'Der Warenkorb · DB VI',
+      title:'Deine Gemeinkosten. <span>Posten für Posten.</span>',
+      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB VI ist der Euro.',
+      summary:'Fixkosten', chain:true },
+    { path:/\/gemeinkosten-mitarbeiterlhne\/?$/, kachel:'db7_mitarbeiterloehne',
+      container:'.notion-tabs', marker:/Mitarbeiter/,
+      eyebrow:'Der Warenkorb · DB VII',
+      title:'Deine Mitarbeiterlöhne. <span>Stunde für Stunde.</span>',
+      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB VII ist die Produktivität pro Stunde.',
+      summary:'Produktivität', chain:true },
     { path:/\/inventurliste\/?$/, kachel:'db0_inventurliste',
       eyebrow:'Der Warenkorb · DB 0',
       title:'Deine Inventurliste. <span>Schritt für Schritt.</span>',
@@ -3139,10 +3194,14 @@
     var lists=document.querySelectorAll(sel||'.notion-column-list'), cand=null;
     for(var i=0;i<lists.length;i++){
       var t=lists[i].textContent||'';
-      /* Standard-Regal verlangt "Phase I"+"Schritt". Bei eigenem container-Selector
-         (z. B. Tab-Widget .notion-tabs auf /rezepturen) reicht "Phase I"+marker —
-         dort steht das Wort "Schritt" nicht im Container-Text. */
-      var ok=t.indexOf('Phase I')>-1&&(sel?true:t.indexOf('Schritt')>-1)&&(!marker||marker.test(t));
+      /* Standard-Regal (column-list) verlangt "Phase I"+"Schritt". Bei eigenem
+         container-Selector (Tab-Widget .notion-tabs) identifiziert allein der marker
+         die richtige Sektion — diese Seiten tragen kein "Phase I"/"Schritt" im
+         Container-Text (z. B. /rezepturen: /Grundgerüst/; /gemeinkosten…: /Gemeinkosten/
+         bzw. /Mitarbeiter/). Ohne marker fällt der Container-Fall auf "Phase I" zurück. */
+      var ok = sel
+        ? (marker ? marker.test(t) : t.indexOf('Phase I')>-1)
+        : (t.indexOf('Phase I')>-1 && t.indexOf('Schritt')>-1 && (!marker||marker.test(t)));
       if(ok){ if(!cand||cand.contains(lists[i])) cand=lists[i]; }
     }
     return cand;
@@ -3203,7 +3262,7 @@
      Nenner = Summe der bekannten Schrittzahlen (auch noch nicht besuchte Seiten
      zählen mit). Zähler = erledigte Schritte = localStorage-Keys "done-…"='1'
      (dieselben Keys, die das Karten-/Checkbox-System setzt → immer aktuell). */
-  var BACKOFFICE={ db0_inventurliste:16, db13_lieferanten:13, db13_ansprechpartner:10, db13_vertraege:13, db4_zutaten:30, db5_rezepturen:23 };
+  var BACKOFFICE={ db0_inventurliste:16, db13_lieferanten:13, db13_ansprechpartner:10, db13_vertraege:13, db4_zutaten:30, db5_rezepturen:23, db6_gemeinkosten:15, db7_mitarbeiterloehne:15 };
   function backofficeTotal(){ var t=0; for(var kk in BACKOFFICE){ if(BACKOFFICE.hasOwnProperty(kk)) t+=BACKOFFICE[kk]; } return t; }
   function backofficeDone(){ var d=0; try{ for(var i=0;i<localStorage.length;i++){ var key=localStorage.key(i); if(key&&key.slice(0,5)==='done-'&&localStorage.getItem(key)==='1') d++; } }catch(e){} return d; }
   function backofficePct(){ var t=backofficeTotal(), d=Math.min(backofficeDone(),t); return t>0?Math.round(d/t*100):0; }
