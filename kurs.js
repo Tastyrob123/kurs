@@ -3126,8 +3126,8 @@
   #ts2mac-lb.open .ts2mac-inner{transform:none}
   #ts2mac-lb.full .ts2mac-inner{max-width:100vw}
   #ts2mac-lb .ts2mac-mockup{position:relative;width:100%;aspect-ratio:1366/768;filter:drop-shadow(0 30px 80px rgba(0,0,0,.6)) drop-shadow(0 10px 30px rgba(0,0,0,.5))}
-  #ts2mac-lb .ts2mac-fr{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;user-select:none}
-  #ts2mac-lb .ts2mac-screen{position:absolute;top:3.65%;left:12.22%;width:73.06%;height:83.85%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;z-index:1;border-radius:3px;background:#191919;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.16) transparent}
+  #ts2mac-lb .ts2mac-fr{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;user-select:none}
+  #ts2mac-lb .ts2mac-screen{position:absolute;top:3.65%;left:12.22%;width:73.06%;height:83.85%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;z-index:3;border-radius:3px;background:#191919;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.16) transparent}
   #ts2mac-lb .ts2mac-screen::-webkit-scrollbar{width:5px}
   #ts2mac-lb .ts2mac-screen::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border-radius:4px}
   #ts2mac-lb .ts2mac-screen img{width:100%;display:block}
