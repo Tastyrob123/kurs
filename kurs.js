@@ -186,6 +186,38 @@
 })();
 
 /* ============================================================
+   gerichte-getrnke-finaler-schritt — Hero "DB IX : Gerichte & Getränke" (Muster: rezepturen-Hero DB V)
+   ============================================================ */
+(function(){
+  var IMG="https://files.catbox.moe/cou55t.png"; /* 3-Laptop-Cover Gerichte & Getränke: weisser Hintergrund per Edge-Flood-Fill entfernt (transparent RGBA, kein AI) + 2x nachgeschaerft (Lanczos+Unsharp), 2732px fuer Retina-Schaerfe (aus Gerichte.png) */
+  var LOGO="https://files.catbox.moe/au80tp.png";
+  function on(){ return /\/gerichte-getrnke-finaler-schritt\/?$/.test(location.pathname); }
+  function mount(){
+    if(!on()) return;
+    var sc=document.querySelector(".super-content");
+    if(!sc) return;
+    if(document.querySelector(".ts-hero")) return;
+    var hero=document.createElement("div");
+    hero.className="ts-hero";
+    hero.innerHTML=
+      '<img class="ts-hero__img" alt="DB IX — Gerichte & Getränke" src="'+IMG+'">'+
+      '<div class="ts-hero__text">'+
+        '<img class="ts-hero__logo" alt="Tasty Studios" src="'+LOGO+'">'+
+        '<div class="ts-hero__eyebrow">L 2.7</div>'+
+        '<h1 class="ts-hero__title">DB IX : <span class="ts-gold">Gerichte &amp; Getränke</span></h1>'+
+      '</div>';
+    var nr=sc.querySelector(".notion-root");
+    if(nr) sc.insertBefore(hero, nr); else sc.appendChild(hero);
+    Array.prototype.forEach.call(sc.querySelectorAll('.notion-image img[src*="logo_vektor"]'),
+      function(img){ var blk=img.closest(".notion-image"); if(blk) blk.style.display="none"; });
+    var nh=document.querySelector(".notion-header.page"); if(nh) nh.style.display="none";
+  }
+  mount();
+  document.addEventListener("DOMContentLoaded", mount);
+  new MutationObserver(mount).observe(document.documentElement,{childList:true,subtree:true});
+})();
+
+/* ============================================================
    zutatenliste — DB IV Erklaer-Animation "Die Zutat zieht sich ihren Preis"
    Inventurliste (DB 0, ganze Tomate) --Relation--> Zutat (DB IV, in Scheiben, Einwaage)
    = Portionspreis (2 gestapelte Scheiben). Roh -> verarbeitet -> portioniert.
