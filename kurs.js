@@ -3185,3 +3185,40 @@
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
+
+/* ============================================================
+   lieferpartner — Überschrift „Lieferanten Netzwerk als
+   Systembaustein" (#tslph): mehr Abstand zum Text darunter +
+   letztes Wort „Systembaustein" in Champagner-Gold (#9e947f).
+   Reiner Display-Layer auf dem Notion-Heading (kein Vault-Text).
+   ============================================================ */
+(function(){
+  if(window.__tslph) return; window.__tslph=true;
+  var PATH=/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/;
+  var PG='.page__lieferpartner-ansprechpartner-lieferantenvertrge';
+  /* Farbe via CSS (Spezifität reicht); Abstand inline+!important,
+     weil eine Theme-Regel mit höherer Spezifität den margin sonst überschreibt. */
+  var CSS=PG+' .tslph-h .tslph-g{color:#9e947f !important}';
+  function injectCSS(){ if(document.getElementById('tslph-css'))return; var s=document.createElement('style'); s.id='tslph-css'; s.textContent=CSS; document.head.appendChild(s); }
+  function findHeading(){
+    var hs=document.querySelectorAll(PG+' .notion-heading, '+PG+' h1, '+PG+' h2');
+    for(var i=0;i<hs.length;i++){ if(/Lieferanten Netzwerk als Systembaustein/i.test(hs[i].textContent||'')) return hs[i]; }
+    return null;
+  }
+  function apply(){
+    if(!PATH.test(location.pathname)) return;
+    var h=findHeading(); if(!h) return;
+    injectCSS();
+    if(!h.classList.contains('tslph-h')) h.classList.add('tslph-h');
+    if(h.style.marginBottom!=='44px') h.style.setProperty('margin-bottom','44px','important');
+    if(!h.querySelector('.tslph-g')){
+      h.innerHTML=(h.textContent||'').replace(/(Systembaustein)/, '<span class="tslph-g">$1</span>');
+    }
+  }
+  function boot(){
+    var tries=0;
+    var iv=setInterval(function(){ tries++; apply(); if(tries>80) clearInterval(iv); },300);
+    new MutationObserver(function(){ apply(); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
