@@ -783,7 +783,8 @@
   /* Seiten-Map: auf welcher Lektion führt "Nächste Lektion" wohin */
   var PAGES = [
     { re:/\/mehrwert-zielbild\/?$/, href:'/inventurliste' },
-    { re:/\/inventurliste\/?$/,     href:'/lieferpartner-ansprechpartner-lieferantenvertrge' }
+    { re:/\/inventurliste\/?$/,     href:'/lieferpartner-ansprechpartner-lieferantenvertrge' },
+    { re:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, href:'/zutatenliste' }
   ];
   function pageHref(){
     for(var i=0;i<PAGES.length;i++){ if(PAGES[i].re.test(location.pathname)) return PAGES[i].href; }
@@ -873,7 +874,8 @@
      Notion editieren/ergänzen, die Bubbles ziehen automatisch nach) */
   var PAGES = [
     { re:/\/mehrwert-zielbild\/?$/, items:ITEMS },
-    { re:/\/inventurliste\/?$/,     items:null }
+    { re:/\/inventurliste\/?$/,     items:null },
+    { re:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, items:null }
   ];
   function pageCfg(){
     for(var i=0;i<PAGES.length;i++){ if(PAGES[i].re.test(location.pathname)) return PAGES[i]; }
