@@ -1141,7 +1141,8 @@
     { re:/\/inventurliste\/?$/,     href:'/lieferpartner-ansprechpartner-lieferantenvertrge' },
     { re:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, href:'/zutatenliste' },
     { re:/\/zutatenliste\/?$/,       href:'/rezepturen' },
-    { re:/\/rezepturen\/?$/,         href:'/gemeinkosten-mitarbeiterlhne' }
+    { re:/\/rezepturen\/?$/,         href:'/gemeinkosten-mitarbeiterlhne' },
+    { re:/\/gemeinkosten-mitarbeiterlhne\/?$/, href:'/gerichte-getrnke-finaler-schritt' }
   ];
   function pageHref(){
     for(var i=0;i<PAGES.length;i++){ if(PAGES[i].re.test(location.pathname)) return PAGES[i].href; }
@@ -2961,6 +2962,49 @@
         { name:'Kochjacke',        wert:2600, img:'https://tastyrob123.github.io/kurs/img/mitarbeiterloehne/kochjacke.jpg' },
         { name:'Mitarbeiterhandbuch', wert:2200, img:'https://tastyrob123.github.io/kurs/img/mitarbeiterloehne/mitarbeiterhandbuch.jpg' }
       ]},
+    { kachel_id:'db8_gerichte', kachel_name:'Gerichte & Getränke', ist_produkt_kachel:true,
+      einheit:'Kosten (€)', einheit_typ:'preis',
+      /* 37 Tasty-Studios-Menü-Bilder (Fine-Dining-Teller/Gläser/Tassen, schwarzes Studio, img/gerichte, GitHub Pages)
+         — Kosten pro Gericht/Getränk/Dessert (Wareneinsatz) = Beispielwerte. Reihenfolge = Menü-Gänge. */
+      objekt_varianten:[
+        { name:'Jakobsmuscheln',   wert:6.50,  img:'https://tastyrob123.github.io/kurs/img/gerichte/jakobsmuscheln.jpg' },
+        { name:'Rindertatar',      wert:5.80,  img:'https://tastyrob123.github.io/kurs/img/gerichte/rindertatar.jpg' },
+        { name:'Burrata',          wert:4.20,  img:'https://tastyrob123.github.io/kurs/img/gerichte/burrata.jpg' },
+        { name:'Thunfisch-Tataki', wert:6.90,  img:'https://tastyrob123.github.io/kurs/img/gerichte/thunfisch-tataki.jpg' },
+        { name:'Kürbis-Velouté',   wert:2.40,  img:'https://tastyrob123.github.io/kurs/img/gerichte/kuerbis-veloute.jpg' },
+        { name:'Rinderfilet',      wert:11.50, img:'https://tastyrob123.github.io/kurs/img/gerichte/rinderfilet.jpg' },
+        { name:'Lachs',            wert:7.80,  img:'https://tastyrob123.github.io/kurs/img/gerichte/lachs.jpg' },
+        { name:'Lammkarree',       wert:10.20, img:'https://tastyrob123.github.io/kurs/img/gerichte/lammkarree.jpg' },
+        { name:'Rote-Bete-Risotto',wert:3.60,  img:'https://tastyrob123.github.io/kurs/img/gerichte/rote-bete-risotto.jpg' },
+        { name:'Entenbrust',       wert:8.40,  img:'https://tastyrob123.github.io/kurs/img/gerichte/entenbrust.jpg' },
+        { name:'Wolfsbarsch',      wert:9.10,  img:'https://tastyrob123.github.io/kurs/img/gerichte/wolfsbarsch.jpg' },
+        { name:'Pilz-Ravioli',     wert:3.90,  img:'https://tastyrob123.github.io/kurs/img/gerichte/pilz-ravioli.jpg' },
+        { name:'Short Rib',        wert:8.90,  img:'https://tastyrob123.github.io/kurs/img/gerichte/short-rib.jpg' },
+        { name:'Gemüse-Steak',     wert:3.20,  img:'https://tastyrob123.github.io/kurs/img/gerichte/gemuese-steak.jpg' },
+        { name:'Schoko-Fondant',   wert:2.10,  img:'https://tastyrob123.github.io/kurs/img/gerichte/schoko-fondant.jpg' },
+        { name:'Crème-Brûlée',     wert:1.80,  img:'https://tastyrob123.github.io/kurs/img/gerichte/creme-brulee.jpg' },
+        { name:'Beeren-Pavlova',   wert:2.60,  img:'https://tastyrob123.github.io/kurs/img/gerichte/beeren-pavlova.jpg' },
+        { name:'Tiramisu',         wert:2.20,  img:'https://tastyrob123.github.io/kurs/img/gerichte/tiramisu.jpg' },
+        { name:'Zitronentarte',    wert:1.90,  img:'https://tastyrob123.github.io/kurs/img/gerichte/zitronentarte.jpg' },
+        { name:'Panna-Cotta',      wert:1.70,  img:'https://tastyrob123.github.io/kurs/img/gerichte/panna-cotta.jpg' },
+        { name:'Cheesecake',       wert:2.30,  img:'https://tastyrob123.github.io/kurs/img/gerichte/cheesecake.jpg' },
+        { name:'Negroni',          wert:2.80,  img:'https://tastyrob123.github.io/kurs/img/gerichte/negroni.jpg' },
+        { name:'Aperol-Spritz',    wert:2.20,  img:'https://tastyrob123.github.io/kurs/img/gerichte/aperol-spritz.jpg' },
+        { name:'Mojito',           wert:2.40,  img:'https://tastyrob123.github.io/kurs/img/gerichte/mojito.jpg' },
+        { name:'Margarita',        wert:2.60,  img:'https://tastyrob123.github.io/kurs/img/gerichte/margarita.jpg' },
+        { name:'Espresso-Martini', wert:2.90,  img:'https://tastyrob123.github.io/kurs/img/gerichte/espresso-martini.jpg' },
+        { name:'Cosmopolitan',     wert:2.70,  img:'https://tastyrob123.github.io/kurs/img/gerichte/cosmopolitan.jpg' },
+        { name:'Piña-Colada',      wert:2.50,  img:'https://tastyrob123.github.io/kurs/img/gerichte/pina-colada.jpg' },
+        { name:'Gin-Basil-Smash',  wert:3.10,  img:'https://tastyrob123.github.io/kurs/img/gerichte/gin-basil-smash.jpg' },
+        { name:'Espresso',         wert:0.45,  img:'https://tastyrob123.github.io/kurs/img/gerichte/espresso.jpg' },
+        { name:'Cappuccino',       wert:0.65,  img:'https://tastyrob123.github.io/kurs/img/gerichte/cappuccino.jpg' },
+        { name:'Flat-White',       wert:0.75,  img:'https://tastyrob123.github.io/kurs/img/gerichte/flat-white.jpg' },
+        { name:'Latte-Macchiato',  wert:0.80,  img:'https://tastyrob123.github.io/kurs/img/gerichte/latte-macchiato.jpg' },
+        { name:'Caramel-Macchiato',wert:0.95,  img:'https://tastyrob123.github.io/kurs/img/gerichte/caramel-macchiato.jpg' },
+        { name:'Cortado',          wert:0.60,  img:'https://tastyrob123.github.io/kurs/img/gerichte/cortado.jpg' },
+        { name:'Affogato',         wert:1.40,  img:'https://tastyrob123.github.io/kurs/img/gerichte/affogato.jpg' },
+        { name:'Irish-Coffee',     wert:2.20,  img:'https://tastyrob123.github.io/kurs/img/gerichte/irish-coffee.jpg' }
+      ]},
     { kachel_id:'db7_allergene', kachel_name:'Allergene', ist_produkt_kachel:true,
       einheit:'EU-Ziffer (1–14)', einheit_typ:'code',
       objekt_varianten:[{name:'Weizenähre'},{name:'Erdnuss'},{name:'Milchkanne'},{name:'Fisch'},{name:'Ei'},{name:'Sellerie'}]},
@@ -3037,6 +3081,14 @@
       title:'Deine Mitarbeiterlöhne. <span>Netto für Netto.</span>',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB VII ist das Nettogehalt.',
       summary:'Lohnsumme', chain:true },
+    /* DB VIII Gerichte & Getränke — 4 getrennte Phasen-Tab-Widgets (.notion-tabs) zu EINEM
+       Regal gebündelt (multi:true, expect:4). marker /Phase/ trifft alle vier. 37 Schritte. */
+    { path:/\/gerichte-getrnke-finaler-schritt\/?$/, kachel:'db8_gerichte',
+      container:'.notion-tabs', multi:true, expect:4, marker:/Phase/,
+      eyebrow:'Der Warenkorb · DB VIII',
+      title:'Deine Gerichte & Getränke. <span>Teller für Teller.</span>',
+      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB VIII sind die Kosten pro Gericht, Getränk oder Dessert.',
+      summary:'Menükosten', chain:true },
     { path:/\/inventurliste\/?$/, kachel:'db0_inventurliste',
       eyebrow:'Der Warenkorb · DB 0',
       title:'Deine Inventurliste. <span>Schritt für Schritt.</span>',
@@ -3294,7 +3346,7 @@
      Nenner = Summe der bekannten Schrittzahlen (auch noch nicht besuchte Seiten
      zählen mit). Zähler = erledigte Schritte = localStorage-Keys "done-…"='1'
      (dieselben Keys, die das Karten-/Checkbox-System setzt → immer aktuell). */
-  var BACKOFFICE={ db0_inventurliste:16, db13_lieferanten:13, db13_ansprechpartner:10, db13_vertraege:13, db4_zutaten:30, db5_rezepturen:23, db6_gemeinkosten:15, db7_mitarbeiterloehne:15 };
+  var BACKOFFICE={ db0_inventurliste:16, db13_lieferanten:13, db13_ansprechpartner:10, db13_vertraege:13, db4_zutaten:30, db5_rezepturen:23, db6_gemeinkosten:15, db7_mitarbeiterloehne:15, db8_gerichte:37 };
   function backofficeTotal(){ var t=0; for(var kk in BACKOFFICE){ if(BACKOFFICE.hasOwnProperty(kk)) t+=BACKOFFICE[kk]; } return t; }
   function backofficeDone(){ var d=0; try{ for(var i=0;i<localStorage.length;i++){ var key=localStorage.key(i); if(key&&key.slice(0,5)==='done-'&&localStorage.getItem(key)==='1') d++; } }catch(e){} return d; }
   function backofficePct(){ var t=backofficeTotal(), d=Math.min(backofficeDone(),t); return t>0?Math.round(d/t*100):0; }
@@ -3506,22 +3558,39 @@
   }
   function rootIdFor(page){ return 'tsshop--'+(page.kachel||'x'); }
   function mountPage(page){
-    var list=findPhases(page.marker,page.container); if(!list) return;
+    var lists;
+    if(page.multi){
+      /* Mehrere getrennte Container zu EINEM Regal bündeln (z. B. 4 einzelne
+         .notion-tabs-Phasen auf /gerichte…): per Selector+marker sammeln, alle
+         verstecken, Schritte zusammenfassen, Regal vor dem ERSTEN einfügen.
+         page.expect: erst mounten, wenn alle erwarteten Container im DOM sind
+         (verhindert Teil-Render während React-Hydration). */
+      lists=[]; var nodes=document.querySelectorAll(page.container||'.notion-tabs');
+      for(var i=0;i<nodes.length;i++){ var tx=nodes[i].textContent||''; if(!page.marker||page.marker.test(tx)) lists.push(nodes[i]); }
+      if(page.expect && lists.length<page.expect) return;
+    } else {
+      var one=findPhases(page.marker,page.container); lists=one?[one]:[];
+    }
+    if(!lists.length) return;
     /* Original-Phasen verstecken (Notion bleibt SSOT) — auch nach React-Re-Render */
-    if(list.style.display!=='none') list.style.display='none';
+    for(var h=0;h<lists.length;h++){ if(lists[h].style.display!=='none') lists[h].style.display='none'; }
+    var anchor=lists[0];
     var rootId=rootIdFor(page), existing=document.getElementById(rootId);
     /* leere Notion-Text-Blöcke direkt über dem Shop ausblenden — sie erzeugen tote Leerfläche */
-    var top=existing||list, prev=top.previousElementSibling;
+    var top=existing||anchor, prev=top.previousElementSibling;
     while(prev && prev.classList && prev.classList.contains('notion-text') && !(prev.textContent||'').trim()){
       if(prev.style.display!=='none') prev.style.display='none';
       prev=prev.previousElementSibling;
     }
     if(existing) return;
     var k=kachel(page.kachel); if(!k||!k.ist_produkt_kachel) return;
-    var steps=collectSteps(list); if(!steps.length) return;
+    var steps=[];
+    for(var m=0;m<lists.length;m++){ steps=steps.concat(collectSteps(lists[m])); }
+    steps.forEach(function(st,idx){ st.i=idx; });
+    if(!steps.length) return;
     injectCSS();
     var root=build(page,k,steps);
-    list.parentNode.insertBefore(root,list);
+    anchor.parentNode.insertBefore(root,anchor);
     setup(page,k,steps,root);
   }
   function mount(){
