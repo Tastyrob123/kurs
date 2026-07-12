@@ -4019,6 +4019,7 @@
 
 
 
+
 /* ============================================================================
    #tscover — Zutaten-DB-Erklär-Animationen (Seite /zutatenliste)
    ZWEI getrennte Vollbreite-Blöcke, je: Animation LINKS + Textpanel RECHTS.
@@ -4421,13 +4422,15 @@
   }
   function mount(){
     if(!on()){ ['A','B'].forEach(function(k){ var e=document.getElementById('tscb-'+k); if(e&&e.parentNode)e.parentNode.removeChild(e); }); return; }
-    var lo=findLoesung();
-    if(lo && lo.el && lo.el.classList && !lo.el.classList.contains('tsc-loesung')) lo.el.classList.add('tsc-loesung');
+    /* WICHTIG: billiger Früh-Ausstieg, sobald alles platziert ist — sonst würde findLoesung()
+       bei JEDER Animations-DOM-Mutation den ganzen .notion-text-Baum scannen (Main-Thread-Storm/Freeze). */
+    var needA=!document.getElementById('tscb-A'), needB=!document.getElementById('tscb-B'), needLo=!document.querySelector('.tsc-loesung');
+    if(!needA && !needB && !needLo) return;
+    var lo=(needLo||needA) ? findLoesung() : null;
+    if(needLo && lo && lo.el && lo.el.classList) lo.el.classList.add('tsc-loesung');
     var shop=anchorShop();
-    /* Block A „Neue Größeneinheit anlegen" — mittig, direkt UNTER „Die Lösung" (oder Marker groesse-animation, sonst Shop) */
-    mountBlock(BLOCKS[0], (lo&&lo.block)||shop);
-    /* Block B „Galerie mit Cover als Vorlage" — Animation links/Text rechts, per Marker vorlage-animation (sonst unter Shop) */
-    mountBlock(BLOCKS[1], shop);
+    if(needA) mountBlock(BLOCKS[0], (lo&&lo.block)||shop);
+    if(needB) mountBlock(BLOCKS[1], shop);
   }
   function boot(){
     var tries=0; var iv=setInterval(function(){ tries++; mount(); if(tries>50)clearInterval(iv); },300);
