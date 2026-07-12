@@ -198,15 +198,15 @@
   var IMG_SLICED="https://tastyrob123.github.io/kurs/img/anim/tomate-sliced.png";
   var IMG_STACK ="https://tastyrob123.github.io/kurs/img/anim/tomate-stack.png";
   var CSS=`
-  #tsd4{width:min(1000px,95vw);margin:8px auto 44px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;opacity:0;transform:translateY(20px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+  #tsd4{width:min(1000px,95vw);margin:-10px auto 40px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;opacity:0;transform:translateY(20px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
   #tsd4.in{opacity:1;transform:none}
-  #tsd4 .tsd4-head{text-align:center;margin:0 0 46px}
+  #tsd4 .tsd4-head{text-align:center;margin:0 0 60px}
   #tsd4 .tsd4-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:#9e947f;margin:0 0 12px}
   #tsd4 .tsd4-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#9e947f;box-shadow:0 0 12px rgba(158,148,127,.7)}
   #tsd4 .tsd4-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;font-size:clamp(1.5rem,3vw,2.1rem);font-weight:600;letter-spacing:-.02em;line-height:1.15;margin:0;color:#fff}
   #tsd4 .tsd4-title .g{color:#9e947f}
   #tsd4 .tsd4-stage{display:grid;grid-template-columns:1fr auto 1.15fr auto 1fr;align-items:center;gap:0}
-  #tsd4 .tsd4-card{position:relative;border-radius:14px;padding:56px 20px 20px;background:rgba(255,255,255,.035);border:1px solid rgba(158,148,127,.28);opacity:0;transform:translateY(14px) scale(.97);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1),border-color .6s ease,box-shadow .6s ease}
+  #tsd4 .tsd4-card{position:relative;border-radius:14px;padding:66px 20px 20px;background:rgba(255,255,255,.035);border:1px solid rgba(158,148,127,.28);opacity:0;transform:translateY(14px) scale(.97);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1),border-color .6s ease,box-shadow .6s ease}
   #tsd4 .tsd4-card.lit{opacity:1;transform:none}
   #tsd4 .tsd4-card .c-eye{font-size:10px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin:0 0 10px}
   #tsd4 .tsd4-card .c-name{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:20px;font-weight:600;letter-spacing:-.01em;color:#fff;margin:0 0 14px}
@@ -219,11 +219,11 @@
   #tsd4 .tsd4-row .v.gold{color:#9e947f;font-weight:700;font-size:15px}
   #tsd4 .tsd4-note{font-size:10px;color:rgba(255,255,255,.28);margin:10px 0 0}
   /* Schwebendes Motiv auf jeder Karte */
-  #tsd4 .tsd4-fruit{position:absolute;top:-42px;left:50%;height:100px;transform:translateX(-50%) scale(.4);opacity:0;pointer-events:none;filter:drop-shadow(0 15px 20px rgba(0,0,0,.55)) drop-shadow(0 4px 10px rgba(0,0,0,.4));transition:opacity .6s ease,transform .7s cubic-bezier(.34,1.56,.64,1)}
+  #tsd4 .tsd4-fruit{position:absolute;top:-52px;left:50%;height:82px;transform:translateX(-50%) scale(.4);opacity:0;pointer-events:none;filter:drop-shadow(0 15px 20px rgba(0,0,0,.55)) drop-shadow(0 4px 10px rgba(0,0,0,.4));transition:opacity .6s ease,transform .7s cubic-bezier(.34,1.56,.64,1)}
   #tsd4 .tsd4-card.lit .tsd4-fruit{opacity:1;transform:translateX(-50%) scale(1)}
   #tsd4 .tsd4-fruit img{height:100%;width:auto;display:block}
-  #tsd4 .tsd4-fruit.is-sliced{height:82px;top:-30px}
-  #tsd4 .tsd4-fruit.is-stack{height:98px;top:-40px}
+  #tsd4 .tsd4-fruit.is-sliced{height:100px;top:-52px}
+  #tsd4 .tsd4-fruit.is-stack{height:82px;top:-54px}
   #tsd4 .tsd4-zutat{border-color:rgba(158,148,127,.5)}
   #tsd4 .tsd4-zutat.lit{box-shadow:0 24px 60px rgba(0,0,0,.45)}
   /* Connector 1 (Relation, mit wandernder Kugel) */
@@ -267,7 +267,7 @@
   function build(){
     var root=document.createElement('div'); root.id='tsd4';
     root.innerHTML=
-      '<div class="tsd4-head"><div class="tsd4-eyebrow">So entsteht ein Baustein</div><h2 class="tsd4-title">Die Zutat zieht sich ihren <span class="g">Preis.</span></h2></div>'+
+      '<div class="tsd4-head"><h2 class="tsd4-title">Die Zutat zieht sich ihren <span class="g">Preis.</span></h2></div>'+
       '<div class="tsd4-stage">'+
         '<div class="tsd4-card tsd4-inv"><div class="tsd4-fruit is-whole"><img src="'+IMG_WHOLE+'" alt="Tomate" loading="lazy"></div><p class="c-eye">DB 0 · Inventurliste</p><p class="c-name">Tomaten</p><div class="c-div"></div><div class="tsd4-row"><span class="k">Einkaufspreis</span><span class="v">3,20 €/kg</span></div><p class="tsd4-note">Beispielwert</p></div>'+
         '<div class="tsd4-conn"><div class="clabel">Relation<small>zieht den Preis</small></div><div class="line"></div><div class="ball"></div></div>'+
