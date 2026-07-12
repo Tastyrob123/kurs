@@ -4017,6 +4017,7 @@
 
 
 
+
 /* ============================================================================
    #tscover — Zutaten-DB-Erklär-Animationen (Seite /zutatenliste)
    ZWEI getrennte Vollbreite-Blöcke, je: Animation LINKS + Textpanel RECHTS.
@@ -4045,9 +4046,16 @@
   .tscb{width:100vw;max-width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:clamp(30px,4vh,52px) clamp(20px,4vw,56px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
   .tscb *{box-sizing:border-box}
   .tscb .tscb-in{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,4vw,64px);align-items:center}
-  .tscb.rev .tscb-in{direction:rtl}
-  .tscb.rev .tscb-in>*{direction:ltr}
-  @media(max-width:900px){.tscb .tscb-in{grid-template-columns:1fr;gap:30px}.tscb.rev .tscb-in{direction:ltr}}
+  .tscb .tscb-in.center{display:block;max-width:720px;text-align:center}
+  .tscb .tscb-in.center .tscp-head{text-align:center}
+  .tscb .tscb-in.center .tsc-steps{justify-content:center}
+  .tscb .tscb-in.center .tsc-stage{max-width:640px;margin:20px auto 0}
+  @media(max-width:900px){.tscb .tscb-in{grid-template-columns:1fr;gap:30px}}
+
+  /* „Die Lösung"-Absatz entschärfen: kleiner + normal, nur „Die Lösung :" fett */
+  .tsc-loesung,.tsc-loesung .notion-text__content,.tsc-loesung .notion-semantic-string{font-size:16px!important;font-weight:400!important;line-height:1.7!important}
+  .tsc-loesung strong{font-weight:400!important}
+  .tsc-loesung strong:first-of-type{font-weight:700!important}
 
   /* --- Textpanel rechts --- */
   .tscb .tsx{min-width:0}
@@ -4076,9 +4084,9 @@
   .tscb .tsc-step.done .n svg{opacity:1}
   .tscb .tsc-stage{position:relative;margin:18px 0 0}
   .tscb .tsc-win{position:relative;border-radius:16px;overflow:hidden;background:#191919;border:1px solid rgba(255,255,255,.09);box-shadow:0 40px 90px -46px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.02),inset 0 1px 0 rgba(255,255,255,.05);opacity:0;transform:translateY(22px) scale(.985);transition:opacity .8s ease,transform .9s cubic-bezier(.16,1,.3,1)}
-  .tscb.on .tsc-win{opacity:1;transform:none}
+  .tscb .tsc-anim.on .tsc-win{opacity:1;transform:none}
   .tscb .tsc-cursor{position:absolute;left:0;top:0;width:21px;height:21px;z-index:20;pointer-events:none;filter:drop-shadow(0 3px 5px rgba(0,0,0,.6));opacity:0;transition:opacity .4s ease;will-change:transform}
-  .tscb.on .tsc-cursor{opacity:1}
+  .tscb .tsc-anim.on .tsc-cursor{opacity:1}
   .tscb .tsc-cursor.click{animation:tsc-cclick .4s ease}
   @keyframes tsc-cclick{40%{transform:scale(.8)}100%{transform:scale(1)}}
   @keyframes tsc-blink{50%{opacity:0}}
@@ -4270,10 +4278,8 @@
   }
 
   var BLOCKS=[
-    { key:'A', marker:'groesse-animation', anim:animA, play:function(el){playA(el);},
-      txt:{ eyebrow:'Warum das so läuft', h:'Jede Größe ist <span>eine eigene Zutat</span>.',
-        body:['Platzhalter — hier kommt dein Erklärtext rechts neben die Animation.','Statt jede Portionsgröße neu anzulegen, duplizierst du die Hauptzutat und passt nur Name, Portionsgröße und die Hauptzutat-Markierung an.'] } },
-    { key:'B', marker:'vorlage-animation', anim:animB, play:function(el){playB(el);},
+    { key:'A', mode:'center', marker:'groesse-animation', anim:animA, play:function(el){playA(el);} },
+    { key:'B', mode:'split', marker:'vorlage-animation', anim:animB, play:function(el){playB(el);},
       txt:{ eyebrow:'Einmal einrichten', h:'Jede Zutat als <span>Galerie mit Cover</span>.',
         body:['Platzhalter — hier kommt dein Erklärtext rechts neben die Animation.','Eine Vorlage mit voreingestellter Galerie- und Coveransicht zeigt dir in jeder Zutat sofort ihre Größeneinheiten — als Standard gesetzt, gilt sie automatisch für jede neue Seite.'] } }
   ];
@@ -4281,7 +4287,9 @@
   function buildBlock(cfg){
     if(!document.getElementById('tscover-css')){ var s=document.createElement('style'); s.id='tscover-css'; s.textContent=CSS; document.head.appendChild(s); }
     var sec=document.createElement('section'); sec.className='tscb'; sec.id='tscb-'+cfg.key; sec.setAttribute('data-block',cfg.key);
-    sec.innerHTML='<div class="tscb-in">'+cfg.anim()+txtPanel(cfg.txt)+'</div>';
+    sec.innerHTML = cfg.mode==='center'
+      ? '<div class="tscb-in center">'+cfg.anim()+'</div>'
+      : '<div class="tscb-in">'+cfg.anim()+txtPanel(cfg.txt)+'</div>';
     return sec;
   }
 
@@ -4395,20 +4403,30 @@
     return null;
   }
   function anchorShop(){ return document.getElementById('tsshop--db4_zutaten'); }
-  function mountBlock(cfg, fallbackAfter){
+  function findLoesung(){
+    var all=document.querySelectorAll('.notion-text');
+    for(var i=0;i<all.length;i++){ if((all[i].textContent||'').trim().indexOf('Die Lösung')===0){ return { el:all[i], block:(all[i].closest('[id^="block-"]')||all[i]) }; } }
+    return null;
+  }
+  function mountBlock(cfg, anchorAfter){
     if(document.getElementById('tscb-'+cfg.key)) return document.getElementById('tscb-'+cfg.key);
-    var mk=findMarker(cfg.marker), sec=buildBlock(cfg);
-    if(mk && mk.parentNode){ mk.style.display='none'; mk.parentNode.insertBefore(sec, mk.nextSibling); }
-    else if(fallbackAfter && fallbackAfter.parentNode){ fallbackAfter.parentNode.insertBefore(sec, fallbackAfter.nextSibling); }
+    var mk=findMarker(cfg.marker), sec=buildBlock(cfg), ref=null;
+    if(mk && mk.parentNode){ mk.style.display='none'; ref=mk; }
+    else if(anchorAfter && anchorAfter.parentNode){ ref=anchorAfter; }
     else return null;
+    ref.parentNode.insertBefore(sec, ref.nextSibling);
     trigger(sec,cfg);
     return sec;
   }
   function mount(){
     if(!on()){ ['A','B'].forEach(function(k){ var e=document.getElementById('tscb-'+k); if(e&&e.parentNode)e.parentNode.removeChild(e); }); return; }
+    var lo=findLoesung();
+    if(lo && lo.el && lo.el.classList && !lo.el.classList.contains('tsc-loesung')) lo.el.classList.add('tsc-loesung');
     var shop=anchorShop();
-    var a=mountBlock(BLOCKS[0], shop);
-    mountBlock(BLOCKS[1], a||shop);
+    /* Block A „Neue Größeneinheit anlegen" — mittig, direkt UNTER „Die Lösung" (oder Marker groesse-animation, sonst Shop) */
+    mountBlock(BLOCKS[0], (lo&&lo.block)||shop);
+    /* Block B „Galerie mit Cover als Vorlage" — Animation links/Text rechts, per Marker vorlage-animation (sonst unter Shop) */
+    mountBlock(BLOCKS[1], shop);
   }
   function boot(){
     var tries=0; var iv=setInterval(function(){ tries++; mount(); if(tries>50)clearInterval(iv); },300);
