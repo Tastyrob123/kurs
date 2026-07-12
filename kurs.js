@@ -4316,6 +4316,7 @@
 
 
 
+
 /* ============================================================================
    #tscover — Zutaten-DB-Erklär-Animationen (Seite /zutatenliste)
    ZWEI getrennte Vollbreite-Blöcke, je: Animation LINKS + Textpanel RECHTS.
@@ -4350,7 +4351,7 @@
   .tscb .tscb-in.center .tsc-stage{max-width:640px;margin:20px auto 0}
   @media(max-width:900px){.tscb .tscb-in{grid-template-columns:1fr;gap:30px}}
   /* Block A dicht unter „Die Lösung" (Leerraum der Spalte wegziehen) */
-  .tscb[data-block="A"]{padding-top:8px}
+  .tscb[data-block="A"]{padding-top:8px;padding-bottom:12px}
   @media(min-width:901px){.tscb[data-block="A"]{padding-top:0;margin-top:-56px}}
 
   /* „Die Lösung"-Absatz entschärfen: kleiner + normal, nur „Die Lösung :" fett */
@@ -4767,7 +4768,12 @@
       var HIDE=['kurz gesagt','in diesem schritt übersetzen','öffne hierzu zunächst'];
       var nt=document.querySelectorAll('.notion-text');
       for(var ni=0;ni<nt.length;ni++){ var tt=(nt[ni].textContent||'').trim().toLowerCase();
-        for(var h=0;h<HIDE.length;h++){ if(tt.indexOf(HIDE[h])===0){ var blk=nt[ni].closest('[id^="block-"]')||nt[ni]; blk.style.setProperty('display','none','important'); } } }
+        for(var h=0;h<HIDE.length;h++){ if(tt.indexOf(HIDE[h])===0){
+          /* wenn die ganze Spaltenliste NUR diese Absätze enthält (kein „Die Lösung"), die Liste ausblenden — sonst nur den Block */
+          var cl=nt[ni].closest('.notion-column-list');
+          var target=(cl && (cl.textContent||'').toLowerCase().indexOf('die lösung')<0) ? cl : (nt[ni].closest('[id^="block-"]')||nt[ni]);
+          target.style.setProperty('display','none','important');
+        } } }
     }
     var shop=anchorShop();
     if(needA) mountBlock(BLOCKS[0], (lo&&lo.block)||shop);
