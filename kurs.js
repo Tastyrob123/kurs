@@ -2709,7 +2709,7 @@
         { name:'Granatapfel',   wert:200, img:'https://tastyrob123.github.io/kurs/img/zutaten/granatapfel.jpg' },
         { name:'Knoblauch',     wert:40,  img:'https://tastyrob123.github.io/kurs/img/zutaten/knoblauch.jpg' },
         { name:'Brokkoli',      wert:140, img:'https://tastyrob123.github.io/kurs/img/zutaten/brokkoli.jpg' },
-        { name:'Ei',            wert:60,  img:'https://tastyrob123.github.io/kurs/img/zutaten/ei.jpg' },
+        { name:'Blaubeeren',    wert:60,  img:'https://tastyrob123.github.io/kurs/img/zutaten/blaubeeren.jpg' },
         { name:'Chili',         wert:15,  img:'https://tastyrob123.github.io/kurs/img/zutaten/chili-rot.jpg' },
         { name:'Kartoffel',     wert:170, img:'https://tastyrob123.github.io/kurs/img/zutaten/kartoffel.jpg' },
         { name:'Garnelen',      wert:75,  img:'https://tastyrob123.github.io/kurs/img/zutaten/garnelen.jpg' },
