@@ -3103,9 +3103,9 @@
   var SCROLL=BASE+'scroll/';
   var FRAME='https://files.catbox.moe/oj1wa9.png'; /* leerer MacBook-Rahmen wie #tsmb */
   var MACS=[
-    { after:'tsshop--db13_lieferanten',     side:'left',  img:BASE+'lieferpartner-uebersicht.png', shot:SCROLL+'lieferpartner.jpg',   cap:'Lieferpartner-Übersicht' },
-    { after:'tsshop--db13_ansprechpartner', side:'right', img:BASE+'ansprechpartner-galerie.png',   shot:SCROLL+'ansprechpartner.jpg', cap:'Ansprechpartner-Galerie' },
-    { after:'tsshop--db13_vertraege',       side:'left',  img:BASE+'vertraege-datenbank.png',        shot:SCROLL+'vertraege.jpg',      cap:'Verträge-Datenbank' }
+    { after:'tsshop--db13_lieferanten',     side:'right', img:BASE+'lieferpartner-uebersicht.png', shot:SCROLL+'lieferpartner.jpg',   cap:'Lieferpartner-Übersicht' },
+    { after:'tsshop--db13_ansprechpartner', side:'left',  img:BASE+'ansprechpartner-galerie.png',   shot:SCROLL+'ansprechpartner.jpg', cap:'Ansprechpartner-Galerie' },
+    { after:'tsshop--db13_vertraege',       side:'right', img:BASE+'vertraege-datenbank.png',        shot:SCROLL+'vertraege.jpg',      cap:'Verträge-Datenbank' }
   ];
   var CSS = `
   .ts2mac-row{width:100%;max-width:1180px;margin:clamp(30px,4vh,58px) auto 0;padding:0 clamp(16px,3vw,40px);display:flex;align-items:center;gap:clamp(20px,4vw,64px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;box-sizing:border-box}
