@@ -3363,10 +3363,10 @@
   #tslmod{width:min(1080px,95vw);margin:34px auto 30px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
   #tslmod *{box-sizing:border-box}
   #tslmod .tsl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-  #tslmod a.tsl-card{position:relative;display:block;overflow:hidden;text-align:center;text-decoration:none;color:inherit;-webkit-tap-highlight-color:transparent;border-radius:16px;padding:30px 24px 26px;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0));border:1px solid transparent;box-shadow:none;opacity:0;transform:translateY(18px);will-change:transform,box-shadow;transition:opacity .6s ease,transform .7s cubic-bezier(.22,1,.36,1),border-color .4s ease,box-shadow .5s ease}
-  #tslmod .tsl-bg{position:absolute;inset:0;z-index:0;border-radius:inherit;overflow:hidden;background:#04050a;pointer-events:none}
+  #tslmod a.tsl-card{position:relative;display:block;overflow:hidden;text-align:center;text-decoration:none;color:inherit;-webkit-tap-highlight-color:transparent;border-radius:16px;padding:30px 24px 26px;background:transparent;border:1px solid transparent;box-shadow:none;opacity:0;transform:translateY(18px);will-change:transform,box-shadow;transition:opacity .6s ease,transform .7s cubic-bezier(.22,1,.36,1),border-color .4s ease,box-shadow .5s ease}
+  #tslmod .tsl-bg{position:absolute;inset:0;z-index:0;border-radius:inherit;overflow:hidden;background:transparent;pointer-events:none;-webkit-mask-image:radial-gradient(ellipse 82% 86% at 50% 50%,#000 50%,transparent 100%);mask-image:radial-gradient(ellipse 82% 86% at 50% 50%,#000 50%,transparent 100%)}
   #tslmod .tsl-bg img{width:100%;height:100%;object-fit:contain;object-position:center;display:block}
-  #tslmod .tsl-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0)),radial-gradient(96% 86% at 50% 62%,rgba(4,5,10,.66) 0%,rgba(4,5,10,.42) 48%,rgba(4,5,10,.12) 78%,rgba(4,5,10,0) 100%)}
+  #tslmod .tsl-bg::after{content:"";position:absolute;inset:0;background:radial-gradient(96% 86% at 50% 62%,rgba(4,5,10,.60) 0%,rgba(4,5,10,.36) 48%,rgba(4,5,10,.10) 78%,rgba(4,5,10,0) 100%)}
   #tslmod .tsl-num,#tslmod .tsl-logo,#tslmod .tsl-k,#tslmod .tsl-h,#tslmod .tsl-t{position:relative;z-index:2}
   #tslmod a.tsl-card.on{opacity:1;transform:translateY(0)}
   #tslmod a.tsl-card:hover{transform:translateY(-4px);border-color:rgba(${GLOW},.5);animation:tslmod-hb 2.6s cubic-bezier(.4,0,.3,1) infinite}
