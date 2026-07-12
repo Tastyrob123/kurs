@@ -2724,7 +2724,7 @@
       summary:'Wareneinsatz', chain:true },
     { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_lieferanten',
       marker:/Kundennummer/,
-      eyebrow:'DB I - Lieferanten',
+      eyebrow:'DB I - Lieferpartner',
       title:'Deine Lieferpartner. <span>An einem Ort.</span>',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB I ist die Mindestbelieferung.<br>Um zu starten: / → neue Tabellenansicht / Datenbank → DB I : Lieferpartner Übersicht.',
       summary:'Transportkosten', cta:'Tour buchen', ctaDone:'Tour gebucht', chain:true },
