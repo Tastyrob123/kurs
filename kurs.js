@@ -4577,6 +4577,11 @@
     /* Zweites Regal auf derselben Seite: DB II Ansprechpartner (Marker eindeutig = Hauptansprechpartner) */
     { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_ansprechpartner',
       marker:/Hauptansprechpartner/,
+      /* keepSteps: DB II hat nur 7 eigene Spalten. Die Lektions-Schritte 8-10
+         (Rollup Kontaktinfos, Ansprechpartner Lieferant, Hauptkontakt Visitenkarte)
+         bauen real Spalten in DB I / Inventurliste (Cross-Reference) und sind dort
+         bereits als Relation-Kacheln abgebildet (db0 + db13_lieferanten) → hier raus. */
+      keepSteps:7,
       eyebrow:'DB II - Ansprechpartner',
       title:'Deine Ansprechpartner. <span>In einer Übersicht</span>.',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB II ist die Jahresrückvergütung.<br>Um zu starten: / → neue Tabellenansicht / Datenbank → DB II : Ansprechpartner Übersicht.',
@@ -4865,7 +4870,7 @@
      Nenner = Summe der bekannten Schrittzahlen (auch noch nicht besuchte Seiten
      zählen mit). Zähler = erledigte Schritte = localStorage-Keys "done-…"='1'
      (dieselben Keys, die das Karten-/Checkbox-System setzt → immer aktuell). */
-  var BACKOFFICE={ db0_inventurliste:16, db13_lieferanten:13, db13_ansprechpartner:10, db13_vertraege:13, db4_zutaten:30, db5_rezepturen:23, db5_finance_personal:7, db6_gemeinkosten:10, db6_gemeinkostenannahmen:5, db7_mitarbeiterloehne:15, db8_gerichte:37 };
+  var BACKOFFICE={ db0_inventurliste:16, db13_lieferanten:13, db13_ansprechpartner:7, db13_vertraege:13, db4_zutaten:30, db5_rezepturen:23, db5_finance_personal:7, db6_gemeinkosten:10, db6_gemeinkostenannahmen:5, db7_mitarbeiterloehne:15, db8_gerichte:37 };
   function backofficeTotal(){ var t=0; for(var kk in BACKOFFICE){ if(BACKOFFICE.hasOwnProperty(kk)) t+=BACKOFFICE[kk]; } return t; }
   function backofficeDone(){ var d=0; try{ for(var i=0;i<localStorage.length;i++){ var key=localStorage.key(i); if(key&&key.slice(0,5)==='done-'&&localStorage.getItem(key)==='1') d++; } }catch(e){} return d; }
   function backofficePct(){ var t=backofficeTotal(), d=Math.min(backofficeDone(),t); return t>0?Math.round(d/t*100):0; }
@@ -5176,6 +5181,9 @@
     }
     var steps=[];
     for(var m=0;m<srcs.length;m++){ steps=steps.concat(collectSteps(srcs[m])); }
+    /* keepSteps: nur die ersten N Schritte ins Regal (Rest = Cross-Reference-Schritte,
+       die real in anderen Tabellen gebaut werden und dort schon als Relation-Kacheln stehen). */
+    if(page.keepSteps && steps.length>page.keepSteps) steps=steps.slice(0,page.keepSteps);
     steps.forEach(function(st,idx){ st.i=idx; });
     if(!steps.length) return;
     injectCSS();
