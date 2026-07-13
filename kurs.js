@@ -5354,10 +5354,10 @@
   /* Formel — freistehend, weiss, größer (Gold-Betonungen bleiben) */
   #tsd5 .d5-formula{font-size:14.5px;color:#fff;text-align:center;margin:26px 0 0;padding:20px 4px 0;border-top:1px solid rgba(255,255,255,.09);line-height:1.6}
   #tsd5 .d5-formula b{color:#c7b489;font-weight:600}
-  #tsd5 .d5-foot{text-align:center;margin:32px auto 0;max-width:700px}
-  #tsd5 .d5-foot .fm{font-size:17.5px;line-height:1.5;color:#fff;margin:0 0 8px}
+  #tsd5 .d5-foot{text-align:center;margin:48px auto 0;max-width:720px}
+  #tsd5 .d5-foot .fm{font-size:20px;line-height:1.5;color:#fff;margin:0 0 12px}
   #tsd5 .d5-foot .fm .g{color:#c7b489}
-  #tsd5 .d5-foot .fs{font-size:13px;line-height:1.55;color:rgba(255,255,255,.78);margin:0}
+  #tsd5 .d5-foot .fs{font-size:15px;line-height:1.55;color:rgba(255,255,255,.8);margin:0}
   @media(max-width:820px){
     #tsd5 .d5-grid{grid-template-columns:1fr}
     #tsd5 .d5-hero{width:min(420px,88%)}
