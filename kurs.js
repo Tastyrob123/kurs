@@ -4296,10 +4296,10 @@
           desc:'Spiegelspalte der Zutaten-Verknüpfung — erscheint von allein.',
           img:'https://tastyrob123.github.io/kurs/img/zutaten/tomate.jpg',
           content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> selbst an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch, sobald du in <b>DB IV : Zutaten</b> die Verknüpfung „Inventar Produkt" mit <b>wechselseitiger Verbindung</b> zur Inventurliste anlegst.</p>' },
-        { type:'ghost', name:'Packaging / Co.', target:'Selbst-Verknüpfung · Inventory', flag:'erscheint automatisch',
-          desc:'Selbst-Verknüpfung innerhalb der Inventurliste — erscheint von allein.',
+        { type:'ghost', name:'Packaging / Co.', target:'Gegenspalte · aus DB VIII Gerichte', flag:'erscheint automatisch',
+          desc:'Gegenspalte der Packaging-Verknüpfung aus den Gerichten — erscheint von allein.',
           img:'https://tastyrob123.github.io/kurs/img/packaging/kuchenbox.jpg',
-          content:'<p class="notion-text"><b>Packaging</b> ist keine eigene Tabelle — es ist eine <b>gefilterte Galerie-Ansicht deiner Inventurliste</b> (Quelle: TB Inventory), gefiltert nach Kategorie.</p><p class="notion-text">&nbsp;</p><p class="notion-text">„Packaging / Co." ist eine <b>wechselseitige Verknüpfung innerhalb derselben Tabelle</b> — du verknüpfst ein Produkt mit dem passenden Verpackungs-Artikel. Die Gegenspalte erscheint hier automatisch, sobald du die Verbindung anlegst.</p>' }
+          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie ist die <b>Gegenspalte</b> der Verknüpfung „Packaging", die du erst in <b>DB VIII : Gerichte &amp; Getränke</b> anlegst — dort wählst du je Gericht die passende Verpackung, und ihr Preis fließt in den Wareneinsatz. Ist die Verbindung wechselseitig, taucht „Packaging / Co." hier automatisch auf und zeigt, welche Gerichte diese Verpackung nutzen.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Die Verpackung selbst liegt als normales Produkt in deiner Inventurliste — die „Packaging"-Seite ist nur eine gefilterte Ansicht davon.</p>' }
       ],
       summary:'Wareneinsatz', chain:true },
     { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_lieferanten',
