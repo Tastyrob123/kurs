@@ -325,6 +325,186 @@
   new MutationObserver(mount).observe(document.documentElement,{childList:true,subtree:true});
 })();
 
+/* ============================================================
+   zutatenliste — #tsreuse  Split: Text links / Animation rechts
+   Links: die zwei Absaetze "In diesem Schritt..." + "Oeffne hierzu..."
+   (nativ ausgeblendet, hier gerendert = driftsichere Text+Visual-Einheit).
+   Rechts: SSOT-Animation "Ein Eintrag, vier Anwendungen" (Olivenoel):
+   1x angelegt -> faechert auf 4 Anwendungen -> Preis EINMAL geaendert
+   -> alle 4 rechnen sofort neu (Count-up) + Merksatz darunter.
+   Mount: VOR dem "In diesem Schritt"-Absatz. Ausgeblendet: die 2 Absaetze
+   + der native "Kurz gesagt"-Heading.
+   Zahlen = Beispielwerte (Olivenoel 12,90->14,90 EUR/L illustrativ).
+   Reveal robust: @keyframes + inView-Polling, Endzustand direkt gesetzt.
+   ============================================================ */
+(function(){
+  if(window.__tsreuse) return; window.__tsreuse=true;
+  function on(){ return /\/zutatenliste\/?$/.test(location.pathname); }
+  var DEST=[
+    {name:'Salat',        menge:'15 ml', a:0.19, b:0.22},
+    {name:'Dressing',     menge:'30 ml', a:0.39, b:0.45},
+    {name:'Dressing II',  menge:'25 ml', a:0.32, b:0.37},
+    {name:'Tomatensauce', menge:'90 ml', a:1.16, b:1.34}
+  ];
+  var VB_W=720, VB_H=280;
+  var SRCX=236, SRCY=140, DSTX=470, DSTY=[36,106,174,244];
+  var PARA1='In diesem Schritt übersetzen wir das Inventarprodukt in diese verarbeitbare Einheit – zum Beispiel vom gelieferten Gebinde hin zu Gramm, Milliliter oder Stück. Wenn wir damit weiterarbeiten wollen duplizieren wir es einfach, ändern die Portionsgröße, entfernen den Haken bei &#8220;Hauptzutat&#8221; und haben einen fertigen Baustein (s. Animation).';
+  var PARA2='Öffne hierzu zunächst deine Notion AI Backoffice Startseite, erstelle eine neue Seite die du &#8220;DB Zutaten&#8221; nennst, einen &#8220;Zurück&#8221; Button und eine neue Tabelle / Datenbankansicht → Name : &#8220;DB IV : Zutaten&#8221; :';
+  /* native Bloecke, die dieses Widget ersetzt (Fallback-IDs; primaer per Textphrase) */
+  var HIDE_PHRASES=['In diesem Schritt übersetzen wir das Inventarprodukt','Öffne hierzu zunächst deine Notion AI Backoffice','Kurz gesagt: Die Zutat wird einmal gepflegt'];
+  var CSS=`
+  #tsreuse{width:100%;max-width:1120px;margin:20px auto 44px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
+  #tsreuse .rz-wrap{display:flex;align-items:center;gap:clamp(28px,4vw,60px)}
+  #tsreuse .rz-left{flex:0 0 39%;max-width:39%;min-width:0}
+  #tsreuse .rz-para{font-size:15.5px;line-height:1.72;color:rgba(255,255,255,.82);margin:0 0 16px}
+  #tsreuse .rz-para:last-child{margin-bottom:0}
+  #tsreuse .rz-left{opacity:0;transform:translateY(14px)}
+  #tsreuse.go .rz-left{animation:rzUp .8s cubic-bezier(.16,1,.3,1) both}
+  #tsreuse .rz-right{flex:1 1 auto;min-width:0}
+  #tsreuse .rz-head{text-align:center;margin:0 auto 20px;opacity:0;transform:translateY(14px)}
+  #tsreuse.go .rz-head{animation:rzUp .7s cubic-bezier(.16,1,.3,1) both;animation-delay:.1s}
+  #tsreuse .rz-eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#c7b489;margin:0 0 10px}
+  #tsreuse .rz-eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:#c7b489;box-shadow:0 0 10px rgba(199,180,137,.7)}
+  #tsreuse .rz-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;font-weight:600;font-size:clamp(1.25rem,2.2vw,1.65rem);letter-spacing:-.02em;line-height:1.15;margin:0;color:#fff}
+  #tsreuse .rz-title .g{color:#c7b489}
+  #tsreuse .rz-stage{position:relative;width:100%;max-width:640px;margin:0 auto;aspect-ratio:720/280;min-height:240px}
+  #tsreuse svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+  #tsreuse .rz-line{fill:none;stroke:#c7b489;stroke-width:1.6;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-dasharray:100;stroke-dashoffset:100;opacity:.5}
+  #tsreuse.go .rz-line{animation:rzDraw .85s cubic-bezier(.5,0,.2,1) forwards}
+  #tsreuse.go .rz-line.l0{animation-delay:.35s}
+  #tsreuse.go .rz-line.l1{animation-delay:.47s}
+  #tsreuse.go .rz-line.l2{animation-delay:.59s}
+  #tsreuse.go .rz-line.l3{animation-delay:.71s}
+  #tsreuse .rz-node{position:absolute;transform:translate(-50%,-50%) translateY(10px);opacity:0;box-sizing:border-box}
+  #tsreuse.go .rz-node{animation:rzNode .55s cubic-bezier(.16,1,.3,1) both}
+  #tsreuse .rz-card{position:relative;border-radius:13px;background:rgba(255,255,255,.04);border:1px solid rgba(199,180,137,.28)}
+  #tsreuse .rz-src{left:19%;top:50%;width:min(34%,196px)}
+  #tsreuse .rz-src .rz-card{padding:14px 16px;border-color:rgba(199,180,137,.5);box-shadow:0 16px 40px rgba(0,0,0,.4)}
+  #tsreuse .rz-eye{font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);margin:0 0 6px}
+  #tsreuse .rz-src .rz-eye{color:#c7b489}
+  #tsreuse .rz-name{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-weight:600;font-size:18px;letter-spacing:-.01em;color:#fff;margin:0 0 10px}
+  #tsreuse .rz-div{height:1px;background:rgba(255,255,255,.09);margin:0 0 9px}
+  #tsreuse .rz-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  #tsreuse .rz-row .k{font-size:11px;color:rgba(255,255,255,.55)}
+  #tsreuse .rz-price{font-size:16px;font-weight:700;color:#c7b489;white-space:nowrap;font-variant-numeric:tabular-nums}
+  #tsreuse .rz-badge{display:inline-block;margin-top:10px;font-size:8.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#c7b489;background:rgba(199,180,137,.1);border:1px solid rgba(199,180,137,.32);border-radius:999px;padding:3px 9px}
+  #tsreuse .rz-chg{position:absolute;top:-11px;right:11px;font-size:8.5px;font-weight:600;letter-spacing:.05em;color:#05060b;background:#c7b489;border-radius:999px;padding:3px 8px;opacity:0;transform:translateY(5px) scale(.9);box-shadow:0 6px 16px rgba(199,180,137,.35)}
+  #tsreuse.upd .rz-chg{animation:rzChg .5s cubic-bezier(.34,1.56,.64,1) both}
+  #tsreuse .rz-dst{left:80%;width:min(33%,190px)}
+  #tsreuse .rz-dst.d0{top:12.9%}
+  #tsreuse .rz-dst.d1{top:37.9%}
+  #tsreuse .rz-dst.d2{top:62.1%}
+  #tsreuse .rz-dst.d3{top:87.1%}
+  #tsreuse .rz-dst .rz-card{padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:9px;transition:border-color .5s ease,box-shadow .5s ease}
+  #tsreuse .rz-dst.lit .rz-card{border-color:rgba(199,180,137,.5);box-shadow:0 10px 24px rgba(0,0,0,.3)}
+  #tsreuse .rz-dst .rz-l .rz-name{font-size:13px;margin:0 0 2px}
+  #tsreuse .rz-dst .rz-l .rz-menge{font-size:10px;color:rgba(255,255,255,.5)}
+  #tsreuse .rz-dst .rz-r{text-align:right}
+  #tsreuse .rz-dst .rz-cost{font-size:14px;font-weight:700;color:#fff;white-space:nowrap;font-variant-numeric:tabular-nums;transition:color .4s ease}
+  #tsreuse .rz-dst.pop .rz-cost{color:#c7b489}
+  #tsreuse .rz-dst .rz-upd{display:block;font-size:7.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#c7b489;margin-top:2px;opacity:0}
+  #tsreuse .rz-dst.pop .rz-upd{opacity:1;transition:opacity .4s ease}
+  #tsreuse .rz-note{max-width:520px;margin:26px auto 0;text-align:center;font-size:clamp(.95rem,1.2vw,1.06rem);line-height:1.55;color:#fff;opacity:0;transform:translateY(10px)}
+  #tsreuse.go .rz-note{animation:rzUp .8s cubic-bezier(.16,1,.3,1) both;animation-delay:.5s}
+  #tsreuse .rz-note b{color:#c7b489;font-weight:600}
+  #tsreuse .rz-note .lead{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;color:rgba(255,255,255,.5);font-size:.78em;letter-spacing:.02em;display:block;margin-bottom:5px}
+  @keyframes rzUp{to{opacity:1;transform:none}}
+  @keyframes rzNode{to{opacity:1;transform:translate(-50%,-50%)}}
+  @keyframes rzDraw{to{stroke-dashoffset:0;opacity:1}}
+  @keyframes rzChg{to{opacity:1;transform:none}}
+  @media(max-width:860px){
+    #tsreuse .rz-wrap{flex-direction:column;align-items:stretch;gap:26px}
+    #tsreuse .rz-left{flex-basis:auto;max-width:none}
+    #tsreuse .rz-stage{max-width:560px}
+  }
+  @media(max-width:600px){
+    #tsreuse .rz-stage{overflow-x:auto;overflow-y:hidden;aspect-ratio:auto;max-width:none}
+    #tsreuse .rz-stage>.rz-inner{position:relative;width:600px;height:280px;margin:0 auto}
+    #tsreuse svg{width:600px;height:280px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    #tsreuse .rz-left,#tsreuse .rz-head,#tsreuse .rz-node,#tsreuse .rz-note{opacity:1!important;transform:none!important;animation:none!important}
+    #tsreuse .rz-line{stroke-dashoffset:0!important;opacity:1!important;animation:none!important}
+  }
+  `;
+  function injectCSS(){ if(document.getElementById('tsreuse-css'))return; var s=document.createElement('style'); s.id='tsreuse-css'; s.textContent=CSS; document.head.appendChild(s); }
+  function eur(v){ return v.toFixed(2).replace('.',',')+' €'; }
+  function build(){
+    var root=document.createElement('div'); root.id='tsreuse';
+    var paths='';
+    DSTY.forEach(function(y,i){
+      var cx=(SRCX+DSTX)/2;
+      paths+='<path class="rz-line l'+i+'" pathLength="100" d="M '+SRCX+','+SRCY+' C '+cx+','+SRCY+' '+cx+','+y+' '+DSTX+','+y+'"/>';
+    });
+    var dstHTML='';
+    DEST.forEach(function(d,i){
+      dstHTML+='<div class="rz-node rz-dst d'+i+'" data-i="'+i+'"><div class="rz-card"><div class="rz-l"><p class="rz-name">'+d.name+'</p><span class="rz-menge">'+d.menge+'</span></div><div class="rz-r"><span class="rz-cost" data-b="'+d.b+'">'+eur(d.a)+'</span><span class="rz-upd">aktualisiert</span></div></div></div>';
+    });
+    var right=
+      '<div class="rz-head"><div class="rz-eyebrow">Das Prinzip</div><h2 class="rz-title">Ein Eintrag, <span class="g">vier Anwendungen.</span></h2></div>'+
+      '<div class="rz-stage"><div class="rz-inner"><svg viewBox="0 0 '+VB_W+' '+VB_H+'" preserveAspectRatio="none">'+paths+'</svg>'+
+        '<div class="rz-node rz-src"><div class="rz-card"><span class="rz-chg">Preis geändert</span><p class="rz-eye">DB IV · Zutat</p><p class="rz-name">Olivenöl</p><div class="rz-div"></div><div class="rz-row"><span class="k">Preis</span><span class="rz-price" data-b="14.90">12,90&nbsp;€/L</span></div><span class="rz-badge">1× angelegt</span></div></div>'+
+        dstHTML+
+      '</div></div>'+
+      '<p class="rz-note"><span class="lead">Kurz gesagt</span>Die Zutat wird <b>einmal gepflegt</b>, aber <b>beliebig oft verwendet</b>.</p>';
+    root.innerHTML=
+      '<div class="rz-wrap">'+
+        '<div class="rz-left"><p class="rz-para">'+PARA1+'</p><p class="rz-para">'+PARA2+'</p></div>'+
+        '<div class="rz-right">'+right+'</div>'+
+      '</div>';
+    root.querySelector('.rz-src').style.animationDelay='.22s';
+    root.querySelectorAll('.rz-dst').forEach(function(n,i){ n.style.animationDelay=(1.0+i*0.13)+'s'; });
+    return root;
+  }
+  function countUp(el,to,unit){ var from=parseFloat((el.textContent||'0').replace(/[^\d,]/g,'').replace(',','.'))||0, dur=600, t0=null;
+    function step(now){ if(t0===null)t0=now; var p=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-p,3), v=from+(to-from)*e; el.textContent=unit(v); if(p<1)requestAnimationFrame(step); }
+    requestAnimationFrame(step); }
+  function reduced(){ try{return window.matchMedia('(prefers-reduced-motion:reduce)').matches;}catch(e){return false;} }
+  function go(root){ if(root.__played) return; root.__played=true;
+    if(reduced()){ root.classList.add('go'); root.querySelectorAll('.rz-dst').forEach(function(n){ n.classList.add('lit','pop'); n.querySelector('.rz-cost').textContent=eur(parseFloat(n.querySelector('.rz-cost').getAttribute('data-b'))); }); root.querySelector('.rz-price').textContent='14,90 €/L'; return; }
+    root.classList.add('go');
+    DEST.forEach(function(d,i){ setTimeout(function(){ root.querySelectorAll('.rz-dst')[i].classList.add('lit'); },1000+i*130+650); });
+    setTimeout(function(){
+      root.classList.add('upd');
+      countUp(root.querySelector('.rz-price'),14.90,function(v){return v.toFixed(2).replace('.',',')+' €/L';});
+      root.querySelectorAll('.rz-dst').forEach(function(n,i){
+        setTimeout(function(){ n.classList.add('pop'); countUp(n.querySelector('.rz-cost'),parseFloat(n.querySelector('.rz-cost').getAttribute('data-b')),eur); },240+i*80);
+      });
+    },2700);
+  }
+  function inView(el){ var r=el.getBoundingClientRect(); return r.top < (window.innerHeight*0.82) && r.bottom > 60; }
+  function arm(root){
+    if(inView(root)) return go(root);
+    var iv=setInterval(function(){ if(!document.body.contains(root)){ clearInterval(iv); return; } if(inView(root)){ clearInterval(iv); go(root); } },250);
+    window.addEventListener('scroll',function h(){ if(inView(root)){ window.removeEventListener('scroll',h); go(root); } },{passive:true});
+    try{ var io=new IntersectionObserver(function(e){ if(e[0].isIntersecting){ io.disconnect(); go(root); } },{threshold:.2}); io.observe(root); }catch(e){}
+  }
+  function hideNative(){
+    HIDE_PHRASES.forEach(function(ph){
+      var els=document.querySelectorAll('.notion-text, .notion-heading, h1, h2, h3');
+      for(var i=0;i<els.length;i++){ if((els[i].textContent||'').replace(/\s+/g,' ').indexOf(ph)>-1){ var b=els[i].closest('[id^="block-"]')||els[i]; b.style.setProperty('display','none','important'); break; } }
+    });
+  }
+  function findAnchor(){
+    var els=document.querySelectorAll('.notion-text, .notion-heading, h1, h2, h3');
+    for(var i=0;i<els.length;i++){ if((els[i].textContent||'').replace(/\s+/g,' ').indexOf('In diesem Schritt übersetzen wir das Inventarprodukt')>-1) return els[i].closest('[id^="block-"]')||els[i]; }
+    return document.getElementById('block-39bb9546553480cda6ffe5537b0064e5');
+  }
+  function mount(){
+    if(!on()){ var e=document.getElementById('tsreuse'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    hideNative();
+    if(document.getElementById('tsreuse')) return;
+    var a=findAnchor(); if(!a) return;
+    injectCSS();
+    var root=build();
+    a.parentNode.insertBefore(root, a);
+    arm(root);
+  }
+  function boot(){ var tries=0; var iv=setInterval(function(){ tries++; mount(); if(tries>40) clearInterval(iv); },300);
+    new MutationObserver(function(){ if(on()){ hideNative(); if(!document.getElementById('tsreuse')) mount(); } }).observe(document.documentElement,{childList:true,subtree:true}); }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
+
 /* ---- */
 
 (function(){
