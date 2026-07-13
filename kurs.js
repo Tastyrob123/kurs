@@ -5073,3 +5073,250 @@
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
+
+/* ============================================================
+   #tsd5 — REZEPTUR-RECHNER (DB V) · /rezepturen
+   Interaktive Demo des Intro-Konzepts: Rezeptur zieht ihre
+   Zutaten (Bausteine, freigestellte Tasty-Produktbilder) →
+   summiert Gesamtmenge (g) + Rohstoffkosten → Portionsgröße
+   teilt alles auf: Anzahl Portionen, Preis/Portion, Menge je
+   Zutat/Portion, plus Nährwerte/Portion + Allergene (fließen
+   im echten System aus den Zutaten mit). Live-Neuberechnung.
+   Stil nach #tsd4 (/zutatenliste). Mount vor "Der Aufbau —
+   Schritt für Schritt" (block-394b9546553480c785e7d4785453354f).
+   Zahlen = Beispielwerte (Basilikum-Pesto). Bilder freigestellt
+   (remove_background) aus den Tasty-Zutaten/Inventar-Fotos.
+   ============================================================ */
+(function(){
+  if(window.__tsd5) return; window.__tsd5=true;
+
+  var IMGBASE='https://tastyrob123.github.io/kurs/img/zutaten-cut/';
+  var RECIPE={
+    name:'Basilikum-Pesto',
+    /* g = Einwaage, p = Einkaufspreis €/kg, img = freigestelltes Produktbild */
+    items:[
+      {n:'Basilikum',   g:50, p:24.00, img:'basilikum.png'},
+      {n:'Parmesan',    g:40, p:18.00, img:'parmesan.png'},
+      {n:'Pinienkerne', g:30, p:42.00, img:'pinienkerne.png'},
+      {n:'Olivenöl',    g:90, p:9.80,  img:'olivenoel.png'},
+      {n:'Knoblauch',   g:8,  p:6.00,  img:'knoblauch.png'},
+      {n:'Meersalz',    g:2,  p:2.90,  img:'meersalz.png'}
+    ]
+  };
+  /* Nährwerte je 100 g fertige Rezeptur (Beispielwerte) → skalieren mit der Portionsgröße */
+  var NUT={kcal:460, fett:45, kh:4, protein:7};
+  var ALLERGENE=['Milch','Schalenfrüchte'];
+  var DEFAULT_PORTION=25, MIN_P=10, MAX_P=60;
+
+  function totalG(){ return RECIPE.items.reduce(function(s,i){return s+i.g;},0); }
+  function totalCost(){ return RECIPE.items.reduce(function(s,i){return s+i.g/1000*i.p;},0); }
+  function nf(v,dec){ return (v).toFixed(dec).replace('.',','); }
+
+  var CSS=`
+  #tsd5{width:min(1000px,95vw);margin:26px auto 62px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;opacity:0;transform:translateY(20px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+  #tsd5.in{opacity:1;transform:none}
+  #tsd5 .d5-head{text-align:center;margin:0 0 40px}
+  #tsd5 .d5-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:#c7b489;margin:0 0 12px}
+  #tsd5 .d5-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#c7b489;box-shadow:0 0 12px rgba(199,180,137,.7)}
+  #tsd5 .d5-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;font-size:clamp(1.5rem,3vw,2.1rem);font-weight:600;letter-spacing:-.02em;line-height:1.15;margin:0 0 14px;color:#fff}
+  #tsd5 .d5-title .g{color:#c7b489}
+  #tsd5 .d5-sub{max-width:640px;margin:0 auto;font-size:15px;line-height:1.6;color:rgba(255,255,255,.62)}
+  #tsd5 .d5-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;align-items:stretch}
+  #tsd5 .d5-card{position:relative;border-radius:16px;padding:22px 22px 20px;background:rgba(255,255,255,.035);border:1px solid rgba(199,180,137,.28)}
+  #tsd5 .d5-caphead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 14px}
+  #tsd5 .d5-cap{font-size:10px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.4)}
+  #tsd5 .d5-recipe{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:16px;font-weight:600;color:#c7b489;letter-spacing:-.01em}
+  /* Bausteine-Zeilen mit freigestelltem Produktbild */
+  #tsd5 .d5-item{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:13px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);opacity:0;transform:translateX(-14px);transition:opacity .5s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
+  #tsd5.in .d5-item{opacity:1;transform:none}
+  #tsd5 .d5-thumb{width:44px;height:44px;object-fit:contain;object-position:center;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5));flex-shrink:0}
+  #tsd5 .d5-item .nm{font-size:14.5px;font-weight:500;color:#fff}
+  #tsd5 .d5-item .nm small{display:block;font-size:11px;color:rgba(255,255,255,.4);font-weight:400;margin-top:1px}
+  #tsd5 .d5-item .qty{text-align:right;white-space:nowrap}
+  #tsd5 .d5-item .qty .q1{font-size:14px;font-weight:600;color:#fff}
+  #tsd5 .d5-item .qty .q2{font-size:11.5px;color:rgba(255,255,255,.42);margin-top:1px}
+  #tsd5 .d5-item .qty .q2 b{color:#c7b489;font-weight:600}
+  /* Summen-Fuß */
+  #tsd5 .d5-sums{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  #tsd5 .d5-sum{border-radius:12px;padding:13px 14px;background:rgba(199,180,137,.07);border:1px solid rgba(199,180,137,.22)}
+  #tsd5 .d5-sum .sl{font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:rgba(255,255,255,.45);margin:0 0 5px}
+  #tsd5 .d5-sum .sv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:24px;font-weight:700;color:#c7b489;letter-spacing:-.01em;line-height:1}
+  /* Rechte Karte — Pro Portion */
+  #tsd5 .d5-right{background:rgba(199,180,137,.06);border-color:rgba(199,180,137,.4)}
+  #tsd5 .d5-ctrl{margin:2px 0 18px}
+  #tsd5 .d5-ctrl .cl{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 10px}
+  #tsd5 .d5-ctrl .cl .lab{font-size:13px;color:rgba(255,255,255,.7)}
+  #tsd5 .d5-ctrl .cl .val{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:19px;font-weight:700;color:#fff}
+  #tsd5 .d5-ctrl .cl .val small{font-size:12px;font-weight:500;color:rgba(255,255,255,.5);margin-left:2px}
+  #tsd5 .d5-range{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:4px;background:rgba(255,255,255,.14);outline:none;margin:0}
+  #tsd5 .d5-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:#c7b489;cursor:pointer;box-shadow:0 0 0 4px rgba(199,180,137,.18),0 2px 8px rgba(0,0,0,.5);transition:transform .12s ease}
+  #tsd5 .d5-range::-webkit-slider-thumb:active{transform:scale(1.15)}
+  #tsd5 .d5-range::-moz-range-thumb{width:20px;height:20px;border:none;border-radius:50%;background:#c7b489;cursor:pointer;box-shadow:0 0 0 4px rgba(199,180,137,.18)}
+  #tsd5 .d5-scale{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.3);margin-top:7px}
+  #tsd5 .d5-out{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 16px}
+  #tsd5 .d5-tile{border-radius:12px;padding:14px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);text-align:center}
+  #tsd5 .d5-tile.hot{background:rgba(199,180,137,.1);border-color:rgba(199,180,137,.5)}
+  #tsd5 .d5-tile .tl{font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:rgba(255,255,255,.45);margin:0 0 7px}
+  #tsd5 .d5-tile .tv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:clamp(1.5rem,3.2vw,2rem);font-weight:700;letter-spacing:-.02em;color:#fff;line-height:1}
+  #tsd5 .d5-tile.hot .tv{color:#c7b489}
+  #tsd5 .d5-tile .tu{font-size:12px;color:rgba(255,255,255,.45);margin-top:5px}
+  /* Nährwerte / Portion */
+  #tsd5 .d5-seclbl{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.4);margin:0 0 9px}
+  #tsd5 .d5-nut{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 16px}
+  #tsd5 .d5-ncell{border-radius:10px;padding:11px 6px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);text-align:center}
+  #tsd5 .d5-ncell .nv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:17px;font-weight:700;color:#fff;line-height:1}
+  #tsd5 .d5-ncell .nu{font-size:9.5px;color:rgba(255,255,255,.4);margin-top:5px;letter-spacing:.3px}
+  #tsd5 .d5-aller{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+  #tsd5 .d5-aller .al-l{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-right:2px}
+  #tsd5 .d5-chip{font-size:12px;color:#e6d8b6;background:rgba(199,180,137,.12);border:1px solid rgba(199,180,137,.3);border-radius:999px;padding:4px 11px}
+  #tsd5 .d5-formula{font-size:11.5px;color:rgba(255,255,255,.4);text-align:center;margin:18px 0 0;line-height:1.5}
+  #tsd5 .d5-formula b{color:rgba(199,180,137,.85);font-weight:600}
+  #tsd5 .d5-foot{text-align:center;margin:30px auto 0;max-width:680px}
+  #tsd5 .d5-foot .fm{font-size:15px;color:rgba(255,255,255,.85);margin:0 0 6px}
+  #tsd5 .d5-foot .fm .g{color:#c7b489}
+  #tsd5 .d5-foot .fs{font-size:11.5px;color:rgba(255,255,255,.45);margin:0}
+  @media(max-width:820px){
+    #tsd5 .d5-grid{grid-template-columns:1fr}
+  }
+  `;
+
+  function injectCSS(){ if(document.getElementById('tsd5-css'))return; var s=document.createElement('style'); s.id='tsd5-css'; s.textContent=CSS; document.head.appendChild(s); }
+
+  function build(){
+    var root=document.createElement('div'); root.id='tsd5';
+    var itemsHTML='';
+    RECIPE.items.forEach(function(it,i){
+      itemsHTML+='<div class="d5-item" style="transition-delay:'+(120+i*90)+'ms">'+
+        '<img class="d5-thumb" src="'+IMGBASE+it.img+'" alt="'+it.n+'" loading="lazy">'+
+        '<span class="nm">'+it.n+'<small>aus DB Zutaten · '+nf(it.p,2)+' €/kg</small></span>'+
+        '<span class="qty"><div class="q1">'+it.g+' g</div><div class="q2"><b class="pp" data-g="'+it.g+'">–</b> g/Portion</div></span>'+
+      '</div>';
+    });
+    var allerHTML=ALLERGENE.map(function(a){return '<span class="d5-chip">'+a+'</span>';}).join('');
+    root.innerHTML=
+      '<div class="d5-head">'+
+        '<span class="d5-eyebrow">DB V · Rezeptur-Rechner</span>'+
+        '<h2 class="d5-title">Die Rezeptur rechnet sich <span class="g">selbst</span>.</h2>'+
+        '<p class="d5-sub">Ein Rezept zieht seine Zutaten als Bausteine. Menge und Preis summieren sich automatisch – die Portionsgröße teilt alles sauber auf.</p>'+
+      '</div>'+
+      '<div class="d5-grid">'+
+        '<div class="d5-card">'+
+          '<div class="d5-caphead"><span class="d5-cap">Bausteine · Zutaten</span><span class="d5-recipe">'+RECIPE.name+'</span></div>'+
+          itemsHTML+
+          '<div class="d5-sums">'+
+            '<div class="d5-sum"><p class="sl">Gesamtmenge</p><div class="sv" data-count="menge">0 g</div></div>'+
+            '<div class="d5-sum"><p class="sl">Rohstoffkosten</p><div class="sv" data-count="kosten">0,00 €</div></div>'+
+          '</div>'+
+        '</div>'+
+        '<div class="d5-card d5-right">'+
+          '<div class="d5-caphead"><span class="d5-cap">Steuerung</span><span class="d5-recipe">Pro Portion</span></div>'+
+          '<div class="d5-ctrl">'+
+            '<div class="cl"><span class="lab">Portionsgröße</span><span class="val"><span class="pval">'+DEFAULT_PORTION+'</span><small> g</small></span></div>'+
+            '<input type="range" class="d5-range" min="'+MIN_P+'" max="'+MAX_P+'" step="1" value="'+DEFAULT_PORTION+'">'+
+            '<div class="d5-scale"><span>'+MIN_P+' g</span><span>'+MAX_P+' g</span></div>'+
+          '</div>'+
+          '<div class="d5-out">'+
+            '<div class="d5-tile"><p class="tl">Anzahl Portionen</p><div class="tv" data-out="portionen">–</div><div class="tu">Portionen</div></div>'+
+            '<div class="d5-tile hot"><p class="tl">Preis / Portion</p><div class="tv" data-out="preis">–</div><div class="tu">pro Portion</div></div>'+
+          '</div>'+
+          '<p class="d5-seclbl">Nährwerte / Portion</p>'+
+          '<div class="d5-nut">'+
+            '<div class="d5-ncell"><div class="nv" data-nut="kcal">–</div><div class="nu">kcal</div></div>'+
+            '<div class="d5-ncell"><div class="nv" data-nut="fett">–</div><div class="nu">Fett</div></div>'+
+            '<div class="d5-ncell"><div class="nv" data-nut="kh">–</div><div class="nu">Kohlenh.</div></div>'+
+            '<div class="d5-ncell"><div class="nv" data-nut="protein">–</div><div class="nu">Protein</div></div>'+
+          '</div>'+
+          '<div class="d5-aller"><span class="al-l">Allergene</span>'+allerHTML+'</div>'+
+          '<p class="d5-formula"><b>Gesamtmenge ÷ Portionsgröße</b> = Portionen &nbsp;·&nbsp; <b>Kosten &amp; Nährwerte</b> laufen pro Portion mit.</p>'+
+        '</div>'+
+      '</div>'+
+      '<div class="d5-foot">'+
+        '<p class="fm">→ Änderst du eine Zutat, verschiebt sich <span class="g">alles</span> mit – Menge, Kosten, Nährwerte und jede Portion.</p>'+
+        '<p class="fs">Zahlen = Beispielwerte. Nährwerte &amp; Allergene fließen im echten System automatisch aus den Zutaten mit.</p>'+
+      '</div>';
+    return root;
+  }
+
+  function recompute(root, portion, animate){
+    var tG=totalG(), tC=totalCost();
+    var portionen=tG/portion;               // Anzahl Portionen
+    var preisPortion=tC/portionen;          // Rohstoffkosten pro Portion
+    var f=portion/100;                      // Nährwert-Skalierung (je 100 g)
+    var pv=root.querySelector('.pval'); if(pv)pv.textContent=portion;
+    root.querySelectorAll('.pp').forEach(function(el){
+      var g=parseFloat(el.getAttribute('data-g'))||0;
+      el.textContent=nf(g/portionen,1);
+    });
+    var oP=root.querySelector('[data-out="portionen"]'), oE=root.querySelector('[data-out="preis"]');
+    /* Nährwerte skalieren linear mit der Portionsgröße */
+    var setN=function(k,val){ var el=root.querySelector('[data-nut="'+k+'"]'); if(el)el.textContent=val; };
+    setN('kcal', Math.round(NUT.kcal*f));
+    setN('fett', nf(NUT.fett*f,1)+' g');
+    setN('kh',   nf(NUT.kh*f,1)+' g');
+    setN('protein', nf(NUT.protein*f,1)+' g');
+    if(animate){
+      countTo(oP, portionen, function(v){return nf(v,1);});
+      countTo(oE, preisPortion, function(v){return nf(v,2)+' €';});
+    }else{
+      oP.textContent=nf(portionen,1);
+      oE.textContent=nf(preisPortion,2)+' €';
+    }
+  }
+
+  function countTo(el,target,fmt){
+    var dur=750,t0=null,done=false;
+    function finish(){ if(done)return; done=true; el.textContent=fmt(target); }
+    function step(now){ if(done)return; if(t0===null)t0=now; var p=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-p,3); el.textContent=fmt(target*e); if(p<1)requestAnimationFrame(step); else finish(); }
+    requestAnimationFrame(step);
+    /* Garantie: Endzustand nie von rAF abhängig (Tab-Throttling friert rAF sonst mitten im Count-up ein) */
+    setTimeout(finish, dur+140);
+  }
+
+  var REDUCE=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function play(root){
+    if(root.__played)return; root.__played=true;
+    root.classList.add('in');
+    var tG=totalG(), tC=totalCost();
+    var mEl=root.querySelector('[data-count="menge"]'), kEl=root.querySelector('[data-count="kosten"]');
+    if(REDUCE){
+      mEl.textContent=Math.round(tG)+' g';
+      kEl.textContent=nf(tC,2)+' €';
+      recompute(root, DEFAULT_PORTION, false);
+      return;
+    }
+    setTimeout(function(){ countTo(mEl,tG,function(v){return Math.round(v)+' g';}); },700);
+    setTimeout(function(){ countTo(kEl,tC,function(v){return nf(v,2)+' €';}); },900);
+    setTimeout(function(){ recompute(root, DEFAULT_PORTION, true); },1150);
+  }
+
+  function findAnchor(){
+    /* Textphrase zuerst (strukturtragendes Heading), Block-ID nur Fallback */
+    var n=document.querySelectorAll('h2.notion-heading');
+    for(var i=0;i<n.length;i++){ if((n[i].textContent||'').trim().indexOf('Der Aufbau')===0) return n[i].closest('[id^="block-"]')||n[i]; }
+    return document.getElementById('block-394b9546553480c785e7d4785453354f');
+  }
+  function inView(el){ var r=el.getBoundingClientRect(); return r.top<(window.innerHeight*0.75)&&r.bottom>(window.innerHeight*0.25); }
+
+  function mount(){
+    if(!/\/rezepturen\/?$/.test(location.pathname)){ var e=document.getElementById('tsd5'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    if(document.getElementById('tsd5')) return;
+    var a=findAnchor(); if(!a) return;
+    injectCSS();
+    var root=build();
+    a.parentNode.insertBefore(root, a);
+    var range=root.querySelector('.d5-range');
+    range.addEventListener('input', function(){ recompute(root, parseInt(range.value,10)||DEFAULT_PORTION, false); });
+    recompute(root, DEFAULT_PORTION, false);
+    root.querySelector('[data-out="portionen"]').textContent='–';
+    root.querySelector('[data-out="preis"]').textContent='–';
+    var io=new IntersectionObserver(function(ev){ if(ev[0].isIntersecting){ play(root); io.disconnect(); } },{threshold:.3});
+    io.observe(root);
+    if(inView(root)) play(root);
+    var poll=setInterval(function(){ if(!document.body.contains(root)){ clearInterval(poll); return; } if(inView(root)){ play(root); clearInterval(poll); } },250);
+    setTimeout(function(){ clearInterval(poll); },20000);
+  }
+  mount();
+  document.addEventListener("DOMContentLoaded", mount);
+  new MutationObserver(mount).observe(document.documentElement,{childList:true,subtree:true});
+})();
