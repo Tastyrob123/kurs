@@ -5883,17 +5883,17 @@
   #tsd5 .d5-title .basil{color:#7c7200}
   #tsd5 .d5-title .pesto{color:#fff}
   #tsd5 .d5-sub{max-width:660px;margin:20px auto 0;font-size:15.5px;line-height:1.62;color:#fff}
-  #tsd5 .d5-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:start}
+  #tsd5 .d5-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:stretch}
   /* High-End Karten: sanfter Verlauf, Gold-Hairline, Tiefe + Glas-Kante oben */
   #tsd5 .d5-card{position:relative;border-radius:22px;padding:28px 26px 24px 20px;background:linear-gradient(180deg,rgba(255,255,255,.052),rgba(255,255,255,.022));border:1px solid rgba(199,180,137,.24);box-shadow:0 30px 80px -28px rgba(0,0,0,.72),inset 0 1px 0 rgba(255,255,255,.07);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
   /* Rechte Karte Überschrift — zentriert, weiss */
-  #tsd5 .d5-rhead{text-align:center;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:27px;font-weight:600;color:#fff;letter-spacing:-.01em;margin:6px 0 28px}
+  #tsd5 .d5-rhead{text-align:center;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:27px;font-weight:600;color:#fff;letter-spacing:-.01em;margin:6px 0 16px}
   /* Bausteine-Zeilen mit freigestelltem Produktbild (viel größer) */
-  #tsd5 .d5-item{display:grid;grid-template-columns:128px 1fr auto;align-items:center;gap:18px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.055);opacity:0;transform:translateX(-14px);transition:opacity .5s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
+  #tsd5 .d5-item{display:grid;grid-template-columns:108px 1fr auto;align-items:center;gap:18px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.055);opacity:0;transform:translateX(-14px);transition:opacity .5s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
   #tsd5 .d5-item:first-child{padding-top:2px}
   #tsd5 .d5-item:last-child{border-bottom:0}
   #tsd5.in .d5-item{opacity:1;transform:none}
-  #tsd5 .d5-thumb{width:128px;height:128px;object-fit:contain;object-position:center;filter:drop-shadow(0 8px 18px rgba(0,0,0,.6));flex-shrink:0}
+  #tsd5 .d5-thumb{width:108px;height:108px;object-fit:contain;object-position:center;filter:drop-shadow(0 8px 18px rgba(0,0,0,.6));flex-shrink:0}
   #tsd5 .d5-item .nm{font-size:22px;font-weight:600;letter-spacing:-.01em;color:#fff}
   #tsd5 .d5-item .nm small{display:block;font-size:13.5px;color:rgba(255,255,255,.46);font-weight:400;letter-spacing:.01em;margin-top:4px}
   #tsd5 .d5-item .qty{text-align:right;white-space:nowrap}
@@ -5906,7 +5906,7 @@
   #tsd5 .d5-sum .sl{font-size:11px;letter-spacing:.7px;text-transform:uppercase;color:rgba(255,255,255,.55);margin:0 0 8px}
   #tsd5 .d5-sum .sv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:30px;font-weight:700;color:#c7b489;letter-spacing:-.01em;line-height:1}
   /* Rechte Karte — Pro Portion (füllt die volle Kartenhöhe, kein leerer Boden) */
-  #tsd5 .d5-right{background:linear-gradient(180deg,rgba(199,180,137,.085),rgba(199,180,137,.03));border-color:rgba(199,180,137,.38);display:flex;flex-direction:column;justify-content:flex-start}
+  #tsd5 .d5-right{background:linear-gradient(180deg,rgba(199,180,137,.085),rgba(199,180,137,.03));border-color:rgba(199,180,137,.38);display:flex;flex-direction:column;justify-content:space-between}
   #tsd5 .d5-ctrl{margin:2px 0 22px}
   #tsd5 .d5-ctrl .cl{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 13px}
   #tsd5 .d5-ctrl .cl .lab{font-size:13px;color:rgba(255,255,255,.7)}
