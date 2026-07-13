@@ -5866,6 +5866,9 @@
   function totalG(){ return RECIPE.items.reduce(function(s,i){return s+i.g;},0); }
   function totalCost(){ return RECIPE.items.reduce(function(s,i){return s+i.g/1000*i.p;},0); }
   function nf(v,dec){ return (v).toFixed(dec).replace('.',','); }
+  function nfP(v){ return (Math.abs(v-Math.round(v))<1e-6)?String(Math.round(v)):nf(v,1); } /* Portionen: ganze Zahl ohne ,0 */
+  function MINPORT(){ return Math.max(2, Math.ceil(totalG()/MAX_P)); } /* min. Portionen, damit Portionsgröße ≤ MAX_P */
+  function MAXPORT(){ return Math.floor(totalG()/MIN_P); }             /* max. Portionen, damit Portionsgröße ≥ MIN_P */
 
   var CSS=`
   #tsd5{width:min(1180px,94vw);margin:26px auto 62px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;opacity:0;transform:translateY(20px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
@@ -5917,23 +5920,30 @@
   #tsd5 .d5-range::-moz-range-thumb{width:24px;height:24px;border:1px solid rgba(255,255,255,.4);border-radius:50%;background:radial-gradient(circle at 34% 30%,#fbf5e6,#c7b489 68%);cursor:pointer;box-shadow:0 0 0 6px rgba(199,180,137,.13),0 4px 12px rgba(0,0,0,.6)}
   #tsd5 .d5-scale{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.32);margin-top:10px}
   #tsd5 .d5-out{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0}
-  #tsd5 .d5-tile{border-radius:16px;padding:17px 14px;background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);text-align:center}
-  #tsd5 .d5-tile.hot{background:linear-gradient(180deg,rgba(199,180,137,.16),rgba(199,180,137,.05));border-color:rgba(199,180,137,.5)}
+  #tsd5 .d5-tile{border-radius:16px;padding:17px 14px;background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);text-align:center;display:flex;flex-direction:column;justify-content:center}
+  #tsd5 .d5-tile.hot{background:linear-gradient(180deg,rgba(199,180,137,.16),rgba(199,180,137,.05));border-color:rgba(199,180,137,.5);padding-top:22px;padding-bottom:22px}
   #tsd5 .d5-tile .tl{font-size:10px;letter-spacing:.7px;text-transform:uppercase;color:rgba(255,255,255,.5);margin:0 0 8px}
   #tsd5 .d5-tile .tv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:clamp(1.6rem,3.4vw,2.15rem);font-weight:700;letter-spacing:-.02em;color:#fff;line-height:1}
-  #tsd5 .d5-tile.hot .tv{color:#c7b489}
+  #tsd5 .d5-tile.hot .tv{color:#c7b489;font-size:clamp(2.4rem,5vw,3.05rem)}
   #tsd5 .d5-tile .tu{font-size:12px;color:rgba(255,255,255,.45);margin-top:6px}
+  /* Anzahl Portionen — mit +/- Steppern */
+  #tsd5 .d5-adjrow{display:flex;align-items:center;justify-content:center;gap:16px;margin:2px 0}
+  #tsd5 .d5-adjrow .tv{min-width:2.2ch}
+  #tsd5 .d5-step{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid rgba(199,180,137,.42);background:linear-gradient(180deg,rgba(199,180,137,.18),rgba(199,180,137,.06));color:#e9dcb8;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:22px;font-weight:600;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 2px 8px rgba(0,0,0,.4);transition:transform .14s cubic-bezier(.16,1,.3,1),background .2s ease,box-shadow .2s ease}
+  #tsd5 .d5-step:hover{background:linear-gradient(180deg,rgba(199,180,137,.28),rgba(199,180,137,.1));box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 12px rgba(0,0,0,.5);transform:translateY(-1px)}
+  #tsd5 .d5-step:active{transform:scale(.94)}
+  #tsd5 .d5-step:disabled{opacity:.28;cursor:not-allowed;transform:none;box-shadow:none}
   /* Nährwerte / Portion — deutlich mehr Abstand zu den Feldern darunter */
-  #tsd5 .d5-seclbl{font-size:11px;font-weight:600;letter-spacing:1.1px;text-transform:uppercase;color:#fff;text-align:center;margin:30px 0 20px}
+  #tsd5 .d5-seclbl{font-size:12.5px;font-weight:600;letter-spacing:1.1px;text-transform:uppercase;color:#fff;text-align:center;margin:30px 0 20px}
   #tsd5 .d5-nut{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0}
-  #tsd5 .d5-ncell{border-radius:13px;padding:13px 6px;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.05);text-align:center}
-  #tsd5 .d5-ncell .nv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:18px;font-weight:700;color:#fff;line-height:1}
-  #tsd5 .d5-ncell .nu{font-size:9.5px;color:rgba(255,255,255,.42);margin-top:6px;letter-spacing:.3px}
+  #tsd5 .d5-ncell{border-radius:13px;padding:16px 6px;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.05);text-align:center}
+  #tsd5 .d5-ncell .nv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:23px;font-weight:700;color:#fff;line-height:1}
+  #tsd5 .d5-ncell .nu{font-size:11px;color:rgba(255,255,255,.45);margin-top:7px;letter-spacing:.3px}
   /* Allergene — Label zentriert weiss, deutlich mehr Abstand zu den Chips */
   #tsd5 .d5-aller{text-align:center;margin-top:28px}
-  #tsd5 .d5-aller .al-l{display:block;font-size:11px;font-weight:600;letter-spacing:1.1px;text-transform:uppercase;color:#fff;margin:0 0 16px}
-  #tsd5 .d5-allchips{display:flex;justify-content:center;flex-wrap:wrap;gap:10px}
-  #tsd5 .d5-chip{font-size:13px;color:#efe3c4;background:linear-gradient(180deg,rgba(199,180,137,.16),rgba(199,180,137,.07));border:1px solid rgba(199,180,137,.32);border-radius:999px;padding:6px 15px;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+  #tsd5 .d5-aller .al-l{display:block;font-size:12.5px;font-weight:600;letter-spacing:1.1px;text-transform:uppercase;color:#fff;margin:0 0 16px}
+  #tsd5 .d5-allchips{display:flex;justify-content:center;flex-wrap:wrap;gap:11px}
+  #tsd5 .d5-chip{font-size:15px;color:#efe3c4;background:linear-gradient(180deg,rgba(199,180,137,.16),rgba(199,180,137,.07));border:1px solid rgba(199,180,137,.32);border-radius:999px;padding:8px 18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
   /* Formel — freistehend, weiss, größer (Gold-Betonungen bleiben) */
   #tsd5 .d5-formula{font-size:14.5px;color:#fff;text-align:center;margin:26px 0 0;padding:20px 4px 0;border-top:1px solid rgba(255,255,255,.09);line-height:1.6}
   #tsd5 .d5-formula b{color:#c7b489;font-weight:600}
@@ -5988,7 +5998,7 @@
             '<div class="d5-scale"><span>'+MIN_P+' g</span><span>'+MAX_P+' g</span></div>'+
           '</div>'+
           '<div class="d5-out">'+
-            '<div class="d5-tile"><p class="tl">Anzahl Portionen</p><div class="tv" data-out="portionen">–</div><div class="tu">Portionen</div></div>'+
+            '<div class="d5-tile d5-adj"><p class="tl">Anzahl Portionen</p><div class="d5-adjrow"><button type="button" class="d5-step" data-step="-1" aria-label="Weniger Portionen">&#8722;</button><div class="tv" data-out="portionen">–</div><button type="button" class="d5-step" data-step="1" aria-label="Mehr Portionen">+</button></div><div class="tu">Portionen</div></div>'+
             '<div class="d5-tile hot"><p class="tl">Preis / Portion</p><div class="tv" data-out="preis">–</div><div class="tu">pro Portion</div></div>'+
           '</div>'+
           '<p class="d5-seclbl">Nährwerte / Portion</p>'+
@@ -6014,8 +6024,12 @@
     var portionen=tG/portion;               // Anzahl Portionen
     var preisPortion=tC/portionen;          // Rohstoffkosten pro Portion
     var f=portion/100;                      // Nährwert-Skalierung (je 100 g)
-    var pv=root.querySelector('.pval'); if(pv)pv.textContent=portion;
-    var rng=root.querySelector('.d5-range'); if(rng){ var pct=Math.max(0,Math.min(100,((portion-MIN_P)/(MAX_P-MIN_P))*100)); rng.style.setProperty('--d5fill', pct+'%'); }
+    var pv=root.querySelector('.pval'); if(pv)pv.textContent=nfP(portion);
+    var rng=root.querySelector('.d5-range'); if(rng){ var pct=Math.max(0,Math.min(100,((portion-MIN_P)/(MAX_P-MIN_P))*100)); rng.style.setProperty('--d5fill', pct+'%'); rng.value=Math.round(portion); }
+    root.__portion=portion;
+    var mn=root.querySelector('.d5-step[data-step="-1"]'), pl=root.querySelector('.d5-step[data-step="1"]');
+    if(mn)mn.disabled=(portionen<=MINPORT()+1e-6);
+    if(pl)pl.disabled=(portionen>=MAXPORT()-1e-6);
     root.querySelectorAll('.pp').forEach(function(el){
       var g=parseFloat(el.getAttribute('data-g'))||0;
       el.textContent=nf(g/portionen,1);
@@ -6027,10 +6041,10 @@
     setN('kh',   nf(NUT.kh*f,1)+' g');
     setN('protein', nf(NUT.protein*f,1)+' g');
     if(animate){
-      countTo(oP, portionen, function(v){return nf(v,1);});
+      countTo(oP, portionen, function(v){return nfP(v);});
       countTo(oE, preisPortion, function(v){return nf(v,2)+' €';});
     }else{
-      oP.textContent=nf(portionen,1);
+      oP.textContent=nfP(portionen);
       oE.textContent=nf(preisPortion,2)+' €';
     }
   }
@@ -6079,6 +6093,16 @@
     a.parentNode.insertBefore(root, a.nextSibling);  /* DIREKT UNTER den Konzept-Absatz */
     var range=root.querySelector('.d5-range');
     range.addEventListener('input', function(){ recompute(root, parseInt(range.value,10)||DEFAULT_PORTION, false); });
+    /* +/- an "Anzahl Portionen": invers gekoppelt — Portionsgröße = Gesamtmenge ÷ Portionen */
+    root.querySelectorAll('.d5-step').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var dir=parseInt(btn.getAttribute('data-step'),10);
+        var tG=totalG(), curP=tG/(root.__portion||DEFAULT_PORTION);
+        var newP=(dir>0)?Math.floor(curP+1e-6)+1:Math.ceil(curP-1e-6)-1;
+        newP=Math.max(MINPORT(),Math.min(MAXPORT(),newP));
+        recompute(root, tG/newP, true);
+      });
+    });
     recompute(root, DEFAULT_PORTION, false);
     root.querySelector('[data-out="portionen"]').textContent='–';
     root.querySelector('[data-out="preis"]').textContent='–';
