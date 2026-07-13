@@ -2485,54 +2485,50 @@
   #tsgk{width:100%;max-width:100%;margin:34px auto 30px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
   #tsgk *{box-sizing:border-box}
   #tsgk .tsgk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-  #tsgk .tsgk-card{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;border-radius:16px;padding:26px 18px 22px;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0));border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85);opacity:0;transform:translateY(18px) scale(.985);will-change:transform,opacity;transition:border-color .4s ease,box-shadow .5s ease}
+  #tsgk .tsgk-card{position:relative;display:block;aspect-ratio:4/5;border-radius:16px;overflow:hidden;background:#04050a;border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85);opacity:0;transform:translateY(18px) scale(.985);will-change:transform,opacity;transition:border-color .4s ease,box-shadow .5s ease}
   /* Reveal = Keyframe-Animation (NICHT transition): auf dieser busy Super.so-Seite
      bleiben class-getriggerte Transitions haengen. .on setzt zusaetzlich den End-
      zustand direkt, damit der Inhalt nie von der Animation abhaengt. */
   #tsgk .tsgk-card.on{opacity:1;transform:none;animation:tsgk-rise .7s cubic-bezier(.22,1,.36,1) both;animation-delay:var(--d,0s)}
   #tsgk .tsgk-card.on.done{animation:none}
   #tsgk .tsgk-card.on.done:hover{border-color:rgba(var(--g),.5);transform:translateY(-4px);animation:tsgk-hb 2.6s cubic-bezier(.4,0,.3,1) infinite}
-  #tsgk .tsgk-ic{position:relative;width:52px;height:52px;display:flex;align-items:center;justify-content:center;border-radius:50%;margin-bottom:14px;background:radial-gradient(circle at 50% 38%,rgba(var(--g),.16),rgba(var(--g),.04) 70%,transparent);border:1px solid rgba(var(--g),.32);box-shadow:inset 0 0 12px rgba(var(--g),.10)}
-  #tsgk .tsgk-ic svg{width:26px;height:26px;display:block}
-  #tsgk .tsgk-ic path,#tsgk .tsgk-ic circle,#tsgk .tsgk-ic line,#tsgk .tsgk-ic polyline,#tsgk .tsgk-ic rect{stroke:#d8c9ab;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}
-  #tsgk .tsgk-card.on .tsgk-ic path,#tsgk .tsgk-card.on .tsgk-ic circle,#tsgk .tsgk-card.on .tsgk-ic line,#tsgk .tsgk-card.on .tsgk-ic polyline,#tsgk .tsgk-card.on .tsgk-ic rect{stroke-dashoffset:0;animation:tsgk-draw .9s cubic-bezier(.65,0,.35,1) both;animation-delay:calc(var(--d,0s) + .16s)}
-  #tsgk .tsgk-h{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1rem;font-weight:600;letter-spacing:-.006em;line-height:1.2;color:#fff;margin:0}
-  #tsgk .tsgk-s{display:block;margin-top:5px;font-size:.72rem;letter-spacing:.04em;color:rgba(255,255,255,.5)}
+  #tsgk .tsgk-bg{position:absolute;inset:0;z-index:0;border-radius:inherit;overflow:hidden}
+  #tsgk .tsgk-bg img{width:100%;height:100%;object-fit:cover;object-position:center 70%;display:block}
+  #tsgk .tsgk-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,5,10,.92) 0%,rgba(4,5,10,.62) 30%,rgba(4,5,10,.14) 46%,rgba(4,5,10,0) 60%),radial-gradient(120% 80% at 50% 100%,rgba(4,5,10,.5),rgba(4,5,10,0) 60%)}
+  #tsgk .tsgk-in{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:22px 16px 0}
+  #tsgk .tsgk-logo{display:block;height:26px;width:auto;margin:0 auto 12px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.7))}
+  #tsgk .tsgk-k{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-weight:600;font-size:.66rem;letter-spacing:.02em;color:#c7b489;margin-bottom:5px;text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 8px rgba(0,0,0,.8)}
+  #tsgk .tsgk-h{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1.04rem;font-weight:600;letter-spacing:-.008em;line-height:1.16;color:#fff;margin:0;text-shadow:0 0 4px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,.95),0 3px 14px rgba(0,0,0,.85)}
   @keyframes tsgk-rise{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
-  @keyframes tsgk-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
   @keyframes tsgk-hb{0%{box-shadow:0 4px 14px rgba(var(--g),.10),0 0 14px rgba(var(--g),.10)}18%{box-shadow:0 6px 22px rgba(var(--g),.30),0 0 46px rgba(var(--g),.34)}32%{box-shadow:0 5px 18px rgba(var(--g),.16),0 0 26px rgba(var(--g),.18)}46%{box-shadow:0 6px 20px rgba(var(--g),.26),0 0 40px rgba(var(--g),.28)}72%,100%{box-shadow:0 4px 14px rgba(var(--g),.10),0 0 14px rgba(var(--g),.10)}}
   @media(max-width:860px){#tsgk .tsgk-grid{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:460px){#tsgk .tsgk-grid{grid-template-columns:repeat(2,1fr);gap:12px}#tsgk .tsgk-card{padding:22px 12px 18px}}
-  #tsgk .tsgk-card.on.done .tsgk-ic path,#tsgk .tsgk-card.on.done .tsgk-ic circle,#tsgk .tsgk-card.on.done .tsgk-ic line,#tsgk .tsgk-card.on.done .tsgk-ic polyline,#tsgk .tsgk-card.on.done .tsgk-ic rect{animation:none}
-  @media(prefers-reduced-motion:reduce){#tsgk .tsgk-card,#tsgk .tsgk-card.on{opacity:1;transform:none;animation:none}#tsgk .tsgk-card.on.done:hover{transform:none;animation:none;box-shadow:0 0 26px rgba(var(--g),.22)}#tsgk .tsgk-ic path,#tsgk .tsgk-ic circle,#tsgk .tsgk-ic line,#tsgk .tsgk-ic polyline,#tsgk .tsgk-ic rect,#tsgk .tsgk-card.on .tsgk-ic path,#tsgk .tsgk-card.on .tsgk-ic circle,#tsgk .tsgk-card.on .tsgk-ic line,#tsgk .tsgk-card.on .tsgk-ic polyline,#tsgk .tsgk-card.on .tsgk-ic rect{stroke-dashoffset:0;animation:none}}
+  @media(max-width:460px){#tsgk .tsgk-grid{grid-template-columns:repeat(2,1fr);gap:12px}#tsgk .tsgk-in{padding:18px 12px 0}}
+  @media(prefers-reduced-motion:reduce){#tsgk .tsgk-card,#tsgk .tsgk-card.on{opacity:1;transform:none;animation:none}#tsgk .tsgk-card.on.done:hover{transform:none;animation:none;box-shadow:0 0 26px rgba(var(--g),.22)}}
   `;
-  /* Icons: minimal 24er-Linien, pathLength=1 damit die Zeichen-Animation
-     unabhaengig von der echten Pfadlaenge sauber laeuft. */
-  var I={
-    reinigung:'<svg viewBox="0 0 24 24"><path pathLength="1" d="M12 3v3"/><path pathLength="1" d="M12 3l2 1.4-2 1.2-2-1.2z"/><path pathLength="1" d="M6.5 20.5l1-9a1.5 1.5 0 0 1 1.5-1.3h6a1.5 1.5 0 0 1 1.5 1.3l1 9a1.2 1.2 0 0 1-1.2 1.3H7.7a1.2 1.2 0 0 1-1.2-1.3z"/><path pathLength="1" d="M9.2 13.5h5.6"/></svg>',
-    versicherung:'<svg viewBox="0 0 24 24"><path pathLength="1" d="M12 3l7 2.4v5.2c0 4.4-3 7.6-7 9.4-4-1.8-7-5-7-9.4V5.4z"/><path pathLength="1" d="M9 12l2.2 2.2L15.2 10"/></svg>',
-    verwaltung:'<svg viewBox="0 0 24 24"><rect pathLength="1" x="5.5" y="3.5" width="13" height="17" rx="2"/><path pathLength="1" d="M9 8h6"/><path pathLength="1" d="M9 12h6"/><path pathLength="1" d="M9 16h4"/></svg>',
-    instandhaltung:'<svg viewBox="0 0 24 24"><path pathLength="1" d="M14.5 6.3a3.8 3.8 0 0 0-4.9 4.9l-5.2 5.2a1.7 1.7 0 0 0 2.4 2.4l5.2-5.2a3.8 3.8 0 0 0 4.9-4.9l-2.3 2.3-2-.4-.4-2z"/></svg>',
-    miete:'<svg viewBox="0 0 24 24"><path pathLength="1" d="M4.5 20.5V10l7.5-5 7.5 5v10.5"/><path pathLength="1" d="M4.5 20.5h15"/><rect pathLength="1" x="9.5" y="13" width="5" height="7.5"/></svg>',
-    abschreibung:'<svg viewBox="0 0 24 24"><path pathLength="1" d="M4 5v14h16"/><polyline pathLength="1" points="7,9 11,13 14,10 19,15.5"/><path pathLength="1" d="M19 12v3.5h-3.5"/></svg>',
-    marketing:'<svg viewBox="0 0 24 24"><path pathLength="1" d="M4 10v4h3l7 4V6l-7 4z"/><path pathLength="1" d="M17.5 9a4 4 0 0 1 0 6"/></svg>',
-    sonstige:'<svg viewBox="0 0 24 24"><circle pathLength="1" cx="6" cy="12" r="1.4"/><circle pathLength="1" cx="12" cy="12" r="1.4"/><circle pathLength="1" cx="18" cy="12" r="1.4"/></svg>'
-  };
+  /* BG-Bilder liegen im Repo (GitHub Pages), da kurs.js von github.io geladen
+     wird -> absolute Pages-URL noetig. Serie 3: Produkt mittig auf reinem Schwarz. */
+  var BASE='https://tastyrob123.github.io/kurs/img/gemeinkosten-grid/';
+  var LOGO='https://files.catbox.moe/au80tp.png';
   var CARDS=[
-    ['Reinigungskosten','Reinigungsfirma',I.reinigung],
-    ['Versicherungen','',I.versicherung],
-    ['Verwaltung','',I.verwaltung],
-    ['Instandhaltung','',I.instandhaltung],
-    ['Miete & Kaution','',I.miete],
-    ['Abschreibungen','',I.abschreibung],
-    ['Marketing','',I.marketing],
-    ['Sonstige Kosten','',I.sonstige]
+    ['Reinigungskosten','reinigungskosten'],
+    ['Versicherungen','versicherungen'],
+    ['Verwaltung','verwaltung'],
+    ['Instandhaltung','instandhaltung'],
+    ['Miete & Kaution','miete-kaution'],
+    ['Abschreibungen','abschreibungen'],
+    ['Marketing','marketing'],
+    ['Sonstige Kosten','sonstige-kosten']
   ];
   function injectCSS(){ if(document.getElementById('tsgk-css'))return; var s=document.createElement('style'); s.id='tsgk-css'; s.textContent=CSS; document.head.appendChild(s); }
   function build(){
     var root=document.createElement('div'); root.id='tsgk';
     root.innerHTML='<div class="tsgk-grid">'+CARDS.map(function(c){
-      return '<div class="tsgk-card" style="--g:'+GLOW+'"><span class="tsgk-ic" aria-hidden="true">'+c[2]+'</span><h3 class="tsgk-h">'+c[0]+(c[1]?'<span class="tsgk-s">'+c[1]+'</span>':'')+'</h3></div>';
+      return '<div class="tsgk-card" style="--g:'+GLOW+'">'
+        +'<span class="tsgk-bg" aria-hidden="true"><img src="'+BASE+c[1]+'.webp" alt="" loading="lazy"></span>'
+        +'<div class="tsgk-in"><img class="tsgk-logo" src="'+LOGO+'" alt="Tasty Studios" loading="lazy">'
+        +'<span class="tsgk-k">Kostenblock</span>'
+        +'<h3 class="tsgk-h">'+c[0]+'</h3></div>'
+        +'</div>';
     }).join('')+'</div>';
     return root;
   }
