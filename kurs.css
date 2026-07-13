@@ -1128,9 +1128,14 @@ details > summary {
 .page__rezepturen #tsd5{ margin-bottom:36px !important; }
 
 /* Intro-Satz über der Finance-Sektion ("Nun haben wir Zutaten und Rezepte…"): mittig,
-   volle Breite (nur text-align:center, KEINE max-width-Kappung). */
+   volle Breite (nur text-align:center, KEINE max-width-Kappung).
+   Hinweis: seit #tsrv (MacBook-Kachel) wird dieser Block geklont+versteckt — Regel bleibt
+   als Fallback, falls #tsrv nicht mountet. */
 .page__rezepturen #block-6a8b34d0e7ed4681ab0fb35925ce5a88,
 .page__rezepturen #block-6a8b34d0e7ed4681ab0fb35925ce5a88 .notion-text__content{ text-align:center !important; }
+
+/* Finance-Warenkorb: Untertext auf volle Breite (mittig bleibt via .tss-head), keine 600px-Kappung. */
+.page__rezepturen #tsshop--db5_finance_personal .tss-sub{ max-width:none !important; }
 
 /* ---- gerichte-getrnke-finaler-schritt — Hero "DB IX : Gerichte & Getränke" (Muster: rezepturen DB V) ---- */
 .page__gerichte-getrnke-finaler-schritt .ts-hero{

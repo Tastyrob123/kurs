@@ -6073,3 +6073,128 @@
   document.addEventListener("DOMContentLoaded", mount);
   new MutationObserver(mount).observe(document.documentElement,{childList:true,subtree:true});
 })();
+
+
+/* ---- */
+
+/* ============================================================
+   rezepturen — MacBook-Scroll-Kachel "Meine Rezepturen" (#tsrv)
+   Am "Nun haben wir Zutaten und Rezepte…"-Absatz: eigenes 2-Spalten-
+   Grid — links Roberts Notion-Text (geklont, Original versteckt),
+   rechts das anklickbare MacBook-Poster. Klick → großer PC (geteilter
+   leerer Frame oj1wa9, identisch zu #tsiv/#tsmb) → Screen scrollt die
+   lange Zutaten-Detailseite. Nur auf /rezepturen. Muster = #tsiv.
+   Bilder: Frame (geteilt) oj1wa9.png · Poster img/rezepturen-mac/rv-poster.png
+   (freigestellter MacBook "DB Meine Rezepturen") · Scroll
+   img/rezepturen-mac/rv-scroll.png (Parmesan-Zutat-Detailseite).
+   ============================================================ */
+(function(){
+  if(window.__tsrv) return; window.__tsrv=true;
+  var FRAME="https://files.catbox.moe/oj1wa9.png";
+  var COVER="https://tastyrob123.github.io/kurs/img/rezepturen-mac/rv-poster.png";
+  var SHOT="https://tastyrob123.github.io/kurs/img/rezepturen-mac/rv-scroll.png";
+  var ANCHOR_ID='block-6a8b34d0e7ed4681ab0fb35925ce5a88';
+  var ANCHOR_PHRASE='Nun haben wir Zutaten und Rezepte';
+  function on(){ return /\/rezepturen\/?$/.test(location.pathname); }
+  var CSS=[
+    '#tsrv-root{--tsrv-gold:#c7b489;--tsrv-ease:cubic-bezier(.16,1,.3,1);width:min(1000px,95vw);margin:8px auto 40px;display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4.5vw,60px);align-items:center;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;opacity:0;transform:translateY(20px);transition:opacity .8s var(--tsrv-ease),transform .9s var(--tsrv-ease);}',
+    '#tsrv-root.in{opacity:1;transform:none;}',
+    '#tsrv-root .tsrv-textslot{min-width:0;min-height:1px;}',
+    '#tsrv-root .tsrv-textslot p{font-size:1rem;line-height:1.68;color:rgba(255,255,255,.82);margin:0;}',
+    '.tsrv-hide{display:none !important;}',
+    '#tsrv-root .tsrv-unit{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;}',
+    '@media(max-width:900px){#tsrv-root{grid-template-columns:1fr;}#tsrv-root .tsrv-textslot{text-align:left;max-width:560px;margin:0 auto 6px;}}',
+    '#tsrv-root .tsrv-tile{position:relative;width:100%;max-width:520px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 18px 44px rgba(0,0,0,.5));transition:transform .5s var(--tsrv-ease),filter .5s var(--tsrv-ease);}',
+    '#tsrv-root .tsrv-tile:hover{transform:translateY(-4px) scale(1.02);animation:tsrvHeartbeat 2.6s var(--tsrv-ease) infinite;}',
+    '@keyframes tsrvHeartbeat{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(199,180,137,.14));}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(199,180,137,.30));}}',
+    '#tsrv-root .tsrv-tile:active{transform:scale(.99);transition-duration:.12s;}',
+    '#tsrv-root .tsrv-cover{width:100%;height:auto;aspect-ratio:1366/768;display:block;pointer-events:none;user-select:none;}',
+    '#tsrv-root .tsrv-caption{width:100%;text-align:center;font-size:15px;font-weight:600;letter-spacing:.005em;color:#fff;margin-top:6px;}',
+    '#tsrv-root .tsrv-caption .tsrv-accent{color:var(--tsrv-gold);}',
+    '#tsrv-root .tsrv-hint{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.32);animation:tsrvHint 2.5s ease-in-out infinite;}',
+    '@keyframes tsrvHint{0%,100%{opacity:.4}50%{opacity:.8}}',
+    '#tsrv-lb{position:fixed;inset:0;z-index:99999;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(5,6,11,.92);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);padding:32px;opacity:0;transition:opacity .24s cubic-bezier(.16,1,.3,1);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;}',
+    '#tsrv-lb.open{display:flex;opacity:1;}',
+    '#tsrv-lb .tsrv-inner{position:relative;width:100%;max-width:min(960px,calc(100vw - 64px));transform:scale(.92) translateY(24px);transition:transform .5s cubic-bezier(.16,1,.3,1);}',
+    '#tsrv-lb.open .tsrv-inner{transform:scale(1) translateY(0);}',
+    '#tsrv-lb.full{padding:0;}',
+    '#tsrv-lb.full .tsrv-inner{max-width:100vw;}',
+    '#tsrv-lb .tsrv-mockup{position:relative;width:100%;aspect-ratio:1366/768;filter:drop-shadow(0 30px 80px rgba(0,0,0,.6)) drop-shadow(0 10px 30px rgba(0,0,0,.5));}',
+    '#tsrv-lb .tsrv-frame{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;user-select:none;}',
+    '#tsrv-lb .tsrv-screen{position:absolute;top:3.65%;left:12.22%;width:73.06%;height:83.85%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;z-index:3;border-radius:3px;background:#191919;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.14) transparent;}',
+    '#tsrv-lb .tsrv-screen::-webkit-scrollbar{width:5px;}',
+    '#tsrv-lb .tsrv-screen::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:4px;}',
+    '#tsrv-lb .tsrv-screen img{width:100%;display:block;}',
+    '#tsrv-lb .tsrv-closehint{margin-top:22px;font-size:12px;letter-spacing:.1em;color:rgba(255,255,255,.32);text-align:center;}',
+    '#tsrv-lb.full .tsrv-closehint{display:none;}',
+    '#tsrv-lb .tsrv-btn{position:absolute;top:16px;z-index:10;width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.55);cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);transition:background .2s,color .2s;}',
+    '#tsrv-lb .tsrv-btn:hover{background:rgba(255,255,255,.16);color:#fff;}',
+    '#tsrv-lb .tsrv-expand{left:16px;}#tsrv-lb .tsrv-closex{right:16px;}',
+    '@media(prefers-reduced-motion:reduce){#tsrv-root,#tsrv-root *,#tsrv-lb *{animation:none!important;transition-duration:.01ms!important;}#tsrv-root{opacity:1;transform:none;}}'
+  ].join('');
+  function injectCSS(){ if(document.getElementById('tsrv-css'))return; var s=document.createElement('style'); s.id='tsrv-css'; s.textContent=CSS; document.head.appendChild(s); }
+  function shut(){ var lb=document.getElementById('tsrv-lb'); if(!lb)return; lb.classList.remove('open','full'); document.body.style.overflow=''; }
+  function ensureLb(){
+    var lb=document.getElementById('tsrv-lb'); if(lb) return lb;
+    lb=document.createElement('div'); lb.id='tsrv-lb';
+    lb.innerHTML='<button class="tsrv-btn tsrv-expand" title="Vollbild" aria-label="Vollbild"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="tsrv-btn tsrv-closex" title="Schließen" aria-label="Schließen"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 4.5l9 9M13.5 4.5l-9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><div class="tsrv-inner"><div class="tsrv-mockup"><img class="tsrv-frame" src="'+FRAME+'" alt="MacBook"><div class="tsrv-screen"><img src="'+SHOT+'" alt="Zutaten-Detailseite — Live Beispiel"></div></div></div><div class="tsrv-closehint">✕ Klicke daneben oder ESC zum Schließen</div>';
+    document.body.appendChild(lb);
+    var inner=lb.querySelector('.tsrv-inner');
+    lb.querySelector('.tsrv-closex').addEventListener('click',shut);
+    lb.querySelector('.tsrv-expand').addEventListener('click',function(e){ e.stopPropagation(); lb.classList.toggle('full'); });
+    inner.addEventListener('click',function(e){ e.stopPropagation(); });
+    lb.addEventListener('click',function(e){ if(e.target===lb) shut(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') shut(); });
+    return lb;
+  }
+  function openLb(){ var lb=ensureLb(); lb.classList.add('open'); lb.classList.remove('full'); document.body.style.overflow='hidden'; var sc=lb.querySelector('.tsrv-screen'); if(sc) sc.scrollTop=0; }
+  function buildTile(){
+    var root=document.createElement('div'); root.id='tsrv-root';
+    root.innerHTML='<div class="tsrv-textslot"></div><div class="tsrv-unit"><div class="tsrv-tile" role="button" tabindex="0" aria-label="Meine Rezepturen vergrößern"><img class="tsrv-cover" src="'+COVER+'" alt="Meine Rezepturen — DB-Ansicht" fetchpriority="high" decoding="async"></div><div class="tsrv-caption">Meine Rezepturen<span class="tsrv-accent"> · DB-Ansicht – Live Beispiel</span></div><div class="tsrv-hint">Klicke zum Vergrößern</div></div>';
+    var tile=root.querySelector('.tsrv-tile');
+    tile.addEventListener('click',openLb);
+    tile.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(); } });
+    return root;
+  }
+  function reveal(root){
+    if(root.__rv) return; root.__rv=true;
+    var io=new IntersectionObserver(function(en){ if(en[0].isIntersecting){ root.classList.add('in'); io.disconnect(); } },{threshold:.2});
+    io.observe(root);
+    if(root.getBoundingClientRect().top < (window.innerHeight||800)) root.classList.add('in');
+  }
+  function findAnchor(){
+    var el=document.getElementById(ANCHOR_ID);
+    if(el) return el;
+    var els=document.querySelectorAll('.page__rezepturen p.notion-text, .page__rezepturen .notion-text__content');
+    for(var i=0;i<els.length;i++){ if((els[i].textContent||'').trim().indexOf(ANCHOR_PHRASE)===0) return els[i]; }
+    return null;
+  }
+  function hideBlock(el){ if(!el)return; var w=(el.id&&/^block-/.test(el.id))?el:(el.closest('[id^="block-"]')||el); if(w) w.classList.add('tsrv-hide'); }
+  function fillText(anchor){
+    var root=document.getElementById('tsrv-root'); if(!root) return;
+    var slot=root.querySelector('.tsrv-textslot'); if(!slot) return;
+    if(!slot.__filled){
+      var p=document.createElement('p'); p.textContent=(anchor.textContent||'').replace(/\s+/g,' ').trim();
+      if(p.textContent){ slot.appendChild(p); slot.__filled=true; }
+    }
+    if(slot.__filled) hideBlock(anchor);
+  }
+  function mount(){
+    if(!on()){ ['tsrv-root','tsrv-lb'].forEach(function(id){ var e=document.getElementById(id); if(e&&e.parentNode)e.parentNode.removeChild(e); }); return; }
+    var anchor=findAnchor(); if(!anchor) return;
+    if(!document.getElementById('tsrv-root')){
+      injectCSS();
+      var root=buildTile();
+      anchor.parentNode.insertBefore(root, anchor);
+      reveal(root);
+    }
+    fillText(anchor);
+  }
+  function boot(){
+    var tries=0;
+    var iv=setInterval(function(){ tries++; mount(); if(tries>60) clearInterval(iv); },300);
+    var t=null;
+    new MutationObserver(function(){ if(t) return; t=setTimeout(function(){ t=null; mount(); },200); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
