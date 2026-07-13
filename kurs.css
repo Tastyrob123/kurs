@@ -91,18 +91,18 @@ section.notion-tabs {
 .page__zutatenliste .ts-hero__eyebrow{
   display:inline-flex; align-items:center; gap:9px;
   font:600 13px/1 var(--font-sans, -apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif);
-  letter-spacing:.16em; text-transform:uppercase; color:#9e947f;
+  letter-spacing:.16em; text-transform:uppercase; color:#c7b489;
   margin-bottom:16px; text-shadow:0 1px 3px rgba(0,0,0,1),0 3px 18px rgba(0,0,0,.95),0 6px 40px rgba(0,0,0,.8);
   animation:tsRise 700ms cubic-bezier(.16,1,.3,1) 120ms both;
 }
-.page__zutatenliste .ts-hero__eyebrow::before{ content:""; width:7px;height:7px;border-radius:50%; background:#9e947f; box-shadow:0 0 12px rgba(158,148,127,.7); }
+.page__zutatenliste .ts-hero__eyebrow::before{ content:""; width:7px;height:7px;border-radius:50%; background:#c7b489; box-shadow:0 0 12px rgba(199,180,137,.7); }
 .page__zutatenliste .ts-hero__title{
   margin:0; font-family:"Lineal TS", var(--font-sans, sans-serif); font-weight:600; color:#fff;
   line-height:1.02; letter-spacing:-.02em; font-size:clamp(2.6rem,8vw,5.4rem);
   text-shadow:0 0 4px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,1),0 3px 16px rgba(0,0,0,1),0 6px 40px rgba(0,0,0,.98),0 10px 80px rgba(0,0,0,.9),0 18px 140px rgba(0,0,0,.78);
   animation:tsRise 800ms cubic-bezier(.16,1,.3,1) 220ms both;
 }
-.page__zutatenliste .ts-hero__title .ts-gold{ color:#9e947f; }
+.page__zutatenliste .ts-hero__title .ts-gold{ color:#c7b489; }
 @keyframes tsRise{ from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
 .page__zutatenliste #block-395b954655348061b681e279d94e2f3f{ display:none !important; }
 .page__zutatenliste .notion-root .notion-image img[src*="logo_vektor"]{ display:none !important; }
@@ -130,12 +130,12 @@ section.notion-tabs {
 .page__zutatenliste #block-396b9546553480a5b5a4d06877f1543c{ margin-top:40px !important; }
 .page__zutatenliste #block-395b9546553480fcb4a0f065b83ee656{ margin-bottom:12px !important; }
 /* Section-Heading "Die fertige Übersicht." in Display-Schrift Lineal TS, etwas größer;
-   das Wort "Übersicht" wird per JS (__tsZdbUeber) in .ts-gold gewrappt → beige (#9e947f). */
+   das Wort "Übersicht" wird per JS (__tsZdbUeber) in .ts-gold gewrappt → beige (#c7b489). */
 .page__zutatenliste #block-39bb9546553480158645e1054324e824{
   font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif !important;
   font-weight:600 !important; letter-spacing:-.01em !important;
   font-size:clamp(1.6rem,2.4vw,1.9rem) !important; line-height:1.2 !important; }
-.page__zutatenliste #block-39bb9546553480158645e1054324e824 .ts-gold{ color:#9e947f !important; }
+.page__zutatenliste #block-39bb9546553480158645e1054324e824 .ts-gold{ color:#c7b489 !important; }
 .page__zutatenliste #block-396b954655348098ae30f9bff07fa068{ display:flex !important; align-items:flex-start !important; max-width:1320px !important; margin-left:auto !important; margin-right:auto !important; }
 .page__zutatenliste #block-396b954655348098ae30f9bff07fa068 > .notion-column{
   display:block !important; max-width:none !important; flex:0 0 auto !important; margin:0 !important;
@@ -211,7 +211,7 @@ canvas[style*="2147483647"]{ display:none !important; }
   margin-bottom:16px; text-shadow:0 1px 3px rgba(0,0,0,1),0 3px 18px rgba(0,0,0,.95),0 6px 40px rgba(0,0,0,.8);
   animation:tsRise 700ms cubic-bezier(.16,1,.3,1) 120ms both;
 }
-.page__index .ts-hero__eyebrow::before{ content:""; width:7px;height:7px;border-radius:50%; background:#9e947f; box-shadow:0 0 12px rgba(158,148,127,.7); }
+.page__index .ts-hero__eyebrow::before{ content:""; width:7px;height:7px;border-radius:50%; background:#c7b489; box-shadow:0 0 12px rgba(199,180,137,.7); }
 .page__index .ts-hero__eyebrow .ts-eb-w{ color:#fff; }
 .page__index .ts-hero__eyebrow .ts-eb-b{ color:#fff; }
 .page__index .ts-hero__title{
@@ -234,7 +234,7 @@ canvas[style*="2147483647"]{ display:none !important; }
   opacity:0; transform:translateY(14px); animation:tsHomeIntro .9s cubic-bezier(.16,1,.3,1) both;
 }
 .ts-home .ts-intro strong{ color:#fff; font-weight:600; }
-.ts-home .ts-intro--lead{ color:#9e947f !important; font-weight:600; letter-spacing:.02em; }
+.ts-home .ts-intro--lead{ color:#c7b489 !important; font-weight:600; letter-spacing:.02em; }
 @keyframes tsHomeIntro{ to{ opacity:1; transform:none; } }
 .ts-home .ts-cols{ margin-top:72px !important; }
 .ts-home .ts-col .notion-divider, .ts-home .ts-col hr{ display:none !important; }
@@ -302,11 +302,11 @@ canvas[style*="2147483647"]{ display:none !important; }
 .page__modul-2-das-notion-ai-backoffice-system .ts-hero__eyebrow{
   display:inline-flex; align-items:center; gap:9px;
   font:600 13px/1 var(--font-sans, -apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif);
-  letter-spacing:.16em; text-transform:uppercase; color:#9e947f;
+  letter-spacing:.16em; text-transform:uppercase; color:#c7b489;
   margin-bottom:16px; text-shadow:0 1px 3px rgba(0,0,0,1),0 3px 18px rgba(0,0,0,.95),0 6px 40px rgba(0,0,0,.8);
   animation:tsRise 700ms cubic-bezier(.16,1,.3,1) 120ms both;
 }
-.page__modul-2-das-notion-ai-backoffice-system .ts-hero__eyebrow::before{ content:""; width:7px;height:7px;border-radius:50%; background:#9e947f; box-shadow:0 0 12px rgba(158,148,127,.7); }
+.page__modul-2-das-notion-ai-backoffice-system .ts-hero__eyebrow::before{ content:""; width:7px;height:7px;border-radius:50%; background:#c7b489; box-shadow:0 0 12px rgba(199,180,137,.7); }
 .page__modul-2-das-notion-ai-backoffice-system .ts-hero__title{
   margin:0; font-family:"Lineal TS", var(--font-sans, sans-serif); font-weight:600; color:#fff;
   line-height:1.04; letter-spacing:-.02em; font-size:clamp(2.4rem,7vw,4.6rem);
@@ -352,7 +352,7 @@ canvas[style*="2147483647"]{ display:none !important; }
   font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif !important;
   font-weight:600 !important; letter-spacing:-.01em !important;
   font-size:clamp(1.7rem,3.4vw,2.2rem) !important; line-height:1.2 !important; }
-.page__modul-2-das-notion-ai-backoffice-system .ts-m2-gold{ color:#9e947f !important; }
+.page__modul-2-das-notion-ai-backoffice-system .ts-m2-gold{ color:#c7b489 !important; }
 /* Fließtext-Sektion unter den Section-Headings ("Die meisten Betriebe…", "Dein Backoffice gliedert…"
    + Nachsatz "Am Ende weißt du…") — alle drei Absätze zentriert und auf EINE Größe (1.2rem / 1.65)
    vereinheitlicht. Der Nachsatz war vorher bewusst kleiner (0.9rem, linksbündig); jetzt gleichgezogen. */
@@ -383,7 +383,7 @@ canvas[style*="2147483647"]{ display:none !important; }
 /* Full-Bleed Modul-2-Animationen (.tsmb) — ZWEI separate Instanzen: Teil 1 "Fundament" (Food/Drinks/Finance),
    Teil 2 "Ausbau" (Key Metrics/Operations/Vision), je 3 Bereiche + 7 DB-Cover-Kacheln. Jede läuft EINMAL beim
    Scrollen in den Viewport, danach statisch — KEINE Dauer-Animationen (kein Glow-Breathing, kein End-Puls) → flüssig. */
-.tsmb{--gold:#c7b489;--gold2:#d8c9ab;--gold3:#efe6d2;--taupe:#9e947f;--ink:#05060b;
+.tsmb{--gold:#c7b489;--gold2:#d8c9ab;--gold3:#efe6d2;--taupe:#c7b489;--ink:#05060b;
   position:relative;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
   margin-top:32px;margin-bottom:32px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;color:#fff;
   /* opaker Seiten-Grund (#05060b), oben/unten gefedert → nahtloser Übergang, keine Kante (auch keine Gold-Kante). */
@@ -478,18 +478,18 @@ canvas[style*="2147483647"]{ display:none !important; }
 .page__mehrwert-zielbild .ts-hero__eyebrow{
   display:inline-flex; align-items:center; gap:9px;
   font:600 13px/1 var(--font-sans, -apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif);
-  letter-spacing:.16em; text-transform:uppercase; color:#9e947f;
+  letter-spacing:.16em; text-transform:uppercase; color:#c7b489;
   margin-bottom:16px; text-shadow:0 1px 3px rgba(0,0,0,1),0 3px 18px rgba(0,0,0,.95),0 6px 40px rgba(0,0,0,.8);
   animation:tsRise 700ms cubic-bezier(.16,1,.3,1) 120ms both;
 }
-.page__mehrwert-zielbild .ts-hero__eyebrow::before{ content:""; width:7px;height:7px;border-radius:50%; background:#9e947f; box-shadow:0 0 12px rgba(158,148,127,.7); }
+.page__mehrwert-zielbild .ts-hero__eyebrow::before{ content:""; width:7px;height:7px;border-radius:50%; background:#c7b489; box-shadow:0 0 12px rgba(199,180,137,.7); }
 .page__mehrwert-zielbild .ts-hero__title{
   margin:0; font-family:"Lineal TS", var(--font-sans, sans-serif); font-weight:600; color:#fff;
   line-height:1.02; letter-spacing:-.02em; font-size:clamp(2.6rem,8vw,5.4rem);
   text-shadow:0 0 4px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,1),0 3px 16px rgba(0,0,0,1),0 6px 40px rgba(0,0,0,.98),0 10px 80px rgba(0,0,0,.9),0 18px 140px rgba(0,0,0,.78);
   animation:tsRise 800ms cubic-bezier(.16,1,.3,1) 220ms both;
 }
-.page__mehrwert-zielbild .ts-hero__title .ts-gold{ color:#9e947f; }
+.page__mehrwert-zielbild .ts-hero__title .ts-gold{ color:#c7b489; }
 @media (max-width:640px){
   .page__mehrwert-zielbild .ts-hero__text{ padding:0 16px 20px; }
   .page__mehrwert-zielbild .ts-hero__title{ font-size:clamp(2rem,12vw,3rem); }
@@ -501,7 +501,7 @@ canvas[style*="2147483647"]{ display:none !important; }
   display:inline-flex; align-items:center; justify-content:center;
   height:44px; padding:0 28px;
   border-radius:9999px;
-  background:#9e947f; color:#ffffff;
+  background:#c7b489; color:#05060b;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   font-size:15px; font-weight:600; letter-spacing:.01em;
   text-decoration:none; white-space:nowrap;
@@ -716,14 +716,14 @@ details > summary {
 /* Lektion 2.3 · Textfarben */
 #block-395b95465534809d9337dc22e327d729{
   text-align:center !important;
-  color:#9e947f !important;
+  color:#c7b489 !important;
   font-weight:600 !important;
   letter-spacing:.16em !important;
   text-transform:uppercase !important;
   font-size:.8rem !important;
 }
 .notion-root .notion-heading{ color:#ffffff !important; letter-spacing:-.015em; }
-.notion-root .ts-accent{ color:#9e947f; }
+.notion-root .ts-accent{ color:#c7b489; }
 
 /* ============================================================
    ABSTANDS-NORM — Überschrift ↔ Absatz (global, selbst-durchsetzend)
@@ -760,7 +760,7 @@ details > summary {
 #tsnav .center a{font-size:15px;font-weight:400;color:rgba(255,255,255,.55);text-decoration:none;transition:color .2s;white-space:nowrap}
 #tsnav .center a:hover{color:#fff}
 #tsnav .cta{display:inline-flex;align-items:center;height:44px;padding:0 24px;border-radius:9999px;
-  background:#9e947f;color:#fff;font-size:15px;font-weight:600;text-decoration:none;white-space:nowrap;transition:filter .2s}
+  background:#c7b489;color:#05060b;font-size:15px;font-weight:600;text-decoration:none;white-space:nowrap;transition:filter .2s}
 #tsnav .cta:hover{filter:brightness(1.08)}
 @media(max-width:900px){#tsnav .center{display:none}}
 
@@ -771,8 +771,8 @@ details > summary {
   font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif;}
 #ts-lesson-stats .ts-cell{width:100%;max-width:300px;padding:6px 30px;
   text-align:left;box-sizing:border-box;}
-#ts-lesson-stats .ts-cell + .ts-cell{border-left:1px solid rgba(158,148,127,.16);}
-#ts-lesson-stats .ts-num{color:#9e947f;font-size:64px;font-weight:500;
+#ts-lesson-stats .ts-cell + .ts-cell{border-left:1px solid rgba(199,180,137,.16);}
+#ts-lesson-stats .ts-num{color:#c7b489;font-size:64px;font-weight:500;
   line-height:1;letter-spacing:-1px;}
 #ts-lesson-stats .ts-title{margin-top:16px;color:#fff;font-size:23px;
   font-weight:700;line-height:1.15;letter-spacing:-.2px;}
@@ -832,18 +832,18 @@ details > summary {
 .page__inventurliste .ts-hero__eyebrow{
   display:inline-flex; align-items:center; gap:9px;
   font:600 13px/1 var(--font-sans, -apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif);
-  letter-spacing:.16em; text-transform:uppercase; color:#9e947f;
+  letter-spacing:.16em; text-transform:uppercase; color:#c7b489;
   margin-bottom:16px; text-shadow:0 1px 3px rgba(0,0,0,1),0 3px 18px rgba(0,0,0,.95),0 6px 40px rgba(0,0,0,.8);
   animation:tsRise 700ms cubic-bezier(.16,1,.3,1) 120ms both;
 }
-.page__inventurliste .ts-hero__eyebrow::before{ content:""; width:7px;height:7px;border-radius:50%; background:#9e947f; box-shadow:0 0 12px rgba(158,148,127,.7); }
+.page__inventurliste .ts-hero__eyebrow::before{ content:""; width:7px;height:7px;border-radius:50%; background:#c7b489; box-shadow:0 0 12px rgba(199,180,137,.7); }
 .page__inventurliste .ts-hero__title{
   margin:0; font-family:"Lineal TS", var(--font-sans, sans-serif); font-weight:600; color:#fff;
   line-height:1.02; letter-spacing:-.02em; font-size:clamp(2.6rem,8vw,5.4rem);
   text-shadow:0 0 4px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,1),0 3px 16px rgba(0,0,0,1),0 6px 40px rgba(0,0,0,.98),0 10px 80px rgba(0,0,0,.9),0 18px 140px rgba(0,0,0,.78);
   animation:tsRise 800ms cubic-bezier(.16,1,.3,1) 220ms both;
 }
-.page__inventurliste .ts-hero__title .ts-gold{ color:#9e947f; }
+.page__inventurliste .ts-hero__title .ts-gold{ color:#c7b489; }
 @media (max-width:640px){
   .page__inventurliste .ts-hero__text{ padding:0 16px 20px; }
   .page__inventurliste .ts-hero__title{ font-size:clamp(2rem,12vw,3rem); }
@@ -884,18 +884,18 @@ details > summary {
 .page__gemeinkosten-mitarbeiterlhne .ts-hero__eyebrow{
   display:inline-flex; align-items:center; gap:9px;
   font:600 13px/1 var(--font-sans, -apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif);
-  letter-spacing:.16em; text-transform:uppercase; color:#9e947f;
+  letter-spacing:.16em; text-transform:uppercase; color:#c7b489;
   margin-bottom:16px; text-shadow:0 1px 3px rgba(0,0,0,1),0 3px 18px rgba(0,0,0,.95),0 6px 40px rgba(0,0,0,.8);
   animation:tsRise 700ms cubic-bezier(.16,1,.3,1) 120ms both;
 }
-.page__gemeinkosten-mitarbeiterlhne .ts-hero__eyebrow::before{ content:""; width:7px;height:7px;border-radius:50%; background:#9e947f; box-shadow:0 0 12px rgba(158,148,127,.7); }
+.page__gemeinkosten-mitarbeiterlhne .ts-hero__eyebrow::before{ content:""; width:7px;height:7px;border-radius:50%; background:#c7b489; box-shadow:0 0 12px rgba(199,180,137,.7); }
 .page__gemeinkosten-mitarbeiterlhne .ts-hero__title{
   margin:0; font-family:"Lineal TS", var(--font-sans, sans-serif); font-weight:600; color:#fff;
   line-height:1.02; letter-spacing:-.02em; font-size:clamp(2.6rem,8vw,5.4rem);
   text-shadow:0 0 4px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,1),0 3px 16px rgba(0,0,0,1),0 6px 40px rgba(0,0,0,.98),0 10px 80px rgba(0,0,0,.9),0 18px 140px rgba(0,0,0,.78);
   animation:tsRise 800ms cubic-bezier(.16,1,.3,1) 220ms both;
 }
-.page__gemeinkosten-mitarbeiterlhne .ts-hero__title .ts-gold{ color:#9e947f; }
+.page__gemeinkosten-mitarbeiterlhne .ts-hero__title .ts-gold{ color:#c7b489; }
 @media (max-width:640px){
   .page__gemeinkosten-mitarbeiterlhne .ts-hero__text{ padding:0 16px 20px; }
   .page__gemeinkosten-mitarbeiterlhne .ts-hero__title{ font-size:clamp(2rem,12vw,3rem); }
@@ -960,18 +960,18 @@ details > summary {
 .page__lieferpartner-ansprechpartner-lieferantenvertrge .ts-hero__eyebrow{
   display:inline-flex; align-items:center; gap:9px;
   font:600 13px/1 var(--font-sans, -apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif);
-  letter-spacing:.16em; text-transform:uppercase; color:#9e947f;
+  letter-spacing:.16em; text-transform:uppercase; color:#c7b489;
   margin-bottom:16px; text-shadow:0 1px 3px rgba(0,0,0,1),0 3px 18px rgba(0,0,0,.95),0 6px 40px rgba(0,0,0,.8);
   animation:tsRise 700ms cubic-bezier(.16,1,.3,1) 120ms both;
 }
-.page__lieferpartner-ansprechpartner-lieferantenvertrge .ts-hero__eyebrow::before{ content:""; width:7px;height:7px;border-radius:50%; background:#9e947f; box-shadow:0 0 12px rgba(158,148,127,.7); }
+.page__lieferpartner-ansprechpartner-lieferantenvertrge .ts-hero__eyebrow::before{ content:""; width:7px;height:7px;border-radius:50%; background:#c7b489; box-shadow:0 0 12px rgba(199,180,137,.7); }
 .page__lieferpartner-ansprechpartner-lieferantenvertrge .ts-hero__title{
   margin:0; font-family:"Lineal TS", var(--font-sans, sans-serif); font-weight:600; color:#fff;
   line-height:1.02; letter-spacing:-.02em; font-size:clamp(2.6rem,8vw,5.4rem);
   text-shadow:0 0 4px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,1),0 3px 16px rgba(0,0,0,1),0 6px 40px rgba(0,0,0,.98),0 10px 80px rgba(0,0,0,.9),0 18px 140px rgba(0,0,0,.78);
   animation:tsRise 800ms cubic-bezier(.16,1,.3,1) 220ms both;
 }
-.page__lieferpartner-ansprechpartner-lieferantenvertrge .ts-hero__title .ts-gold{ color:#9e947f; }
+.page__lieferpartner-ansprechpartner-lieferantenvertrge .ts-hero__title .ts-gold{ color:#c7b489; }
 @media (max-width:640px){
   .page__lieferpartner-ansprechpartner-lieferantenvertrge .ts-hero__text{ padding:0 16px 20px; }
   .page__lieferpartner-ansprechpartner-lieferantenvertrge .ts-hero__title{ font-size:clamp(2rem,12vw,3rem); }
@@ -1065,18 +1065,18 @@ details > summary {
 .page__rezepturen .ts-hero__eyebrow{
   display:inline-flex; align-items:center; gap:9px;
   font:600 13px/1 var(--font-sans, -apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif);
-  letter-spacing:.16em; text-transform:uppercase; color:#9e947f;
+  letter-spacing:.16em; text-transform:uppercase; color:#c7b489;
   margin-bottom:16px; text-shadow:0 1px 3px rgba(0,0,0,1),0 3px 18px rgba(0,0,0,.95),0 6px 40px rgba(0,0,0,.8);
   animation:tsRise 700ms cubic-bezier(.16,1,.3,1) 120ms both;
 }
-.page__rezepturen .ts-hero__eyebrow::before{ content:""; width:7px;height:7px;border-radius:50%; background:#9e947f; box-shadow:0 0 12px rgba(158,148,127,.7); }
+.page__rezepturen .ts-hero__eyebrow::before{ content:""; width:7px;height:7px;border-radius:50%; background:#c7b489; box-shadow:0 0 12px rgba(199,180,137,.7); }
 .page__rezepturen .ts-hero__title{
   margin:0; font-family:"Lineal TS", var(--font-sans, sans-serif); font-weight:600; color:#fff;
   line-height:1.02; letter-spacing:-.02em; font-size:clamp(2.6rem,8vw,5.4rem);
   text-shadow:0 0 4px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,1),0 3px 16px rgba(0,0,0,1),0 6px 40px rgba(0,0,0,.98),0 10px 80px rgba(0,0,0,.9),0 18px 140px rgba(0,0,0,.78);
   animation:tsRise 800ms cubic-bezier(.16,1,.3,1) 220ms both;
 }
-.page__rezepturen .ts-hero__title .ts-gold{ color:#9e947f; }
+.page__rezepturen .ts-hero__title .ts-gold{ color:#c7b489; }
 @media (max-width:640px){
   .page__rezepturen .ts-hero__text{ padding:0 16px 20px; }
   .page__rezepturen .ts-hero__title{ font-size:clamp(2rem,12vw,3rem); }
@@ -1113,18 +1113,18 @@ details > summary {
 .page__gerichte-getrnke-finaler-schritt .ts-hero__eyebrow{
   display:inline-flex; align-items:center; gap:9px;
   font:600 13px/1 var(--font-sans, -apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif);
-  letter-spacing:.16em; text-transform:uppercase; color:#9e947f;
+  letter-spacing:.16em; text-transform:uppercase; color:#c7b489;
   margin-bottom:16px; text-shadow:0 1px 3px rgba(0,0,0,1),0 3px 18px rgba(0,0,0,.95),0 6px 40px rgba(0,0,0,.8);
   animation:tsRise 700ms cubic-bezier(.16,1,.3,1) 120ms both;
 }
-.page__gerichte-getrnke-finaler-schritt .ts-hero__eyebrow::before{ content:""; width:7px;height:7px;border-radius:50%; background:#9e947f; box-shadow:0 0 12px rgba(158,148,127,.7); }
+.page__gerichte-getrnke-finaler-schritt .ts-hero__eyebrow::before{ content:""; width:7px;height:7px;border-radius:50%; background:#c7b489; box-shadow:0 0 12px rgba(199,180,137,.7); }
 .page__gerichte-getrnke-finaler-schritt .ts-hero__title{
   margin:0; font-family:"Lineal TS", var(--font-sans, sans-serif); font-weight:600; color:#fff;
   line-height:1.02; letter-spacing:-.02em; font-size:clamp(2.6rem,8vw,5.4rem);
   text-shadow:0 0 4px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,1),0 3px 16px rgba(0,0,0,1),0 6px 40px rgba(0,0,0,.98),0 10px 80px rgba(0,0,0,.9),0 18px 140px rgba(0,0,0,.78);
   animation:tsRise 800ms cubic-bezier(.16,1,.3,1) 220ms both;
 }
-.page__gerichte-getrnke-finaler-schritt .ts-hero__title .ts-gold{ color:#9e947f; }
+.page__gerichte-getrnke-finaler-schritt .ts-hero__title .ts-gold{ color:#c7b489; }
 @media (max-width:640px){
   .page__gerichte-getrnke-finaler-schritt .ts-hero__text{ padding:0 16px 20px; }
   .page__gerichte-getrnke-finaler-schritt .ts-hero__title{ font-size:clamp(2rem,12vw,3rem); }

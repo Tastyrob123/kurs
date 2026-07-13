@@ -233,12 +233,12 @@
   #tsd4{width:min(1000px,95vw);margin:20px auto 60px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;opacity:0;transform:translateY(20px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
   #tsd4.in{opacity:1;transform:none}
   #tsd4 .tsd4-head{text-align:center;margin:0 0 104px}
-  #tsd4 .tsd4-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:#9e947f;margin:0 0 12px}
-  #tsd4 .tsd4-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#9e947f;box-shadow:0 0 12px rgba(158,148,127,.7)}
+  #tsd4 .tsd4-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:#c7b489;margin:0 0 12px}
+  #tsd4 .tsd4-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#c7b489;box-shadow:0 0 12px rgba(199,180,137,.7)}
   #tsd4 .tsd4-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;font-size:clamp(1.5rem,3vw,2.1rem);font-weight:600;letter-spacing:-.02em;line-height:1.15;margin:0;color:#fff}
-  #tsd4 .tsd4-title .g{color:#9e947f}
+  #tsd4 .tsd4-title .g{color:#c7b489}
   #tsd4 .tsd4-stage{display:grid;grid-template-columns:1fr auto 1.15fr auto 1fr;align-items:center;gap:0}
-  #tsd4 .tsd4-card{position:relative;border-radius:14px;padding:66px 20px 20px;background:rgba(255,255,255,.035);border:1px solid rgba(158,148,127,.28);opacity:0;transform:translateY(14px) scale(.97);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1),border-color .6s ease,box-shadow .6s ease}
+  #tsd4 .tsd4-card{position:relative;border-radius:14px;padding:66px 20px 20px;background:rgba(255,255,255,.035);border:1px solid rgba(199,180,137,.28);opacity:0;transform:translateY(14px) scale(.97);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1),border-color .6s ease,box-shadow .6s ease}
   #tsd4 .tsd4-card.lit{opacity:1;transform:none}
   #tsd4 .tsd4-card .c-eye{font-size:10px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin:0 0 10px}
   #tsd4 .tsd4-card .c-name{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:20px;font-weight:600;letter-spacing:-.01em;color:#fff;margin:0 0 14px}
@@ -248,7 +248,7 @@
   #tsd4 .tsd4-row .k{font-size:12.5px;color:rgba(255,255,255,.55)}
   #tsd4 .tsd4-row .v{font-size:14px;font-weight:600;color:#fff;white-space:nowrap}
   #tsd4 .tsd4-row .v.muted{color:rgba(255,255,255,.6);font-weight:500}
-  #tsd4 .tsd4-row .v.gold{color:#9e947f;font-weight:700;font-size:15px}
+  #tsd4 .tsd4-row .v.gold{color:#c7b489;font-weight:700;font-size:15px}
   #tsd4 .tsd4-note{font-size:10px;color:rgba(255,255,255,.28);margin:10px 0 0}
   /* Schwebendes Motiv auf jeder Karte */
   #tsd4 .tsd4-fruit{position:absolute;top:-52px;left:50%;height:82px;transform:translateX(-50%) scale(.4);opacity:0;pointer-events:none;filter:drop-shadow(0 15px 20px rgba(0,0,0,.55)) drop-shadow(0 4px 10px rgba(0,0,0,.4));transition:opacity .6s ease,transform .7s cubic-bezier(.34,1.56,.64,1)}
@@ -256,32 +256,32 @@
   #tsd4 .tsd4-fruit img{height:100%;width:auto;display:block}
   #tsd4 .tsd4-fruit.is-sliced{height:100px;top:-52px}
   #tsd4 .tsd4-fruit.is-stack{height:82px;top:-54px}
-  #tsd4 .tsd4-zutat{border-color:rgba(158,148,127,.5)}
+  #tsd4 .tsd4-zutat{border-color:rgba(199,180,137,.5)}
   #tsd4 .tsd4-zutat.lit{box-shadow:0 24px 60px rgba(0,0,0,.45)}
   /* Connector 1 (Relation, mit wandernder Kugel) */
   #tsd4 .tsd4-conn{position:relative;width:clamp(56px,7vw,92px);height:2px;align-self:center;margin-top:8px}
-  #tsd4 .tsd4-conn .line{position:absolute;inset:0;border-top:2px dashed rgba(158,148,127,.45);opacity:0;transition:opacity .4s ease}
+  #tsd4 .tsd4-conn .line{position:absolute;inset:0;border-top:2px dashed rgba(199,180,137,.45);opacity:0;transition:opacity .4s ease}
   #tsd4 .tsd4-conn.on .line{opacity:1}
-  #tsd4 .tsd4-conn .ball{position:absolute;top:50%;left:0;width:9px;height:9px;border-radius:50%;background:#9e947f;box-shadow:0 0 12px rgba(158,148,127,.8);transform:translate(-50%,-50%) scale(0);transition:left .85s cubic-bezier(.5,0,.2,1),transform .3s ease}
+  #tsd4 .tsd4-conn .ball{position:absolute;top:50%;left:0;width:9px;height:9px;border-radius:50%;background:#c7b489;box-shadow:0 0 12px rgba(199,180,137,.8);transform:translate(-50%,-50%) scale(0);transition:left .85s cubic-bezier(.5,0,.2,1),transform .3s ease}
   #tsd4 .tsd4-conn.on .ball{transform:translate(-50%,-50%) scale(1)}
   #tsd4 .tsd4-conn.go .ball{left:100%}
-  #tsd4 .tsd4-conn .clabel{position:absolute;top:-30px;left:50%;transform:translateX(-50%);text-align:center;white-space:nowrap;font-size:9.5px;letter-spacing:.5px;color:#9e947f;opacity:0;transition:opacity .4s ease}
-  #tsd4 .tsd4-conn .clabel small{display:block;color:rgba(158,148,127,.65);font-size:8.5px;letter-spacing:.2px;margin-top:1px}
+  #tsd4 .tsd4-conn .clabel{position:absolute;top:-30px;left:50%;transform:translateX(-50%);text-align:center;white-space:nowrap;font-size:9.5px;letter-spacing:.5px;color:#c7b489;opacity:0;transition:opacity .4s ease}
+  #tsd4 .tsd4-conn .clabel small{display:block;color:rgba(199,180,137,.65);font-size:8.5px;letter-spacing:.2px;margin-top:1px}
   #tsd4 .tsd4-conn.on .clabel{opacity:1}
   /* Connector 2 (=) */
   #tsd4 .tsd4-eq{display:flex;align-items:center;justify-content:center;width:clamp(40px,5vw,64px);opacity:0;transition:opacity .5s ease}
   #tsd4 .tsd4-eq.on{opacity:1}
   #tsd4 .tsd4-eq svg{width:26px;height:14px;overflow:visible}
-  #tsd4 .tsd4-eq path{stroke:#9e947f;stroke-width:2;fill:none;stroke-linecap:round}
+  #tsd4 .tsd4-eq path{stroke:#c7b489;stroke-width:2;fill:none;stroke-linecap:round}
   /* Ergebnis-Chip */
-  #tsd4 .tsd4-result{text-align:center;background:rgba(158,148,127,.09);border-color:rgba(158,148,127,.55)}
-  #tsd4 .tsd4-result .c-eye{color:#9e947f}
+  #tsd4 .tsd4-result{text-align:center;background:rgba(199,180,137,.09);border-color:rgba(199,180,137,.55)}
+  #tsd4 .tsd4-result .c-eye{color:#c7b489}
   #tsd4 .tsd4-result .r-val{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:clamp(1.8rem,4vw,2.4rem);font-weight:700;letter-spacing:-.02em;color:#fff;margin:6px 0 8px;line-height:1}
   #tsd4 .tsd4-result .r-formula{font-size:12px;color:rgba(255,255,255,.5)}
   /* Fussnote */
   #tsd4 .tsd4-foot{text-align:center;margin:34px auto 0;max-width:640px}
   #tsd4 .tsd4-foot .f-main{font-size:15px;color:rgba(255,255,255,.85);margin:0 0 6px}
-  #tsd4 .tsd4-foot .f-main .g{color:#9e947f}
+  #tsd4 .tsd4-foot .f-main .g{color:#c7b489}
   #tsd4 .tsd4-foot .f-sub{font-size:11.5px;color:rgba(255,255,255,.5);margin:0}
   /* Beschreibungs-Absatz unter der Animation (Text aus dem Notion-Intro hierher gezogen) */
   #tsd4 .tsd4-desc{max-width:700px;margin:44px auto 0;text-align:center;font-size:16px;line-height:1.65;color:#fff}
@@ -291,7 +291,7 @@
     #tsd4{margin-top:24px}
     #tsd4 .tsd4-stage{grid-template-columns:1fr;gap:0;max-width:420px;margin:0 auto}
     #tsd4 .tsd4-conn{width:2px;height:clamp(44px,9vw,58px);margin:8px auto;border-top:0}
-    #tsd4 .tsd4-conn .line{border-top:0;border-left:2px dashed rgba(158,148,127,.45)}
+    #tsd4 .tsd4-conn .line{border-top:0;border-left:2px dashed rgba(199,180,137,.45)}
     #tsd4 .tsd4-conn .ball{top:0;left:50%;transition:top .85s cubic-bezier(.5,0,.2,1),transform .3s ease}
     #tsd4 .tsd4-conn.go .ball{left:50%;top:100%}
     #tsd4 .tsd4-conn .clabel{top:50%;left:auto;right:-8px;transform:translate(100%,-50%);text-align:left}
@@ -303,7 +303,7 @@
   function build(){
     var root=document.createElement('div'); root.id='tsd4';
     root.innerHTML=
-      '<div class="tsd4-head"><h2 class="tsd4-title">Die Zutat zieht sich ihren <span class="g">Preis.</span></h2></div>'+
+      '<div class="tsd4-head"><h2 class="tsd4-title">Die Zutat zieht sich ihren <span class="g">Preis</span>.</h2></div>'+
       '<div class="tsd4-stage">'+
         '<div class="tsd4-card tsd4-inv"><div class="tsd4-fruit is-whole"><img src="'+IMG_WHOLE+'" alt="Tomate" loading="lazy"></div><p class="c-eye">DB 0 · Inventurliste</p><p class="c-name">Tomaten</p><div class="c-div"></div><div class="tsd4-row"><span class="k">Einkaufspreis</span><span class="v">3,20 €/kg</span></div><p class="tsd4-note">Beispielwert</p></div>'+
         '<div class="tsd4-conn"><div class="clabel">Relation<small>zieht den Preis</small></div><div class="line"></div><div class="ball"></div></div>'+
@@ -698,7 +698,7 @@
     root.innerHTML = `
     <section class="net-section" id="ecoNetwork"><div class="net-inner">
       <div class="net-header">
-        <h2 class="net-title">Vernetztes Ökosystem.<br>Eine <span>Datenquelle.</span></h2>
+        <h2 class="net-title">Vernetztes Ökosystem.<br>Eine <span>Datenquelle</span>.</h2>
         <p class="net-sub">Vom Lieferpartner bis zum Deckungsbeitrag — jedes Element verbunden, jede Änderung in Echtzeit synchronisiert.</p>
         <div class="eco-hover-hint" id="ecoHint"><div class="eco-hover-hint-icon">⬡</div><div class="eco-hover-hint-text">Hover über ein Element</div></div></div>
       <div class="eco-canvas-wrap" id="ecoWrap"><div class="eco-scroll">
@@ -974,9 +974,9 @@
   #tsq .tsq-frame img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.22,1,.36,1)}
   #tsq a.tsq-card:hover .tsq-frame{transform:translateY(-4px);border-color:rgba(var(--g),.5);animation:tsq-heartbeat 2.6s cubic-bezier(.4,0,.3,1) infinite}
   #tsq a.tsq-card:hover .tsq-frame img{transform:scale(1.04)}
-  #tsq .tsq-k{display:inline-block;font-size:.58rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:#9e947f;margin:24px 0 10px}
+  #tsq .tsq-k{display:inline-block;font-size:.58rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:#c7b489;margin:24px 0 10px}
   #tsq .tsq-h{font-size:1.45rem;font-weight:600;letter-spacing:-.015em;line-height:1.12;margin:0 0 18px;transition:color .3s ease}
-  #tsq .tsq-h .g{color:#9e947f}
+  #tsq .tsq-h .g{color:#c7b489}
   #tsq a.tsq-card:hover .tsq-h{color:#fff}
   #tsq .tsq-t{color:rgba(255,255,255,.62);font-size:.9rem;line-height:1.68;margin:0 auto;max-width:36ch}
   #tsq .tsq-t b{color:#fff;font-weight:600}
@@ -1053,8 +1053,9 @@
     var w=document.createTreeWalker(strong, NodeFilter.SHOW_TEXT), n;
     while(n=w.nextNode()){
       var i=n.nodeValue.indexOf(PHRASE);
-      if(i>-1){ var after=n.splitText(i); after.splitText(PHRASE.length);
-        var span=document.createElement('span'); span.className='ts-accent'; span.textContent=PHRASE;
+      if(i>-1){ var PACC=PHRASE.replace(/[.!?…]+$/,'');   /* Satzzeichen bleibt weiss (ausserhalb Span) */
+        var after=n.splitText(i); after.splitText(PACC.length);
+        var span=document.createElement('span'); span.className='ts-accent'; span.textContent=PACC;
         after.parentNode.replaceChild(span, after); return; }
     }
   }
@@ -1190,16 +1191,16 @@
   #tsl{width:100vw;max-width:100vw;margin:44px 0 10px;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 clamp(20px,4vw,56px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
   #tsl *{box-sizing:border-box}
   #tsl .tsl-head{text-align:center;margin:0 auto 66px}
-  #tsl .tsl-eyebrow{display:inline-block;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin:0 0 14px}
+  #tsl .tsl-eyebrow{display:inline-block;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#c7b489;margin:0 0 14px}
   #tsl .tsl-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(30px,5vw,46px);font-weight:600;letter-spacing:-.02em;line-height:1.05;margin:0}
   #tsl .tsl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,3vw,40px);max-width:1180px;margin:0 auto;justify-items:center}
   #tsl .tsl-cell{opacity:0;transform:translateY(22px);filter:blur(8px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1),filter .9s cubic-bezier(.16,1,.3,1);transition-delay:calc(var(--i) * 140ms);width:100%;max-width:250px}
   #tsl .tsl-cell.in{opacity:1;transform:translateY(0);filter:blur(0)}
   #tsl .tsl-orb{position:relative;width:100%;aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;
     padding:clamp(20px,2.6vw,32px);
-    background:radial-gradient(120% 120% at 38% 28%, rgba(158,148,127,.20), rgba(255,255,255,.035) 46%, rgba(10,12,20,.85) 78%);
+    background:radial-gradient(120% 120% at 38% 28%, rgba(199,180,137,.20), rgba(255,255,255,.035) 46%, rgba(10,12,20,.85) 78%);
     border:1px solid rgba(255,255,255,.12);
-    box-shadow:0 18px 44px -18px rgba(0,0,0,.75), inset 0 1px 1px rgba(255,255,255,.10), inset 0 0 60px rgba(158,148,127,.06);
+    box-shadow:0 18px 44px -18px rgba(0,0,0,.75), inset 0 1px 1px rgba(255,255,255,.10), inset 0 0 60px rgba(199,180,137,.06);
     animation:tsl-float 7s ease-in-out infinite;will-change:transform;
     transition:border-color .45s ease, box-shadow .45s ease}
   #tsl .tsl-cell:nth-child(1) .tsl-orb{animation-delay:0s}
@@ -1207,7 +1208,7 @@
   #tsl .tsl-cell:nth-child(3) .tsl-orb{animation-delay:-3.2s}
   #tsl .tsl-cell:nth-child(4) .tsl-orb{animation-delay:-4.8s}
   #tsl .tsl-orb::before{content:"";position:absolute;top:10%;left:16%;width:34%;height:24%;border-radius:50%;background:radial-gradient(closest-side, rgba(255,255,255,.16), rgba(255,255,255,0));pointer-events:none}
-  #tsl .tsl-orb:hover{border-color:rgba(158,148,127,.5);box-shadow:0 22px 50px -18px rgba(0,0,0,.8), inset 0 1px 1px rgba(255,255,255,.12), 0 0 40px rgba(158,148,127,.22)}
+  #tsl .tsl-orb:hover{border-color:rgba(199,180,137,.5);box-shadow:0 22px 50px -18px rgba(0,0,0,.8), inset 0 1px 1px rgba(255,255,255,.12), 0 0 40px rgba(199,180,137,.22)}
   #tsl .tsl-t{position:relative;color:rgba(255,255,255,.9);font-size:clamp(12.5px,1.15vw,15px);font-weight:500;line-height:1.5;letter-spacing:-.005em;max-width:22ch}
   @keyframes tsl-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
   @media(max-width:1079px){#tsl .tsl-grid{grid-template-columns:repeat(2,1fr);gap:36px 30px;max-width:580px}}
@@ -1326,7 +1327,8 @@
   function toneLastWord(h){
     if(h.querySelector('.ts-accent')) return;   /* self-healing: schon getont & Span intakt -> überspringen */
     var txt=(h.textContent||'').trim(); if(!txt) return;
-    var last=txt.split(/\s+/).pop(); if(!last||last.length<2) return;
+    var last=txt.split(/\s+/).pop(); if(!last) return;
+    last=last.replace(/[.!?…:;,]+$/,''); if(last.length<2) return;   /* Satzzeichen bleibt weiss (ausserhalb Span) */
     var w=document.createTreeWalker(h,NodeFilter.SHOW_TEXT,null),node,target=null;
     while(node=w.nextNode()){ if(node.nodeValue.indexOf(last)>=0) target=node; }
     if(!target) return;
@@ -1348,7 +1350,7 @@
 /* ---- */
 
 /* zutatenliste — H1 "Wofür eine Zutaten DB ?" : ganze Zeile in Lineal TS,
-   Phrase "Zutaten DB" beige via .ts-accent (#9e947f). super.so liefert den
+   Phrase "Zutaten DB" beige via .ts-accent (#c7b489). super.so liefert den
    Notion-Text teils halb-gesynct ("Wofür eine Zuta ") -> JS erzwingt die
    finale Darstellung (Notion bleibt Text-SSOT). Block-ID-Anker, selbstheilend,
    ueberschreibt auch den generischen Letztes-Wort-Toner __tsTone. */
@@ -1521,14 +1523,14 @@
   var SHOT="https://files.catbox.moe/4s49ab.png";
   var ANCHOR="verwendeten Zutaten und Produkte";   // Text der RECHTEN Spalte -> MacBook links daneben
   var CSS=[
-    '#tsmb-root{--tsmb-gold:#9e947f;--tsmb-ease:cubic-bezier(.16,1,.3,1);margin:0;display:flex;flex-direction:column;align-items:center;gap:8px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;}',
+    '#tsmb-root{--tsmb-gold:#c7b489;--tsmb-ease:cubic-bezier(.16,1,.3,1);margin:0;display:flex;flex-direction:column;align-items:center;gap:8px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;}',
     '.notion-column-list.tsmb-centered-row{align-items:center;}',
     '@media(min-width:768px){#tsmb-root{padding-top:51px;}}',
     '#tsmb-root .tsmb-caption{width:100%;text-align:center;font-size:15px;font-weight:600;letter-spacing:.005em;color:#fff;margin-top:4px;}',
     '#tsmb-root .tsmb-caption .tsmb-accent{color:var(--tsmb-gold);}',
     '#tsmb-root .tsmb-tile{position:relative;width:100%;max-width:520px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 10px 30px rgba(0,0,0,.45));transition:transform .5s var(--tsmb-ease),filter .5s var(--tsmb-ease);}',
     '#tsmb-root .tsmb-tile:hover{transform:translateY(-4px) scale(1.02);animation:tsmbHeartbeat 2.6s var(--tsmb-ease) infinite;}',
-    '@keyframes tsmbHeartbeat{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(158,148,127,.14));}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(158,148,127,.30));}}',
+    '@keyframes tsmbHeartbeat{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(199,180,137,.14));}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(199,180,137,.30));}}',
     '#tsmb-root .tsmb-tile:active{transform:scale(.99);transition-duration:.12s;}',
     '#tsmb-root .tsmb-frame{width:100%;height:auto;display:block;position:relative;z-index:1;pointer-events:none;user-select:none;}',
     '#tsmb-root .tsmb-cover{position:absolute;top:3.65%;left:12.22%;width:73.06%;height:83.85%;overflow:hidden;z-index:0;border-radius:3px;background:#191919;}',
@@ -1707,7 +1709,7 @@
     var guides = GUIDES.map(function(g){ return '<div class="tsdb-guide" style="left:' + g + '%;"></div>'; }).join('');
     root.innerHTML =
       '<div class="tsdb-head">' +
-        '<h3 class="tsdb-title">Deckungsbeitrag. <span>Stufe für Stufe.</span></h3>' +
+        '<h3 class="tsdb-title">Deckungsbeitrag. <span>Stufe für Stufe</span>.</h3>' +
         '<p class="tsdb-sub">Ein Beispielgericht für 14,00&nbsp;€ netto — und was nach jedem Abzug übrig bleibt.</p>' +
       '</div>' +
       '<div class="tsdb-chart">' +
@@ -2245,7 +2247,7 @@
   #tslink a.tsl-card:focus-visible{outline:2px solid rgba(var(--g),.7);outline-offset:4px}
   #tslink .tsl-num{position:absolute;top:26px;right:26px;font-size:.7rem;font-weight:500;letter-spacing:.2em;color:rgba(199,180,137,.55)}
   #tslink .tsl-logo{display:block;height:34px;width:auto;margin:2px auto 18px}
-  #tslink .tsl-k{display:block;font-size:.58rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin-bottom:8px}
+  #tslink .tsl-k{display:block;font-size:.58rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#c7b489;margin-bottom:8px}
   #tslink .tsl-h{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1.32rem;font-weight:600;letter-spacing:-.012em;line-height:1.15;color:#fff;margin:0 0 12px;text-shadow:0 0 4px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,.95),0 3px 14px rgba(0,0,0,.9),0 6px 34px rgba(0,0,0,.8)}
   #tslink .tsl-t{color:rgba(255,255,255,.66);font-size:.88rem;line-height:1.62;margin:0 auto;max-width:34ch;text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 10px rgba(0,0,0,.85),0 4px 22px rgba(0,0,0,.7)}
   #tslink .tsl-k{text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 8px rgba(0,0,0,.8)}
@@ -2334,7 +2336,7 @@
   var COVER="https://files.catbox.moe/r8ef2f.png";
   var SHOT="https://files.catbox.moe/5hhr5b.png";
   var CSS=[
-    '#tsiv-root{--tsiv-gold:#9e947f;--tsiv-ease:cubic-bezier(.16,1,.3,1);width:min(1000px,95vw);margin:8px auto 40px;display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4.5vw,60px);align-items:center;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;opacity:0;transform:translateY(20px);transition:opacity .8s var(--tsiv-ease),transform .9s var(--tsiv-ease);}',
+    '#tsiv-root{--tsiv-gold:#c7b489;--tsiv-ease:cubic-bezier(.16,1,.3,1);width:min(1000px,95vw);margin:8px auto 40px;display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4.5vw,60px);align-items:center;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;opacity:0;transform:translateY(20px);transition:opacity .8s var(--tsiv-ease),transform .9s var(--tsiv-ease);}',
     '#tsiv-root.in{opacity:1;transform:none;}',
     '#tsiv-root .tsiv-textslot{min-width:0;min-height:1px;}',
     '#tsiv-root .tsiv-textslot .tsiv-lead{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;font-size:clamp(1.32rem,2vw,1.6rem);font-weight:600;letter-spacing:-.012em;line-height:1.22;color:#fff;margin:0 0 18px;}',
@@ -2346,7 +2348,7 @@
     '@media(max-width:900px){#tsiv-root{grid-template-columns:1fr;}#tsiv-root .tsiv-textslot{text-align:left;max-width:560px;margin:0 auto;}}',
     '#tsiv-root .tsiv-tile{position:relative;width:100%;max-width:520px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 18px 44px rgba(0,0,0,.5));transition:transform .5s var(--tsiv-ease),filter .5s var(--tsiv-ease);}',
     '#tsiv-root .tsiv-tile:hover{transform:translateY(-4px) scale(1.02);animation:tsivHeartbeat 2.6s var(--tsiv-ease) infinite;}',
-    '@keyframes tsivHeartbeat{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(158,148,127,.14));}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(158,148,127,.30));}}',
+    '@keyframes tsivHeartbeat{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(199,180,137,.14));}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(199,180,137,.30));}}',
     '#tsiv-root .tsiv-tile:active{transform:scale(.99);transition-duration:.12s;}',
     '#tsiv-root .tsiv-cover{width:100%;height:auto;aspect-ratio:831/522;display:block;pointer-events:none;user-select:none;}',
     '#tsiv-root .tsiv-caption{width:100%;text-align:center;font-size:15px;font-weight:600;letter-spacing:.005em;color:#fff;margin-top:6px;}',
@@ -2482,7 +2484,7 @@
   var CSS=`
   #tsdb0{width:100%;margin:6px 0 10px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
   #tsdb0 .hd{font-size:1.65rem;font-weight:700;letter-spacing:-.01em;line-height:1.2;margin:0 0 18px;opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
-  #tsdb0 .hd .g{color:#9e947f}
+  #tsdb0 .hd .g{color:#c7b489}
   #tsdb0.in .hd{opacity:1;transform:none}
   #tsdb0 .row{position:relative;display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
   #tsdb0 .ind{position:absolute;top:0;left:0;height:100%;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);box-shadow:0 0 22px rgba(199,180,137,.10);opacity:0;transition:left .55s cubic-bezier(.22,1,.36,1),width .55s cubic-bezier(.22,1,.36,1),opacity .4s ease;pointer-events:none}
@@ -2596,7 +2598,7 @@
   if(window.__tsmiss) return; window.__tsmiss=true;
   var CSS=`
   .page__inventurliste .tsm-h{text-align:center !important;color:#fff !important;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif !important;font-size:clamp(1.7rem,2.6vw,2.2rem) !important;font-weight:600 !important;letter-spacing:-.01em !important;line-height:1.2 !important;margin-top:72px !important;margin-bottom:16px !important}
-  .page__inventurliste .tsm-h .tsm-hg{color:#9e947f !important}
+  .page__inventurliste .tsm-h .tsm-hg{color:#c7b489 !important}
   .page__inventurliste .tsm-i{max-width:820px;margin-left:auto !important;margin-right:auto !important;text-align:center !important;color:rgba(255,255,255,.62) !important}
   .page__inventurliste .tsm-mid{max-width:820px;margin-left:auto !important;margin-right:auto !important;margin-top:10px !important;text-align:center !important;color:#fff !important}
   #tsmiss{--g:199,180,137;--rx:0deg;--ry:0deg;position:relative;display:grid;grid-template-columns:minmax(300px,1fr) 2fr;gap:clamp(28px,4.5vw,60px);align-items:center;width:min(1000px,95vw);margin:34px auto 30px;padding:clamp(26px,4vw,44px) clamp(24px,4.5vw,50px);border-radius:20px;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0));border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85),0 0 14px rgba(var(--g),.08);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;transform-style:preserve-3d;will-change:transform;opacity:0;transform:perspective(1100px) rotateX(9deg) translateY(34px) scale(.97);transition:opacity .8s ease,transform .9s cubic-bezier(.16,1,.3,1)}
@@ -2622,7 +2624,7 @@
   #tsmiss.in .tsm-item{opacity:1;transform:none}
   #tsmiss .tsm-p{color:rgba(255,255,255,.62);font-size:.95rem;line-height:1.7;margin:0 0 14px;max-width:none}
   #tsmiss .tsm-emph2{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1.45rem;font-weight:600;letter-spacing:-.012em;text-align:center;color:#fff;margin:2px 0 16px !important;padding:0}
-  #tsmiss .tsm-emph2 .tsm-eg{color:#9e947f}
+  #tsmiss .tsm-emph2 .tsm-eg{color:#c7b489}
   #tsmiss .tsm-ol{margin:0;padding-left:1.6em}
   #tsmiss .tsm-ol li{color:rgba(255,255,255,.62);font-size:.92rem;line-height:1.7;margin:0 0 10px;padding:10px 14px;border-radius:12px;transition:color .45s ease,background .5s ease,box-shadow .5s ease}
   #tsmiss .tsm-ol li::marker{color:rgba(255,255,255,.35);font-weight:600}
@@ -2737,7 +2739,7 @@
     L.appendChild(db0);
     function addClone(el,cls){ if(!el)return; var c=stripIds(el.cloneNode(true)); c.className+=' '+cls+' tsm-item'; R.appendChild(c); el.classList.add('tsm-hide'); }
     addClone(p2,'tsm-p'); addClone(h2,'tsm-emph2'); addClone(ol,'tsm-ol');
-    var emph=R.querySelector('.tsm-emph2'); /* letztes Wort "Anzeige" beige (#9e947f), parallel zu "DB 0 : Inventurliste" links */
+    var emph=R.querySelector('.tsm-emph2'); /* letztes Wort "Anzeige" beige (#c7b489), parallel zu "DB 0 : Inventurliste" links */
     if(emph && !emph.querySelector('.tsm-eg')) emph.innerHTML=(emph.textContent||'').replace(/(\S+)(\s*)$/,'<span class="tsm-eg">$1</span>$2');
     var items=R.querySelectorAll('.tsm-item');
     for(var i=0;i<items.length;i++) items[i].style.transitionDelay=(i*0.12)+'s';
@@ -2800,12 +2802,12 @@
   #tslpemp::after{content:"";position:absolute;top:0;left:9%;right:9%;height:1px;background:linear-gradient(90deg,transparent,rgba(var(--g),.4),transparent);pointer-events:none}
   #tslpemp .tslp-col{min-width:0;position:relative;z-index:1;transform:translateZ(22px)}
   #tslpemp .db-hd{font-size:1.4rem;font-weight:700;letter-spacing:-.01em;line-height:1.2;margin:0 0 14px;color:#fff;opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
-  #tslpemp .db-hd .g{color:#9e947f}
+  #tslpemp .db-hd .g{color:#c7b489}
   #tslpemp.in .db-hd{opacity:1;transform:none}
   #tslpemp .db-row{display:flex;flex-direction:column;align-items:stretch;gap:6px;max-width:300px}
   #tslpemp .tb{display:inline-flex;align-items:center;gap:9px;padding:11px 15px;border-radius:12px;font-size:.94rem;font-weight:600;color:rgba(255,255,255,.5);white-space:nowrap;opacity:0;transform:translateY(10px) scale(.97);transition:color .45s ease,background .5s ease,box-shadow .5s ease,opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
   #tslpemp .tb svg{width:15px;height:15px;flex:none;opacity:.7}
-  #tslpemp .tb .num{color:#9e947f;font-variant-numeric:tabular-nums;opacity:.9}
+  #tslpemp .tb .num{color:#c7b489;font-variant-numeric:tabular-nums;opacity:.9}
   #tslpemp.in .tb{opacity:1;transform:none}
   #tslpemp.in .tb:nth-child(2){transition-delay:.10s}
   #tslpemp.in .tb:nth-child(3){transition-delay:.20s}
@@ -2815,7 +2817,7 @@
   #tslpemp .tslp-item{opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
   #tslpemp.in .tslp-item{opacity:1;transform:none}
   #tslpemp .emph{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1.45rem;font-weight:600;letter-spacing:-.012em;color:#fff;margin:0 0 14px;padding:0}
-  #tslpemp .emph .eg{color:#9e947f}
+  #tslpemp .emph .eg{color:#c7b489}
   #tslpemp .p{color:rgba(255,255,255,.68);font-size:.98rem;line-height:1.72;margin:0;max-width:none}
   @keyframes tslp-heartbeat{0%{box-shadow:0 4px 14px rgba(var(--g),.10),0 0 14px rgba(var(--g),.10)}18%{box-shadow:0 6px 22px rgba(var(--g),.30),0 0 46px rgba(var(--g),.34)}32%{box-shadow:0 5px 18px rgba(var(--g),.16),0 0 26px rgba(var(--g),.18)}46%{box-shadow:0 6px 20px rgba(var(--g),.26),0 0 40px rgba(var(--g),.28)}72%,100%{box-shadow:0 4px 14px rgba(var(--g),.10),0 0 14px rgba(var(--g),.10)}}
   @media(max-width:900px){#tslpemp{grid-template-columns:1fr;gap:26px}#tslpemp .db-row{max-width:none}}
@@ -2945,12 +2947,12 @@
   #tszein .tsz-link circle{fill:rgba(var(--g),.9)}
   #tszein .tsz-col{min-width:0;position:relative;z-index:1;transform:translateZ(22px)}
   #tszein .db-hd{font-size:1.4rem;font-weight:700;letter-spacing:-.01em;line-height:1.2;margin:0 0 14px;color:#fff;opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
-  #tszein .db-hd .g{color:#9e947f}
+  #tszein .db-hd .g{color:#c7b489}
   #tszein.in .db-hd{opacity:1;transform:none}
   #tszein .db-row{display:flex;flex-direction:column;align-items:stretch;gap:6px;max-width:300px}
   #tszein .tb{display:inline-flex;align-items:center;gap:9px;padding:11px 15px;border-radius:12px;font-size:.92rem;font-weight:600;color:rgba(255,255,255,.5);white-space:nowrap;opacity:0;transform:translateY(10px) scale(.97);transition:color .45s ease,background .5s ease,box-shadow .5s ease,opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
   #tszein .tb svg{width:15px;height:15px;flex:none;opacity:.7}
-  #tszein .tb .num{color:#9e947f;font-variant-numeric:tabular-nums;opacity:.9;font-size:.82rem}
+  #tszein .tb .num{color:#c7b489;font-variant-numeric:tabular-nums;opacity:.9;font-size:.82rem}
   #tszein.in .tb{opacity:1;transform:none}
   #tszein.in .tb:nth-child(2){transition-delay:.08s}
   #tszein.in .tb:nth-child(3){transition-delay:.16s}
@@ -2961,7 +2963,7 @@
   #tszein .tsz-item{opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
   #tszein.in .tsz-item{opacity:1;transform:none}
   #tszein .emph{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1.45rem;font-weight:600;letter-spacing:-.012em;color:#fff;margin:0 0 12px;padding:0}
-  #tszein .emph .eg{color:#9e947f}
+  #tszein .emph .eg{color:#c7b489}
   #tszein .p{color:rgba(255,255,255,.68);font-size:.96rem;line-height:1.7;margin:0 0 16px;max-width:none}
   #tszein .tsz-ol{margin:0;padding-left:1.6em}
   #tszein .tsz-ol li{color:rgba(255,255,255,.62);font-size:.92rem;line-height:1.55;margin:0 0 8px;padding:10px 14px;border-radius:12px;transition:color .45s ease,background .5s ease,box-shadow .5s ease}
@@ -3378,7 +3380,7 @@
   var PAGES=[
     { path:/\/zutatenliste\/?$/, kachel:'db4_zutaten',
       eyebrow:'Der Warenkorb · DB IV',
-      title:'Deine Zutaten. <span>Gramm für Gramm.</span>',
+      title:'Deine Zutaten. <span>Gramm für Gramm</span>.',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB IV ist die Portionsgröße.',
       summary:'Einwaage', chain:true },
     /* DB V Rezepturen — Phasen liegen hier in einem Tab-Widget (.notion-tabs, 4 Phasen),
@@ -3387,7 +3389,7 @@
     { path:/\/rezepturen\/?$/, kachel:'db5_rezepturen',
       container:'.notion-tabs', marker:/Grundgerüst/,
       eyebrow:'Der Warenkorb · DB V',
-      title:'Deine Rezepturen. <span>Portion für Portion.</span>',
+      title:'Deine Rezepturen. <span>Portion für Portion</span>.',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB V ist die Portionsgröße.',
       summary:'Portionsmenge', chain:true },
     /* DB VI Gemeinkosten + DB VII Mitarbeiterlöhne — beide Abschnitte liegen als getrennte
@@ -3395,13 +3397,13 @@
     { path:/\/gemeinkosten-mitarbeiterlhne\/?$/, kachel:'db6_gemeinkosten',
       container:'.notion-tabs', marker:/Gemeinkosten/,
       eyebrow:'Der Warenkorb · DB VI',
-      title:'Deine Gemeinkosten. <span>Posten für Posten.</span>',
+      title:'Deine Gemeinkosten. <span>Posten für Posten</span>.',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB VI ist der Euro.',
       summary:'Fixkosten', chain:true },
     { path:/\/gemeinkosten-mitarbeiterlhne\/?$/, kachel:'db7_mitarbeiterloehne',
       container:'.notion-tabs', marker:/Mitarbeiter/,
       eyebrow:'Der Warenkorb · DB VII',
-      title:'Deine Mitarbeiterlöhne. <span>Netto für Netto.</span>',
+      title:'Deine Mitarbeiterlöhne. <span>Netto für Netto</span>.',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB VII ist das Nettogehalt.',
       summary:'Lohnsumme', chain:true },
     /* DB VIII Gerichte & Getränke — 4 getrennte Phasen-Tab-Widgets (.notion-tabs) zu EINEM
@@ -3409,32 +3411,32 @@
     { path:/\/gerichte-getrnke-finaler-schritt\/?$/, kachel:'db8_gerichte',
       container:'.notion-tabs', multi:true, expect:4, marker:/Phase/,
       eyebrow:'Der Warenkorb · DB VIII',
-      title:'Deine Gerichte & Getränke. <span>Teller für Teller.</span>',
+      title:'Deine Gerichte & Getränke. <span>Teller für Teller</span>.',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB VIII sind die Kosten pro Gericht, Getränk oder Dessert.',
       summary:'Menükosten', chain:true },
     { path:/\/inventurliste\/?$/, kachel:'db0_inventurliste',
       eyebrow:'Der Warenkorb · DB 0',
-      title:'Deine Inventurliste. <span>Schritt für Schritt.</span>',
+      title:'Deine Inventurliste. <span>Schritt für Schritt</span>.',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB 0 ist der Preis.',
       summary:'Wareneinsatz', chain:true },
     { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_lieferanten',
       marker:/Kundennummer/,
       eyebrow:'DB I - Lieferpartner',
-      title:'Deine Lieferpartner. <span>An einem Ort.</span>',
+      title:'Deine Lieferpartner. <span>An einem Ort</span>.',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB I ist die Mindestbelieferung.<br>Um zu starten: / → neue Tabellenansicht / Datenbank → DB I : Lieferpartner Übersicht.',
       summary:'Transportkosten', cta:'Tour buchen', ctaDone:'Tour gebucht', chain:true },
     /* Zweites Regal auf derselben Seite: DB II Ansprechpartner (Marker eindeutig = Hauptansprechpartner) */
     { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_ansprechpartner',
       marker:/Hauptansprechpartner/,
       eyebrow:'DB II - Ansprechpartner',
-      title:'Deine Ansprechpartner. <span>In einer Übersicht.</span>',
+      title:'Deine Ansprechpartner. <span>In einer Übersicht</span>.',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB II ist die Jahresrückvergütung.<br>Um zu starten: / → neue Tabellenansicht / Datenbank → DB II : Ansprechpartner Übersicht.',
       summary:'Jahresrückvergütung', cta:'Paket auswählen', ctaDone:'Paket gewählt', chain:true },
     /* Drittes Regal auf derselben Seite: DB III Lieferverträge (Marker eindeutig = Vertragsbezeichnung) */
     { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_vertraege',
       marker:/Vertragsbezeichnung/,
       eyebrow:'DB III - Lieferantenverträge',
-      title:'Deine Lieferverträge. <span>Sauber dokumentiert.</span>',
+      title:'Deine Lieferverträge. <span>Sauber dokumentiert</span>.',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB III ist der Vertragswert.<br>Um zu starten: / → neue Tabellenansicht / Datenbank → DB III : Lieferverträge Übersicht.',
       summary:'Vertragsvolumina', cta:'Vertrag abschließen', ctaDone:'Vertrag geschlossen', chain:true }
   ];
@@ -3446,8 +3448,8 @@
   #tsshop *{box-sizing:border-box}
   #tsshop .tss-inner{max-width:1280px;margin:0 auto}
   #tsshop .tss-head{text-align:center;margin-bottom:30px}
-  #tsshop .tss-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin-bottom:12px}
-  #tsshop .tss-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#9e947f;box-shadow:0 0 12px rgba(158,148,127,.7)}
+  #tsshop .tss-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#c7b489;margin-bottom:12px}
+  #tsshop .tss-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#c7b489;box-shadow:0 0 12px rgba(199,180,137,.7)}
   #tsshop .tss-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(32px,4.4vw,52px);font-weight:600;letter-spacing:-.02em;line-height:1.1;color:#fff;margin:0 0 12px}
   #tsshop .tss-title span{color:#c7b489}
   #tsshop .tss-sub{font-size:15px;color:#e1e1e1;max-width:600px;margin:0 auto;line-height:1.6}
@@ -3460,7 +3462,7 @@
   #tsshop .tss-bar__right{text-align:right}
   #tsshop .tss-bar__val{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:clamp(23px,2.7vw,33px);font-weight:700;letter-spacing:-.012em;line-height:1;color:#fff;font-variant-numeric:tabular-nums}
   #tsshop .tss-bar__global{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:clamp(23px,2.7vw,33px);font-weight:700;letter-spacing:-.012em;line-height:1;color:#fff;font-variant-numeric:tabular-nums}
-  #tsshop .tss-bar__cap{font-size:11px;font-weight:600;letter-spacing:.01em;color:#9e947f;margin-top:10px;white-space:nowrap}
+  #tsshop .tss-bar__cap{font-size:11px;font-weight:600;letter-spacing:.01em;color:#c7b489;margin-top:10px;white-space:nowrap}
   #tsshop .tss-bar__mid{flex:1 1 auto;min-width:0}
   #tsshop .tss-bar__track{position:relative;height:6px;border-radius:99px;background:rgba(255,255,255,.08);box-shadow:inset 0 1px 2px rgba(0,0,0,.45);overflow:hidden}
   #tsshop .tss-bar__fill{position:relative;height:100%;width:0;border-radius:99px;overflow:hidden;background:linear-gradient(90deg,#5FAE88,#9FD3B9);box-shadow:0 0 10px rgba(143,203,170,.5),inset 0 1px 0 rgba(255,255,255,.3);transition:width .7s cubic-bezier(.22,1,.36,1)}
@@ -3509,7 +3511,7 @@
   #tsshop .tss-fade.on{opacity:1}
   #tsshop .tss-nav{position:absolute;top:calc(50% - 31px);z-index:3;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(10,12,20,.72);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.75);cursor:pointer;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:opacity .3s ease,border-color .25s ease,color .25s ease,transform .25s ease;opacity:0;pointer-events:none;padding:0}
   #tsshop .tss-nav.on{opacity:1;pointer-events:auto}
-  #tsshop .tss-nav:hover{border-color:rgba(158,148,127,.55);color:#d8c9ab;transform:scale(1.06)}
+  #tsshop .tss-nav:hover{border-color:rgba(199,180,137,.55);color:#d8c9ab;transform:scale(1.06)}
   #tsshop .tss-nav.prev{left:-10px}
   #tsshop .tss-nav.next{right:-10px}
   @media(max-width:1024px){#tsshop .tss-card{flex-basis:calc((100% - 2*22px)/3)}}
@@ -3530,13 +3532,13 @@
   #tsshop-detail.tsd-anim .tsd-panel{animation:tsdUp .55s cubic-bezier(.22,1,.36,1) both}
   @keyframes tsdUp{from{opacity:0;transform:translateY(42px) scale(.97)}to{opacity:1;transform:none}}
   #tsshop-detail .tsd-close{position:absolute;top:14px;right:14px;z-index:5;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.8);cursor:pointer;padding:0;transition:border-color .25s ease,color .25s ease,transform .25s ease}
-  #tsshop-detail .tsd-close:hover{border-color:rgba(158,148,127,.55);color:#d8c9ab;transform:scale(1.06)}
+  #tsshop-detail .tsd-close:hover{border-color:rgba(199,180,137,.55);color:#d8c9ab;transform:scale(1.06)}
   /* Referenz-Proportion: Bild links definiert die Höhe, rechts scrollt der Inhalt intern */
   #tsshop-detail .tsd-grid{display:grid;grid-template-columns:minmax(0,23fr) minmax(0,22fr);gap:clamp(18px,2.4vw,32px);height:min(58vh,540px)}
   #tsshop-detail .tsd-imgwrap{height:100%;border-radius:14px;overflow:hidden;background:#0b0d14;border:1px solid rgba(255,255,255,.08)}
   #tsshop-detail .tsd-imgwrap img{display:block;width:100%;height:100%;object-fit:cover}
   #tsshop-detail .tsd-info{display:flex;flex-direction:column;min-height:0;height:100%}
-  #tsshop-detail .tsd-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.58rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin:2px 0 8px}
+  #tsshop-detail .tsd-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.58rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#c7b489;margin:2px 0 8px}
   #tsshop-detail .tsd-title{font-size:clamp(22px,2.8vw,32px);font-weight:800;letter-spacing:-.02em;line-height:1.1;color:#fff;margin:22px 0 12px;flex:none}
   #tsshop-detail .tsd-content{flex:1;min-height:0;overflow-y:auto;padding-right:8px;font-size:.84rem;line-height:1.55;color:rgba(255,255,255,.72);scrollbar-width:thin}
   #tsshop-detail .tsd-content::-webkit-scrollbar{width:7px}
@@ -3581,7 +3583,7 @@
       +'<circle cx="300" cy="262" r="86" fill="none" stroke="rgba(199,180,137,0.35)" stroke-width="1.5"/>'
       +'<text x="300" y="290" text-anchor="middle" font-family="Georgia,serif" font-size="76" fill="rgba(216,201,171,0.75)">'+initial+'</text>'
       +'<text x="300" y="436" text-anchor="middle" font-family="-apple-system,Helvetica,sans-serif" font-size="21" letter-spacing="5" fill="rgba(255,255,255,0.4)">'+(name||'').toUpperCase()+'</text>'
-      +'<text x="300" y="470" text-anchor="middle" font-family="-apple-system,Helvetica,sans-serif" font-size="12" letter-spacing="3" fill="rgba(158,148,127,0.55)">BILD FOLGT</text>'
+      +'<text x="300" y="470" text-anchor="middle" font-family="-apple-system,Helvetica,sans-serif" font-size="12" letter-spacing="3" fill="rgba(199,180,137,0.55)">BILD FOLGT</text>'
       +'</svg>';
     return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
   }
@@ -4103,7 +4105,7 @@
     +   '<canvas class="tsflow-canvas" id="tsFlowCanvas"></canvas>'
     +   '<div class="tsflow-inner">'
     +     '<div class="tsflow-header">'
-    +       '<h2 class="tsflow-title">Ein Vorgang, <span>eine Kette.</span></h2>'
+    +       '<h2 class="tsflow-title">Ein Vorgang, <span>eine Kette</span>.</h2>'
     +       '<p class="tsflow-sub">Jeder Lieferant hängt an einem Ansprechpartner, jeder Ansprechpartner an einem Vertrag — und jeder Vertrag bestimmt, welches Produkt zu welchen Konditionen bei dir ankommt. Genau diesen Fluss bildest du im Backoffice ab.</p>'
     +     '</div>'
     +     '<div class="tsflow-track">'+track+'</div>'
@@ -4234,10 +4236,10 @@
   .ts2mac-tile{width:100%;max-width:520px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 18px 44px rgba(0,0,0,.5));transition:transform .5s cubic-bezier(.16,1,.3,1),filter .5s cubic-bezier(.16,1,.3,1)}
   .ts2mac-tile img{width:100%;height:auto;display:block}
   .ts2mac-tile:hover,.ts2mac-tile:focus-visible{transform:translateY(-4px) scale(1.02);animation:ts2macHb 2.6s cubic-bezier(.16,1,.3,1) infinite;outline:none}
-  @keyframes ts2macHb{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(158,148,127,.14))}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(158,148,127,.30))}}
+  @keyframes ts2macHb{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(199,180,137,.14))}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(199,180,137,.30))}}
   .ts2mac-tile:active{transform:scale(.99);transition-duration:.12s}
   .ts2mac-cap{width:100%;text-align:center;font-size:15px;font-weight:600;letter-spacing:.005em;color:#fff;margin-top:14px}
-  .ts2mac-cap .g{color:#9e947f}
+  .ts2mac-cap .g{color:#c7b489}
   .ts2mac-hint{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.32);margin-top:6px;animation:ts2macHint 2.5s ease-in-out infinite}
   @keyframes ts2macHint{0%,100%{opacity:.4}50%{opacity:.8}}
   #ts2mac-lb{position:fixed;inset:0;z-index:99999;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(5,6,11,.92);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:clamp(16px,4vw,40px);opacity:0;transition:opacity .3s ease}
@@ -4322,7 +4324,7 @@
 /* ============================================================
    lieferpartner — Überschrift „Lieferanten Netzwerk als
    Systembaustein" (#tslph): mehr Abstand zum Text darunter +
-   letztes Wort „Systembaustein" in Champagner-Gold (#9e947f).
+   letztes Wort „Systembaustein" in Champagner-Gold (#c7b489).
    Reiner Display-Layer auf dem Notion-Heading (kein Vault-Text).
    ============================================================ */
 (function(){
@@ -4331,7 +4333,7 @@
   var PG='.page__lieferpartner-ansprechpartner-lieferantenvertrge';
   /* Farbe via CSS (Spezifität reicht); Abstand inline+!important,
      weil eine Theme-Regel mit höherer Spezifität den margin sonst überschreibt. */
-  var CSS=PG+' .tslph-h .tslph-g{color:#9e947f !important}';
+  var CSS=PG+' .tslph-h .tslph-g{color:#c7b489 !important}';
   function injectCSS(){ if(document.getElementById('tslph-css'))return; var s=document.createElement('style'); s.id='tslph-css'; s.textContent=CSS; document.head.appendChild(s); }
   function findHeading(){
     var hs=document.querySelectorAll(PG+' .notion-heading, '+PG+' h1, '+PG+' h2');
@@ -4410,7 +4412,7 @@
   #tslmod a.tsl-card:focus-visible{outline:2px solid rgba(${GLOW},.7);outline-offset:4px}
   #tslmod .tsl-num{position:absolute;top:24px;right:24px;font-size:.7rem;font-weight:500;letter-spacing:.2em;color:rgba(199,180,137,.55)}
   #tslmod .tsl-logo{display:block;height:32px;width:auto;margin:2px auto 16px}
-  #tslmod .tsl-k{display:block;font-size:.56rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin-bottom:8px;text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 8px rgba(0,0,0,.8)}
+  #tslmod .tsl-k{display:block;font-size:.56rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#c7b489;margin-bottom:8px;text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 8px rgba(0,0,0,.8)}
   #tslmod .tsl-h{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1.22rem;font-weight:600;letter-spacing:-.012em;line-height:1.15;color:#fff;margin:0 0 11px;text-shadow:0 0 4px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,.95),0 3px 14px rgba(0,0,0,.9),0 6px 34px rgba(0,0,0,.8)}
   #tslmod .tsl-t{color:rgba(255,255,255,.66);font-size:.84rem;line-height:1.55;margin:0 auto;max-width:32ch;text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 10px rgba(0,0,0,.85),0 4px 22px rgba(0,0,0,.7)}
   @keyframes tslmod-hb{0%{box-shadow:0 4px 14px rgba(${GLOW},.10),0 0 14px rgba(${GLOW},.10)}18%{box-shadow:0 6px 22px rgba(${GLOW},.30),0 0 46px rgba(${GLOW},.34)}32%{box-shadow:0 5px 18px rgba(${GLOW},.16),0 0 26px rgba(${GLOW},.18)}46%{box-shadow:0 6px 20px rgba(${GLOW},.26),0 0 40px rgba(${GLOW},.28)}72%,100%{box-shadow:0 4px 14px rgba(${GLOW},.10),0 0 14px rgba(${GLOW},.10)}}
@@ -4458,7 +4460,7 @@
 /* ---- */
 
 /* lieferpartner-ansprechpartner-lieferantenvertrge — drei Notion-H3 zweifarbig:
-   letzter Teil beige via .ts-accent (#9e947f), Muster wie __tsMwzGoal (kein CSS-Delta,
+   letzter Teil beige via .ts-accent (#c7b489), Muster wie __tsMwzGoal (kein CSS-Delta,
    .ts-accent global). Heading 2 wird zudem inhaltlich von „…als Supporter" auf
    „…immer erreichbar." gesetzt (Notion-Text bleibt Text-SSOT; JS erzwingt die finale
    Darstellung). Block-ID-Anker + Text-Fallback, selbstheilend (React kann Text/Span
@@ -4482,12 +4484,14 @@
   function tone(h){
     var el=find(h); if(!el) return;
     var want=norm(h.black+h.accent);
+    var accCore=h.accent.replace(/[.!?…]+$/,''), accPunct=h.accent.slice(accCore.length);   /* Satzzeichen bleibt weiss */
     var sp=el.querySelector('.ts-accent');
-    if(sp && norm(sp.textContent)===norm(h.accent) && norm(el.textContent)===want) return; /* schon gesetzt */
+    if(sp && norm(sp.textContent)===norm(accCore) && norm(el.textContent)===want) return; /* schon gesetzt */
     while(el.firstChild) el.removeChild(el.firstChild);
     el.appendChild(document.createTextNode(h.black));
-    var s=document.createElement('span'); s.className='ts-accent'; s.textContent=h.accent;
+    var s=document.createElement('span'); s.className='ts-accent'; s.textContent=accCore;
     el.appendChild(s);
+    if(accPunct) el.appendChild(document.createTextNode(accPunct));
   }
   function apply(){ if(!on()) return; for(var i=0;i<HEADS.length;i++) tone(HEADS[i]); }
   apply();
@@ -4559,8 +4563,8 @@
 
   /* --- Textpanel rechts --- */
   .tscb .tsx{min-width:0}
-  .tscb .tsx-eye{display:inline-flex;align-items:center;gap:9px;font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9e947f;margin-bottom:14px}
-  .tscb .tsx-eye::before{content:"";width:7px;height:7px;border-radius:50%;background:#9e947f;box-shadow:0 0 12px rgba(158,148,127,.7)}
+  .tscb .tsx-eye{display:inline-flex;align-items:center;gap:9px;font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#c7b489;margin-bottom:14px}
+  .tscb .tsx-eye::before{content:"";width:7px;height:7px;border-radius:50%;background:#c7b489;box-shadow:0 0 12px rgba(199,180,137,.7)}
   .tscb .tsx-h{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(26px,2.7vw,38px);font-weight:600;letter-spacing:-.02em;line-height:1.12;color:#fff;margin:0 0 16px}
   .tscb .tsx-h span{color:#c7b489}
   .tscb .tsx-p{font-size:15.5px;line-height:1.7;color:#dcdcdc;margin:0 0 16px;max-width:520px}
@@ -4572,7 +4576,7 @@
   /* --- Animation links --- */
   .tscb .tsc-anim{min-width:0}
   .tscb .tscp-head{text-align:left;margin-bottom:14px}
-  .tscb .tscp-eye{font-size:.58rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:#9e947f}
+  .tscb .tscp-eye{font-size:.58rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:#c7b489}
   .tscb .tscp-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(20px,1.8vw,26px);font-weight:600;letter-spacing:-.015em;color:#fff;margin:6px 0 0}
   .tscb .tscp-title span{color:#c7b489}
   .tscb .tsc-steps{display:flex;gap:6px;justify-content:flex-start;flex-wrap:wrap;margin:14px 0 0}
@@ -5011,10 +5015,10 @@
   .tszmac-tile{width:100%;max-width:520px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 18px 44px rgba(0,0,0,.5));transition:transform .5s cubic-bezier(.16,1,.3,1),filter .5s cubic-bezier(.16,1,.3,1)}
   .tszmac-tile img{width:100%;height:auto;display:block}
   .tszmac-tile:hover,.tszmac-tile:focus-visible{transform:translateY(-4px) scale(1.02);animation:tszmacHb 2.6s cubic-bezier(.16,1,.3,1) infinite;outline:none}
-  @keyframes tszmacHb{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(158,148,127,.14))}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(158,148,127,.30))}}
+  @keyframes tszmacHb{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(199,180,137,.14))}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(199,180,137,.30))}}
   .tszmac-tile:active{transform:scale(.99);transition-duration:.12s}
   .tszmac-cap{width:100%;text-align:center;font-size:15px;font-weight:600;letter-spacing:.005em;color:#fff;margin-top:14px}
-  .tszmac-cap .g{color:#9e947f}
+  .tszmac-cap .g{color:#c7b489}
   .tszmac-hint{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.32);margin-top:6px;animation:tszmacHint 2.5s ease-in-out infinite}
   @keyframes tszmacHint{0%,100%{opacity:.4}50%{opacity:.8}}
   #tszmac-lb{position:fixed;inset:0;z-index:99999;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(5,6,11,.92);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:clamp(16px,4vw,40px);opacity:0;transition:opacity .3s ease;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif}
