@@ -1148,3 +1148,14 @@ details > summary {
   .page__gerichte-getrnke-finaler-schritt .ts-hero__text{ padding:0 16px 20px; }
   .page__gerichte-getrnke-finaler-schritt .ts-hero__title{ font-size:clamp(2rem,12vw,3rem); }
 }
+
+/* ===== BLOCK 12b · Rezepturen · MacBook-Klick-Lightbox (Spiegelung, JS injiziert identisch) =====
+   Muster 1:1 aus inventurliste (BLOCK 10). #tsmac-lb-Styles global (BLOCK 9 mehrwert) — hier NICHT dupliziert. */
+.page__rezepturen .notion-video.tsmac-host video{display:none!important;}
+.page__rezepturen .tsmac{position:relative;cursor:pointer;display:block;width:100%;line-height:0;background:transparent;}
+.page__rezepturen .tsmac img{width:100%;height:auto;display:block;transition:transform .5s ease;}
+.page__rezepturen .tsmac:hover img{transform:scale(1.02);}
+.page__rezepturen .tsmac__play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.page__rezepturen .tsmac__play span{width:76px;height:76px;border-radius:50%;background:rgba(255,255,255,.16);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;transition:transform .3s,background .3s;}
+.page__rezepturen .tsmac__play span::after{content:"";border-style:solid;border-width:12px 0 12px 20px;border-color:transparent transparent transparent #fff;margin-left:5px;}
+.page__rezepturen .tsmac:hover .tsmac__play span{transform:scale(1.08);background:rgba(255,255,255,.26);}
