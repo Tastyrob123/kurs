@@ -5737,7 +5737,7 @@
   #tsd5 .d5-jar{display:block;width:100%;height:auto;object-fit:contain;filter:contrast(1.05) saturate(1.06);pointer-events:none;user-select:none}
   #tsd5 .d5-herotext{position:relative;z-index:2;margin-top:-33%;padding:0 8px 4px}
   #tsd5 .d5-logo{display:block;width:46px;height:auto;margin:0 auto 12px;filter:drop-shadow(0 2px 8px rgba(0,0,0,.95)) drop-shadow(0 6px 24px rgba(0,0,0,.85));pointer-events:none;user-select:none}
-  #tsd5 .d5-title{margin:0;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;font-weight:600;line-height:1.03;letter-spacing:-.02em;font-size:clamp(2.1rem,5.4vw,3.4rem);text-shadow:0 2px 4px rgba(0,0,0,.85),0 4px 12px rgba(0,0,0,.5)}
+  #tsd5 .d5-title{margin:0;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;font-weight:600;line-height:1.03;letter-spacing:-.02em;font-size:clamp(2.1rem,5.4vw,3.4rem);text-shadow:0 0 4px rgba(0,0,0,.55),0 2px 5px rgba(0,0,0,.9),0 5px 16px rgba(0,0,0,.6)}
   #tsd5 .d5-title .basil{color:#7c7200}
   #tsd5 .d5-title .pesto{color:#fff}
   #tsd5 .d5-sub{max-width:660px;margin:20px auto 0;font-size:15.5px;line-height:1.62;color:#fff}
@@ -5952,58 +5952,4 @@
   mount();
   document.addEventListener("DOMContentLoaded", mount);
   new MutationObserver(mount).observe(document.documentElement,{childList:true,subtree:true});
-})();
-
-/* ---- */
-
-/* Sidebar-Styling-Spans (Farben/Font kommen aus kurs.css, hier nur die Spans):
-   1. Modul-Titel: die Zahl in "Modul N" in unser Rot (.ts-modul-num) — Wort weiß / Zahl rot.
-   2. Lektionen: der Name NACH "//" beige (.ts-lektion-name) — "Lektion 2.1 //" bleibt weiß.
-   Site-weit, selbstheilend via debounced Observer (Muster wie ts-m2-gold).
-   HINWEIS: bei Parallel-Arbeit an kurs.js darauf achten, dass dieser Block am Dateiende erhalten bleibt. */
-(function(){
-  if(window.__tsSbNum) return; window.__tsSbNum = true;
-
-  /* Modul-Header: erste Ziffernfolge rot wrappen */
-  function wrapModulNum(){
-    document.querySelectorAll('.super-navigation-menu__list-header .super-navigation-menu__item-title').forEach(function(el){
-      if(el.querySelector('.ts-modul-num')) return;
-      var w=document.createTreeWalker(el, NodeFilter.SHOW_TEXT), n;
-      while(n=w.nextNode()){
-        var m=n.nodeValue.match(/\d+/);
-        if(m){
-          var after=n.splitText(m.index); after.splitText(m[0].length);
-          var span=document.createElement('span'); span.className='ts-modul-num'; span.textContent=m[0];
-          after.parentNode.replaceChild(span, after);
-          break;
-        }
-      }
-    });
-  }
-
-  /* Lektionen (Leaf-Links, NICHT in einem list-header): alles nach "//" beige wrappen */
-  function wrapLektionName(){
-    document.querySelectorAll('.super-navigation-menu__item-title').forEach(function(el){
-      if(el.closest('.super-navigation-menu__list-header')) return;
-      if(el.querySelector('.ts-lektion-name')) return;
-      var w=document.createTreeWalker(el, NodeFilter.SHOW_TEXT), n;
-      while(n=w.nextNode()){
-        var i=n.nodeValue.indexOf('//');
-        if(i>-1){
-          var after=n.splitText(i+2);
-          var span=document.createElement('span'); span.className='ts-lektion-name'; span.textContent=after.nodeValue;
-          after.parentNode.replaceChild(span, after);
-          break;
-        }
-      }
-    });
-  }
-
-  function apply(){ wrapModulNum(); wrapLektionName(); }
-
-  apply();
-  document.addEventListener('DOMContentLoaded', apply);
-  var _t=null;
-  new MutationObserver(function(){ if(_t) return; _t=setTimeout(function(){ _t=null; apply(); },200); })
-    .observe(document.documentElement,{childList:true,subtree:true});
 })();
