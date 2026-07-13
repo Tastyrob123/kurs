@@ -4492,6 +4492,17 @@
       eyebrow:'Der Warenkorb · DB V · Finance',
       title:'Erweiterung nach <span>Finance</span>',
       sub:'Wenn du Gemeinkosten & Mitarbeiterlöhne angelegt hast, können wir diese Tabelle erweitern. Wir wollen jetzt wissen: Was kostet es uns, eine Charge zuzubereiten? Wareneinsatz + Personalkosten pro Arbeitsvorgang (Gemeinkosten sind optional ebenfalls verknüpfbar). Dafür ergänzen wir weitere Spalten in der Rezepturen-Liste.',
+      /* keepSteps: Finance-Schritt 7 „Verwendet in" (→ DB Gerichte) ist keine hier baubare Spalte —
+         DB Gerichte (DB VIII, finaler Schritt) existiert zu diesem Zeitpunkt noch nicht. Sie erscheint
+         automatisch als Gegenspalte, sobald du in DB VIII die „Produkte Inhouse Production"-Verknüpfung
+         (Rezepturen/Homemade-Ansicht) wechselseitig anlegst → Ghost (unten). Muster wie db0 „Packaging / Co.". */
+      keepSteps:6,
+      relations:[
+        { type:'ghost', name:'Verwendet in', target:'Gegenspalte · aus DB VIII Gerichte', flag:'erscheint automatisch',
+          desc:'Gegenspalte der Inhouse-Production-Verknüpfung aus den Gerichten — erscheint von allein.',
+          img:'https://tastyrob123.github.io/kurs/img/gerichte/rote-bete-risotto.jpg',
+          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch, sobald du in <b>DB VIII : Gerichte &amp; Getränke</b> die Verknüpfung „Produkte Inhouse Production" (deine Rezepturen als Inhouse-Production-Ansicht) mit <b>wechselseitiger Verbindung</b> anlegst.</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Verwendet in</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt dir, in welchen Gerichten diese Rezeptur als Baustein steckt.</p>' }
+      ],
       summary:'Portionsmenge', chain:true },
     /* DB VI Gemeinkosten + DB VII Mitarbeiterlöhne — DB VII liegt als eigenes Tab-Widget
        (.notion-tabs, marker /Mitarbeiter/). DB VI ist selbst in ZWEI Sub-Tabs geteilt:
@@ -4870,7 +4881,7 @@
      Nenner = Summe der bekannten Schrittzahlen (auch noch nicht besuchte Seiten
      zählen mit). Zähler = erledigte Schritte = localStorage-Keys "done-…"='1'
      (dieselben Keys, die das Karten-/Checkbox-System setzt → immer aktuell). */
-  var BACKOFFICE={ db0_inventurliste:16, db13_lieferanten:13, db13_ansprechpartner:7, db13_vertraege:13, db4_zutaten:30, db5_rezepturen:23, db5_finance_personal:7, db6_gemeinkosten:10, db6_gemeinkostenannahmen:5, db7_mitarbeiterloehne:15, db8_gerichte:37 };
+  var BACKOFFICE={ db0_inventurliste:16, db13_lieferanten:13, db13_ansprechpartner:7, db13_vertraege:13, db4_zutaten:30, db5_rezepturen:23, db5_finance_personal:6, db6_gemeinkosten:10, db6_gemeinkostenannahmen:5, db7_mitarbeiterloehne:15, db8_gerichte:37 };
   function backofficeTotal(){ var t=0; for(var kk in BACKOFFICE){ if(BACKOFFICE.hasOwnProperty(kk)) t+=BACKOFFICE[kk]; } return t; }
   function backofficeDone(){ var d=0; try{ for(var i=0;i<localStorage.length;i++){ var key=localStorage.key(i); if(key&&key.slice(0,5)==='done-'&&localStorage.getItem(key)==='1') d++; } }catch(e){} return d; }
   function backofficePct(){ var t=backofficeTotal(), d=Math.min(backofficeDone(),t); return t>0?Math.round(d/t*100):0; }
@@ -7125,155 +7136,169 @@
 
 /* ============================================================
    gemeinkosten-mitarbeiterlhne — Exkurs "Die drei Brillen" (#tsbrille)
-   Eine Absatz-Achse, drei Brillen darauf: Break-Even (Untergrenze,
-   Linie) · Kapazitaet (Obergrenze, physisches Max) · Szenario
-   (beweglicher Marker Pessimistisch 50% / Realistisch 70% /
-   Optimistisch 90%). Segmented-Control schaltet das Szenario, der
-   Fuell-Balken zeigt Verlust-(rot)/Gewinn-(gruen)Anteil, Zahlen
-   zaehlen hoch. Darunter 3 Brillen-Karten (Was muss/kann/werde ich).
+   EDLE Bogen-/Tacho-Anzeige: Halbkreis 0 → Kapazität (physisches Max
+   80×26=2.080). Roter Bogen 0→Break-Even (Verlust/Kostendeckung),
+   gold→grüner Bogen Break-Even→Max (Gewinn). Feine Nadel zeigt das
+   Szenario (Pess 50 / Real 70 / Opt 90 %). Zentrum: grosse Absatz-Zahl
+   + Klartext-Zeile, die pro Szenario ERKLÄRT was die Zahl bedeutet.
+   Darunter die 3 Brillen als klare Lese-Hilfe (Muss / Kann / Wird).
    Sitzt DIREKT UNTER dem Intro-Absatz "Werkzeug mit drei Brillen".
-   Nur auf /gemeinkosten-mitarbeiterlhne. Muster = #tsd5.
-   Zahlen = Beispielwerte (Text-Beispiel 80x26x70%; Break-Even
-   illustrativ 9.000 EUR / 9 EUR DB = 1.000 Stueck).
+   Nur auf /gemeinkosten-mitarbeiterlhne. Muster/Tokens = #tsd5.
+   Zahlen = Beispielwerte (Text-Beispiel 80×26; Break-Even illustrativ
+   9.000 € ÷ 9 € DB = 1.000 Stück).
    ============================================================ */
 (function(){
   if(window.__tsbrille) return; window.__tsbrille=true;
 
   var GOLD='#c7b489', EASE='cubic-bezier(.16,1,.3,1)';
   var EINH_TAG=80, TAGE=26;
-  var AXISMAX=EINH_TAG*TAGE;              // 2.080 physisches Maximum (100%)
-  var FIX=9000, DB=9;                     // Beispiel Fixkosten+Personal / DB je Stueck
-  var BREAKEVEN=Math.round(FIX/DB);       // 1.000 Stueck Untergrenze
+  var AXISMAX=EINH_TAG*TAGE;               // 2.080 physisches Maximum (100%)
+  var FIX=9000, DB=9;                      // Beispiel Fixkosten+Personal / DB je Stück
+  var BREAKEVEN=Math.round(FIX/DB);        // 1.000 Stück Untergrenze
   var SZEN=[
-    {key:'pess', lab:'Pessimistisch', pct:50, foot:'50 % der Kapazität'},
-    {key:'real', lab:'Realistisch',   pct:70, foot:'70 % der Kapazität'},
-    {key:'opt',  lab:'Optimistisch',  pct:90, foot:'90 % der Kapazität'}
+    {key:'pess', lab:'Pessimistisch', pct:50,
+      story:'Selbst im schlechten Fall trägt sich der Laden — knapp über der Null-Linie. Viel Puffer ist das nicht.'},
+    {key:'real', lab:'Realistisch',   pct:70,
+      story:'Der Normalfall: klar über Break-Even, mit Luft nach oben bis zur Kapazitätsgrenze.'},
+    {key:'opt',  lab:'Optimistisch',  pct:90,
+      story:'Läuft es gut, schöpfst du fast die volle Kapazität aus — der größte Teil ist reiner Gewinn.'}
   ];
   var DEFAULT=1; // Realistisch
 
+  // Geometrie Halbkreis
+  var CX=220, CY=212, R=176;
   function nf(n){ return Math.round(n).toLocaleString('de-DE'); }
+  function ang(v){ return 180*(1 - v/AXISMAX); }                 // Wert -> Winkel (Grad), 0=180°(links) .. MAX=0°(rechts)
+  function pol(a){ var r=a*Math.PI/180; return [CX + R*Math.cos(r), CY - R*Math.sin(r)]; }
+  function arc(v1,v2){                                            // Bogen-Pfad von Wert v1 (links) zu v2 (rechts), über oben
+    var p1=pol(ang(v1)), p2=pol(ang(v2));
+    return 'M'+p1[0].toFixed(1)+' '+p1[1].toFixed(1)+' A'+R+' '+R+' 0 0 1 '+p2[0].toFixed(1)+' '+p2[1].toFixed(1);
+  }
 
   var CSS=
-  '#tsbrille{width:min(1080px,94vw);margin:26px auto 56px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;opacity:0;transform:translateY(20px);transition:opacity .8s '+EASE+',transform .9s '+EASE+'}'+
+  '#tsbrille{width:min(880px,94vw);margin:30px auto 58px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;opacity:0;transform:translateY(20px);transition:opacity .8s '+EASE+',transform .9s '+EASE+'}'+
   '#tsbrille.in{opacity:1;transform:none}'+
   '#tsbrille *{box-sizing:border-box}'+
-  '#tsbrille .tb-head{text-align:center;margin:0 0 30px}'+
-  '#tsbrille .tb-eye{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-weight:600;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:'+GOLD+';margin:0 0 12px}'+
-  '#tsbrille .tb-title{margin:0;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-weight:600;line-height:1.08;letter-spacing:-.02em;font-size:clamp(1.9rem,4.4vw,2.8rem)}'+
+  '#tsbrille .tb-head{text-align:center;margin:0 0 6px}'+
+  '#tsbrille .tb-eye{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-weight:600;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:'+GOLD+';margin:0 0 12px}'+
+  '#tsbrille .tb-title{margin:0;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-weight:600;line-height:1.06;letter-spacing:-.02em;font-size:clamp(1.9rem,4.6vw,2.9rem)}'+
   '#tsbrille .tb-title .g{color:'+GOLD+'}'+
-  '#tsbrille .tb-sub{max-width:660px;margin:16px auto 0;font-size:15.5px;line-height:1.62;color:rgba(255,255,255,.72)}'+
-  /* Haupt-Glaskarte mit der Achse */
-  '#tsbrille .tb-stage{position:relative;border-radius:22px;padding:34px 34px 30px;background:linear-gradient(180deg,rgba(255,255,255,.052),rgba(255,255,255,.022));border:1px solid rgba(199,180,137,.24);box-shadow:0 30px 80px -28px rgba(0,0,0,.72),inset 0 1px 0 rgba(255,255,255,.07);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}'+
-  '#tsbrille .tb-axlabel{display:flex;justify-content:space-between;align-items:baseline;margin:0 0 30px}'+
-  '#tsbrille .tb-axlabel .l{font-size:12.5px;letter-spacing:.02em;color:rgba(255,255,255,.55)}'+
-  '#tsbrille .tb-axlabel .r{font-size:12.5px;color:rgba(255,255,255,.4)}'+
-  /* Achse / Balken */
-  '#tsbrille .tb-track{position:relative;height:22px;border-radius:999px;background:rgba(255,255,255,.07);box-shadow:inset 0 1px 3px rgba(0,0,0,.45);margin:56px 0 0}'+
-  '#tsbrille .tb-fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:999px;transition:width .9s '+EASE+'}'+
-  '#tsbrille .tb-fill .seg{position:absolute;top:0;bottom:0;border-radius:999px}'+
-  '#tsbrille .tb-seg-loss{left:0;background:linear-gradient(180deg,#e35d76,#e32552);box-shadow:0 0 18px rgba(227,37,82,.4)}'+
-  '#tsbrille .tb-seg-win{background:linear-gradient(180deg,#9FD3B9,#5FAE88);box-shadow:0 0 18px rgba(95,174,136,.45)}'+
-  /* Break-Even Linie */
-  '#tsbrille .tb-be{position:absolute;top:-16px;bottom:-16px;width:2px;background:repeating-linear-gradient(180deg,rgba(255,255,255,.85) 0,rgba(255,255,255,.85) 5px,transparent 5px,transparent 10px);transform:translateX(-1px);z-index:4}'+
-  '#tsbrille .tb-be .cap{position:absolute;top:-30px;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;font-weight:600;letter-spacing:.02em;color:#fff;background:rgba(8,10,18,.85);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:4px 11px;box-shadow:0 6px 18px rgba(0,0,0,.5)}'+
-  /* Kapazitaets-Obergrenze Endkappe (Goldlinie am Bar-Ende; Beschriftung via Kopfzeile + Skala) */
-  '#tsbrille .tb-cap-max{position:absolute;right:0;top:-16px;bottom:-16px;width:2px;background:linear-gradient(180deg,rgba(199,180,137,.9),rgba(199,180,137,.35));z-index:3}'+
-  /* Szenario-Marker (beweglicher Bead) */
-  '#tsbrille .tb-marker{position:absolute;top:50%;left:0;width:28px;height:28px;margin:-14px 0 0 -14px;border-radius:50%;background:radial-gradient(circle at 34% 30%,#fbf5e6,'+GOLD+' 68%);border:1px solid rgba(255,255,255,.5);box-shadow:0 0 0 7px rgba(199,180,137,.15),0 6px 16px rgba(0,0,0,.6);z-index:6;transition:left .9s '+EASE+'}'+
-  '#tsbrille .tb-scale{display:flex;justify-content:space-between;font-size:10.5px;color:rgba(255,255,255,.3);margin-top:14px}'+
-  /* Ergebnis-Tiles */
-  '#tsbrille .tb-out{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:34px 0 0}'+
-  '#tsbrille .tb-tile{border-radius:16px;padding:18px 14px;background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);text-align:center}'+
-  '#tsbrille .tb-tile.hot{background:linear-gradient(180deg,rgba(199,180,137,.16),rgba(199,180,137,.05));border-color:rgba(199,180,137,.5)}'+
-  '#tsbrille .tb-tile .tl{font-size:11.5px;letter-spacing:.02em;color:rgba(255,255,255,.55);margin:0 0 9px}'+
-  '#tsbrille .tb-tile .tv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:clamp(1.5rem,3.2vw,2rem);font-weight:700;letter-spacing:-.02em;color:#fff;line-height:1}'+
-  '#tsbrille .tb-tile.hot .tv{color:'+GOLD+';font-size:clamp(1.7rem,3.6vw,2.35rem)}'+
-  '#tsbrille .tb-tile.win .tv{color:#9FD3B9}'+
-  '#tsbrille .tb-tile .tu{font-size:11.5px;color:rgba(255,255,255,.42);margin-top:7px}'+
+  '#tsbrille .tb-sub{max-width:600px;margin:16px auto 0;font-size:15.5px;line-height:1.62;color:rgba(255,255,255,.66)}'+
+  /* Bühne */
+  '#tsbrille .tb-stage{position:relative;margin:26px 0 0;border-radius:26px;padding:30px 30px 26px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.018));border:1px solid rgba(199,180,137,.22);box-shadow:0 40px 100px -34px rgba(0,0,0,.78),inset 0 1px 0 rgba(255,255,255,.06);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}'+
+  '#tsbrille .tb-gaugewrap{position:relative;width:100%;max-width:440px;margin:0 auto}'+
+  '#tsbrille .tb-gauge{display:block;width:100%;height:auto;overflow:visible}'+
+  '#tsbrille .tb-arc{fill:none;stroke-linecap:round}'+
+  '#tsbrille .tb-arc-track{stroke:rgba(255,255,255,.07);stroke-width:15}'+
+  '#tsbrille .tb-arc-loss{stroke:url(#tbLoss);stroke-width:15;filter:drop-shadow(0 0 7px rgba(227,37,82,.5))}'+
+  '#tsbrille .tb-arc-win{stroke:url(#tbWin);stroke-width:15;filter:drop-shadow(0 0 8px rgba(120,175,140,.45))}'+
+  '#tsbrille .tb-be-tick{stroke:rgba(255,255,255,.9);stroke-width:2.5;stroke-dasharray:3 4}'+
+  '#tsbrille .tb-bead-g{transition:transform 1s '+EASE+'}'+
+  '#tsbrille .tb-bead-tick{stroke:'+GOLD+';stroke-width:2.6;stroke-linecap:round;opacity:.8}'+
+  '#tsbrille .tb-bead-halo{fill:rgba(199,180,137,.22)}'+
+  '#tsbrille .tb-bead{fill:#fbf5e6;filter:drop-shadow(0 0 8px rgba(199,180,137,.95)) drop-shadow(0 2px 5px rgba(0,0,0,.5))}'+
+  '#tsbrille .tb-cap{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;font-weight:600;letter-spacing:.02em}'+
+  /* Zentrum-Overlay */
+  '#tsbrille .tb-center{position:absolute;left:0;right:0;bottom:8%;text-align:center;pointer-events:none}'+
+  '#tsbrille .tb-c-lab{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.5);margin:0 0 4px}'+
+  '#tsbrille .tb-c-val{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:clamp(2.6rem,7vw,3.6rem);font-weight:700;letter-spacing:-.03em;line-height:1;color:'+GOLD+'}'+
+  '#tsbrille .tb-c-unit{font-size:12.5px;color:rgba(255,255,255,.5);margin-top:6px}'+
+  '#tsbrille .tb-c-scn{display:inline-block;margin-top:11px;font-size:12px;font-weight:600;color:#05060b;background:'+GOLD+';border-radius:999px;padding:4px 13px}'+
+  /* Endpunkt-Labels */
+  '#tsbrille .tb-ends{display:flex;justify-content:space-between;max-width:440px;margin:2px auto 0;font-size:11px;color:rgba(255,255,255,.4)}'+
+  '#tsbrille .tb-ends b{display:block;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:12.5px;font-weight:600;color:rgba(255,255,255,.68);margin-bottom:2px}'+
+  /* Klartext-Zeile (besser erklärt) */
+  '#tsbrille .tb-story{max-width:560px;margin:22px auto 0;text-align:center;font-size:15px;line-height:1.6;color:rgba(255,255,255,.82);min-height:48px}'+
+  '#tsbrille .tb-story b{color:#fff;font-weight:600}'+
+  '#tsbrille .tb-story .win{color:#9FD3B9;font-weight:600}'+
   /* Szenario Segmented-Control */
-  '#tsbrille .tb-seg-ctrl{display:flex;gap:8px;justify-content:center;margin:30px auto 0;max-width:520px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:6px}'+
-  '#tsbrille .tb-seg-btn{flex:1;border:0;background:transparent;color:rgba(255,255,255,.62);font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:13.5px;font-weight:600;letter-spacing:.01em;padding:11px 8px;border-radius:999px;cursor:pointer;transition:color .2s ease,background .3s '+EASE+',box-shadow .3s ease}'+
-  '#tsbrille .tb-seg-btn .pc{display:block;font-size:11px;font-weight:500;color:rgba(255,255,255,.4);margin-top:3px}'+
+  '#tsbrille .tb-seg-ctrl{display:flex;gap:6px;justify-content:center;margin:22px auto 0;max-width:460px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:5px}'+
+  '#tsbrille .tb-seg-btn{flex:1;border:0;background:transparent;color:rgba(255,255,255,.6);font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:13px;font-weight:600;letter-spacing:.01em;padding:10px 6px;border-radius:999px;cursor:pointer;transition:color .2s ease,background .3s '+EASE+',box-shadow .3s ease}'+
+  '#tsbrille .tb-seg-btn .pc{display:block;font-size:10.5px;font-weight:500;color:rgba(255,255,255,.38);margin-top:3px}'+
   '#tsbrille .tb-seg-btn:hover{color:#fff}'+
-  '#tsbrille .tb-seg-btn.on{background:linear-gradient(180deg,rgba(199,180,137,.24),rgba(199,180,137,.09));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 4px 14px rgba(0,0,0,.4)}'+
+  '#tsbrille .tb-seg-btn.on{background:linear-gradient(180deg,rgba(199,180,137,.26),rgba(199,180,137,.09));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 4px 14px rgba(0,0,0,.4)}'+
   '#tsbrille .tb-seg-btn.on .pc{color:'+GOLD+'}'+
-  '#tsbrille .tb-formula{font-size:14px;color:rgba(255,255,255,.8);text-align:center;margin:26px auto 0;max-width:640px;line-height:1.6}'+
-  '#tsbrille .tb-formula b{color:'+GOLD+';font-weight:600}'+
-  /* Drei Brillen-Karten */
-  '#tsbrille .tb-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:26px 0 0}'+
-  '#tsbrille .tb-card{border-radius:18px;padding:24px 22px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(199,180,137,.2);box-shadow:0 24px 60px -30px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.06);opacity:0;transform:translateY(16px);transition:opacity .6s '+EASE+',transform .65s '+EASE+'}'+
-  '#tsbrille.in .tb-card{opacity:1;transform:none}'+
-  '#tsbrille .tb-card .ic{width:40px;height:40px;margin:0 0 16px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:linear-gradient(180deg,rgba(199,180,137,.18),rgba(199,180,137,.06));border:1px solid rgba(199,180,137,.32)}'+
-  '#tsbrille .tb-card .ic svg{width:22px;height:22px;display:block}'+
-  '#tsbrille .tb-card .ct{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:1.15rem;font-weight:600;letter-spacing:-.01em;color:#fff;margin:0 0 4px}'+
-  '#tsbrille .tb-card .cq{font-size:13.5px;color:rgba(255,255,255,.6);margin:0 0 16px;line-height:1.5}'+
-  '#tsbrille .tb-card .cr{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.01em;color:'+GOLD+';background:linear-gradient(180deg,rgba(199,180,137,.16),rgba(199,180,137,.06));border:1px solid rgba(199,180,137,.3);border-radius:999px;padding:6px 13px}'+
-  '@media(max-width:820px){'+
-    '#tsbrille .tb-stage{padding:26px 20px 24px}'+
-    '#tsbrille .tb-out{grid-template-columns:1fr;gap:10px}'+
-    '#tsbrille .tb-cards{grid-template-columns:1fr;gap:12px}'+
-    '#tsbrille .tb-seg-btn{font-size:12.5px;padding:10px 4px}'+
+  /* Drei Brillen — Lesehilfe */
+  '#tsbrille .tb-lenses{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin:26px 0 0;background:rgba(199,180,137,.14);border:1px solid rgba(199,180,137,.14);border-radius:18px;overflow:hidden}'+
+  '#tsbrille .tb-lens{background:linear-gradient(180deg,rgba(12,14,22,.6),rgba(8,10,16,.6));padding:22px 20px;position:relative}'+
+  '#tsbrille .tb-lens .ix{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:12px;font-weight:600;color:'+GOLD+';letter-spacing:.04em;margin:0 0 10px}'+
+  '#tsbrille .tb-lens .ln{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:1.12rem;font-weight:600;color:#fff;letter-spacing:-.01em;margin:0 0 3px}'+
+  '#tsbrille .tb-lens .lq{font-size:12.5px;color:rgba(255,255,255,.5);margin:0 0 14px;line-height:1.45}'+
+  '#tsbrille .tb-lens .lr{font-size:12px;font-weight:600;color:'+GOLD+'}'+
+  '#tsbrille .tb-lens .lr small{display:block;font-size:16px;color:#fff;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;margin-top:3px;letter-spacing:-.01em}'+
+  '@media(max-width:720px){'+
+    '#tsbrille .tb-stage{padding:22px 16px 20px}'+
+    '#tsbrille .tb-lenses{grid-template-columns:1fr}'+
+    '#tsbrille .tb-seg-btn{font-size:12px}'+
   '}'+
   '@media(prefers-reduced-motion:reduce){'+
     '#tsbrille,#tsbrille.in{opacity:1;transform:none}'+
-    '#tsbrille .tb-fill,#tsbrille .tb-marker{transition:none}'+
-    '#tsbrille .tb-card{opacity:1;transform:none;transition:none}'+
+    '#tsbrille .tb-needle-g{transition:none}'+
+    '#tsbrille .tb-arc-loss,#tsbrille .tb-arc-win{transition:none}'+
   '}';
 
   function injectCSS(){ if(document.getElementById('tsbrille-css'))return; var s=document.createElement('style'); s.id='tsbrille-css'; s.textContent=CSS; document.head.appendChild(s); }
 
-  var G_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="'+GOLD+'" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.5" cy="14" r="3.5"/><circle cx="17.5" cy="14" r="3.5"/><path d="M10 13c.7-.8 3.3-.8 4 0"/><path d="M3 11l2-4h3M21 11l-2-4h-3"/></svg>';
-
-  var CARDS=[
-    {t:'Break-Even', q:'„Was muss ich mindestens?" — rechnet von den Kosten her.', r:'Untergrenze'},
-    {t:'Kapazität', q:'„Was kann ich überhaupt?" — rechnet vom Laden her, was physisch geht.', r:'Obergrenze'},
-    {t:'Szenario', q:'„Was werde ich wohl?" — spielt gut / mittel / schlecht durch.', r:'Realistischer Bereich'}
+  var LENSES=[
+    {ix:'Brille 1', ln:'Break-Even', lq:'„Was muss ich mindestens?" — von den Kosten her gerechnet.', rl:'Untergrenze', rv:nf(BREAKEVEN)+' Stück'},
+    {ix:'Brille 2', ln:'Kapazität', lq:'„Was kann ich überhaupt?" — vom Laden her, physisch möglich.', rl:'Obergrenze', rv:nf(AXISMAX)+' Stück'},
+    {ix:'Brille 3', ln:'Szenario', lq:'„Was wird realistisch?" — gut / mittel / schlecht durchgespielt.', rl:'Bereich dazwischen', rv:nf(Math.round(AXISMAX*0.5))+'–'+nf(Math.round(AXISMAX*0.9))}
   ];
 
   function build(){
     var root=document.createElement('div'); root.id='tsbrille';
-    var bePct=BREAKEVEN/AXISMAX*100;
+    var beTickA=ang(BREAKEVEN), beP=pol(beTickA);
+    var beInner=[CX+(R-13)*Math.cos(beTickA*Math.PI/180), CY-(R-13)*Math.sin(beTickA*Math.PI/180)];
+    var beOuter=[CX+(R+13)*Math.cos(beTickA*Math.PI/180), CY-(R+13)*Math.sin(beTickA*Math.PI/180)];
     var segHTML=SZEN.map(function(s,i){
       return '<button type="button" class="tb-seg-btn'+(i===DEFAULT?' on':'')+'" data-i="'+i+'">'+s.lab+'<span class="pc">'+s.pct+' %</span></button>';
     }).join('');
-    var cardsHTML=CARDS.map(function(c,i){
-      return '<div class="tb-card" style="transition-delay:'+(160+i*90)+'ms">'+
-        '<div class="ic">'+G_ICON+'</div>'+
-        '<h4 class="ct">'+c.t+'</h4>'+
-        '<p class="cq">'+c.q+'</p>'+
-        '<span class="cr">'+c.r+'</span>'+
-      '</div>';
+    var lensHTML=LENSES.map(function(l){
+      return '<div class="tb-lens"><p class="ix">'+l.ix+'</p><h4 class="ln">'+l.ln+'</h4><p class="lq">'+l.lq+'</p><div class="lr">'+l.rl+'<small>'+l.rv+'</small></div></div>';
     }).join('');
     root.innerHTML=
       '<div class="tb-head">'+
-        '<p class="tb-eye">Exkurs</p>'+
-        '<h3 class="tb-title">Dieselbe Frage, <span class="g">drei Brillen</span></h3>'+
-        '<p class="tb-sub">„Lohnt sich der Laden?" — von unten (Break-Even), von oben (Kapazität) und realistisch dazwischen (Szenario). Schalte die Auslastung um und sieh, wo dein Absatz landet.</p>'+
+        '<p class="tb-eye">Exkurs · Absatzplanung</p>'+
+        '<h3 class="tb-title">Eine Zahl, <span class="g">drei Brillen</span></h3>'+
+        '<p class="tb-sub">Lohnt sich der Laden? Break-Even sagt, was du <b>musst</b>. Kapazität, was du <b>kannst</b>. Das Szenario zeigt, wo du realistisch <b>landest</b>.</p>'+
       '</div>'+
       '<div class="tb-stage">'+
-        '<div class="tb-axlabel"><span class="l">Absatz pro Monat</span><span class="r">Kapazität: '+EINH_TAG+' × '+TAGE+' = '+nf(AXISMAX)+' Stück max</span></div>'+
-        '<div class="tb-track">'+
-          '<div class="tb-fill"><div class="seg tb-seg-loss"></div><div class="seg tb-seg-win"></div></div>'+
-          '<div class="tb-be" style="left:'+bePct+'%"><span class="cap">Break-Even · '+nf(BREAKEVEN)+'</span></div>'+
-          '<div class="tb-cap-max"></div>'+
-          '<div class="tb-marker"></div>'+
+        '<div class="tb-gaugewrap">'+
+          '<svg class="tb-gauge" viewBox="0 0 440 250" role="img" aria-label="Absatz-Anzeige">'+
+            '<defs>'+
+              '<linearGradient id="tbLoss" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e35d76"/><stop offset="1" stop-color="#e32552"/></linearGradient>'+
+              '<linearGradient id="tbWin" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d8c9ab"/><stop offset=".55" stop-color="#a9c9a0"/><stop offset="1" stop-color="#5FAE88"/></linearGradient>'+
+              '<linearGradient id="tbNeedle" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#8a7c58"/><stop offset="1" stop-color="#fbf5e6"/></linearGradient>'+
+            '</defs>'+
+            '<path class="tb-arc tb-arc-track" d="'+arc(0,AXISMAX)+'"/>'+
+            '<path class="tb-arc tb-arc-loss" data-arc="loss" d="'+arc(0,BREAKEVEN)+'"/>'+
+            '<path class="tb-arc tb-arc-win" data-arc="win" d="'+arc(BREAKEVEN,AXISMAX)+'"/>'+
+            '<line class="tb-be-tick" x1="'+beInner[0].toFixed(1)+'" y1="'+beInner[1].toFixed(1)+'" x2="'+beOuter[0].toFixed(1)+'" y2="'+beOuter[1].toFixed(1)+'"/>'+
+            '<text class="tb-cap" x="'+beOuter[0].toFixed(1)+'" y="'+(beOuter[1]-8).toFixed(1)+'" fill="#fff" text-anchor="middle">Break-Even</text>'+
+            '<g class="tb-bead-g" data-needle transform="rotate('+needleDeg(0).toFixed(2)+' '+CX+' '+CY+')">'+
+              '<line class="tb-bead-tick" x1="'+CX+'" y1="'+(CY-R+30)+'" x2="'+CX+'" y2="'+(CY-R+15)+'"/>'+
+              '<circle class="tb-bead-halo" cx="'+CX+'" cy="'+(CY-R)+'" r="13"/>'+
+              '<circle class="tb-bead" cx="'+CX+'" cy="'+(CY-R)+'" r="6.5"/>'+
+            '</g>'+
+          '</svg>'+
+          '<div class="tb-center">'+
+            '<p class="tb-c-lab">Möglicher Absatz</p>'+
+            '<div class="tb-c-val" data-out="absatz">–</div>'+
+            '<div class="tb-c-unit">Stück / Monat</div>'+
+            '<span class="tb-c-scn" data-out="scn">Realistisch · 70 %</span>'+
+          '</div>'+
         '</div>'+
-        '<div class="tb-scale"><span>0</span><span>'+nf(AXISMAX)+' Stück</span></div>'+
-        '<div class="tb-out">'+
-          '<div class="tb-tile"><p class="tl">Untergrenze · Break-Even</p><div class="tv">'+nf(BREAKEVEN)+'</div><div class="tu">Stück / Monat</div></div>'+
-          '<div class="tb-tile hot"><p class="tl">Möglicher Absatz · Szenario</p><div class="tv" data-out="absatz">–</div><div class="tu">Stück / Monat</div></div>'+
-          '<div class="tb-tile win"><p class="tl">Gewinn-Zone · über Break-Even</p><div class="tv" data-out="gewinn">–</div><div class="tu">Stück Puffer</div></div>'+
-        '</div>'+
+        '<div class="tb-ends"><span><b>0</b>Nichts verkauft</span><span style="text-align:right"><b>'+nf(AXISMAX)+'</b>Kapazität max</span></div>'+
+        '<p class="tb-story" data-out="story">–</p>'+
         '<div class="tb-seg-ctrl">'+segHTML+'</div>'+
-        '<p class="tb-formula"><b>'+EINH_TAG+' Einheiten/Tag × '+TAGE+' Tage × Auslastung</b> = möglicher Absatz. Alles über der Break-Even-Linie ist <b>Gewinn</b>.</p>'+
       '</div>'+
-      '<div class="tb-cards">'+cardsHTML+'</div>';
+      '<div class="tb-lenses">'+lensHTML+'</div>';
     return root;
   }
 
   function countTo(el,target,fmt){
     if(!el)return;
-    var dur=800,t0=null,done=false;
+    var dur=850,t0=null,done=false;
     function finish(){ if(done)return; done=true; el.textContent=fmt(target); }
     function step(now){ if(done)return; if(t0===null)t0=now; var p=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-p,3); el.textContent=fmt(target*e); if(p<1)requestAnimationFrame(step); else finish(); }
     requestAnimationFrame(step);
@@ -7282,45 +7307,50 @@
 
   var REDUCE=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  function needleDeg(v){ return 90 - ang(v); }   // 0 -> -90 (links), MAX -> +90 (rechts)
+
   function apply(root, idx, animate){
     var s=SZEN[idx];
     var absatz=Math.round(AXISMAX*s.pct/100);
     var gewinn=Math.max(0,absatz-BREAKEVEN);
-    var absPct=absatz/AXISMAX*100, bePct=BREAKEVEN/AXISMAX*100;
     root.__idx=idx;
-    // Segmented-Control
     root.querySelectorAll('.tb-seg-btn').forEach(function(b){ b.classList.toggle('on', parseInt(b.getAttribute('data-i'),10)===idx); });
-    // Balken
-    var fill=root.querySelector('.tb-fill'); if(fill)fill.style.width=absPct+'%';
-    var loss=root.querySelector('.tb-seg-loss'), win=root.querySelector('.tb-seg-win');
-    // Verlust-Segment: 0 -> min(absatz,BE), in % der GESAMTACHSE -> als px via width des fills? nutze % der Achse
-    var lossW=Math.min(absPct,bePct);          // % der Gesamtachse
-    var winStart=Math.min(absPct,bePct);
-    var winW=Math.max(0,absPct-bePct);
-    // seg sind Kinder des fill (Breite=absPct% der Achse). Positioniere relativ zur Achse via left/width in % der ACHSE,
-    // aber fill ist absPct breit -> rechne seg-Breiten als % von absPct.
-    if(fill && absPct>0){
-      if(loss){ loss.style.left='0'; loss.style.width=(lossW/absPct*100)+'%'; }
-      if(win){ win.style.left=(winStart/absPct*100)+'%'; win.style.width=(winW/absPct*100)+'%'; }
-    }
-    // Marker
-    var mk=root.querySelector('.tb-marker'); if(mk)mk.style.left=absPct+'%';
-    // Zahlen
-    var oA=root.querySelector('[data-out="absatz"]'), oG=root.querySelector('[data-out="gewinn"]');
-    if(animate && !REDUCE){
-      countTo(oA, absatz, function(v){return nf(v);});
-      countTo(oG, gewinn, function(v){return '+'+nf(v);});
-    }else{
-      if(oA)oA.textContent=nf(absatz);
-      if(oG)oG.textContent='+'+nf(gewinn);
-    }
+    // Nadel drehen (um Zentrum)
+    var g=root.querySelector('[data-needle]');
+    if(g)g.setAttribute('transform','rotate('+needleDeg(absatz).toFixed(2)+' '+CX+' '+CY+')');
+    // Szenario-Chip
+    var scn=root.querySelector('[data-out="scn"]'); if(scn)scn.textContent=s.lab+' · '+s.pct+' %';
+    // Story
+    var st=root.querySelector('[data-out="story"]');
+    if(st)st.innerHTML='<b>'+nf(absatz)+' Stück</b> — <span class="win">+'+nf(gewinn)+' über Break-Even</span>. '+s.story;
+    // Zahl
+    var oA=root.querySelector('[data-out="absatz"]');
+    if(animate && !REDUCE) countTo(oA, absatz, function(v){return nf(v);});
+    else if(oA) oA.textContent=nf(absatz);
+  }
+
+  function drawArcs(root){
+    ['loss','win'].forEach(function(k){
+      var p=root.querySelector('[data-arc="'+k+'"]'); if(!p)return;
+      try{ var len=p.getTotalLength(); p.style.strokeDasharray=len; p.style.strokeDashoffset=len;
+        // force reflow then animate
+        p.getBoundingClientRect();
+        p.style.transition='stroke-dashoffset 1.1s '+EASE+((k==='win')?' .15s':'');
+        p.style.strokeDashoffset='0';
+        // Sicherheitsnetz: Bogen MUSS am Ende voll sichtbar sein
+        setTimeout(function(){ p.style.strokeDasharray='none'; p.style.strokeDashoffset='0'; }, 1500);
+      }catch(e){ p.style.strokeDasharray='none'; p.style.strokeDashoffset='0'; }
+    });
   }
 
   function play(root){
     if(root.__played)return; root.__played=true;
     root.classList.add('in');
     if(REDUCE){ apply(root, DEFAULT, false); return; }
-    setTimeout(function(){ apply(root, DEFAULT, true); }, 450);
+    drawArcs(root);
+    // Nadel von links (0) auf Szenario sweepen
+    var g=root.querySelector('[data-needle]'); if(g)g.setAttribute('transform','rotate('+needleDeg(0).toFixed(2)+' '+CX+' '+CY+')');
+    setTimeout(function(){ apply(root, DEFAULT, true); }, 380);
   }
 
   function findAnchor(){
@@ -7339,11 +7369,10 @@
     a.parentNode.insertBefore(root, a.nextSibling);
     apply(root, DEFAULT, false);
     root.querySelector('[data-out="absatz"]').textContent='–';
-    root.querySelector('[data-out="gewinn"]').textContent='–';
     root.querySelectorAll('.tb-seg-btn').forEach(function(btn){
       btn.addEventListener('click', function(){ apply(root, parseInt(btn.getAttribute('data-i'),10)||0, true); });
     });
-    var io=new IntersectionObserver(function(ev){ if(ev[0].isIntersecting){ play(root); io.disconnect(); } },{threshold:.25});
+    var io=new IntersectionObserver(function(ev){ if(ev[0].isIntersecting){ play(root); io.disconnect(); } },{threshold:.2});
     io.observe(root);
     if(inView(root)) play(root);
     var poll=setInterval(function(){ if(!document.body.contains(root)){ clearInterval(poll); return; } if(inView(root)){ play(root); clearInterval(poll); } },250);
