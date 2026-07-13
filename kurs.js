@@ -4116,6 +4116,18 @@
         { name:'Telefon',      wert:40,   img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/telefon.jpg' },
         { name:'Versicherung', wert:210,  img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/versicherung-schirm.jpg' }
       ]},
+    { kachel_id:'db6_gemeinkostenannahmen', kachel_name:'Gemeinkostenannahmen', ist_produkt_kachel:true,
+      einheit:'Annahme', einheit_typ:'anzahl',
+      /* Rechen-/Annahme-Ebene (Monat, Kostenfaktoren, GK-Kosten/Monat, Absatz/Monat, GK/Produkt).
+         ⚠️ PLATZHALTER: Bilder aus der Gemeinkosten-Serie zwischengenutzt, Werte = Beispiele —
+         eigene schwarze-Studio-Bilder + finale Beispielwerte/Einheit von Robert nachziehen. */
+      objekt_varianten:[
+        { name:'Monat',          wert:1,    img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/buchhaltung-rechner.jpg' },
+        { name:'Kostenfaktoren', wert:15,   img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/entsorgung-muelltonne.jpg' },
+        { name:'GK / Monat',     wert:4770, img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/versicherung-schirm.jpg' },
+        { name:'Absatz / Monat', wert:3000, img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/lueftung-ventilator.jpg' },
+        { name:'GK / Produkt',   wert:2,    img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/telefon.jpg' }
+      ]},
     { kachel_id:'db7_mitarbeiterloehne', kachel_name:'Mitarbeiterlöhne', ist_produkt_kachel:true,
       einheit:'Nettogehalt (€)', einheit_typ:'preis',
       /* 15 Tasty-Studios-Personal-Objekte (Personalkosten-Serie, Low-Key, img/mitarbeiterloehne, GitHub Pages) — Netto-Monatsgehälter = Beispielwerte */
@@ -4250,14 +4262,23 @@
       title:'Erweiterung nach <span>Finance</span>',
       sub:'Wenn du Gemeinkosten & Mitarbeiterlöhne angelegt hast, können wir diese Tabelle erweitern. Wir wollen jetzt wissen: Was kostet es uns, eine Charge zuzubereiten? Wareneinsatz + Personalkosten pro Arbeitsvorgang (Gemeinkosten sind optional ebenfalls verknüpfbar). Dafür ergänzen wir weitere Spalten in der Rezepturen-Liste.',
       summary:'Portionsmenge', chain:true },
-    /* DB VI Gemeinkosten + DB VII Mitarbeiterlöhne — beide Abschnitte liegen als getrennte
-       Tab-Widgets (.notion-tabs) auf derselben Seite; marker trennt sie eindeutig. */
+    /* DB VI Gemeinkosten + DB VII Mitarbeiterlöhne — DB VII liegt als eigenes Tab-Widget
+       (.notion-tabs, marker /Mitarbeiter/). DB VI ist selbst in ZWEI Sub-Tabs geteilt:
+       "DB VI : Gemeinkosten" (10 Posten) + "DB : GK-Kosten-Annahmen" (5 Annahmen). Beide
+       liegen im SELBEN .notion-tabs-Widget → gleicher marker /Gemeinkosten/ findet das
+       Widget, panel trennt den jeweiligen Sub-Tab → zwei getrennte Warenkörbe untereinander. */
     { path:/\/gemeinkosten-mitarbeiterlhne\/?$/, kachel:'db6_gemeinkosten',
-      container:'.notion-tabs', marker:/Gemeinkosten/,
+      container:'.notion-tabs', marker:/Gemeinkosten/, panel:/GK Position/,
       eyebrow:'Der Warenkorb · DB VI',
       title:'Deine Gemeinkosten. <span>Posten für Posten</span>.',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB VI ist der Euro.',
       summary:'Fixkosten', chain:true },
+    { path:/\/gemeinkosten-mitarbeiterlhne\/?$/, kachel:'db6_gemeinkostenannahmen',
+      container:'.notion-tabs', marker:/Gemeinkosten/, panel:/Kostenfaktoren/,
+      eyebrow:'Der Warenkorb · DB VI · Annahmen',
+      title:'Deine <span>Gemeinkostenannahmen</span>.',
+      sub:'Aus deinen Fixkosten wird die Rechen-Ebene: Monat, Kostenfaktoren, GK-Kosten pro Monat, Absatz pro Monat und am Ende die Gemeinkosten pro Produkt.',
+      summary:'Annahmen', chain:true },
     { path:/\/gemeinkosten-mitarbeiterlhne\/?$/, kachel:'db7_mitarbeiterloehne',
       container:'.notion-tabs', marker:/Mitarbeiter/,
       eyebrow:'Der Warenkorb · DB VII',
@@ -4613,7 +4634,7 @@
      Nenner = Summe der bekannten Schrittzahlen (auch noch nicht besuchte Seiten
      zählen mit). Zähler = erledigte Schritte = localStorage-Keys "done-…"='1'
      (dieselben Keys, die das Karten-/Checkbox-System setzt → immer aktuell). */
-  var BACKOFFICE={ db0_inventurliste:16, db13_lieferanten:13, db13_ansprechpartner:10, db13_vertraege:13, db4_zutaten:30, db5_rezepturen:23, db5_finance_personal:7, db6_gemeinkosten:15, db7_mitarbeiterloehne:15, db8_gerichte:37 };
+  var BACKOFFICE={ db0_inventurliste:16, db13_lieferanten:13, db13_ansprechpartner:10, db13_vertraege:13, db4_zutaten:30, db5_rezepturen:23, db5_finance_personal:7, db6_gemeinkosten:10, db6_gemeinkostenannahmen:5, db7_mitarbeiterloehne:15, db8_gerichte:37 };
   function backofficeTotal(){ var t=0; for(var kk in BACKOFFICE){ if(BACKOFFICE.hasOwnProperty(kk)) t+=BACKOFFICE[kk]; } return t; }
   function backofficeDone(){ var d=0; try{ for(var i=0;i<localStorage.length;i++){ var key=localStorage.key(i); if(key&&key.slice(0,5)==='done-'&&localStorage.getItem(key)==='1') d++; } }catch(e){} return d; }
   function backofficePct(){ var t=backofficeTotal(), d=Math.min(backofficeDone(),t); return t>0?Math.round(d/t*100):0; }
@@ -4908,8 +4929,22 @@
     }
     if(existing) return;
     var k=kachel(page.kachel); if(!k||!k.ist_produkt_kachel) return;
+    /* Schritt-Quelle bestimmen. Standard = die gefundenen Container. Bei page.panel liegt
+       der gewünschte Schritt-Block in EINEM Sub-Tab (.notion-tabs__panel) des Containers:
+       dann NUR die Toggles dieses Panels lesen, während der GANZE Container versteckt und
+       verankert bleibt. So werden aus EINEM Tab-Widget zwei getrennte Warenkörbe (z. B.
+       Gemeinkosten + Gemeinkostenannahmen auf /gemeinkosten-mitarbeiterlhne). */
+    var srcs=lists;
+    if(page.panel){
+      srcs=[];
+      for(var s=0;s<lists.length;s++){
+        var panes=lists[s].querySelectorAll('.notion-tabs__panel');
+        for(var p=0;p<panes.length;p++){ if(page.panel.test(panes[p].textContent||'')){ srcs.push(panes[p]); break; } }
+      }
+      if(!srcs.length) return;
+    }
     var steps=[];
-    for(var m=0;m<lists.length;m++){ steps=steps.concat(collectSteps(lists[m])); }
+    for(var m=0;m<srcs.length;m++){ steps=steps.concat(collectSteps(srcs[m])); }
     steps.forEach(function(st,idx){ st.i=idx; });
     if(!steps.length) return;
     injectCSS();
