@@ -4781,7 +4781,7 @@
   }
 
   var BLOCKS=[
-    { key:'A', mode:'textleft', marker:'groesse-animation', anim:animA, play:function(el){playA(el);}, txt:TXT_A },
+    { key:'A', mode:'split', marker:'groesse-animation', anim:animA, play:function(el){playA(el);}, txt:TXT_A },
     { key:'B', mode:'split', marker:'vorlage-animation', anim:animB, play:function(el){playB(el);},
       txt:{ h:'Bausteine in den <span>Zutaten anzeigen</span>.',
         body:['Erstelle in jeder Hauptzutat eine Übersicht, in der automatisch die Subzutaten (bspw. 80g) angezeigt werden.','Öffne dafür oben rechts Neu → Neue Vorlage → / Neue Datenbankansicht → DB IV : Zutaten verknüpfen und Filter „Name" = Name der Zutat → Cover Ansicht → Als Standard festlegen.'] } }
