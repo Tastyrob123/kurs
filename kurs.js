@@ -5934,14 +5934,14 @@
   #tsd5 .d5-step:active{transform:scale(.94)}
   #tsd5 .d5-step:disabled{opacity:.28;cursor:not-allowed;transform:none;box-shadow:none}
   /* Nährwerte / Portion — deutlich mehr Abstand zu den Feldern darunter */
-  #tsd5 .d5-seclbl{font-size:12.5px;font-weight:600;letter-spacing:1.1px;text-transform:uppercase;color:#fff;text-align:center;margin:30px 0 20px}
+  #tsd5 .d5-seclbl{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:15px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#fff;text-align:center;margin:30px 0 22px}
   #tsd5 .d5-nut{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0}
   #tsd5 .d5-ncell{border-radius:13px;padding:16px 6px;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.05);text-align:center}
   #tsd5 .d5-ncell .nv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:23px;font-weight:700;color:#fff;line-height:1}
   #tsd5 .d5-ncell .nu{font-size:11px;color:rgba(255,255,255,.45);margin-top:7px;letter-spacing:.3px}
   /* Allergene — Label zentriert weiss, deutlich mehr Abstand zu den Chips */
-  #tsd5 .d5-aller{text-align:center;margin-top:28px}
-  #tsd5 .d5-aller .al-l{display:block;font-size:12.5px;font-weight:600;letter-spacing:1.1px;text-transform:uppercase;color:#fff;margin:0 0 16px}
+  #tsd5 .d5-aller{text-align:center;margin:28px 0 26px}
+  #tsd5 .d5-aller .al-l{display:block;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:15px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#fff;margin:0 0 16px}
   #tsd5 .d5-allchips{display:flex;justify-content:center;flex-wrap:wrap;gap:11px}
   #tsd5 .d5-chip{font-size:15px;color:#efe3c4;background:linear-gradient(180deg,rgba(199,180,137,.16),rgba(199,180,137,.07));border:1px solid rgba(199,180,137,.32);border-radius:999px;padding:8px 18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
   /* Formel — freistehend, weiss, größer (Gold-Betonungen bleiben) */
