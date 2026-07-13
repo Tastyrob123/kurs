@@ -5745,6 +5745,48 @@
 })();
 
 /* ============================================================
+   rezepturen — Section-Heading "Rezepturen als weiterer Baustein"
+   auf den Referenz-Stil bringen (identisch zu "Deine Ansprech-
+   partner immer erreichbar." auf /lieferpartner): Lineal TS,
+   30px / line-height 34.5 / letter-spacing -.6px / weight 600,
+   weiss + letzter Teil "weiterer Baustein" beige (.ts-accent
+   #c7b489). Block-ID-Anker + Text-Fallback, selbstheilend
+   (React strippt Span/Text -> debounced Observer zieht nach).
+   ============================================================ */
+(function(){
+  if(window.__tsRezHead) return; window.__tsRezHead=true;
+  var ID='block-e4ac26e9734d40888bc1dc22849f8d73';
+  var FIND='Rezepturen als weiterer Baustein', BLACK='Rezepturen als ', ACCENT='weiterer Baustein';
+  var CSS='.page__rezepturen #'+ID+'{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif !important;font-size:30px !important;line-height:34.5px !important;letter-spacing:-.6px !important;font-weight:600 !important;color:#fff !important}';
+  function on(){ return /\/rezepturen\/?$/.test(location.pathname); }
+  function injectCSS(){ if(document.getElementById('tsRezHead-css'))return; var s=document.createElement('style'); s.id='tsRezHead-css'; s.textContent=CSS; document.head.appendChild(s); }
+  function norm(s){ return (s||'').replace(/\s+/g,' ').trim(); }
+  function find(){
+    var el=document.getElementById(ID);
+    if(el && el.tagName && el.tagName.charAt(0)==='H') return el;
+    var hs=document.querySelectorAll('.page__rezepturen .notion-heading');
+    for(var i=0;i<hs.length;i++){ if(norm(hs[i].textContent).indexOf(FIND)===0) return hs[i]; }
+    return null;
+  }
+  function tone(){
+    var el=find(); if(!el) return;
+    var want=norm(BLACK+ACCENT);
+    var sp=el.querySelector('.ts-accent');
+    if(sp && norm(sp.textContent)===norm(ACCENT) && norm(el.textContent)===want) return;
+    while(el.firstChild) el.removeChild(el.firstChild);
+    el.appendChild(document.createTextNode(BLACK));
+    var s=document.createElement('span'); s.className='ts-accent'; s.textContent=ACCENT;
+    el.appendChild(s);
+  }
+  function apply(){ if(!on()) return; injectCSS(); tone(); }
+  apply();
+  document.addEventListener('DOMContentLoaded', apply);
+  var _t=null;
+  new MutationObserver(function(){ if(_t) return; _t=setTimeout(function(){ _t=null; apply(); },200); })
+    .observe(document.documentElement,{childList:true,subtree:true});
+})();
+
+/* ============================================================
    #tsd5 — REZEPTUR-RECHNER (DB V) · /rezepturen
    Interaktive Demo des Intro-Konzepts: Rezeptur zieht ihre
    Zutaten (Bausteine, freigestellte Tasty-Produktbilder) →
