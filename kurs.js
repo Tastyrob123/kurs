@@ -6210,15 +6210,17 @@
   var ANCHOR_PHRASE='Nun haben wir Zutaten und Rezepte';
   function on(){ return /\/rezepturen\/?$/.test(location.pathname); }
   var CSS=[
-    '#tsrv-root{--tsrv-gold:#c7b489;--tsrv-ease:cubic-bezier(.16,1,.3,1);width:100vw;max-width:100vw;margin:8px 0 40px;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 clamp(20px,4vw,56px);box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;opacity:0;transform:translateY(20px);transition:opacity .8s var(--tsrv-ease),transform .9s var(--tsrv-ease);}',
+    '#tsrv-root{--tsrv-gold:#c7b489;--tsrv-ease:cubic-bezier(.16,1,.3,1);width:min(1360px,94vw);margin:10px auto 44px;display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,4vw,60px);align-items:center;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;opacity:0;transform:translateY(20px);transition:opacity .8s var(--tsrv-ease),transform .9s var(--tsrv-ease);}',
     '#tsrv-root.in{opacity:1;transform:none;}',
     '#tsrv-root *{box-sizing:border-box;}',
-    '#tsrv-root .tsrv-inner{max-width:1600px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4.5vw,64px);align-items:center;}',
     '#tsrv-root .tsrv-textslot{min-width:0;min-height:1px;}',
-    '#tsrv-root .tsrv-textslot p{font-size:1rem;line-height:1.68;color:rgba(255,255,255,.82);margin:0;}',
+    '#tsrv-root .tsrv-textslot .tsrv-lead{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;font-size:clamp(1.34rem,2vw,1.62rem);font-weight:600;letter-spacing:-.012em;line-height:1.22;color:#fff;margin:0 0 18px;}',
+    '#tsrv-root .tsrv-textslot .tsrv-lead .tsrv-accent{color:var(--tsrv-gold);}',
+    '#tsrv-root .tsrv-textslot p:not(.tsrv-lead){font-size:.98rem;line-height:1.7;color:rgba(255,255,255,.64);margin:0 0 14px;}',
+    '#tsrv-root .tsrv-textslot p:last-child{margin-bottom:0;}',
     '.tsrv-hide{display:none !important;}',
     '#tsrv-root .tsrv-unit{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;}',
-    '@media(max-width:900px){#tsrv-root .tsrv-inner{grid-template-columns:1fr;}#tsrv-root .tsrv-textslot{text-align:left;max-width:560px;margin:0 auto 6px;}}',
+    '@media(max-width:900px){#tsrv-root{grid-template-columns:1fr;}#tsrv-root .tsrv-textslot{text-align:left;max-width:600px;margin:0 auto 6px;}}',
     '#tsrv-root .tsrv-tile{position:relative;width:100%;max-width:720px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 18px 44px rgba(0,0,0,.5));transition:transform .5s var(--tsrv-ease),filter .5s var(--tsrv-ease);}',
     '#tsrv-root .tsrv-tile:hover{transform:translateY(-4px) scale(1.02);animation:tsrvHeartbeat 2.6s var(--tsrv-ease) infinite;}',
     '@keyframes tsrvHeartbeat{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(199,180,137,.14));}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(199,180,137,.30));}}',
@@ -6265,7 +6267,7 @@
   function openLb(){ var lb=ensureLb(); lb.classList.add('open'); lb.classList.remove('full'); document.body.style.overflow='hidden'; var sc=lb.querySelector('.tsrv-screen'); if(sc) sc.scrollTop=0; }
   function buildTile(){
     var root=document.createElement('div'); root.id='tsrv-root';
-    root.innerHTML='<div class="tsrv-inner"><div class="tsrv-textslot"></div><div class="tsrv-unit"><div class="tsrv-tile" role="button" tabindex="0" aria-label="Meine Rezepturen vergrößern"><img class="tsrv-cover" src="'+COVER+'" alt="Meine Rezepturen — DB-Ansicht" fetchpriority="high" decoding="async"></div><div class="tsrv-caption">Meine Rezepturen<span class="tsrv-accent"> · DB-Ansicht – Live Beispiel</span></div><div class="tsrv-hint">Klicke zum Vergrößern</div></div></div>';
+    root.innerHTML='<div class="tsrv-textslot"></div><div class="tsrv-unit"><div class="tsrv-tile" role="button" tabindex="0" aria-label="Meine Rezepturen vergrößern"><img class="tsrv-cover" src="'+COVER+'" alt="Meine Rezepturen — DB-Ansicht" fetchpriority="high" decoding="async"></div><div class="tsrv-caption">Meine Rezepturen<span class="tsrv-accent"> · DB-Ansicht – Live Beispiel</span></div><div class="tsrv-hint">Klicke zum Vergrößern</div></div>';
     var tile=root.querySelector('.tsrv-tile');
     tile.addEventListener('click',openLb);
     tile.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(); } });
@@ -6293,12 +6295,28 @@
     while(node && node.parentElement && node.parentElement!==nroot){ node=node.parentElement; }
     return (node&&node.parentElement===nroot)?node:(el.closest('.notion-column-list')||el);
   }
+  /* Lead = erster Satz (letztes Wort beige, Lineal-TS-groß), Body = Rest — Muster wie #tsiv/#ts2mac. */
+  function makeLead(text){
+    var p=document.createElement('p'); p.className='tsrv-lead';
+    var m=(text||'').match(/^([\s\S]*\s)(\S+)$/);
+    if(m){ p.appendChild(document.createTextNode(m[1])); var s=document.createElement('span'); s.className='tsrv-accent'; s.textContent=m[2]; p.appendChild(s); }
+    else p.textContent=text||'';
+    return p;
+  }
+  function makeP(text){ var p=document.createElement('p'); p.textContent=(text||'').trim(); return p; }
   function fillText(anchor){
     var root=document.getElementById('tsrv-root'); if(!root) return;
     var slot=root.querySelector('.tsrv-textslot'); if(!slot) return;
     if(!slot.__filled){
-      var p=document.createElement('p'); p.textContent=(anchor.textContent||'').replace(/\s+/g,' ').trim();
-      if(p.textContent){ slot.appendChild(p); slot.__filled=true; }
+      var full=(anchor.textContent||'').replace(/\s+/g,' ').trim();
+      if(full){
+        var idx=full.indexOf('. ');
+        var leadTxt=idx>0?full.slice(0,idx+1):full;   /* "Nun haben wir Zutaten und Rezepte." */
+        var bodyTxt=idx>0?full.slice(idx+2):'';        /* Rest */
+        slot.appendChild(makeLead(leadTxt));
+        if(bodyTxt) slot.appendChild(makeP(bodyTxt));
+        slot.__filled=true;
+      }
     }
     if(slot.__filled){
       /* ganze native Spaltenliste (Text-Spalte + leere Spalte) ausblenden, nicht nur den Absatz */
