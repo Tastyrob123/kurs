@@ -4732,13 +4732,19 @@
   .tscb .tscb-in.center .tsc-steps{justify-content:center}
   .tscb .tscb-in.center .tsc-stage{max-width:640px;margin:20px auto 0}
   @media(max-width:900px){.tscb .tscb-in{grid-template-columns:1fr;gap:30px}}
-  /* Duo: beide Animationen nebeneinander, Text je zentriert darunter */
-  .tscb .tscb-duo-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,60px);align-items:start}
-  @media(max-width:900px){.tscb .tscb-duo-grid{grid-template-columns:1fr;gap:48px}}
-  .tscb .tscb-cell{min-width:0;display:flex;flex-direction:column}
-  .tscb .tscb-cell .tscp-head{text-align:center}
-  .tscb .tscb-cell .tsc-steps{justify-content:center}
-  .tscb .tsx-center{text-align:center;margin-top:22px}
+  /* Duo: Animationen in Zeile 1 (gleiche Höhe), Texte in Zeile 2 -> Texte + Überschriften auf gleicher Höhe */
+  .tscb.tscb-duo{padding-bottom:14px;margin-bottom:-100px}
+  @media(max-width:900px){.tscb.tscb-duo{margin-bottom:-40px}}
+  .tscb .tscb-duo-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;column-gap:clamp(28px,4vw,60px);row-gap:22px;align-items:start}
+  .tscb .tscb-anim{min-width:0}
+  .tscb .tscb-anim[data-cell="A"]{grid-column:1;grid-row:1}
+  .tscb .tsx-center[data-cell="A"]{grid-column:1;grid-row:2}
+  .tscb .tscb-anim[data-cell="B"]{grid-column:2;grid-row:1}
+  .tscb .tsx-center[data-cell="B"]{grid-column:2;grid-row:2}
+  @media(max-width:900px){.tscb .tscb-duo-grid{grid-template-columns:1fr;row-gap:14px}.tscb .tscb-duo-grid>*{grid-column:1!important;grid-row:auto!important}.tscb .tscb-anim[data-cell="B"]{margin-top:28px}}
+  .tscb .tscb-anim .tscp-head{text-align:center}
+  .tscb .tscb-anim .tsc-steps{justify-content:center}
+  .tscb .tsx-center{text-align:center}
   .tscb .tsx-center .tsx-h{margin-bottom:12px}
   .tscb .tsx-center .tsx-p{max-width:440px;margin-left:auto;margin-right:auto}
   .tscb .tsx-center .tsx-p:last-child{margin-bottom:0}
@@ -4977,9 +4983,9 @@
 
   var TXT_B={ h:'Bausteine in den <span>Zutaten anzeigen</span>.',
     body:['Erstelle in jeder Hauptzutat eine Übersicht, in der automatisch die Subzutaten (bspw. 80g) angezeigt werden.','Öffne dafür oben rechts Neu → Neue Vorlage → / Neue Datenbankansicht → DB IV : Zutaten verknüpfen und Filter „Name" = Name der Zutat → Cover Ansicht → Als Standard festlegen.'] };
-  function centerText(t){
+  function centerText(t,key){
     var body=(t.body||[]).map(function(p){return '<p class="tsx-p">'+p+'</p>';}).join('');
-    return '<div class="tsx tsx-center">'+(t.h?'<h3 class="tsx-h">'+t.h+'</h3>':'')+body+'</div>';
+    return '<div class="tsx tsx-center" data-cell="'+(key||'')+'">'+(t.h?'<h3 class="tsx-h">'+t.h+'</h3>':'')+body+'</div>';
   }
   var PLAYBTN='<button type="button" class="tsc-play"><span class="tsc-play-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg></span><span class="tsc-play-label">Abspielen</span></button>';
 
@@ -4987,9 +4993,13 @@
   function buildDuo(){
     if(!document.getElementById('tscover-css')){ var s=document.createElement('style'); s.id='tscover-css'; s.textContent=CSS; document.head.appendChild(s); }
     var sec=document.createElement('section'); sec.className='tscb tscb-duo'; sec.id='tscb-duo';
+    /* DOM-Reihenfolge animA, textA, animB, textB -> mobil (1 Spalte) korrekt gestapelt;
+       Desktop: explizite Grid-Platzierung (Animationen Zeile 1, Texte Zeile 2) -> Texte auf gleicher Höhe. */
     sec.innerHTML='<div class="tscb-duo-grid">'+
-      '<div class="tscb-cell" data-cell="A">'+animA()+centerText(TXT_A)+'</div>'+
-      '<div class="tscb-cell" data-cell="B">'+animB()+centerText(TXT_B)+'</div>'+
+      '<div class="tscb-anim" data-cell="A">'+animA()+'</div>'+
+      centerText(TXT_A,'A')+
+      '<div class="tscb-anim" data-cell="B">'+animB()+'</div>'+
+      centerText(TXT_B,'B')+
     '</div>';
     [].forEach.call(sec.querySelectorAll('.tsc-stage'), function(st){ st.insertAdjacentHTML('beforeend', PLAYBTN); });
     return sec;
@@ -5107,8 +5117,8 @@
   }
   function armDuo(sec){
     if(sec.__armed) return; sec.__armed=true;
-    var cA=sec.querySelector('.tscb-cell[data-cell="A"]'); if(cA) armCell(cA, function(el,o){playA(el,o);});
-    var cB=sec.querySelector('.tscb-cell[data-cell="B"]'); if(cB) armCell(cB, function(el,o){playB(el,o);});
+    var cA=sec.querySelector('.tscb-anim[data-cell="A"]'); if(cA) armCell(cA, function(el,o){playA(el,o);});
+    var cB=sec.querySelector('.tscb-anim[data-cell="B"]'); if(cB) armCell(cB, function(el,o){playB(el,o);});
   }
 
   function mount(){
