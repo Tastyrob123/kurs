@@ -326,153 +326,137 @@
 })();
 
 /* ============================================================
-   zutatenliste — #tsreuse  Split: Text links / Video-Animation rechts
+   zutatenliste — #tsreuse  Split: Text links / Animation rechts
    Links: die zwei Absaetze "In diesem Schritt..." + "Oeffne hierzu..."
-   (native Column-List ausgeblendet, hier gerendert = driftsicher).
-   Rechts, cinematische Sequenz (Olivenoel):
-     1) Kachel DB IV · Zutat / Olivenoel / 12,90 EUR/L erscheint
-     2) Preis passt sich sichtbar nach oben an -> 14,90 EUR/L
-     3) Energieimpuls geht von der DB-IV-Kachel aus, wandert auf allen
-        4 Linien zu den Zielkacheln
-     4) die 4 Kacheln empfangen den Impuls, leuchten kurz auf, rechnen neu
-   Ziel-Eyebrows: Salat=DB IX · Gerichte; Dressing/Dressing II/Tomatensauce=DB V · Rezepte.
-   Auch: "Die Lösung"-Absatz wieder 16px/400. Mount als Top-Level-Block
-   vor der Column-List. Reveal robust: inView-Polling; reduced-motion=statisch.
+   (nativ ausgeblendet, hier gerendert = driftsichere Text+Visual-Einheit).
+   Rechts: elegante "Video"-Sequenz (Olivenoel):
+     1) nur die Quell-Kachel DB IV · Zutat (12,90 EUR/L) erscheint
+     2) Verbindung wird EINMAL aufgebaut (Linien faden ein, bleiben solide)
+        + die 4 Anwendungs-Kacheln erscheinen (DB-Label je Kachel)
+     3) Preis wird nach oben angepasst 12,90 -> 14,90 EUR/L
+     4) ein Tron-Lichtimpuls laeuft ueber alle 4 Linien zu den Kacheln
+     5) beim Ankommen blitzt jede Kachel kurz auf + Preis rechnet neu
+   Mount: eigener Top-Level-Block VOR der "In diesem Schritt"-Column-List,
+   die ganze Column-List + der native "Kurz gesagt"-Heading werden versteckt.
+   "Die Loesung"-Absatz wird auf normal (16px/400) zurueckgesetzt.
    Zahlen = Beispielwerte (Olivenoel 12,90->14,90 EUR/L illustrativ).
+   Reveal robust: @keyframes + inView-Polling, Endzustand direkt gesetzt.
    ============================================================ */
 (function(){
   if(window.__tsreuse) return; window.__tsreuse=true;
   function on(){ return /\/zutatenliste\/?$/.test(location.pathname); }
   var DEST=[
-    {eye:'DB IX · Gerichte', name:'Salat',        menge:'15 ml', a:0.19, b:0.22},
-    {eye:'DB V · Rezepte',   name:'Dressing',     menge:'30 ml', a:0.39, b:0.45},
-    {eye:'DB V · Rezepte',   name:'Dressing II',  menge:'25 ml', a:0.32, b:0.37},
-    {eye:'DB V · Rezepte',   name:'Tomatensauce', menge:'90 ml', a:1.16, b:1.34}
+    {name:'Salat',        db:'DB IX · Gerichte', menge:'15 ml', a:0.19, b:0.22},
+    {name:'Dressing',     db:'DB V · Rezepte',   menge:'30 ml', a:0.39, b:0.45},
+    {name:'Dressing II',  db:'DB V · Rezepte',   menge:'25 ml', a:0.32, b:0.37},
+    {name:'Tomatensauce', db:'DB V · Rezepte',   menge:'90 ml', a:1.16, b:1.34}
   ];
-  var VB_W=720, VB_H=330;
-  var SRCX=236, SRCY=165, DSTX=470, DSTY=[38,124,206,292];
+  var VB_W=720, VB_H=340;
+  var SRCX=237, SRCY=170, DSTX=481, DSTY=[37,126,214,303];
   var PARA1='In diesem Schritt übersetzen wir das Inventarprodukt in diese verarbeitbare Einheit – zum Beispiel vom gelieferten Gebinde hin zu Gramm, Milliliter oder Stück. Wenn wir damit weiterarbeiten wollen duplizieren wir es einfach, ändern die Portionsgröße, entfernen den Haken bei &#8220;Hauptzutat&#8221; und haben einen fertigen Baustein (s. Animation).';
   var PARA2='Öffne hierzu zunächst deine Notion AI Backoffice Startseite, erstelle eine neue Seite die du &#8220;DB Zutaten&#8221; nennst, einen &#8220;Zurück&#8221; Button und eine neue Tabelle / Datenbankansicht → Name : &#8220;DB IV : Zutaten&#8221; :';
   var CSS=`
   /* "Die Lösung"-Absatz wieder normal gross + nicht fett (nativ 18px/600) */
   #block-38eb9546553480fea559e458d25dd0da{font-size:16px!important;font-weight:400!important;line-height:1.7!important}
   #block-38eb9546553480fea559e458d25dd0da b,#block-38eb9546553480fea559e458d25dd0da strong,#block-38eb9546553480fea559e458d25dd0da *{font-weight:400!important}
-  #tsreuse{width:100%;max-width:1120px;margin:8px auto 40px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
+  #tsreuse{width:100%;max-width:1120px;margin:46px auto 44px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
   #tsreuse .rz-wrap{display:flex;align-items:center;gap:clamp(28px,4vw,60px)}
-  #tsreuse .rz-left{flex:0 0 39%;max-width:39%;min-width:0;opacity:0;transform:translateY(14px)}
-  #tsreuse.go .rz-left{animation:rzUp .8s cubic-bezier(.16,1,.3,1) both}
+  #tsreuse .rz-left{flex:0 0 39%;max-width:39%;min-width:0}
   #tsreuse .rz-para{font-size:15.5px;line-height:1.72;color:rgba(255,255,255,.82);margin:0 0 16px}
   #tsreuse .rz-para:last-child{margin-bottom:0}
+  #tsreuse .rz-left{opacity:0;transform:translateY(14px)}
+  #tsreuse.go .rz-left{animation:rzUp .8s cubic-bezier(.16,1,.3,1) both}
   #tsreuse .rz-right{flex:1 1 auto;min-width:0}
   #tsreuse .rz-head{text-align:center;margin:0 auto 18px;opacity:0;transform:translateY(14px)}
   #tsreuse.go .rz-head{animation:rzUp .7s cubic-bezier(.16,1,.3,1) both;animation-delay:.1s}
-  #tsreuse .rz-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;font-weight:600;font-size:clamp(1.25rem,2.2vw,1.62rem);letter-spacing:-.02em;line-height:1.15;margin:0;color:#fff}
+  #tsreuse .rz-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;font-weight:600;font-size:clamp(1.25rem,2.2vw,1.65rem);letter-spacing:-.02em;line-height:1.15;margin:0;color:#fff}
   #tsreuse .rz-title .g{color:#c7b489}
-  #tsreuse .rz-stage{position:relative;width:100%;max-width:660px;margin:0 auto;aspect-ratio:720/330;min-height:280px}
+  #tsreuse .rz-stage{position:relative;width:100%;max-width:640px;margin:0 auto;aspect-ratio:720/340;min-height:300px}
   #tsreuse svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
-  /* Basislinien (dim) */
-  #tsreuse .rz-line{fill:none;stroke:#c7b489;stroke-width:1.5;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-dasharray:100;stroke-dashoffset:100;opacity:0}
-  #tsreuse.go .rz-line{animation:rzDraw .8s cubic-bezier(.5,0,.2,1) forwards}
-  #tsreuse.go .rz-line.l0{animation-delay:.55s}
-  #tsreuse.go .rz-line.l1{animation-delay:.65s}
-  #tsreuse.go .rz-line.l2{animation-delay:.75s}
-  #tsreuse.go .rz-line.l3{animation-delay:.85s}
-  #tsreuse.flow .rz-line{animation:rzBright .7s ease forwards}
-  /* Energie-Impuls: heller Kometen-Strich wandert je Linie von Quelle -> Ziel */
-  #tsreuse .rz-flow{fill:none;stroke:#efe6d2;stroke-width:2.6;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-dasharray:8 220;stroke-dashoffset:0;opacity:0;filter:drop-shadow(0 0 4px rgba(231,222,180,.95)) drop-shadow(0 0 9px rgba(199,180,137,.75))}
-  #tsreuse.flow .rz-flow{animation:rzFlow .9s cubic-bezier(.42,0,.32,1) forwards}
-  #tsreuse.flow .rz-flow.f1{animation-delay:.1s}
-  #tsreuse.flow .rz-flow.f2{animation-delay:.2s}
-  #tsreuse.flow .rz-flow.f3{animation-delay:.3s}
-  /* Energie-Burst an der Quelle beim Impuls-Start */
-  #tsreuse.flow .rz-src .rz-card{animation:rzEmitGlow 1s ease}
-  /* Karten */
+  /* Basis-Verbindung (einmal aufgebaut, bleibt solide) */
+  #tsreuse .rz-line{fill:none;stroke:#c7b489;stroke-width:1.5;stroke-linecap:round;vector-effect:non-scaling-stroke;opacity:0}
+  #tsreuse.go .rz-line{animation:rzFade .7s ease forwards;animation-delay:.85s}
+  /* Tron-Lichtimpuls (nur bei Preisaenderung) */
+  #tsreuse .rz-pulse{fill:none;stroke:#fbe6c2;stroke-width:3;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-dasharray:8 300;stroke-dashoffset:8;opacity:0;filter:drop-shadow(0 0 4px rgba(251,230,194,.95)) drop-shadow(0 0 10px rgba(199,180,137,.75))}
+  #tsreuse.upd .rz-pulse{animation:rzTron .9s cubic-bezier(.42,0,.32,1) forwards}
+  @keyframes rzTron{0%{stroke-dashoffset:8;opacity:0}12%{opacity:1}86%{opacity:1}100%{stroke-dashoffset:-96;opacity:0}}
   #tsreuse .rz-node{position:absolute;transform:translate(-50%,-50%) translateY(10px);opacity:0;box-sizing:border-box}
+  #tsreuse.go .rz-node{animation:rzNode .55s cubic-bezier(.16,1,.3,1) both}
   #tsreuse .rz-card{position:relative;border-radius:13px;background:rgba(255,255,255,.04);border:1px solid rgba(199,180,137,.28)}
-  #tsreuse .rz-eye{font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#c7b489;margin:0 0 6px}
-  #tsreuse .rz-name{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-weight:600;letter-spacing:-.01em;color:#fff}
   /* Quelle */
   #tsreuse .rz-src{left:19%;top:50%;width:min(35%,196px)}
-  #tsreuse.go .rz-src{animation:rzNode .6s cubic-bezier(.16,1,.3,1) both;animation-delay:.15s}
-  #tsreuse.upd .rz-src .rz-card{animation:rzSrcPulse 1.1s ease}
   #tsreuse .rz-src .rz-card{padding:14px 16px;border-color:rgba(199,180,137,.5);box-shadow:0 16px 40px rgba(0,0,0,.4)}
-  #tsreuse .rz-src .rz-name{font-size:18px;margin:0 0 10px}
+  #tsreuse .rz-eye{font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);margin:0 0 6px}
+  #tsreuse .rz-src .rz-eye{color:#c7b489}
+  #tsreuse .rz-name{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-weight:600;font-size:18px;letter-spacing:-.01em;color:#fff;margin:0 0 10px}
   #tsreuse .rz-div{height:1px;background:rgba(255,255,255,.09);margin:0 0 9px}
   #tsreuse .rz-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
   #tsreuse .rz-row .k{font-size:11px;color:rgba(255,255,255,.55)}
   #tsreuse .rz-price{font-size:16px;font-weight:700;color:#c7b489;white-space:nowrap;font-variant-numeric:tabular-nums}
   #tsreuse .rz-badge{display:inline-block;margin-top:10px;font-size:8.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#c7b489;background:rgba(199,180,137,.1);border:1px solid rgba(199,180,137,.32);border-radius:999px;padding:3px 9px}
-  #tsreuse .rz-chg{position:absolute;top:-11px;right:11px;font-size:8.5px;font-weight:600;letter-spacing:.05em;color:#05060b;background:#c7b489;border-radius:999px;padding:3px 8px;opacity:0;transform:translateY(5px) scale(.9);box-shadow:0 6px 16px rgba(199,180,137,.4)}
+  #tsreuse .rz-chg{position:absolute;top:-11px;right:11px;font-size:8.5px;font-weight:600;letter-spacing:.05em;color:#05060b;background:#c7b489;border-radius:999px;padding:3px 8px;opacity:0;transform:translateY(5px) scale(.9);box-shadow:0 6px 16px rgba(199,180,137,.35)}
   #tsreuse.upd .rz-chg{animation:rzChg .5s cubic-bezier(.34,1.56,.64,1) both}
   /* Anwendungen */
-  #tsreuse .rz-dst{left:80%;width:min(34%,192px)}
-  #tsreuse.go .rz-dst{animation:rzDim .6s cubic-bezier(.16,1,.3,1) both}
-  #tsreuse.go .rz-dst.d0{animation-delay:.5s}
-  #tsreuse.go .rz-dst.d1{animation-delay:.58s}
-  #tsreuse.go .rz-dst.d2{animation-delay:.66s}
-  #tsreuse.go .rz-dst.d3{animation-delay:.74s}
-  #tsreuse .rz-dst.d0{top:11.5%}
-  #tsreuse .rz-dst.d1{top:37.6%}
-  #tsreuse .rz-dst.d2{top:62.4%}
-  #tsreuse .rz-dst.d3{top:88.5%}
-  #tsreuse .rz-dst .rz-card{padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:9px;transition:border-color .5s ease,box-shadow .5s ease}
-  #tsreuse .rz-dst .rz-l{min-width:0}
-  #tsreuse .rz-dst .rz-deye{font-size:7.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#c7b489;margin:0 0 3px;opacity:.85}
-  #tsreuse .rz-dst .rz-name{font-size:12.5px;margin:0 0 2px}
-  #tsreuse .rz-dst .rz-menge{font-size:9.5px;color:rgba(255,255,255,.5)}
-  #tsreuse .rz-dst .rz-r{text-align:right;flex:none}
+  #tsreuse .rz-dst{left:80%;width:min(35%,192px)}
+  #tsreuse .rz-dst.d0{top:10.9%}
+  #tsreuse .rz-dst.d1{top:37.1%}
+  #tsreuse .rz-dst.d2{top:62.9%}
+  #tsreuse .rz-dst.d3{top:89.1%}
+  #tsreuse .rz-dst .rz-card{padding:9px 12px;display:flex;align-items:center;justify-content:space-between;gap:9px;transition:border-color .4s ease,box-shadow .45s ease}
+  #tsreuse .rz-dst.lit .rz-card{border-color:rgba(199,180,137,.5);box-shadow:0 10px 24px rgba(0,0,0,.3)}
+  #tsreuse .rz-dst.flash .rz-card{border-color:#f2e2b8;box-shadow:0 0 24px rgba(251,230,194,.55),0 10px 24px rgba(0,0,0,.3)}
+  #tsreuse .rz-deye{font-size:8px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#c7b489;margin:0 0 3px;opacity:.85}
+  #tsreuse .rz-dst .rz-l .rz-name{font-size:13px;margin:0 0 2px}
+  #tsreuse .rz-dst .rz-l .rz-menge{font-size:10px;color:rgba(255,255,255,.5)}
+  #tsreuse .rz-dst .rz-r{text-align:right}
   #tsreuse .rz-dst .rz-cost{font-size:14px;font-weight:700;color:#fff;white-space:nowrap;font-variant-numeric:tabular-nums;transition:color .4s ease}
+  #tsreuse .rz-dst.pop .rz-cost{color:#c7b489}
   #tsreuse .rz-dst .rz-upd{display:block;font-size:7.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#c7b489;margin-top:2px;opacity:0}
-  #tsreuse .rz-dst.hit{animation:rzHitOp .7s ease both}
-  #tsreuse .rz-dst.hit .rz-card{animation:rzHitGlow .8s ease both}
-  #tsreuse .rz-dst.hit .rz-cost{color:#c7b489}
-  #tsreuse .rz-dst.hit .rz-upd{opacity:1;transition:opacity .5s ease}
+  #tsreuse .rz-dst.pop .rz-upd{opacity:1;transition:opacity .4s ease}
   /* Merksatz */
-  #tsreuse .rz-note{max-width:520px;margin:24px auto 0;text-align:center;font-size:clamp(.95rem,1.2vw,1.05rem);line-height:1.55;color:#fff;opacity:0;transform:translateY(10px)}
+  #tsreuse .rz-note{max-width:520px;margin:24px auto 0;text-align:center;font-size:clamp(.95rem,1.2vw,1.06rem);line-height:1.55;color:#fff;opacity:0;transform:translateY(10px)}
   #tsreuse.go .rz-note{animation:rzUp .8s cubic-bezier(.16,1,.3,1) both;animation-delay:.5s}
   #tsreuse .rz-note b{color:#c7b489;font-weight:600}
   #tsreuse .rz-note .lead{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;color:rgba(255,255,255,.5);font-size:.78em;letter-spacing:.02em;display:block;margin-bottom:5px}
   @keyframes rzUp{to{opacity:1;transform:none}}
   @keyframes rzNode{to{opacity:1;transform:translate(-50%,-50%)}}
-  @keyframes rzDim{to{opacity:.4;transform:translate(-50%,-50%)}}
-  @keyframes rzDraw{to{stroke-dashoffset:0;opacity:.26}}
-  @keyframes rzBright{to{stroke-dashoffset:0;opacity:.62}}
-  @keyframes rzFlow{0%{stroke-dashoffset:0;opacity:0}14%{opacity:1}86%{opacity:1}100%{stroke-dashoffset:-100;opacity:0}}
-  @keyframes rzEmitGlow{0%{box-shadow:0 16px 40px rgba(0,0,0,.4)}22%{box-shadow:0 16px 40px rgba(0,0,0,.4),0 0 36px 6px rgba(199,180,137,.55)}100%{box-shadow:0 16px 40px rgba(0,0,0,.4)}}
+  @keyframes rzFade{to{opacity:.5}}
   @keyframes rzChg{to{opacity:1;transform:none}}
-  @keyframes rzSrcPulse{0%{box-shadow:0 16px 40px rgba(0,0,0,.4)}30%{box-shadow:0 16px 40px rgba(0,0,0,.4),0 0 28px 3px rgba(199,180,137,.5)}100%{box-shadow:0 16px 40px rgba(0,0,0,.4)}}
-  @keyframes rzHitOp{0%{opacity:.4;transform:translate(-50%,-50%)}30%{opacity:1}100%{opacity:1;transform:translate(-50%,-50%)}}
-  @keyframes rzHitGlow{0%{border-color:rgba(199,180,137,.28);box-shadow:0 0 0 rgba(199,180,137,0)}28%{border-color:rgba(231,222,180,.95);box-shadow:0 0 26px 4px rgba(199,180,137,.55)}100%{border-color:rgba(199,180,137,.5);box-shadow:0 10px 26px rgba(0,0,0,.32)}}
   @media(max-width:860px){
+    #tsreuse{margin-top:32px}
     #tsreuse .rz-wrap{flex-direction:column;align-items:stretch;gap:26px}
     #tsreuse .rz-left{flex-basis:auto;max-width:none}
     #tsreuse .rz-stage{max-width:560px}
   }
   @media(max-width:600px){
     #tsreuse .rz-stage{overflow-x:auto;overflow-y:hidden;aspect-ratio:auto;max-width:none}
-    #tsreuse .rz-stage>.rz-inner{position:relative;width:600px;height:330px;margin:0 auto}
-    #tsreuse svg{width:600px;height:330px}
+    #tsreuse .rz-stage>.rz-inner{position:relative;width:600px;height:340px;margin:0 auto}
+    #tsreuse svg{width:600px;height:340px}
   }
   @media(prefers-reduced-motion:reduce){
     #tsreuse .rz-left,#tsreuse .rz-head,#tsreuse .rz-node,#tsreuse .rz-note{opacity:1!important;transform:none!important;animation:none!important}
-    #tsreuse .rz-line{stroke-dashoffset:0!important;opacity:.5!important;animation:none!important}
-    #tsreuse .rz-flow{display:none!important}
+    #tsreuse .rz-line{opacity:.5!important;animation:none!important}
+    #tsreuse .rz-pulse{display:none!important}
   }
   `;
   function injectCSS(){ if(document.getElementById('tsreuse-css'))return; var s=document.createElement('style'); s.id='tsreuse-css'; s.textContent=CSS; document.head.appendChild(s); }
   function eur(v){ return v.toFixed(2).replace('.',',')+' €'; }
   function build(){
     var root=document.createElement('div'); root.id='tsreuse';
-    var cx=(SRCX+DSTX)/2, svg='';
-    DSTY.forEach(function(y,i){ var d='M '+SRCX+','+SRCY+' C '+cx+','+SRCY+' '+cx+','+y+' '+DSTX+','+y; svg+='<path class="rz-line l'+i+'" pathLength="100" d="'+d+'"/>'; });
-    DSTY.forEach(function(y,i){ var d='M '+SRCX+','+SRCY+' C '+cx+','+SRCY+' '+cx+','+y+' '+DSTX+','+y; svg+='<path class="rz-flow f'+i+'" pathLength="100" d="'+d+'"/>'; });
+    var lines='', pulses='';
+    DSTY.forEach(function(y,i){
+      var cx=(SRCX+DSTX)/2;
+      var d='M '+SRCX+','+SRCY+' C '+cx+','+SRCY+' '+cx+','+y+' '+DSTX+','+y;
+      lines +='<path class="rz-line l'+i+'" pathLength="100" d="'+d+'"/>';
+      pulses+='<path class="rz-pulse p'+i+'" pathLength="100" d="'+d+'"/>';
+    });
     var dstHTML='';
     DEST.forEach(function(d,i){
-      dstHTML+='<div class="rz-node rz-dst d'+i+'" data-i="'+i+'"><div class="rz-card"><div class="rz-l"><p class="rz-deye">'+d.eye+'</p><p class="rz-name">'+d.name+'</p><span class="rz-menge">'+d.menge+'</span></div><div class="rz-r"><span class="rz-cost" data-b="'+d.b+'">'+eur(d.a)+'</span><span class="rz-upd">aktualisiert</span></div></div></div>';
+      dstHTML+='<div class="rz-node rz-dst d'+i+'" data-i="'+i+'"><div class="rz-card"><div class="rz-l"><p class="rz-deye">'+d.db+'</p><p class="rz-name">'+d.name+'</p><span class="rz-menge">'+d.menge+'</span></div><div class="rz-r"><span class="rz-cost" data-b="'+d.b+'">'+eur(d.a)+'</span><span class="rz-upd">aktualisiert</span></div></div></div>';
     });
     var right=
       '<div class="rz-head"><h2 class="rz-title">Ein Eintrag, <span class="g">vier Anwendungen.</span></h2></div>'+
-      '<div class="rz-stage"><div class="rz-inner"><svg viewBox="0 0 '+VB_W+' '+VB_H+'" preserveAspectRatio="none">'+svg+'</svg>'+
+      '<div class="rz-stage"><div class="rz-inner"><svg viewBox="0 0 '+VB_W+' '+VB_H+'" preserveAspectRatio="none">'+lines+pulses+'</svg>'+
         '<div class="rz-node rz-src"><div class="rz-card"><span class="rz-chg">Preis geändert</span><p class="rz-eye">DB IV · Zutat</p><p class="rz-name">Olivenöl</p><div class="rz-div"></div><div class="rz-row"><span class="k">Preis</span><span class="rz-price" data-b="14.90">12,90&nbsp;€/L</span></div><span class="rz-badge">1× angelegt</span></div></div>'+
         dstHTML+
       '</div></div>'+
@@ -482,28 +466,30 @@
         '<div class="rz-left"><p class="rz-para">'+PARA1+'</p><p class="rz-para">'+PARA2+'</p></div>'+
         '<div class="rz-right">'+right+'</div>'+
       '</div>';
+    root.querySelector('.rz-src').style.animationDelay='.22s';
+    root.querySelectorAll('.rz-dst').forEach(function(n,i){ n.style.animationDelay=(1.05+i*0.12)+'s'; });
     return root;
   }
-  function countUp(el,to,unit){ var from=parseFloat((el.textContent||'0').replace(/[^\d,]/g,'').replace(',','.'))||0, dur=650, t0=null;
+  function countUp(el,to,unit){ var from=parseFloat((el.textContent||'0').replace(/[^\d,]/g,'').replace(',','.'))||0, dur=600, t0=null;
     function step(now){ if(t0===null)t0=now; var p=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-p,3), v=from+(to-from)*e; el.textContent=unit(v); if(p<1)requestAnimationFrame(step); }
     requestAnimationFrame(step); }
-  function priceUnit(v){ return v.toFixed(2).replace('.',',')+' €/L'; }
   function reduced(){ try{return window.matchMedia('(prefers-reduced-motion:reduce)').matches;}catch(e){return false;} }
+  function priceUnit(v){ return v.toFixed(2).replace('.',',')+' €/L'; }
   function go(root){ if(root.__played) return; root.__played=true;
-    if(reduced()){
-      root.classList.add('go','upd','flow');
-      root.querySelector('.rz-price').textContent='14,90 €/L';
-      root.querySelectorAll('.rz-dst').forEach(function(n){ n.classList.add('hit'); n.querySelector('.rz-cost').textContent=eur(parseFloat(n.querySelector('.rz-cost').getAttribute('data-b'))); });
-      return;
-    }
+    var dsts=root.querySelectorAll('.rz-dst'), price=root.querySelector('.rz-price');
+    if(reduced()){ root.classList.add('go','upd'); dsts.forEach(function(n){ n.classList.add('lit','pop'); n.querySelector('.rz-cost').textContent=eur(parseFloat(n.querySelector('.rz-cost').getAttribute('data-b'))); }); price.textContent='14,90 €/L'; return; }
     root.classList.add('go');
-    // 2) Preis passt sich nach oben an
-    setTimeout(function(){ root.classList.add('upd'); countUp(root.querySelector('.rz-price'),14.90,priceUnit); },1150);
-    // 3) Energieimpuls
-    setTimeout(function(){ root.classList.add('flow'); },2250);
-    // 4) Zielkacheln empfangen Impuls -> leuchten + rechnen neu (getaktet auf Puls-Ankunft)
+    /* Preis nach oben anpassen -> Tron-Impuls -> Kacheln blitzen auf */
+    setTimeout(function(){
+      root.classList.add('upd');                 // Pill + Tron-Pulse starten
+      countUp(price,14.90,priceUnit);
+    },2200);
     DEST.forEach(function(d,i){
-      setTimeout(function(){ var n=root.querySelectorAll('.rz-dst')[i]; n.classList.add('hit'); countUp(n.querySelector('.rz-cost'),parseFloat(n.querySelector('.rz-cost').getAttribute('data-b')),eur); }, 2250 + i*100 + 760);
+      setTimeout(function(){
+        var n=dsts[i]; n.classList.add('flash','pop');
+        countUp(n.querySelector('.rz-cost'),parseFloat(n.querySelector('.rz-cost').getAttribute('data-b')),eur);
+        setTimeout(function(){ n.classList.remove('flash'); n.classList.add('lit'); },430);
+      },2200+760+i*70);
     });
   }
   function inView(el){ var r=el.getBoundingClientRect(); return r.top < (window.innerHeight*0.82) && r.bottom > 60; }
@@ -513,11 +499,13 @@
     window.addEventListener('scroll',function h(){ if(inView(root)){ window.removeEventListener('scroll',h); go(root); } },{passive:true});
     try{ var io=new IntersectionObserver(function(e){ if(e[0].isIntersecting){ io.disconnect(); go(root); } },{threshold:.2}); io.observe(root); }catch(e){}
   }
+  /* natives Element mit Phrase finden, aber niemals aus dem eigenen Widget */
   function findNative(phrase){
     var els=document.querySelectorAll('.notion-text, .notion-heading, p, h1, h2, h3');
     for(var i=0;i<els.length;i++){ var e=els[i]; if(e.closest('#tsreuse')) continue; if((e.textContent||'').replace(/\s+/g,' ').indexOf(phrase)>-1) return e; }
     return null;
   }
+  /* hoch bis zum direkten Kind der .notion-root (Top-Level-Block) */
   function topLevel(el){ var nr=document.querySelector('.notion-root'); if(!nr) return el.closest('[id^="block-"]')||el; var b=el; while(b&&b.parentElement&&b.parentElement!==nr) b=b.parentElement; return (b&&b.parentElement===nr)?b:(el.closest('[id^="block-"]')||el); }
   function hideNative(){
     var t=findNative('In diesem Schritt übersetzen wir das Inventarprodukt');
@@ -547,7 +535,6 @@
     new MutationObserver(function(){ if(on()){ hideNative(); if(!document.getElementById('tsreuse')) mount(); } }).observe(document.documentElement,{childList:true,subtree:true}); }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
-
 
 /* ---- */
 
