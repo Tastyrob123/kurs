@@ -4053,9 +4053,9 @@
         { name:'Kühltransporter Sprinter', wert:180, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/kuehltransporter-sprinter.jpg' },
         { name:'Pritschenwagen',           wert:220, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/pritschenwagen-kisten.jpg' },
         { name:'Getränke-LKW',             wert:350, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/getraenke-lkw.jpg' },
-        { name:'Güterzug',                 wert:1200, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/gueterzug.jpg' },
-        { name:'Containerschiff',          wert:3500, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/containerschiff.jpg' },
-        { name:'Frachtflugzeug',           wert:7500, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/militaer-frachtflugzeug.jpg' }
+        { name:'Güterzug',                 wert:1200, fit:'contain', img:'https://tastyrob123.github.io/kurs/img/lieferpartner/gueterzug.jpg' },
+        { name:'Containerschiff',          wert:3500, fit:'contain', img:'https://tastyrob123.github.io/kurs/img/lieferpartner/containerschiff.jpg' },
+        { name:'Frachtflugzeug',           wert:7500, fit:'contain', img:'https://tastyrob123.github.io/kurs/img/lieferpartner/militaer-frachtflugzeug.jpg' }
       ]},
     { kachel_id:'db13_ansprechpartner', kachel_name:'Ansprechpartner', ist_produkt_kachel:true,
       einheit:'Jahresrückvergütung (%)', einheit_typ:'prozent',
@@ -4571,7 +4571,7 @@
     var root=document.createElement('div'); root.className='tsshop'+((page.relations&&page.relations.length)?' tss-has-rel':''); root.id='tsshop--'+(page.kachel||'x');
     var cards=steps.map(function(st,i){
       var v=k.objekt_varianten[i%k.objekt_varianten.length]||{};
-      return '<article class="tss-card'+(isDone(st)?' is-done':'')+'" data-step="'+i+'" role="button" tabindex="0" aria-label="'+st.title+' öffnen">'
+      return '<article class="tss-card'+(v.fit==='contain'?' tss-fit-contain':'')+(isDone(st)?' is-done':'')+'" data-step="'+i+'" role="button" tabindex="0" aria-label="'+st.title+' öffnen">'
         +'<div class="tss-imgwrap"><img src="'+(v.img||ph(v.name||st.title))+'" alt="'+st.title+'" loading="lazy"><span class="tss-donebadge">'+CHECK+'</span></div>'
         +'<div class="tss-body">'
           +'<h4 class="tss-name">'+st.title+'</h4>'
@@ -4686,7 +4686,7 @@
       +'<div class="tsd-panel">'
         +'<button type="button" class="tsd-close" aria-label="Schließen">'+XICON+'</button>'
         +'<div class="tsd-grid">'
-          +'<div class="tsd-imgwrap"><img src="'+(v.img||ph(v.name||st.title))+'" alt="'+st.title+'" style="view-transition-name:tsshopimg"></div>'
+          +'<div class="tsd-imgwrap'+(v.fit==='contain'?' tsd-imgwrap--contain':'')+'"><img src="'+(v.img||ph(v.name||st.title))+'" alt="'+st.title+'" style="view-transition-name:tsshopimg"></div>'
           +'<div class="tsd-info">'
             +'<div class="tsd-eyebrow">'+page.eyebrow+'</div>'
             +'<h2 class="tsd-title" style="view-transition-name:tsshoptitle">'+st.title+'</h2>'
