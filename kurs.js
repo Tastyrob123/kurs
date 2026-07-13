@@ -4123,6 +4123,26 @@
       eyebrow:'Der Warenkorb · DB 0',
       title:'Deine Inventurliste. <span>Schritt für Schritt</span>.',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB 0 ist der Preis.',
+      /* Relation-Kacheln (erscheinen im Nachgang) — ans Ende des Regals, zählen gesondert.
+         type:'ghost'  = wechselseitige Relation, erscheint automatisch → du tust nichts (nicht im Balken)
+         type:'later'  = Rollup/aktive Verknüpfung, baust du selbst NACH der Relation (zählt im Balken, Lila) */
+      relations:[
+        { type:'ghost', name:'Lieferant', target:'Relation · DB I Lieferpartner', flag:'erscheint automatisch',
+          desc:'Die Verbindung zu den Lieferpartnern. Erscheint hier von allein, sobald du sie von der Lieferanten-Seite aus wechselseitig anlegst — du baust sie hier nicht.',
+          img:'https://tastyrob123.github.io/kurs/img/flow/lieferant.jpg' },
+        { type:'ghost', name:'Ist Zutat', target:'Relation · DB IV Zutaten', flag:'erscheint automatisch',
+          desc:'Die Verbindung zu den Zutaten. Kommt automatisch, sobald du die wechselseitige Verbindung von der Zutaten-Seite aus setzt.',
+          img:'https://tastyrob123.github.io/kurs/img/zutaten/tomate.jpg' },
+        { type:'ghost', name:'Packaging / Co.', target:'Relation · Packaging', flag:'erscheint automatisch',
+          desc:'Die Verbindung zum Packaging. Erscheint automatisch über die wechselseitige Verbindung der Packaging-Tabelle.',
+          img:'https://tastyrob123.github.io/kurs/img/flow/produkt.jpg' },
+        { type:'later', name:'Ansprechpartner Lieferant', target:'Rollup · über Lieferant', flag:'später verknüpfen',
+          desc:'Ein Rollup über die Lieferant-Relation. Den baust du selbst — aber erst, wenn die Lieferant-Verbindung steht.',
+          img:'https://tastyrob123.github.io/kurs/img/flow/ansprechpartner.jpg' },
+        { type:'later', name:'Hauptkontakt Lieferant', target:'Rollup · über Lieferant', flag:'später verknüpfen',
+          desc:'Ein Rollup/Formel über die Lieferant-Relation. Baust du selbst nach, sobald die Verbindung existiert.',
+          img:'https://tastyrob123.github.io/kurs/img/flow/lieferantenvertrag.jpg' }
+      ],
       summary:'Wareneinsatz', chain:true },
     { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_lieferanten',
       marker:/Kundennummer/,
@@ -4203,6 +4223,24 @@
   #tsshop .tss-card.is-done .tss-body::after{opacity:1}
   #tsshop .tss-card.is-done{--tss-g:143,203,170;background:linear-gradient(165deg,rgba(160,208,180,.30),rgba(160,208,180,.12) 55%,rgba(160,208,180,.05));border-color:rgba(160,208,180,.6);box-shadow:0 18px 44px -30px rgba(0,0,0,.85),0 0 38px rgba(143,203,170,.24)}
   #tsshop .tss-card.is-done .tss-val{color:#9FD3B9}
+  /* ── Relation-Kacheln: Ghost (erscheint automatisch) + Safe-for-Later (Lila) ── */
+  #tsshop .tss-card.tss-rel{cursor:default}
+  #tsshop .tss-card.tss-later{cursor:pointer}
+  #tsshop .tss-flag{position:absolute;top:11px;left:11px;z-index:4;display:inline-flex;align-items:center;gap:6px;padding:5px 10px 5px 9px;border-radius:999px;font-size:10px;font-weight:600;letter-spacing:.02em;line-height:1;white-space:nowrap;-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px)}
+  #tsshop .tss-flag::before{content:"";width:6px;height:6px;border-radius:50%;flex:none}
+  #tsshop .tss-val--rel{font-size:11px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+  #tsshop .tss-card.tss-ghost{opacity:.5;border:1px dashed rgba(255,255,255,.32);box-shadow:none}
+  #tsshop .tss-card.tss-ghost .tss-imgwrap img{filter:grayscale(.7) brightness(.82)}
+  #tsshop .tss-card.tss-ghost:hover,#tsshop .tss-card.tss-ghost:focus-visible{transform:none;animation:none;border-color:rgba(255,255,255,.45);opacity:.6}
+  #tsshop .tss-ghost .tss-flag{background:rgba(16,18,26,.74);border:1px dashed rgba(255,255,255,.5);color:rgba(255,255,255,.86)}
+  #tsshop .tss-ghost .tss-flag::before{background:rgba(255,255,255,.6)}
+  #tsshop .tss-card.tss-ghost.is-done{opacity:1;border-style:solid}
+  #tsshop .tss-card.tss-later{--tss-g:150,120,224;border:1px solid rgba(150,120,224,.5);background:linear-gradient(165deg,rgba(150,120,224,.17),rgba(150,120,224,.05) 55%,rgba(150,120,224,.015))}
+  #tsshop .tss-card.tss-later:hover,#tsshop .tss-card.tss-later:focus-visible{border-color:rgba(150,120,224,.85);box-shadow:0 18px 44px -30px rgba(0,0,0,.85),0 0 34px rgba(150,120,224,.28)}
+  #tsshop .tss-later .tss-flag{background:rgba(150,120,224,.92);border:1px solid rgba(255,255,255,.28);color:#0c0a16}
+  #tsshop .tss-later .tss-flag::before{background:#0c0a16}
+  #tsshop .tss-card.tss-later.is-done{--tss-g:143,203,170;border-color:rgba(160,208,180,.6)}
+  #tsshop.tss-has-rel .tss-bar__fill{background:linear-gradient(90deg,#e35d76,#e32552);box-shadow:0 0 10px rgba(227,37,82,.5),inset 0 1px 0 rgba(255,255,255,.3)}
   /* Tron-Neon-Sweep beim In-den-Einkaufswagen-Legen */
   #tsshop .tss-neon{position:absolute;inset:0;width:100%;height:100%;z-index:4;pointer-events:none;overflow:visible;filter:drop-shadow(0 0 5px rgba(143,203,170,.95)) drop-shadow(0 0 16px rgba(143,203,170,.5));transition:opacity .5s ease}
   #tsshop .tss-body{padding:16px 18px 18px}
@@ -4331,6 +4369,7 @@
       return { i:i, toggle:t, title:title, key:doneKey(rawTitle), content:content, desc:desc };
     });
   }
+  function relKey(page,r){ return 'rel-done-'+(page.kachel||'x')+'-'+r.name.replace(/[^a-z0-9]+/gi,'').toLowerCase(); }
   function isDone(step){ return localStorage.getItem(step.key)==='1'; }
   function setDone(step,val){
     localStorage.setItem(step.key, val?'1':'0');
@@ -4341,7 +4380,7 @@
 
   /* ---- Markup ---- */
   function build(page,k,steps){
-    var root=document.createElement('div'); root.className='tsshop'; root.id='tsshop--'+(page.kachel||'x');
+    var root=document.createElement('div'); root.className='tsshop'+((page.relations&&page.relations.length)?' tss-has-rel':''); root.id='tsshop--'+(page.kachel||'x');
     var cards=steps.map(function(st,i){
       var v=k.objekt_varianten[i%k.objekt_varianten.length]||{};
       return '<article class="tss-card'+(isDone(st)?' is-done':'')+'" data-step="'+i+'" role="button" tabindex="0" aria-label="'+st.title+' öffnen">'
@@ -4352,6 +4391,16 @@
           +'<div class="tss-val">'+fmt(k.einheit_typ,v.wert)+'</div>'
         +'</div></article>';
     }).join('');
+    var relCards='';
+    if(page.relations&&page.relations.length){
+      relCards=page.relations.map(function(r,ri){
+        var done=(r.type==='later'&&localStorage.getItem(relKey(page,r))==='1')||(r.mirrorKey&&localStorage.getItem(r.mirrorKey)==='1');
+        return '<article class="tss-card tss-rel tss-'+r.type+(done?' is-done':'')+'" data-rel="'+ri+'"'+(r.type==='later'?' role="button" tabindex="0"':'')+' aria-label="'+r.name+' — '+r.flag+'">'
+          +'<div class="tss-imgwrap"><img src="'+r.img+'" alt="'+r.name+'" loading="lazy"><span class="tss-flag">'+r.flag+'</span><span class="tss-donebadge">'+CHECK+'</span></div>'
+          +'<div class="tss-body"><h4 class="tss-name">'+r.name+'</h4><p class="tss-desc">'+r.desc+'</p><div class="tss-val tss-val--rel">'+r.target+'</div></div>'
+        +'</article>';
+      }).join('');
+    }
     root.innerHTML='<div class="tss-inner">'
       +'<div class="tss-head">'
         +'<div class="tss-eyebrow">'+page.eyebrow+'</div>'
@@ -4362,7 +4411,7 @@
         +'<div class="tss-fade prev"></div><div class="tss-fade next"></div>'
         +'<button type="button" class="tss-nav prev" aria-label="Zurück scrollen">'+CHEV_L+'</button>'
         +'<button type="button" class="tss-nav next" aria-label="Weiter scrollen">'+CHEV_R+'</button>'
-        +'<div class="tss-track">'+cards+'</div>'
+        +'<div class="tss-track">'+cards+relCards+'</div>'
       +'</div>'
       +(page.summary?'<div class="tss-bar">'
           +'<div class="tss-bar__side tss-bar__left"><div class="tss-bar__val"></div><div class="tss-bar__cap">'+page.summary+'</div></div>'
@@ -4393,11 +4442,16 @@
     total=Math.round(total*100)/100;
     var valEl=root.querySelector('.tss-bar__val');
     if(valEl) valEl.textContent=fmt(page.summaryType||k.einheit_typ,total);
-    /* Mitte: Fortschritt DIESES Schritt-Blocks */
-    var pct=steps.length?Math.round(done/steps.length*100):0;
+    /* Mitte: Fortschritt DIESES Schritt-Blocks.
+       Nenner = jetzt baubare Schritte + Safe-for-Later-Relationen (Lila).
+       Ghost-Kacheln (erscheinen automatisch) zählen NICHT mit. */
+    var laterList=(page.relations||[]).filter(function(r){ return r.type==='later'; });
+    var laterDone=laterList.filter(function(r){ return localStorage.getItem(relKey(page,r))==='1'; }).length;
+    var denom=steps.length+laterList.length, num=done+laterDone;
+    var pct=denom?Math.round(num/denom*100):0;
     var fill=root.querySelector('.tss-bar__fill'); if(fill) fill.style.width=pct+'%';
     var mc=root.querySelector('.tss-bar__mid-cap');
-    if(mc) mc.innerHTML='<span>Diese Lektion</span><span><b>'+pct+' %</b> · '+done+'/'+steps.length+'</span>';
+    if(mc) mc.innerHTML='<span>Diese Lektion</span><span><b>'+pct+' %</b> · '+num+'/'+denom+'</span>';
     /* Rechts: Backoffice-Gesamt (rot) — auf allen Balken der Seite synchron */
     refreshGlobals();
   }
@@ -4577,6 +4631,15 @@
     window.addEventListener('resize',upd);
     setTimeout(upd,150);
     cards.forEach(function(c){
+      if(c.classList.contains('tss-rel')){
+        if(c.classList.contains('tss-later')){
+          var r=page.relations[parseInt(c.dataset.rel,10)];
+          var toggle=function(){ var kk=relKey(page,r); var nv=localStorage.getItem(kk)==='1'?'0':'1'; localStorage.setItem(kk,nv); c.classList.toggle('is-done',nv==='1'); updProgress(root,steps,k,page); };
+          c.addEventListener('click',toggle);
+          c.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggle(); } });
+        }
+        return;
+      }
       c.addEventListener('click',function(){ openDetail(page,k,steps,parseInt(c.dataset.step,10),root); });
       c.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openDetail(page,k,steps,parseInt(c.dataset.step,10),root); } });
     });
