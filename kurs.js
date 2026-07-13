@@ -6169,7 +6169,7 @@
   #tsd5 .d5-sum .sl{font-size:12px;letter-spacing:.01em;color:rgba(255,255,255,.55);margin:0 0 8px}
   #tsd5 .d5-sum .sv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:30px;font-weight:700;color:#c7b489;letter-spacing:-.01em;line-height:1}
   /* Rechte Karte — Pro Portion (füllt die volle Kartenhöhe, kein leerer Boden) */
-  #tsd5 .d5-right{background:linear-gradient(180deg,rgba(199,180,137,.085),rgba(199,180,137,.03));border-color:rgba(199,180,137,.38);display:flex;flex-direction:column;justify-content:space-between}
+  #tsd5 .d5-right{background:linear-gradient(180deg,rgba(199,180,137,.085),rgba(199,180,137,.03));border-color:rgba(199,180,137,.38);display:flex;flex-direction:column;justify-content:space-between;padding-left:23px;padding-right:23px}
   #tsd5 .d5-ctrl{margin:2px 0 22px}
   #tsd5 .d5-ctrl .cl{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 13px}
   #tsd5 .d5-ctrl .cl .lab{font-size:13px;color:rgba(255,255,255,.7)}
