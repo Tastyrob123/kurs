@@ -3854,6 +3854,19 @@
         { name:'Rhabarber-Sirup',       wert:25, img:'https://tastyrob123.github.io/kurs/img/rezepturen/rhabarber-sirup.jpg' },
         { name:'Curry-Mango-Dip',       wert:50, img:'https://tastyrob123.github.io/kurs/img/rezepturen/curry-mango-dip.jpg' }
       ]},
+    { kachel_id:'db5_finance_personal', kachel_name:'Personalkosten pro Rezeptur', ist_produkt_kachel:true,
+      einheit:'Portionsgröße (g)', einheit_typ:'menge_g',
+      /* 7 Tasty-Studios-Gerichte (Glasschale, schwarzes Studio, img/erweiterung, GitHub Pages) — Portionsgrößen = Beispielwerte.
+         Finance-Erweiterung "Personalkosten pro Rezeptur" = 2. Tab-Gruppe auf /rezepturen, 7 Schritte = 7 Karten (1:1). */
+      objekt_varianten:[
+        { name:'Räucherlachs-Röschen', wert:120, img:'https://tastyrob123.github.io/kurs/img/erweiterung/raeucherlachs-roeschen.jpg' },
+        { name:'Tomatensalsa',         wert:90,  img:'https://tastyrob123.github.io/kurs/img/erweiterung/tomatensalsa.jpg' },
+        { name:'Guacamole',            wert:80,  img:'https://tastyrob123.github.io/kurs/img/erweiterung/guacamole.jpg' },
+        { name:'Hummus',               wert:100, img:'https://tastyrob123.github.io/kurs/img/erweiterung/hummus.jpg' },
+        { name:'Kichererbsen-Salat',   wert:150, img:'https://tastyrob123.github.io/kurs/img/erweiterung/kichererbsen-salat.jpg' },
+        { name:'Gurkensalat',          wert:130, img:'https://tastyrob123.github.io/kurs/img/erweiterung/gurkensalat.jpg' },
+        { name:'Caprese',              wert:160, img:'https://tastyrob123.github.io/kurs/img/erweiterung/caprese.jpg' }
+      ]},
     { kachel_id:'db13_lieferanten', kachel_name:'Lieferpartner', ist_produkt_kachel:true,
       einheit:'Mindestbelieferung (€)', einheit_typ:'preis',
       /* 13 Tasty-Studios-Fahrzeugbilder (img/lieferpartner, GitHub Pages) — Werte = Beispielwerte */
@@ -4055,6 +4068,15 @@
       eyebrow:'Der Warenkorb · DB V',
       title:'Deine Rezepturen. <span>Portion für Portion</span>.',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB V ist die Portionsgröße.',
+      summary:'Portionsmenge', chain:true },
+    /* DB V Finance-Erweiterung — zweite .notion-tabs-Gruppe auf /rezepturen ("Personalkosten pro
+       Rezeptur", 7 Schritte). marker /Finance/ trifft NUR diese Gruppe; die Grundgerüst-Gruppe
+       trägt kein "Finance". Zweites Regal unter DB V auf derselben Seite (eigene kachel_id → eigene rootId). */
+    { path:/\/rezepturen\/?$/, kachel:'db5_finance_personal',
+      container:'.notion-tabs', marker:/Finance/,
+      eyebrow:'Der Warenkorb · DB V · Finance',
+      title:'Deine Personalkosten. <span>Portion für Portion</span>.',
+      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung der Finance-Erweiterung ist die Portionsgröße.',
       summary:'Portionsmenge', chain:true },
     /* DB VI Gemeinkosten + DB VII Mitarbeiterlöhne — beide Abschnitte liegen als getrennte
        Tab-Widgets (.notion-tabs) auf derselben Seite; marker trennt sie eindeutig. */
@@ -4335,7 +4357,7 @@
      Nenner = Summe der bekannten Schrittzahlen (auch noch nicht besuchte Seiten
      zählen mit). Zähler = erledigte Schritte = localStorage-Keys "done-…"='1'
      (dieselben Keys, die das Karten-/Checkbox-System setzt → immer aktuell). */
-  var BACKOFFICE={ db0_inventurliste:16, db13_lieferanten:13, db13_ansprechpartner:10, db13_vertraege:13, db4_zutaten:30, db5_rezepturen:23, db6_gemeinkosten:15, db7_mitarbeiterloehne:15, db8_gerichte:37 };
+  var BACKOFFICE={ db0_inventurliste:16, db13_lieferanten:13, db13_ansprechpartner:10, db13_vertraege:13, db4_zutaten:30, db5_rezepturen:23, db5_finance_personal:7, db6_gemeinkosten:15, db7_mitarbeiterloehne:15, db8_gerichte:37 };
   function backofficeTotal(){ var t=0; for(var kk in BACKOFFICE){ if(BACKOFFICE.hasOwnProperty(kk)) t+=BACKOFFICE[kk]; } return t; }
   function backofficeDone(){ var d=0; try{ for(var i=0;i<localStorage.length;i++){ var key=localStorage.key(i); if(key&&key.slice(0,5)==='done-'&&localStorage.getItem(key)==='1') d++; } }catch(e){} return d; }
   function backofficePct(){ var t=backofficeTotal(), d=Math.min(backofficeDone(),t); return t>0?Math.round(d/t*100):0; }
