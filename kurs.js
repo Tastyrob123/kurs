@@ -4283,7 +4283,7 @@
           img:'https://tastyrob123.github.io/kurs/img/zutaten/tomate.jpg',
           content:'<p class="notion-text">Die Verbindung zu den <b>Zutaten</b>. Baust du hier nicht — sie erscheint automatisch, sobald du in <b>DB IV · Zutaten</b> die wechselseitige Relation zur Inventurliste setzt.</p>' },
         { type:'ghost', name:'Packaging / Co.', target:'Relation · Packaging', flag:'erscheint automatisch',
-          desc:'Die Verbindung zum Packaging — erscheint von allein.', fit:'contain',
+          desc:'Die Verbindung zum Packaging — erscheint von allein.',
           img:'https://tastyrob123.github.io/kurs/img/packaging/kuchenbox.jpg',
           content:'<p class="notion-text">Die Verbindung zum <b>Packaging</b>. Erscheint automatisch über die wechselseitige Relation der Packaging-Tabelle — du legst sie hier nicht an.</p>' }
       ],
