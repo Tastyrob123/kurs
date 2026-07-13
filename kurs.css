@@ -129,13 +129,17 @@ section.notion-tabs {
 .page__zutatenliste #block-397b954655348040977bd774bd3e5dab{ display:none !important; }
 .page__zutatenliste #block-396b9546553480a5b5a4d06877f1543c{ margin-top:40px !important; }
 .page__zutatenliste #block-395b9546553480fcb4a0f065b83ee656{ margin-bottom:12px !important; }
-/* Section-Heading "Die fertige Übersicht." in Display-Schrift Lineal TS, etwas größer;
-   das Wort "Übersicht" wird per JS (__tsZdbUeber) in .ts-gold gewrappt → beige (#c7b489). */
+/* Section-Heading "Die fertige Übersicht." in Display-Schrift Lineal TS; Groesse/Zeilenhoehe/
+   Laufweite = Theme-H2-Standard (identisch zu "Vertraglich abgesicherte Warenflüsse", Robert 2026-07-13).
+   Das Wort "Übersicht" wird per JS (__tsZdbUeber) in .ts-gold gewrappt → beige (#c7b489). */
 .page__zutatenliste #block-39bb9546553480158645e1054324e824{
   font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif !important;
-  font-weight:600 !important; letter-spacing:-.01em !important;
-  font-size:clamp(1.6rem,2.4vw,1.9rem) !important; line-height:1.2 !important; }
+  font-weight:600 !important; letter-spacing:-.02em !important;
+  font-size:1.5rem !important; line-height:1.15 !important; }
 .page__zutatenliste #block-39bb9546553480158645e1054324e824 .ts-gold{ color:#c7b489 !important; }
+/* Leerer Notion-Textblock direkt unter der Überschrift ausblenden → Fließtext rueckt so nah
+   heran wie bei "Warenflüsse" (16px statt 48px; Robert 2026-07-13). */
+.page__zutatenliste #block-39bb9546553480669c76c172515df995{ display:none !important; }
 .page__zutatenliste #block-396b954655348098ae30f9bff07fa068{ display:flex !important; align-items:flex-start !important; max-width:1320px !important; margin-left:auto !important; margin-right:auto !important; }
 .page__zutatenliste #block-396b954655348098ae30f9bff07fa068 > .notion-column{
   display:block !important; max-width:none !important; flex:0 0 auto !important; margin:0 !important;
