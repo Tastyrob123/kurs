@@ -924,6 +924,15 @@ details > summary {
   .page__gemeinkosten-mitarbeiterlhne .ts-hero__title{ font-size:clamp(2rem,12vw,3rem); }
 }
 
+/* gemeinkosten — "Abschnitt A"-Sektion: Video-Spalte neben h1 wieder anzeigen (50/50 wie inventurliste).
+   super.so kollabiert diese native column-list zu display:block + versteckt die Video-Spalte. */
+.page__gemeinkosten-mitarbeiterlhne .notion-column-list:has(h1.notion-heading) > .notion-column:not(:has(h1.notion-heading)){ display:flex !important; }
+@media (min-width:768px){
+  .page__gemeinkosten-mitarbeiterlhne .notion-column-list:has(h1.notion-heading){ display:flex !important; gap:0 !important; }
+  .page__gemeinkosten-mitarbeiterlhne .notion-column-list:has(h1.notion-heading) > .notion-column{ width:calc((100% - 18px) * 0.5) !important; }
+  .page__gemeinkosten-mitarbeiterlhne .notion-column-list:has(h1.notion-heading) > .notion-column + .notion-column{ margin-inline-start:18px !important; }
+}
+
 /* inventurliste — t1/t2 als mittiger Block (volle Zeilen, nicht per Zeile zentriert) */
 .page__inventurliste #block-399b9546553480c0ac35e72c9d8c4055,
 .page__inventurliste #block-38eb9546553480d3ac7dda0fb8e1ab61{ max-width:900px; margin-left:auto; margin-right:auto; }

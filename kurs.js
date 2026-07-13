@@ -6758,3 +6758,90 @@
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
+
+/* ============================================================
+   MacBook-Cover + Klick-Lightbox (gemeinkosten-mitarbeiterlhne)
+   Muster 1:1 aus rezepturen (.tsmac / #tsmacRez). Natives 2-Spalten-
+   Layout (Notion column-list #block-39cb…c985): links Rohvideo,
+   rechts "Abschnitt A — Gemeinkosten"-Heading + Text. Rohvideo
+   (#block-39cb…c8a4 / Anker "Wir bauen zwei Datenbanken") per
+   JS-Marker .tsmac-host versteckt, freigestellter MacBook-Poster
+   (build.png -> Lektion 2.6 im Screen) + Play-Button, Klick ->
+   geteilte Lightbox #tsmac-lb. Nur auf /gemeinkosten-mitarbeiterlhne.
+   Poster: img/gemeinkosten-mac/pc.png (jsDelivr).
+   ============================================================ */
+(function(){
+  if(window.__tsmacGk) return; window.__tsmacGk=true;
+  var POSTER="https://cdn.jsdelivr.net/gh/Tastyrob123/kurs@main/img/gemeinkosten-mac/pc.png";
+  (function(){ var pre=new Image(); pre.src=POSTER; })();
+  var VID='#block-39cb9546553480c8a4d0e1fc54cfcb87';
+  var PHRASE='Wir bauen zwei Datenbanken';
+  var CSS=[
+    '.page__gemeinkosten-mitarbeiterlhne .notion-video.tsmac-host video{display:none!important;}',
+    '.page__gemeinkosten-mitarbeiterlhne .tsmac{position:relative;cursor:pointer;display:block;width:100%;line-height:0;background:transparent;}',
+    '.page__gemeinkosten-mitarbeiterlhne .tsmac img{width:100%;height:auto;display:block;transition:transform .5s ease;}',
+    '.page__gemeinkosten-mitarbeiterlhne .tsmac:hover img{transform:scale(1.02);}',
+    '.page__gemeinkosten-mitarbeiterlhne .tsmac__play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}',
+    '.page__gemeinkosten-mitarbeiterlhne .tsmac__play span{width:76px;height:76px;border-radius:50%;background:rgba(255,255,255,.16);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;transition:transform .3s,background .3s;}',
+    '.page__gemeinkosten-mitarbeiterlhne .tsmac__play span::after{content:"";border-style:solid;border-width:12px 0 12px 20px;border-color:transparent transparent transparent #fff;margin-left:5px;}',
+    '.page__gemeinkosten-mitarbeiterlhne .tsmac:hover .tsmac__play span{transform:scale(1.08);background:rgba(255,255,255,.26);}',
+    '#tsmac-lb{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;background:rgba(5,6,11,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:4vw;opacity:0;transition:opacity .35s ease;}',
+    '#tsmac-lb.open{display:flex;opacity:1;}',
+    '#tsmac-lb .tsmac-stage{transform:scale(.94);transition:transform .4s cubic-bezier(.2,.7,.2,1);width:min(92vw,1180px);}',
+    '#tsmac-lb.open .tsmac-stage{transform:scale(1);}',
+    '#tsmac-lb video{width:100%;max-height:86vh;border-radius:12px;box-shadow:0 40px 120px rgba(0,0,0,.6);background:#000;display:block;}',
+    '#tsmac-lb__close{position:absolute;top:22px;right:28px;width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}'
+  ].join('');
+  function injectCSS(){ if(document.getElementById('tsmac-gk-css'))return; var s=document.createElement('style'); s.id='tsmac-gk-css'; s.textContent=CSS; document.head.appendChild(s); }
+  function shut(){ var lb=document.getElementById('tsmac-lb'); if(!lb)return; lb.classList.remove('open'); var v=lb.querySelector('video'); if(v){ try{v.pause();}catch(e){} } }
+  function ensureLb(){
+    var lb=document.getElementById('tsmac-lb'); if(lb) return lb;
+    lb=document.createElement('div'); lb.id='tsmac-lb';
+    var stage=document.createElement('div'); stage.className='tsmac-stage';
+    var close=document.createElement('button'); close.id='tsmac-lb__close'; close.textContent='✕';
+    lb.appendChild(stage); lb.appendChild(close); document.body.appendChild(lb);
+    close.addEventListener('click',shut);
+    lb.addEventListener('click',function(e){ if(e.target===lb) shut(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') shut(); });
+    return lb;
+  }
+  function findVid(scope){
+    var b=scope.querySelector(VID);
+    if(b){ var v=b.matches&&b.matches('.notion-video')?b:b.querySelector('.notion-video'); if(v&&v.querySelector('video')) return v; }
+    var texts=scope.querySelectorAll('.notion-text,p');
+    for(var i=0;i<texts.length;i++){
+      if(texts[i].textContent && texts[i].textContent.indexOf(PHRASE)>-1){
+        var cl=texts[i].closest('.notion-column-list'); if(cl){ var vv=cl.querySelector('.notion-video'); if(vv&&vv.querySelector('video')) return vv; }
+      }
+    }
+    var g=scope.querySelectorAll('.notion-column-list .notion-video');
+    for(var j=0;j<g.length;j++){ if(g[j].querySelector('video')) return g[j]; }
+    return null;
+  }
+  function mount(){
+    if(!/\/gemeinkosten-mitarbeiterlhne\/?$/.test(location.pathname)) return;
+    injectCSS();
+    var scope=document.querySelector('.page__gemeinkosten-mitarbeiterlhne'); if(!scope) return;
+    var nv=findVid(scope); if(!nv) return;
+    if(nv.querySelector('.tsmac')) return;
+    var raw=nv.querySelector('video'); if(!raw) return;
+    var src=raw.currentSrc||raw.getAttribute('src')||(raw.querySelector('source')&&raw.querySelector('source').getAttribute('src'));
+    if(!src) return;
+    nv.classList.add('tsmac-host');
+    var poster=document.createElement('div'); poster.className='tsmac';
+    poster.innerHTML='<img src="'+POSTER+'" alt="Lektion 2.6 – DB VI–VII: GK & Löhne" fetchpriority="high" decoding="async"><div class="tsmac__play"><span></span></div>';
+    nv.appendChild(poster);
+    poster.addEventListener('click',function(){
+      var lb=ensureLb(); var stage=lb.querySelector('.tsmac-stage');
+      stage.innerHTML='<video controls playsinline preload="auto" src="'+src+'"></video>';
+      lb.classList.add('open');
+      var v=stage.querySelector('video'); if(v){ try{ v.play(); }catch(e){} }
+    });
+  }
+  function boot(){
+    var tries=0;
+    var iv=setInterval(function(){ tries++; mount(); if(tries>60) clearInterval(iv); },300);
+    new MutationObserver(function(){ mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
