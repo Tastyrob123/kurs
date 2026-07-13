@@ -6150,13 +6150,13 @@
     '#tsrv-root{--tsrv-gold:#c7b489;--tsrv-ease:cubic-bezier(.16,1,.3,1);width:100vw;max-width:100vw;margin:8px 0 40px;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 clamp(20px,4vw,56px);box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;opacity:0;transform:translateY(20px);transition:opacity .8s var(--tsrv-ease),transform .9s var(--tsrv-ease);}',
     '#tsrv-root.in{opacity:1;transform:none;}',
     '#tsrv-root *{box-sizing:border-box;}',
-    '#tsrv-root .tsrv-inner{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4.5vw,60px);align-items:center;}',
+    '#tsrv-root .tsrv-inner{max-width:1600px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4.5vw,64px);align-items:center;}',
     '#tsrv-root .tsrv-textslot{min-width:0;min-height:1px;}',
     '#tsrv-root .tsrv-textslot p{font-size:1rem;line-height:1.68;color:rgba(255,255,255,.82);margin:0;}',
     '.tsrv-hide{display:none !important;}',
     '#tsrv-root .tsrv-unit{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;}',
     '@media(max-width:900px){#tsrv-root .tsrv-inner{grid-template-columns:1fr;}#tsrv-root .tsrv-textslot{text-align:left;max-width:560px;margin:0 auto 6px;}}',
-    '#tsrv-root .tsrv-tile{position:relative;width:100%;max-width:520px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 18px 44px rgba(0,0,0,.5));transition:transform .5s var(--tsrv-ease),filter .5s var(--tsrv-ease);}',
+    '#tsrv-root .tsrv-tile{position:relative;width:100%;max-width:720px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 18px 44px rgba(0,0,0,.5));transition:transform .5s var(--tsrv-ease),filter .5s var(--tsrv-ease);}',
     '#tsrv-root .tsrv-tile:hover{transform:translateY(-4px) scale(1.02);animation:tsrvHeartbeat 2.6s var(--tsrv-ease) infinite;}',
     '@keyframes tsrvHeartbeat{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(199,180,137,.14));}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(199,180,137,.30));}}',
     '#tsrv-root .tsrv-tile:active{transform:scale(.99);transition-duration:.12s;}',
@@ -6222,6 +6222,14 @@
     return null;
   }
   function hideBlock(el){ if(!el)return; var w=(el.id&&/^block-/.test(el.id))?el:(el.closest('[id^="block-"]')||el); if(w) w.classList.add('tsrv-hide'); }
+  /* Top-Level-Block = direktes Kind der .notion-root (der „Nun haben wir…"-Absatz liegt in einer
+     .notion-column → das Grid MUSS auf Seitenebene vor der ganzen Spaltenliste sitzen, nicht in der Spalte). */
+  function topLevelBlockFor(el){
+    var nroot=document.querySelector('.notion-root'); if(!nroot) return el.closest('.notion-column-list')||el;
+    var node=el;
+    while(node && node.parentElement && node.parentElement!==nroot){ node=node.parentElement; }
+    return (node&&node.parentElement===nroot)?node:(el.closest('.notion-column-list')||el);
+  }
   function fillText(anchor){
     var root=document.getElementById('tsrv-root'); if(!root) return;
     var slot=root.querySelector('.tsrv-textslot'); if(!slot) return;
@@ -6229,7 +6237,10 @@
       var p=document.createElement('p'); p.textContent=(anchor.textContent||'').replace(/\s+/g,' ').trim();
       if(p.textContent){ slot.appendChild(p); slot.__filled=true; }
     }
-    if(slot.__filled) hideBlock(anchor);
+    if(slot.__filled){
+      /* ganze native Spaltenliste (Text-Spalte + leere Spalte) ausblenden, nicht nur den Absatz */
+      var col=anchor.closest('.notion-column-list'); if(col) col.classList.add('tsrv-hide'); else hideBlock(anchor);
+    }
   }
   function mount(){
     if(!on()){ ['tsrv-root','tsrv-lb'].forEach(function(id){ var e=document.getElementById(id); if(e&&e.parentNode)e.parentNode.removeChild(e); }); return; }
@@ -6237,7 +6248,8 @@
     if(!document.getElementById('tsrv-root')){
       injectCSS();
       var root=buildTile();
-      anchor.parentNode.insertBefore(root, anchor);
+      var target=topLevelBlockFor(anchor);   // vor der ganzen Spaltenliste (Top-Level), NICHT in die schmale Spalte
+      target.parentNode.insertBefore(root, target);
       reveal(root);
     }
     fillText(anchor);
