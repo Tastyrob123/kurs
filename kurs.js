@@ -6025,9 +6025,7 @@
   #tsd5 .d5-sum .sl{font-size:12px;letter-spacing:.01em;color:rgba(255,255,255,.55);margin:0 0 8px}
   #tsd5 .d5-sum .sv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:30px;font-weight:700;color:#c7b489;letter-spacing:-.01em;line-height:1}
   /* Rechte Karte — Pro Portion (füllt die volle Kartenhöhe, kein leerer Boden) */
-  #tsd5 .d5-right{background:linear-gradient(180deg,rgba(199,180,137,.085),rgba(199,180,137,.03));border-color:rgba(199,180,137,.38);display:flex;flex-direction:column;justify-content:flex-start}
-  #tsd5 .d5-top{margin-bottom:30px}
-  #tsd5 .d5-lower{flex:1 1 auto;display:flex;flex-direction:column;justify-content:space-between}
+  #tsd5 .d5-right{background:linear-gradient(180deg,rgba(199,180,137,.085),rgba(199,180,137,.03));border-color:rgba(199,180,137,.38);display:flex;flex-direction:column;justify-content:space-between}
   #tsd5 .d5-ctrl{margin:2px 0 22px}
   #tsd5 .d5-ctrl .cl{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 13px}
   #tsd5 .d5-ctrl .cl .lab{font-size:13px;color:rgba(255,255,255,.7)}
@@ -6131,7 +6129,6 @@
               '<div class="d5-tile hot"><p class="tl">Preis / Portion</p><div class="tv" data-out="preis">–</div><div class="tu">pro Portion</div></div>'+
             '</div>'+
           '</div>'+
-          '<div class="d5-lower">'+
           '<div class="d5-nutblock">'+
             '<p class="d5-seclbl">Nährwerte / Portion</p>'+
             '<div class="d5-nut">'+
@@ -6143,7 +6140,6 @@
           '</div>'+
           '<div class="d5-aller"><span class="al-l">Allergene</span><div class="d5-allchips">'+allerHTML+'</div></div>'+
           '<p class="d5-formula"><b>Gesamtmenge ÷ Portionsgröße</b> = Portionen &nbsp;·&nbsp; <b>Kosten &amp; Nährwerte</b> laufen pro Portion mit.</p>'+
-          '</div>'+
         '</div>'+
       '</div>'+
       '<div class="d5-foot">'+
