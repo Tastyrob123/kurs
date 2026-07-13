@@ -5887,7 +5887,7 @@
   /* High-End Karten: sanfter Verlauf, Gold-Hairline, Tiefe + Glas-Kante oben */
   #tsd5 .d5-card{position:relative;border-radius:22px;padding:28px 26px 24px 20px;background:linear-gradient(180deg,rgba(255,255,255,.052),rgba(255,255,255,.022));border:1px solid rgba(199,180,137,.24);box-shadow:0 30px 80px -28px rgba(0,0,0,.72),inset 0 1px 0 rgba(255,255,255,.07);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
   /* Rechte Karte Überschrift — zentriert, weiss */
-  #tsd5 .d5-rhead{text-align:center;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:27px;font-weight:600;color:#fff;letter-spacing:-.01em;margin:14px 0 30px}
+  #tsd5 .d5-rhead{text-align:center;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:27px;font-weight:600;color:#fff;letter-spacing:-.01em;margin:52px 0 30px}
   /* Bausteine-Zeilen mit freigestelltem Produktbild (viel größer) */
   #tsd5 .d5-item{display:grid;grid-template-columns:128px 1fr auto;align-items:center;gap:18px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.055);opacity:0;transform:translateX(-14px);transition:opacity .5s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
   #tsd5 .d5-item:first-child{padding-top:2px}
