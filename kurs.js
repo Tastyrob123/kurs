@@ -4552,6 +4552,16 @@
   .tscb .tscb-in.center .tsc-steps{justify-content:center}
   .tscb .tscb-in.center .tsc-stage{max-width:640px;margin:20px auto 0}
   @media(max-width:900px){.tscb .tscb-in{grid-template-columns:1fr;gap:30px}}
+  /* Duo: beide Animationen nebeneinander, Text je zentriert darunter */
+  .tscb .tscb-duo-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,60px);align-items:start}
+  @media(max-width:900px){.tscb .tscb-duo-grid{grid-template-columns:1fr;gap:48px}}
+  .tscb .tscb-cell{min-width:0;display:flex;flex-direction:column}
+  .tscb .tscb-cell .tscp-head{text-align:center}
+  .tscb .tscb-cell .tsc-steps{justify-content:center}
+  .tscb .tsx-center{text-align:center;margin-top:22px}
+  .tscb .tsx-center .tsx-h{margin-bottom:12px}
+  .tscb .tsx-center .tsx-p{max-width:440px;margin-left:auto;margin-right:auto}
+  .tscb .tsx-center .tsx-p:last-child{margin-bottom:0}
   /* Block A steht als eigene Vollbreite-Sektion unter „Bausteine" (Block B), über „Empfehlung zur Einrichtung" (#tszein) — keine Sonder-Margin mehr */
 
   /* --- Textpanel rechts --- */
@@ -4785,25 +4795,23 @@
       '</div></div>';
   }
 
-  var BLOCKS=[
-    { key:'A', mode:'split', marker:'groesse-animation', anim:animA, play:function(el,opts){playA(el,opts);}, txt:TXT_A },
-    { key:'B', mode:'split', marker:'vorlage-animation', anim:animB, play:function(el,opts){playB(el,opts);},
-      txt:{ h:'Bausteine in den <span>Zutaten anzeigen</span>.',
-        body:['Erstelle in jeder Hauptzutat eine Übersicht, in der automatisch die Subzutaten (bspw. 80g) angezeigt werden.','Öffne dafür oben rechts Neu → Neue Vorlage → / Neue Datenbankansicht → DB IV : Zutaten verknüpfen und Filter „Name" = Name der Zutat → Cover Ansicht → Als Standard festlegen.'] } }
-  ];
+  var TXT_B={ h:'Bausteine in den <span>Zutaten anzeigen</span>.',
+    body:['Erstelle in jeder Hauptzutat eine Übersicht, in der automatisch die Subzutaten (bspw. 80g) angezeigt werden.','Öffne dafür oben rechts Neu → Neue Vorlage → / Neue Datenbankansicht → DB IV : Zutaten verknüpfen und Filter „Name" = Name der Zutat → Cover Ansicht → Als Standard festlegen.'] };
+  function centerText(t){
+    var body=(t.body||[]).map(function(p){return '<p class="tsx-p">'+p+'</p>';}).join('');
+    return '<div class="tsx tsx-center">'+(t.h?'<h3 class="tsx-h">'+t.h+'</h3>':'')+body+'</div>';
+  }
+  var PLAYBTN='<button type="button" class="tsc-play"><span class="tsc-play-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg></span><span class="tsc-play-label">Abspielen</span></button>';
 
-  function buildBlock(cfg){
+  /* EIN Section: beide Animationen nebeneinander (2 Spalten), Text je zentriert darunter, je eigener Play-Button. */
+  function buildDuo(){
     if(!document.getElementById('tscover-css')){ var s=document.createElement('style'); s.id='tscover-css'; s.textContent=CSS; document.head.appendChild(s); }
-    var sec=document.createElement('section'); sec.className='tscb'; sec.id='tscb-'+cfg.key; sec.setAttribute('data-block',cfg.key);
-    sec.innerHTML = cfg.mode==='center'
-      ? '<div class="tscb-in center">'+cfg.anim()+'</div>'
-      : cfg.mode==='textleft'
-      ? '<div class="tscb-in">'+txtBig(cfg.txt)+cfg.anim()+'</div>'
-      : '<div class="tscb-in">'+cfg.anim()+txtPanel(cfg.txt)+'</div>';
-    var st=sec.querySelector('.tsc-stage');
-    if(st){ var pb=document.createElement('button'); pb.type='button'; pb.className='tsc-play';
-      pb.innerHTML='<span class="tsc-play-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg></span><span class="tsc-play-label">Abspielen</span>';
-      st.appendChild(pb); }
+    var sec=document.createElement('section'); sec.className='tscb tscb-duo'; sec.id='tscb-duo';
+    sec.innerHTML='<div class="tscb-duo-grid">'+
+      '<div class="tscb-cell" data-cell="A">'+animA()+centerText(TXT_A)+'</div>'+
+      '<div class="tscb-cell" data-cell="B">'+animB()+centerText(TXT_B)+'</div>'+
+    '</div>';
+    [].forEach.call(sec.querySelectorAll('.tsc-stage'), function(st){ st.insertAdjacentHTML('beforeend', PLAYBTN); });
     return sec;
   }
 
@@ -4905,55 +4913,33 @@
     at(11000,function(){ if(opts&&opts.onEnd) opts.onEnd(); });
   }
 
-  /* Kein Autoplay: Idle-Poster + Play-Button, Animation läuft EINMAL auf Klick (kein Dauerloop). */
-  function arm(sec,cfg){
-    if(sec.__armed) return; sec.__armed=true;
-    var panel=sec.querySelector('.tsc-anim'), btn=sec.querySelector('.tsc-play');
-    cfg.play(panel,{idle:true});
+  /* Kein Autoplay: Idle-Poster + Play-Button JE Kachel, Animation läuft EINMAL auf Klick. */
+  function armCell(cell, playFn){
+    var panel=cell.querySelector('.tsc-anim'), btn=cell.querySelector('.tsc-play');
+    playFn(panel,{idle:true});
     if(!btn) return;
     var playing=false;
     function label(t){ var l=btn.querySelector('.tsc-play-label'); if(l) l.textContent=t; }
     btn.addEventListener('click',function(){
       if(playing) return; playing=true; btn.classList.add('playing');
-      cfg.play(panel,{onEnd:function(){ playing=false; label('Erneut abspielen'); btn.classList.remove('playing'); }});
+      playFn(panel,{onEnd:function(){ playing=false; label('Erneut abspielen'); btn.classList.remove('playing'); }});
     });
   }
+  function armDuo(sec){
+    if(sec.__armed) return; sec.__armed=true;
+    var cA=sec.querySelector('.tscb-cell[data-cell="A"]'); if(cA) armCell(cA, function(el,o){playA(el,o);});
+    var cB=sec.querySelector('.tscb-cell[data-cell="B"]'); if(cB) armCell(cB, function(el,o){playB(el,o);});
+  }
 
-  /* Marker (Vollbreite-Textzeile, NICHT in einer Spalte) */
-  function findMarker(marker){
-    var els=document.querySelectorAll('.notion-text');
-    for(var i=0;i<els.length;i++){
-      var t=(els[i].textContent||'').trim().toLowerCase().replace(/^[^a-z]+/,'').replace(/[^a-z-]+$/,'');
-      if(t===marker && !els[i].closest('.notion-column')){
-        var blk=els[i].closest('[data-block-id]')||els[i].closest('[id^="block-"]')||els[i];
-        return blk;
-      }
-    }
-    return null;
-  }
-  function anchorShop(){ return document.getElementById('tsshop--db4_zutaten'); }
-  function mountBlock(cfg, anchorAfter){
-    if(document.getElementById('tscb-'+cfg.key)) return document.getElementById('tscb-'+cfg.key);
-    var mk=findMarker(cfg.marker), sec=buildBlock(cfg), ref=null;
-    if(mk && mk.parentNode){ mk.style.display='none'; ref=mk; }
-    else if(anchorAfter && anchorAfter.parentNode){ ref=anchorAfter; }
-    else return null;
-    ref.parentNode.insertBefore(sec, ref.nextSibling);
-    arm(sec,cfg);
-    return sec;
-  }
   function mount(){
-    if(!on()){ ['A','B'].forEach(function(k){ var e=document.getElementById('tscb-'+k); if(e&&e.parentNode)e.parentNode.removeChild(e); }); return; }
-    /* Früh-Ausstieg, sobald beide Blöcke platziert sind (verhindert Baum-Scan bei jeder DOM-Mutation). */
-    var needA=!document.getElementById('tscb-A'), needB=!document.getElementById('tscb-B');
-    if(!needA && !needB) return;
-    /* Beide Blöcke UNTER die "Empfehlung zur Einrichtung"-Box (#tszein): A direkt darunter, B unter A.
-       #tszein ankert selbst hinter dem Laptop (#tszmac). Endreihenfolge:
-       ... -> "Die fertige Übersicht"(Laptop) -> #tszein -> Block A -> Block B. */
-    var zein=document.getElementById('tszein');
-    if(needA && zein) mountBlock(BLOCKS[0], zein);
-    var aSec=document.getElementById('tscb-A');
-    if(needB && aSec) mountBlock(BLOCKS[1], aSec);
+    if(!on()){ var e=document.getElementById('tscb-duo'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    if(document.getElementById('tscb-duo')) return;
+    /* EIN Duo-Block direkt UNTER die "Empfehlung zur Einrichtung"-Box (#tszein):
+       Animation A | Animation B nebeneinander, Text je zentriert darunter. */
+    var zein=document.getElementById('tszein'); if(!zein || !zein.parentNode) return;
+    var sec=buildDuo();
+    zein.parentNode.insertBefore(sec, zein.nextSibling);
+    armDuo(sec);
   }
   function boot(){
     var tries=0; var iv=setInterval(function(){ tries++; mount(); if(tries>50)clearInterval(iv); },300);
