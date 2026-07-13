@@ -4075,8 +4075,8 @@
     { path:/\/rezepturen\/?$/, kachel:'db5_finance_personal',
       container:'.notion-tabs', marker:/Finance/,
       eyebrow:'Der Warenkorb · DB V · Finance',
-      title:'Deine Personalkosten. <span>Portion für Portion</span>.',
-      sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung der Finance-Erweiterung ist die Portionsgröße.',
+      title:'Erweiterung nach <span>Finance</span>',
+      sub:'Wenn du Gemeinkosten & Mitarbeiterlöhne angelegt hast, können wir diese Tabelle erweitern. Wir wollen jetzt wissen: Was kostet es uns, eine Charge zuzubereiten? Wareneinsatz + Personalkosten pro Arbeitsvorgang (Gemeinkosten sind optional ebenfalls verknüpfbar). Dafür ergänzen wir weitere Spalten in der Rezepturen-Liste.',
       summary:'Portionsmenge', chain:true },
     /* DB VI Gemeinkosten + DB VII Mitarbeiterlöhne — beide Abschnitte liegen als getrennte
        Tab-Widgets (.notion-tabs) auf derselben Seite; marker trennt sie eindeutig. */
