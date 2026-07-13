@@ -6147,13 +6147,15 @@
   var ANCHOR_PHRASE='Nun haben wir Zutaten und Rezepte';
   function on(){ return /\/rezepturen\/?$/.test(location.pathname); }
   var CSS=[
-    '#tsrv-root{--tsrv-gold:#c7b489;--tsrv-ease:cubic-bezier(.16,1,.3,1);width:min(1000px,95vw);margin:8px auto 40px;display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4.5vw,60px);align-items:center;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;opacity:0;transform:translateY(20px);transition:opacity .8s var(--tsrv-ease),transform .9s var(--tsrv-ease);}',
+    '#tsrv-root{--tsrv-gold:#c7b489;--tsrv-ease:cubic-bezier(.16,1,.3,1);width:100vw;max-width:100vw;margin:8px 0 40px;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 clamp(20px,4vw,56px);box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;opacity:0;transform:translateY(20px);transition:opacity .8s var(--tsrv-ease),transform .9s var(--tsrv-ease);}',
     '#tsrv-root.in{opacity:1;transform:none;}',
+    '#tsrv-root *{box-sizing:border-box;}',
+    '#tsrv-root .tsrv-inner{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4.5vw,60px);align-items:center;}',
     '#tsrv-root .tsrv-textslot{min-width:0;min-height:1px;}',
     '#tsrv-root .tsrv-textslot p{font-size:1rem;line-height:1.68;color:rgba(255,255,255,.82);margin:0;}',
     '.tsrv-hide{display:none !important;}',
     '#tsrv-root .tsrv-unit{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;}',
-    '@media(max-width:900px){#tsrv-root{grid-template-columns:1fr;}#tsrv-root .tsrv-textslot{text-align:left;max-width:560px;margin:0 auto 6px;}}',
+    '@media(max-width:900px){#tsrv-root .tsrv-inner{grid-template-columns:1fr;}#tsrv-root .tsrv-textslot{text-align:left;max-width:560px;margin:0 auto 6px;}}',
     '#tsrv-root .tsrv-tile{position:relative;width:100%;max-width:520px;cursor:pointer;border-radius:12px;filter:drop-shadow(0 18px 44px rgba(0,0,0,.5));transition:transform .5s var(--tsrv-ease),filter .5s var(--tsrv-ease);}',
     '#tsrv-root .tsrv-tile:hover{transform:translateY(-4px) scale(1.02);animation:tsrvHeartbeat 2.6s var(--tsrv-ease) infinite;}',
     '@keyframes tsrvHeartbeat{0%,100%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 6px 18px rgba(199,180,137,.14));}50%{filter:drop-shadow(0 22px 52px rgba(0,0,0,.6)) drop-shadow(0 8px 26px rgba(199,180,137,.30));}}',
@@ -6200,7 +6202,7 @@
   function openLb(){ var lb=ensureLb(); lb.classList.add('open'); lb.classList.remove('full'); document.body.style.overflow='hidden'; var sc=lb.querySelector('.tsrv-screen'); if(sc) sc.scrollTop=0; }
   function buildTile(){
     var root=document.createElement('div'); root.id='tsrv-root';
-    root.innerHTML='<div class="tsrv-textslot"></div><div class="tsrv-unit"><div class="tsrv-tile" role="button" tabindex="0" aria-label="Meine Rezepturen vergrößern"><img class="tsrv-cover" src="'+COVER+'" alt="Meine Rezepturen — DB-Ansicht" fetchpriority="high" decoding="async"></div><div class="tsrv-caption">Meine Rezepturen<span class="tsrv-accent"> · DB-Ansicht – Live Beispiel</span></div><div class="tsrv-hint">Klicke zum Vergrößern</div></div>';
+    root.innerHTML='<div class="tsrv-inner"><div class="tsrv-textslot"></div><div class="tsrv-unit"><div class="tsrv-tile" role="button" tabindex="0" aria-label="Meine Rezepturen vergrößern"><img class="tsrv-cover" src="'+COVER+'" alt="Meine Rezepturen — DB-Ansicht" fetchpriority="high" decoding="async"></div><div class="tsrv-caption">Meine Rezepturen<span class="tsrv-accent"> · DB-Ansicht – Live Beispiel</span></div><div class="tsrv-hint">Klicke zum Vergrößern</div></div></div>';
     var tile=root.querySelector('.tsrv-tile');
     tile.addEventListener('click',openLb);
     tile.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(); } });
