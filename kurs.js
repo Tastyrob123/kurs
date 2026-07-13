@@ -4307,6 +4307,20 @@
       eyebrow:'DB I - Lieferpartner',
       title:'Deine Lieferpartner. <span>An einem Ort</span>.',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB I ist die Mindestbelieferung.<br>Um zu starten: / → neue Tabellenansicht / Datenbank → DB I : Lieferpartner Übersicht.',
+      relations:[
+        { type:'ghost', name:'Ansprechpartner', target:'Gegenspalte · aus DB II', flag:'erscheint automatisch',
+          desc:'Gegenspalte der Ansprechpartner-Verknüpfung — erscheint von allein.',
+          img:'https://tastyrob123.github.io/kurs/img/flow/ansprechpartner.jpg',
+          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch, sobald du in <b>DB II : Ansprechpartner</b> die Verknüpfung „Gehört zu Lieferpartner" mit <b>wechselseitiger Verbindung</b> anlegst.</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Ansprechpartner</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt dir, welche Ansprechpartner zu diesem Lieferpartner gehören.</p>' },
+        { type:'ghost', name:'Verträge &amp; Dienstleister', target:'Gegenspalte · aus DB III', flag:'erscheint automatisch',
+          desc:'Gegenspalte der Vertrags-Verknüpfung — erscheint von allein.',
+          img:'https://tastyrob123.github.io/kurs/img/vertraege/navy-executive.jpg',
+          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch, sobald du in <b>DB III : Lieferantenverträge</b> die Verknüpfung „Lieferpartner" mit <b>wechselseitiger Verbindung</b> anlegst.</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Verträge &amp; Dienstleister</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt dir, welche Verträge zu diesem Lieferpartner gehören.</p>' },
+        { type:'later', name:'Hauptkontakt', target:'Rollup · über Ansprechpartner', flag:'später verknüpfen',
+          desc:'Rollup über die Ansprechpartner-Verknüpfung — baust du selbst.',
+          img:'https://tastyrob123.github.io/kurs/img/flow/lieferantenvertrag.jpg',
+          content:'<p class="notion-text">→ <b>Eigenschaft</b> : Rollup</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Verknüpfung</b> : Ansprechpartner Übersicht</p><p class="notion-text">→ <b>Eigenschaft</b> : Kontaktinfos</p><p class="notion-text">→ <b>Berechnen</b> : Original anzeigen</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Kontaktinfos</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt den Hauptansprechpartner deines Lieferpartners direkt in der Übersicht.</p>' }
+      ],
       summary:'Transportkosten', cta:'Tour buchen', ctaDone:'Tour gebucht', chain:true },
     /* Zweites Regal auf derselben Seite: DB II Ansprechpartner (Marker eindeutig = Hauptansprechpartner) */
     { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_ansprechpartner',
@@ -4321,6 +4335,12 @@
       eyebrow:'DB III - Lieferantenverträge',
       title:'Deine Lieferverträge. <span>Sauber dokumentiert</span>.',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB III ist der Vertragswert.<br>Um zu starten: / → neue Tabellenansicht / Datenbank → DB III : Lieferverträge Übersicht.',
+      relations:[
+        { type:'later', name:'Kontakt', target:'Rollup · über Lieferpartner', flag:'später verknüpfen',
+          desc:'Rollup über die Lieferpartner-Verknüpfung — baust du selbst.',
+          img:'https://tastyrob123.github.io/kurs/img/flow/ansprechpartner.jpg',
+          content:'<p class="notion-text">→ <b>Eigenschaft</b> : Rollup</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Verknüpfung</b> : Lieferpartner</p><p class="notion-text">→ <b>Eigenschaft</b> : Ansprechpartner</p><p class="notion-text">→ <b>Berechnen</b> : Original anzeigen</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Kontakt</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zieht den Ansprechpartner des verknüpften Lieferpartners in den Vertrag.</p>' }
+      ],
       summary:'Vertragsvolumina', cta:'Vertrag abschließen', ctaDone:'Vertrag geschlossen', chain:true }
   ];
 
