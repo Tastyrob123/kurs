@@ -280,9 +280,9 @@
   #tsd4 .tsd4-result .r-formula{font-size:12px;color:rgba(255,255,255,.5)}
   /* Fussnote */
   #tsd4 .tsd4-foot{text-align:center;margin:34px auto 0;max-width:640px}
-  #tsd4 .tsd4-foot .f-main{font-size:15px;color:rgba(255,255,255,.85);margin:0 0 6px}
+  #tsd4 .tsd4-foot .f-main{font-size:17px;color:rgba(255,255,255,.85);margin:0 0 6px}
   #tsd4 .tsd4-foot .f-main .g{color:#c7b489}
-  #tsd4 .tsd4-foot .f-sub{font-size:11.5px;color:rgba(255,255,255,.5);margin:0}
+  #tsd4 .tsd4-foot .f-sub{font-size:13px;color:rgba(255,255,255,.85);margin:0}
   /* Beschreibungs-Absatz unter der Animation (Text aus dem Notion-Intro hierher gezogen) */
   #tsd4 .tsd4-desc{max-width:700px;margin:44px auto 0;text-align:center;font-size:16px;line-height:1.65;color:#fff}
   /* Original-Notion-Absatz "Jede einzelne Zutat buendelt" + die 4 leeren Text-Spacer + die leere Rest-Spalte im Intro ausblenden — Text lebt jetzt in .tsd4-desc unter der Animation, damit rutscht alles darueber natuerlich nach oben */
