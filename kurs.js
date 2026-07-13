@@ -4935,9 +4935,12 @@
     var shop=anchorShop();
     /* Block B (Bausteine/Vorlage) hinter den Laptop (#tszmac), sonst hinter den Shop */
     if(needB){ var lap=document.querySelector('.tszmac-pc'); var lapList=lap?lap.closest('.notion-column-list'):null; mountBlock(BLOCKS[1], lapList||shop); }
-    /* Block A (80g Spinat) direkt hinter Block B -> sitzt unter „Bausteine", über „Empfehlung zur Einrichtung" (#tszein) */
-    var bSec=document.getElementById('tscb-B');
-    if(needA && bSec) mountBlock(BLOCKS[0], bSec);
+    /* Block A (80g Spinat) zwischen Block B und dem Einrichtungs-Kasten (#tszein).
+       WICHTIG: erst mounten, wenn #tszein schon da ist — sonst hängt sich #tszein (ankert
+       ebenfalls direkt hinter #tscb-B) NACH B ein und schiebt Block A darunter. Ist #tszein
+       bereits B.nextSibling, landet A per insertBefore sauber dazwischen (B -> A -> #tszein). */
+    var bSec=document.getElementById('tscb-B'), zein=document.getElementById('tszein');
+    if(needA && bSec && zein) mountBlock(BLOCKS[0], bSec);
   }
   function boot(){
     var tries=0; var iv=setInterval(function(){ tries++; mount(); if(tries>50)clearInterval(iv); },300);
