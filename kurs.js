@@ -3859,11 +3859,11 @@
       /* 7 Tasty-Studios-Gerichte (Glasschale, schwarzes Studio, img/erweiterung, GitHub Pages) — Portionsgrößen = Beispielwerte.
          Finance-Erweiterung "Personalkosten pro Rezeptur" = 2. Tab-Gruppe auf /rezepturen, 7 Schritte = 7 Karten (1:1). */
       objekt_varianten:[
-        { name:'Räucherlachs-Röschen', wert:120, img:'https://tastyrob123.github.io/kurs/img/erweiterung/raeucherlachs-roeschen.jpg' },
+        { name:'Kichererbsen-Salat',   wert:120, img:'https://tastyrob123.github.io/kurs/img/erweiterung/kichererbsen-salat.jpg' },
         { name:'Tomatensalsa',         wert:90,  img:'https://tastyrob123.github.io/kurs/img/erweiterung/tomatensalsa.jpg' },
         { name:'Guacamole',            wert:80,  img:'https://tastyrob123.github.io/kurs/img/erweiterung/guacamole.jpg' },
         { name:'Hummus',               wert:100, img:'https://tastyrob123.github.io/kurs/img/erweiterung/hummus.jpg' },
-        { name:'Kichererbsen-Salat',   wert:150, img:'https://tastyrob123.github.io/kurs/img/erweiterung/kichererbsen-salat.jpg' },
+        { name:'Räucherlachs-Röschen', wert:150, img:'https://tastyrob123.github.io/kurs/img/erweiterung/raeucherlachs-roeschen.jpg' },
         { name:'Gurkensalat',          wert:130, img:'https://tastyrob123.github.io/kurs/img/erweiterung/gurkensalat.jpg' },
         { name:'Caprese',              wert:160, img:'https://tastyrob123.github.io/kurs/img/erweiterung/caprese.jpg' }
       ]},
