@@ -1384,6 +1384,35 @@
 
 /* ---- */
 
+/* zutatenliste — Section-Heading "Die fertige Übersicht." : Wort "Übersicht" beige (.ts-gold).
+   Lineal-Schrift + Größe kommen aus kurs.css; hier nur der Wort-Wrap, selbstheilend (Muster wie __tsm2). */
+(function(){
+  if(window.__tsZdbUeber) return; window.__tsZdbUeber=true;
+  var ID='block-39bb9546553480158645e1054324e824', WORD='Übersicht';
+  function on(){ return /\/zutatenliste\/?$/.test(location.pathname); }
+  function wrap(){
+    if(!on()) return;
+    var el=document.getElementById(ID); if(!el) return;
+    if(el.querySelector('.ts-gold')) return;
+    var w=document.createTreeWalker(el, NodeFilter.SHOW_TEXT), n;
+    while(n=w.nextNode()){
+      var i=n.nodeValue.indexOf(WORD);
+      if(i>-1){
+        var after=n.splitText(i); after.splitText(WORD.length);
+        var span=document.createElement('span'); span.className='ts-gold'; span.textContent=WORD;
+        after.parentNode.replaceChild(span, after); return;
+      }
+    }
+  }
+  wrap();
+  document.addEventListener('DOMContentLoaded', wrap);
+  var _tu=null;
+  new MutationObserver(function(){ if(_tu) return; _tu=setTimeout(function(){ _tu=null; wrap(); },200); })
+    .observe(document.documentElement,{childList:true,subtree:true});
+})();
+
+/* ---- */
+
 (function(){
   return; /* Lesson-Stats auf /zutatenliste entfernt (Robert 2026-07-13) — die #tsd4-Erklaer-Animation uebernimmt diese Position. Kennzahlen bleiben SSOT in der Vault-Lektionsdatei. Zum Reaktivieren dieses return entfernen. */
   var ANCHOR='block-396b954655348098ae30f9bff07fa068';
