@@ -4469,6 +4469,21 @@
       eyebrow:'Der Warenkorb · DB IV',
       title:'Deine Zutaten. <span>Gramm für Gramm</span>.',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB IV ist die Portionsgröße.',
+      /* Relation-Kacheln (erscheinen im Nachgang). DB IV baut die „Inventar Produkt"-Verknüpfung
+         selbst → alle Rollups darüber (Herstellerbezeichnung, Preis/Ltr/Kg/Stück …) sind reguläre
+         Checklisten-Schritte, KEINE Later-Karten. Es bleiben zwei Ghosts: die Gegenspalten, die
+         auftauchen, sobald DB V (Rezepturen) und DB VIII (Gerichte) je eine wechselseitige
+         „Zutaten"-Verknüpfung zu dieser Tabelle anlegen. */
+      relations:[
+        { type:'ghost', name:'Rezepturen', target:'Gegenspalte · aus DB V Rezepturen', flag:'erscheint automatisch',
+          desc:'Gegenspalte der Zutaten-Verknüpfung aus den Rezepturen — erscheint von allein.',
+          img:'https://tastyrob123.github.io/kurs/img/rezepturen/basilikum-pesto.jpg',
+          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch, sobald du in <b>DB V : Rezepturen</b> die Verknüpfung „Zutaten" mit <b>wechselseitiger Verbindung</b> anlegst.</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Rezepturen</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt dir, in welchen Rezepturen diese Zutat als Baustein steckt.</p>' },
+        { type:'ghost', name:'Gerichte', target:'Gegenspalte · aus DB VIII Gerichte', flag:'erscheint automatisch',
+          desc:'Gegenspalte der Zutaten-Verknüpfung aus den Gerichten — erscheint von allein.',
+          img:'https://tastyrob123.github.io/kurs/img/gerichte/rinderfilet.jpg',
+          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch, sobald du in <b>DB VIII : Gerichte &amp; Getränke</b> die Verknüpfung „Zutaten" mit <b>wechselseitiger Verbindung</b> anlegst.</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Gerichte</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt dir, in welchen Gerichten diese Zutat direkt (Ready-to-Use) eingehängt ist.</p>' }
+      ],
       summary:'Einwaage', chain:true },
     /* DB V Rezepturen — Phasen liegen hier in einem Tab-Widget (.notion-tabs, 4 Phasen),
        nicht in einer .notion-column-list → container-Selector + marker (nur die Phasen-
