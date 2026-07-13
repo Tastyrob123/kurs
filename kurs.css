@@ -1081,6 +1081,21 @@ details > summary {
   .page__rezepturen .ts-hero__text{ padding:0 16px 20px; }
   .page__rezepturen .ts-hero__title{ font-size:clamp(2rem,12vw,3rem); }
 }
+/* Intro-Lead unter dem Hero (3 Absätze) zentriert — Muster 1:1 aus BLOCK 9 Modul-2-Intro.
+   #block-80f3… = "In dieser Lektion behandeln wir die Rezepturen…"
+   #block-394b…33e6e = "Vorab zusammengefasst, was hier passiert:"
+   #block-2c5e… = "Die DB Rezepturen zieht sich die einzelnen Zutaten…" */
+.page__rezepturen #block-80f311485aa84816b97ce805515ce8c2,
+.page__rezepturen #block-80f311485aa84816b97ce805515ce8c2 .notion-text__content,
+.page__rezepturen #block-394b9546553480c1a132df5b2fd33e6e,
+.page__rezepturen #block-394b9546553480c1a132df5b2fd33e6e .notion-text__content,
+.page__rezepturen #block-2c5edc4c7d1e4c1eb2478fdea38a3535,
+.page__rezepturen #block-2c5edc4c7d1e4c1eb2478fdea38a3535 .notion-text__content{
+  text-align:center !important; font-size:1.2rem !important; line-height:1.65 !important; }
+.page__rezepturen #block-80f311485aa84816b97ce805515ce8c2,
+.page__rezepturen #block-394b9546553480c1a132df5b2fd33e6e,
+.page__rezepturen #block-2c5edc4c7d1e4c1eb2478fdea38a3535{
+  max-width:820px !important; margin-left:auto !important; margin-right:auto !important; }
 
 /* ---- gerichte-getrnke-finaler-schritt — Hero "DB IX : Gerichte & Getränke" (Muster: rezepturen DB V) ---- */
 .page__gerichte-getrnke-finaler-schritt .ts-hero{
