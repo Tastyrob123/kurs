@@ -1763,6 +1763,14 @@
     "Du hast das vollständige Zielbild eines fertigen Gerichts vor Augen und weißt, worauf die nächsten sieben Schritte hinarbeiten."
   ];
 
+  /* /rezepturen (DB V) — feste Learnings (keine Notion-"Learnings"-Überschrift auf der Seite) */
+  var REZ = [
+    "Du hast die Rezepturen-Datenbank gebaut — sie bündelt deine Zutaten zu fertigen Bausteinen für Gerichte und Getränke.",
+    "Du verstehst, wie eine Rezeptur alle Zutaten zusammenzieht und ihr Gesamtvolumen automatisch in Gramm oder Liter rechnet.",
+    "Du weißt, wie die Portionsgröße alles aufteilt: Menge, Rohstoffkosten und Nährwerte pro Portion entstehen von selbst.",
+    "Du kannst die Rezeptur um Personalkosten erweitern und siehst, was dich eine Portion in der Zubereitung wirklich kostet."
+  ];
+
   var CSS = `
   #tsl{width:100vw;max-width:100vw;margin:44px 0 10px;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:0 clamp(20px,4vw,56px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff}
   #tsl *{box-sizing:border-box}
@@ -1811,7 +1819,8 @@
     { re:/\/mehrwert-zielbild\/?$/, items:ITEMS },
     { re:/\/inventurliste\/?$/,     items:null },
     { re:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, items:null },
-    { re:/\/zutatenliste\/?$/,      items:null }
+    { re:/\/zutatenliste\/?$/,      items:null },
+    { re:/\/rezepturen\/?$/,        items:REZ }
   ];
   function pageCfg(){
     for(var i=0;i<PAGES.length;i++){ if(PAGES[i].re.test(location.pathname)) return PAGES[i]; }
@@ -1876,14 +1885,24 @@
       var e = document.getElementById('tsl'); if (e && e.parentNode) e.parentNode.removeChild(e); return;
     }
     if (document.getElementById('tsl')) return;
-    var head = findHead(); if (!head) return;
-    var items = cfg.items || readItems(head);
+    var head = findHead();
+    var items = cfg.items || (head ? readItems(head) : []);
     if (!items.length) return;
     injectStyle();
-    var hb = hideOriginals(head);
     var d = document.createElement('div'); d.innerHTML = buildHTML(items);
     var node = d.firstElementChild;
-    hb.parentNode.insertBefore(node, hb);
+    if (head){
+      var hb = hideOriginals(head);
+      hb.parentNode.insertBefore(node, hb);
+    } else {
+      /* Keine Notion-"Learnings"-Überschrift (z. B. /rezepturen mit festen items):
+         ans Seitenende, aber ÜBER den "Nächste Lektion"-Button. */
+      var root = document.querySelector('.notion-root') || document.querySelector('main');
+      if (!root) return;
+      var nx = document.getElementById('ts-next-wrap');
+      if (nx && nx.parentNode === root) root.insertBefore(node, nx);
+      else root.appendChild(node);
+    }
     reveal(node);
   }
   function boot(){
