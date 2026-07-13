@@ -5338,3 +5338,160 @@
   document.addEventListener("DOMContentLoaded", mount);
   new MutationObserver(mount).observe(document.documentElement,{childList:true,subtree:true});
 })();
+
+
+/* ============================================================
+   zutatenliste — #tsreuse  "Ein Eintrag, vier Anwendungen"
+   Visualisiert den SSOT-Gedanken der Loesung (Olivenoel-Beispiel):
+   1x Olivenoel angelegt (samt Preis) faechert links->rechts auf die
+   4 Anwendungen der Seite (Salat / Dressing / Dressing II / Tomatensauce)
+   auf. Danach Preis EINMAL an der Quelle geaendert -> alle 4 rechnen
+   sofort korrekt weiter (Count-up). Kompakt & contained.
+   Mount: VOR dem "Kurz gesagt"-Heading, das native Heading wird
+   ausgeblendet (Merksatz lebt hier im build() als zentriertes <p>).
+   Zahlen = Beispielwerte (Olivenoel 12,90->14,90 EUR/L illustrativ).
+   Reveal robust: @keyframes + inView-Polling, Endzustand direkt gesetzt.
+   ============================================================ */
+(function(){
+  if(window.__tsreuse) return; window.__tsreuse=true;
+  function on(){ return /\/zutatenliste\/?$/.test(location.pathname); }
+  var DEST=[
+    {name:'Salat',        menge:'15 ml', a:0.19, b:0.22},
+    {name:'Dressing',     menge:'30 ml', a:0.39, b:0.45},
+    {name:'Dressing II',  menge:'25 ml', a:0.32, b:0.37},
+    {name:'Tomatensauce', menge:'90 ml', a:1.16, b:1.34}
+  ];
+  var VB_W=720, VB_H=280;
+  var SRCX=236, SRCY=140, DSTX=470, DSTY=[36,106,174,244];
+  var CSS=`
+  #tsreuse{width:100%;max-width:900px;margin:18px auto 40px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
+  #tsreuse .rz-head{text-align:center;margin:0 auto 22px;max-width:640px;opacity:0;transform:translateY(14px)}
+  #tsreuse.go .rz-head{animation:rzUp .7s cubic-bezier(.16,1,.3,1) both}
+  #tsreuse .rz-eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#c7b489;margin:0 0 10px}
+  #tsreuse .rz-eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:#c7b489;box-shadow:0 0 10px rgba(199,180,137,.7)}
+  #tsreuse .rz-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;font-weight:600;font-size:clamp(1.3rem,2.4vw,1.75rem);letter-spacing:-.02em;line-height:1.15;margin:0;color:#fff}
+  #tsreuse .rz-title .g{color:#c7b489}
+  #tsreuse .rz-stage{position:relative;width:100%;max-width:720px;margin:0 auto;aspect-ratio:720/280;min-height:250px}
+  #tsreuse svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+  #tsreuse .rz-line{fill:none;stroke:#c7b489;stroke-width:1.6;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-dasharray:100;stroke-dashoffset:100;opacity:.5}
+  #tsreuse.go .rz-line{animation:rzDraw .85s cubic-bezier(.5,0,.2,1) forwards}
+  #tsreuse.go .rz-line.l0{animation-delay:.3s}
+  #tsreuse.go .rz-line.l1{animation-delay:.42s}
+  #tsreuse.go .rz-line.l2{animation-delay:.54s}
+  #tsreuse.go .rz-line.l3{animation-delay:.66s}
+  #tsreuse .rz-node{position:absolute;transform:translate(-50%,-50%) translateY(10px);opacity:0;box-sizing:border-box}
+  #tsreuse.go .rz-node{animation:rzNode .55s cubic-bezier(.16,1,.3,1) both}
+  #tsreuse .rz-card{position:relative;border-radius:13px;background:rgba(255,255,255,.04);border:1px solid rgba(199,180,137,.28)}
+  /* Quelle */
+  #tsreuse .rz-src{left:19%;top:50%;width:min(33%,214px)}
+  #tsreuse .rz-src .rz-card{padding:15px 17px;border-color:rgba(199,180,137,.5);box-shadow:0 18px 44px rgba(0,0,0,.4)}
+  #tsreuse .rz-eye{font-size:9.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);margin:0 0 6px}
+  #tsreuse .rz-src .rz-eye{color:#c7b489}
+  #tsreuse .rz-name{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-weight:600;font-size:19px;letter-spacing:-.01em;color:#fff;margin:0 0 11px}
+  #tsreuse .rz-div{height:1px;background:rgba(255,255,255,.09);margin:0 0 10px}
+  #tsreuse .rz-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  #tsreuse .rz-row .k{font-size:11.5px;color:rgba(255,255,255,.55)}
+  #tsreuse .rz-price{font-size:16.5px;font-weight:700;color:#c7b489;white-space:nowrap;font-variant-numeric:tabular-nums}
+  #tsreuse .rz-badge{display:inline-block;margin-top:11px;font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#c7b489;background:rgba(199,180,137,.1);border:1px solid rgba(199,180,137,.32);border-radius:999px;padding:3px 9px}
+  #tsreuse .rz-chg{position:absolute;top:-12px;right:12px;font-size:9px;font-weight:600;letter-spacing:.05em;color:#05060b;background:#c7b489;border-radius:999px;padding:3px 9px;opacity:0;transform:translateY(5px) scale(.9);box-shadow:0 6px 16px rgba(199,180,137,.35)}
+  #tsreuse.upd .rz-chg{animation:rzChg .5s cubic-bezier(.34,1.56,.64,1) both}
+  /* Anwendungen */
+  #tsreuse .rz-dst{left:80%;width:min(31%,206px)}
+  #tsreuse .rz-dst.d0{top:12.9%}
+  #tsreuse .rz-dst.d1{top:37.9%}
+  #tsreuse .rz-dst.d2{top:62.1%}
+  #tsreuse .rz-dst.d3{top:87.1%}
+  #tsreuse .rz-dst .rz-card{padding:9px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px;transition:border-color .5s ease,box-shadow .5s ease}
+  #tsreuse .rz-dst.lit .rz-card{border-color:rgba(199,180,137,.5);box-shadow:0 10px 24px rgba(0,0,0,.3)}
+  #tsreuse .rz-dst .rz-l .rz-name{font-size:13.5px;margin:0 0 2px}
+  #tsreuse .rz-dst .rz-l .rz-menge{font-size:10.5px;color:rgba(255,255,255,.5)}
+  #tsreuse .rz-dst .rz-r{text-align:right}
+  #tsreuse .rz-dst .rz-cost{font-size:14.5px;font-weight:700;color:#fff;white-space:nowrap;font-variant-numeric:tabular-nums;transition:color .4s ease}
+  #tsreuse .rz-dst.pop .rz-cost{color:#c7b489}
+  #tsreuse .rz-dst .rz-upd{display:block;font-size:8px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#c7b489;margin-top:2px;opacity:0}
+  #tsreuse .rz-dst.pop .rz-upd{opacity:1;transition:opacity .4s ease}
+  /* Merksatz */
+  #tsreuse .rz-note{max-width:680px;margin:30px auto 0;text-align:center;font-size:clamp(.98rem,1.3vw,1.1rem);line-height:1.55;color:#fff;opacity:0;transform:translateY(10px)}
+  #tsreuse.go .rz-note{animation:rzUp .8s cubic-bezier(.16,1,.3,1) both;animation-delay:.45s}
+  #tsreuse .rz-note b{color:#c7b489;font-weight:600}
+  #tsreuse .rz-note .lead{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;color:rgba(255,255,255,.5);font-size:.78em;letter-spacing:.02em;display:block;margin-bottom:5px}
+  @keyframes rzUp{to{opacity:1;transform:none}}
+  @keyframes rzNode{to{opacity:1;transform:translate(-50%,-50%)}}
+  @keyframes rzDraw{to{stroke-dashoffset:0;opacity:1}}
+  @keyframes rzChg{to{opacity:1;transform:none}}
+  @media(max-width:720px){
+    #tsreuse .rz-stage{overflow-x:auto;overflow-y:hidden;aspect-ratio:auto}
+    #tsreuse .rz-stage>.rz-inner{position:relative;width:700px;height:280px;margin:0 auto}
+    #tsreuse svg{width:700px;height:280px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    #tsreuse .rz-head,#tsreuse .rz-node,#tsreuse .rz-note{opacity:1!important;transform:none!important;animation:none!important}
+    #tsreuse .rz-line{stroke-dashoffset:0!important;opacity:1!important;animation:none!important}
+  }
+  #block-39bb9546553480afb42bcbbe484372a8{display:none!important}
+  `;
+  function injectCSS(){ if(document.getElementById('tsreuse-css'))return; var s=document.createElement('style'); s.id='tsreuse-css'; s.textContent=CSS; document.head.appendChild(s); }
+  function eur(v){ return v.toFixed(2).replace('.',',')+' €'; }
+  function build(){
+    var root=document.createElement('div'); root.id='tsreuse';
+    var paths='';
+    DSTY.forEach(function(y,i){
+      var cx=(SRCX+DSTX)/2;
+      paths+='<path class="rz-line l'+i+'" pathLength="100" d="M '+SRCX+','+SRCY+' C '+cx+','+SRCY+' '+cx+','+y+' '+DSTX+','+y+'"/>';
+    });
+    var dstHTML='';
+    DEST.forEach(function(d,i){
+      dstHTML+='<div class="rz-node rz-dst d'+i+'" data-i="'+i+'"><div class="rz-card"><div class="rz-l"><p class="rz-name">'+d.name+'</p><span class="rz-menge">'+d.menge+'</span></div><div class="rz-r"><span class="rz-cost" data-b="'+d.b+'">'+eur(d.a)+'</span><span class="rz-upd">aktualisiert</span></div></div></div>';
+    });
+    root.innerHTML=
+      '<div class="rz-head"><div class="rz-eyebrow">Das Prinzip</div><h2 class="rz-title">Ein Eintrag, <span class="g">vier Anwendungen.</span></h2></div>'+
+      '<div class="rz-stage"><div class="rz-inner"><svg viewBox="0 0 '+VB_W+' '+VB_H+'" preserveAspectRatio="none">'+paths+'</svg>'+
+        '<div class="rz-node rz-src"><div class="rz-card"><span class="rz-chg">Preis geändert</span><p class="rz-eye">DB IV · Zutat</p><p class="rz-name">Olivenöl</p><div class="rz-div"></div><div class="rz-row"><span class="k">Preis</span><span class="rz-price" data-b="14.90">12,90&nbsp;€/L</span></div><span class="rz-badge">1× angelegt</span></div></div>'+
+        dstHTML+
+      '</div></div>'+
+      '<p class="rz-note"><span class="lead">Kurz gesagt</span>Die Zutat wird <b>einmal gepflegt</b>, aber <b>beliebig oft verwendet</b>.</p>';
+    root.querySelector('.rz-src').style.animationDelay='.12s';
+    root.querySelectorAll('.rz-dst').forEach(function(n,i){ n.style.animationDelay=(1.0+i*0.13)+'s'; });
+    return root;
+  }
+  function countUp(el,to,unit){ var from=parseFloat((el.textContent||'0').replace(/[^\d,]/g,'').replace(',','.'))||0, dur=600, t0=null;
+    function step(now){ if(t0===null)t0=now; var p=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-p,3), v=from+(to-from)*e; el.textContent=unit(v); if(p<1)requestAnimationFrame(step); }
+    requestAnimationFrame(step); }
+  function reduced(){ try{return window.matchMedia('(prefers-reduced-motion:reduce)').matches;}catch(e){return false;} }
+  function go(root){ if(root.__played) return; root.__played=true;
+    if(reduced()){ root.classList.add('go'); root.querySelectorAll('.rz-dst').forEach(function(n){ n.classList.add('lit','pop'); n.querySelector('.rz-cost').textContent=eur(parseFloat(n.querySelector('.rz-cost').getAttribute('data-b'))); }); root.querySelector('.rz-price').textContent='14,90 €/L'; return; }
+    root.classList.add('go');
+    DEST.forEach(function(d,i){ setTimeout(function(){ root.querySelectorAll('.rz-dst')[i].classList.add('lit'); },1000+i*130+650); });
+    setTimeout(function(){
+      root.classList.add('upd');
+      countUp(root.querySelector('.rz-price'),14.90,function(v){return v.toFixed(2).replace('.',',')+' €/L';});
+      root.querySelectorAll('.rz-dst').forEach(function(n,i){
+        setTimeout(function(){ n.classList.add('pop'); countUp(n.querySelector('.rz-cost'),parseFloat(n.querySelector('.rz-cost').getAttribute('data-b')),eur); },240+i*80);
+      });
+    },2700);
+  }
+  function inView(el){ var r=el.getBoundingClientRect(); return r.top < (window.innerHeight*0.82) && r.bottom > 60; }
+  function arm(root){
+    if(inView(root)) return go(root);
+    var iv=setInterval(function(){ if(!document.body.contains(root)){ clearInterval(iv); return; } if(inView(root)){ clearInterval(iv); go(root); } },250);
+    window.addEventListener('scroll',function h(){ if(inView(root)){ window.removeEventListener('scroll',h); go(root); } },{passive:true});
+    try{ var io=new IntersectionObserver(function(e){ if(e[0].isIntersecting){ io.disconnect(); go(root); } },{threshold:.25}); io.observe(root); }catch(e){}
+  }
+  function findAnchor(){
+    var h=document.querySelectorAll('.notion-heading, h1, h2, h3');
+    for(var i=0;i<h.length;i++){ if((h[i].textContent||'').replace(/\s+/g,' ').indexOf('Kurz gesagt: Die Zutat wird einmal gepflegt')>-1) return h[i].closest('[id^="block-"]')||h[i]; }
+    return document.getElementById('block-39bb9546553480afb42bcbbe484372a8');
+  }
+  function mount(){
+    if(!on()){ var e=document.getElementById('tsreuse'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    if(document.getElementById('tsreuse')) return;
+    var a=findAnchor(); if(!a) return;
+    injectCSS();
+    var root=build();
+    a.parentNode.insertBefore(root, a);
+    arm(root);
+  }
+  function boot(){ var tries=0; var iv=setInterval(function(){ tries++; mount(); if(tries>40) clearInterval(iv); },300);
+    new MutationObserver(function(){ if(on() && !document.getElementById('tsreuse')) mount(); }).observe(document.documentElement,{childList:true,subtree:true}); }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
