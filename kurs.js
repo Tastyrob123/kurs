@@ -7121,3 +7121,237 @@
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
+
+
+/* ---- */
+
+/* ============================================================
+   gemeinkosten-mitarbeiterlhne — Exkurs "Die drei Brillen" (#tsbrille)
+   Eine Absatz-Achse, drei Brillen darauf: Break-Even (Untergrenze,
+   Linie) · Kapazitaet (Obergrenze, physisches Max) · Szenario
+   (beweglicher Marker Pessimistisch 50% / Realistisch 70% /
+   Optimistisch 90%). Segmented-Control schaltet das Szenario, der
+   Fuell-Balken zeigt Verlust-(rot)/Gewinn-(gruen)Anteil, Zahlen
+   zaehlen hoch. Darunter 3 Brillen-Karten (Was muss/kann/werde ich).
+   Sitzt DIREKT UNTER dem Intro-Absatz "Werkzeug mit drei Brillen".
+   Nur auf /gemeinkosten-mitarbeiterlhne. Muster = #tsd5.
+   Zahlen = Beispielwerte (Text-Beispiel 80x26x70%; Break-Even
+   illustrativ 9.000 EUR / 9 EUR DB = 1.000 Stueck).
+   ============================================================ */
+(function(){
+  if(window.__tsbrille) return; window.__tsbrille=true;
+
+  var GOLD='#c7b489', EASE='cubic-bezier(.16,1,.3,1)';
+  var EINH_TAG=80, TAGE=26;
+  var AXISMAX=EINH_TAG*TAGE;              // 2.080 physisches Maximum (100%)
+  var FIX=9000, DB=9;                     // Beispiel Fixkosten+Personal / DB je Stueck
+  var BREAKEVEN=Math.round(FIX/DB);       // 1.000 Stueck Untergrenze
+  var SZEN=[
+    {key:'pess', lab:'Pessimistisch', pct:50, foot:'50 % der Kapazität'},
+    {key:'real', lab:'Realistisch',   pct:70, foot:'70 % der Kapazität'},
+    {key:'opt',  lab:'Optimistisch',  pct:90, foot:'90 % der Kapazität'}
+  ];
+  var DEFAULT=1; // Realistisch
+
+  function nf(n){ return Math.round(n).toLocaleString('de-DE'); }
+
+  var CSS=
+  '#tsbrille{width:min(1080px,94vw);margin:26px auto 56px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;opacity:0;transform:translateY(20px);transition:opacity .8s '+EASE+',transform .9s '+EASE+'}'+
+  '#tsbrille.in{opacity:1;transform:none}'+
+  '#tsbrille *{box-sizing:border-box}'+
+  '#tsbrille .tb-head{text-align:center;margin:0 0 30px}'+
+  '#tsbrille .tb-eye{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-weight:600;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:'+GOLD+';margin:0 0 12px}'+
+  '#tsbrille .tb-title{margin:0;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-weight:600;line-height:1.08;letter-spacing:-.02em;font-size:clamp(1.9rem,4.4vw,2.8rem)}'+
+  '#tsbrille .tb-title .g{color:'+GOLD+'}'+
+  '#tsbrille .tb-sub{max-width:660px;margin:16px auto 0;font-size:15.5px;line-height:1.62;color:rgba(255,255,255,.72)}'+
+  /* Haupt-Glaskarte mit der Achse */
+  '#tsbrille .tb-stage{position:relative;border-radius:22px;padding:34px 34px 30px;background:linear-gradient(180deg,rgba(255,255,255,.052),rgba(255,255,255,.022));border:1px solid rgba(199,180,137,.24);box-shadow:0 30px 80px -28px rgba(0,0,0,.72),inset 0 1px 0 rgba(255,255,255,.07);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}'+
+  '#tsbrille .tb-axlabel{display:flex;justify-content:space-between;align-items:baseline;margin:0 0 30px}'+
+  '#tsbrille .tb-axlabel .l{font-size:12.5px;letter-spacing:.02em;color:rgba(255,255,255,.55)}'+
+  '#tsbrille .tb-axlabel .r{font-size:12.5px;color:rgba(255,255,255,.4)}'+
+  /* Achse / Balken */
+  '#tsbrille .tb-track{position:relative;height:22px;border-radius:999px;background:rgba(255,255,255,.07);box-shadow:inset 0 1px 3px rgba(0,0,0,.45);margin:56px 0 0}'+
+  '#tsbrille .tb-fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:999px;transition:width .9s '+EASE+'}'+
+  '#tsbrille .tb-fill .seg{position:absolute;top:0;bottom:0;border-radius:999px}'+
+  '#tsbrille .tb-seg-loss{left:0;background:linear-gradient(180deg,#e35d76,#e32552);box-shadow:0 0 18px rgba(227,37,82,.4)}'+
+  '#tsbrille .tb-seg-win{background:linear-gradient(180deg,#9FD3B9,#5FAE88);box-shadow:0 0 18px rgba(95,174,136,.45)}'+
+  /* Break-Even Linie */
+  '#tsbrille .tb-be{position:absolute;top:-16px;bottom:-16px;width:2px;background:repeating-linear-gradient(180deg,rgba(255,255,255,.85) 0,rgba(255,255,255,.85) 5px,transparent 5px,transparent 10px);transform:translateX(-1px);z-index:4}'+
+  '#tsbrille .tb-be .cap{position:absolute;top:-30px;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;font-weight:600;letter-spacing:.02em;color:#fff;background:rgba(8,10,18,.85);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:4px 11px;box-shadow:0 6px 18px rgba(0,0,0,.5)}'+
+  /* Kapazitaets-Obergrenze Endkappe (Goldlinie am Bar-Ende; Beschriftung via Kopfzeile + Skala) */
+  '#tsbrille .tb-cap-max{position:absolute;right:0;top:-16px;bottom:-16px;width:2px;background:linear-gradient(180deg,rgba(199,180,137,.9),rgba(199,180,137,.35));z-index:3}'+
+  /* Szenario-Marker (beweglicher Bead) */
+  '#tsbrille .tb-marker{position:absolute;top:50%;left:0;width:28px;height:28px;margin:-14px 0 0 -14px;border-radius:50%;background:radial-gradient(circle at 34% 30%,#fbf5e6,'+GOLD+' 68%);border:1px solid rgba(255,255,255,.5);box-shadow:0 0 0 7px rgba(199,180,137,.15),0 6px 16px rgba(0,0,0,.6);z-index:6;transition:left .9s '+EASE+'}'+
+  '#tsbrille .tb-scale{display:flex;justify-content:space-between;font-size:10.5px;color:rgba(255,255,255,.3);margin-top:14px}'+
+  /* Ergebnis-Tiles */
+  '#tsbrille .tb-out{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:34px 0 0}'+
+  '#tsbrille .tb-tile{border-radius:16px;padding:18px 14px;background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);text-align:center}'+
+  '#tsbrille .tb-tile.hot{background:linear-gradient(180deg,rgba(199,180,137,.16),rgba(199,180,137,.05));border-color:rgba(199,180,137,.5)}'+
+  '#tsbrille .tb-tile .tl{font-size:11.5px;letter-spacing:.02em;color:rgba(255,255,255,.55);margin:0 0 9px}'+
+  '#tsbrille .tb-tile .tv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:clamp(1.5rem,3.2vw,2rem);font-weight:700;letter-spacing:-.02em;color:#fff;line-height:1}'+
+  '#tsbrille .tb-tile.hot .tv{color:'+GOLD+';font-size:clamp(1.7rem,3.6vw,2.35rem)}'+
+  '#tsbrille .tb-tile.win .tv{color:#9FD3B9}'+
+  '#tsbrille .tb-tile .tu{font-size:11.5px;color:rgba(255,255,255,.42);margin-top:7px}'+
+  /* Szenario Segmented-Control */
+  '#tsbrille .tb-seg-ctrl{display:flex;gap:8px;justify-content:center;margin:30px auto 0;max-width:520px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:6px}'+
+  '#tsbrille .tb-seg-btn{flex:1;border:0;background:transparent;color:rgba(255,255,255,.62);font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:13.5px;font-weight:600;letter-spacing:.01em;padding:11px 8px;border-radius:999px;cursor:pointer;transition:color .2s ease,background .3s '+EASE+',box-shadow .3s ease}'+
+  '#tsbrille .tb-seg-btn .pc{display:block;font-size:11px;font-weight:500;color:rgba(255,255,255,.4);margin-top:3px}'+
+  '#tsbrille .tb-seg-btn:hover{color:#fff}'+
+  '#tsbrille .tb-seg-btn.on{background:linear-gradient(180deg,rgba(199,180,137,.24),rgba(199,180,137,.09));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 4px 14px rgba(0,0,0,.4)}'+
+  '#tsbrille .tb-seg-btn.on .pc{color:'+GOLD+'}'+
+  '#tsbrille .tb-formula{font-size:14px;color:rgba(255,255,255,.8);text-align:center;margin:26px auto 0;max-width:640px;line-height:1.6}'+
+  '#tsbrille .tb-formula b{color:'+GOLD+';font-weight:600}'+
+  /* Drei Brillen-Karten */
+  '#tsbrille .tb-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:26px 0 0}'+
+  '#tsbrille .tb-card{border-radius:18px;padding:24px 22px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(199,180,137,.2);box-shadow:0 24px 60px -30px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.06);opacity:0;transform:translateY(16px);transition:opacity .6s '+EASE+',transform .65s '+EASE+'}'+
+  '#tsbrille.in .tb-card{opacity:1;transform:none}'+
+  '#tsbrille .tb-card .ic{width:40px;height:40px;margin:0 0 16px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:linear-gradient(180deg,rgba(199,180,137,.18),rgba(199,180,137,.06));border:1px solid rgba(199,180,137,.32)}'+
+  '#tsbrille .tb-card .ic svg{width:22px;height:22px;display:block}'+
+  '#tsbrille .tb-card .ct{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:1.15rem;font-weight:600;letter-spacing:-.01em;color:#fff;margin:0 0 4px}'+
+  '#tsbrille .tb-card .cq{font-size:13.5px;color:rgba(255,255,255,.6);margin:0 0 16px;line-height:1.5}'+
+  '#tsbrille .tb-card .cr{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.01em;color:'+GOLD+';background:linear-gradient(180deg,rgba(199,180,137,.16),rgba(199,180,137,.06));border:1px solid rgba(199,180,137,.3);border-radius:999px;padding:6px 13px}'+
+  '@media(max-width:820px){'+
+    '#tsbrille .tb-stage{padding:26px 20px 24px}'+
+    '#tsbrille .tb-out{grid-template-columns:1fr;gap:10px}'+
+    '#tsbrille .tb-cards{grid-template-columns:1fr;gap:12px}'+
+    '#tsbrille .tb-seg-btn{font-size:12.5px;padding:10px 4px}'+
+  '}'+
+  '@media(prefers-reduced-motion:reduce){'+
+    '#tsbrille,#tsbrille.in{opacity:1;transform:none}'+
+    '#tsbrille .tb-fill,#tsbrille .tb-marker{transition:none}'+
+    '#tsbrille .tb-card{opacity:1;transform:none;transition:none}'+
+  '}';
+
+  function injectCSS(){ if(document.getElementById('tsbrille-css'))return; var s=document.createElement('style'); s.id='tsbrille-css'; s.textContent=CSS; document.head.appendChild(s); }
+
+  var G_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="'+GOLD+'" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.5" cy="14" r="3.5"/><circle cx="17.5" cy="14" r="3.5"/><path d="M10 13c.7-.8 3.3-.8 4 0"/><path d="M3 11l2-4h3M21 11l-2-4h-3"/></svg>';
+
+  var CARDS=[
+    {t:'Break-Even', q:'„Was muss ich mindestens?" — rechnet von den Kosten her.', r:'Untergrenze'},
+    {t:'Kapazität', q:'„Was kann ich überhaupt?" — rechnet vom Laden her, was physisch geht.', r:'Obergrenze'},
+    {t:'Szenario', q:'„Was werde ich wohl?" — spielt gut / mittel / schlecht durch.', r:'Realistischer Bereich'}
+  ];
+
+  function build(){
+    var root=document.createElement('div'); root.id='tsbrille';
+    var bePct=BREAKEVEN/AXISMAX*100;
+    var segHTML=SZEN.map(function(s,i){
+      return '<button type="button" class="tb-seg-btn'+(i===DEFAULT?' on':'')+'" data-i="'+i+'">'+s.lab+'<span class="pc">'+s.pct+' %</span></button>';
+    }).join('');
+    var cardsHTML=CARDS.map(function(c,i){
+      return '<div class="tb-card" style="transition-delay:'+(160+i*90)+'ms">'+
+        '<div class="ic">'+G_ICON+'</div>'+
+        '<h4 class="ct">'+c.t+'</h4>'+
+        '<p class="cq">'+c.q+'</p>'+
+        '<span class="cr">'+c.r+'</span>'+
+      '</div>';
+    }).join('');
+    root.innerHTML=
+      '<div class="tb-head">'+
+        '<p class="tb-eye">Exkurs</p>'+
+        '<h3 class="tb-title">Dieselbe Frage, <span class="g">drei Brillen</span></h3>'+
+        '<p class="tb-sub">„Lohnt sich der Laden?" — von unten (Break-Even), von oben (Kapazität) und realistisch dazwischen (Szenario). Schalte die Auslastung um und sieh, wo dein Absatz landet.</p>'+
+      '</div>'+
+      '<div class="tb-stage">'+
+        '<div class="tb-axlabel"><span class="l">Absatz pro Monat</span><span class="r">Kapazität: '+EINH_TAG+' × '+TAGE+' = '+nf(AXISMAX)+' Stück max</span></div>'+
+        '<div class="tb-track">'+
+          '<div class="tb-fill"><div class="seg tb-seg-loss"></div><div class="seg tb-seg-win"></div></div>'+
+          '<div class="tb-be" style="left:'+bePct+'%"><span class="cap">Break-Even · '+nf(BREAKEVEN)+'</span></div>'+
+          '<div class="tb-cap-max"></div>'+
+          '<div class="tb-marker"></div>'+
+        '</div>'+
+        '<div class="tb-scale"><span>0</span><span>'+nf(AXISMAX)+' Stück</span></div>'+
+        '<div class="tb-out">'+
+          '<div class="tb-tile"><p class="tl">Untergrenze · Break-Even</p><div class="tv">'+nf(BREAKEVEN)+'</div><div class="tu">Stück / Monat</div></div>'+
+          '<div class="tb-tile hot"><p class="tl">Möglicher Absatz · Szenario</p><div class="tv" data-out="absatz">–</div><div class="tu">Stück / Monat</div></div>'+
+          '<div class="tb-tile win"><p class="tl">Gewinn-Zone · über Break-Even</p><div class="tv" data-out="gewinn">–</div><div class="tu">Stück Puffer</div></div>'+
+        '</div>'+
+        '<div class="tb-seg-ctrl">'+segHTML+'</div>'+
+        '<p class="tb-formula"><b>'+EINH_TAG+' Einheiten/Tag × '+TAGE+' Tage × Auslastung</b> = möglicher Absatz. Alles über der Break-Even-Linie ist <b>Gewinn</b>.</p>'+
+      '</div>'+
+      '<div class="tb-cards">'+cardsHTML+'</div>';
+    return root;
+  }
+
+  function countTo(el,target,fmt){
+    if(!el)return;
+    var dur=800,t0=null,done=false;
+    function finish(){ if(done)return; done=true; el.textContent=fmt(target); }
+    function step(now){ if(done)return; if(t0===null)t0=now; var p=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-p,3); el.textContent=fmt(target*e); if(p<1)requestAnimationFrame(step); else finish(); }
+    requestAnimationFrame(step);
+    setTimeout(finish, dur+150);
+  }
+
+  var REDUCE=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function apply(root, idx, animate){
+    var s=SZEN[idx];
+    var absatz=Math.round(AXISMAX*s.pct/100);
+    var gewinn=Math.max(0,absatz-BREAKEVEN);
+    var absPct=absatz/AXISMAX*100, bePct=BREAKEVEN/AXISMAX*100;
+    root.__idx=idx;
+    // Segmented-Control
+    root.querySelectorAll('.tb-seg-btn').forEach(function(b){ b.classList.toggle('on', parseInt(b.getAttribute('data-i'),10)===idx); });
+    // Balken
+    var fill=root.querySelector('.tb-fill'); if(fill)fill.style.width=absPct+'%';
+    var loss=root.querySelector('.tb-seg-loss'), win=root.querySelector('.tb-seg-win');
+    // Verlust-Segment: 0 -> min(absatz,BE), in % der GESAMTACHSE -> als px via width des fills? nutze % der Achse
+    var lossW=Math.min(absPct,bePct);          // % der Gesamtachse
+    var winStart=Math.min(absPct,bePct);
+    var winW=Math.max(0,absPct-bePct);
+    // seg sind Kinder des fill (Breite=absPct% der Achse). Positioniere relativ zur Achse via left/width in % der ACHSE,
+    // aber fill ist absPct breit -> rechne seg-Breiten als % von absPct.
+    if(fill && absPct>0){
+      if(loss){ loss.style.left='0'; loss.style.width=(lossW/absPct*100)+'%'; }
+      if(win){ win.style.left=(winStart/absPct*100)+'%'; win.style.width=(winW/absPct*100)+'%'; }
+    }
+    // Marker
+    var mk=root.querySelector('.tb-marker'); if(mk)mk.style.left=absPct+'%';
+    // Zahlen
+    var oA=root.querySelector('[data-out="absatz"]'), oG=root.querySelector('[data-out="gewinn"]');
+    if(animate && !REDUCE){
+      countTo(oA, absatz, function(v){return nf(v);});
+      countTo(oG, gewinn, function(v){return '+'+nf(v);});
+    }else{
+      if(oA)oA.textContent=nf(absatz);
+      if(oG)oG.textContent='+'+nf(gewinn);
+    }
+  }
+
+  function play(root){
+    if(root.__played)return; root.__played=true;
+    root.classList.add('in');
+    if(REDUCE){ apply(root, DEFAULT, false); return; }
+    setTimeout(function(){ apply(root, DEFAULT, true); }, 450);
+  }
+
+  function findAnchor(){
+    var p=document.querySelectorAll('p.notion-text__content, .notion-text__content');
+    for(var i=0;i<p.length;i++){ if((p[i].textContent||'').indexOf('Werkzeug mit drei Brillen')>-1) return p[i].closest('[id^="block-"]')||p[i]; }
+    return document.getElementById('block-e0117226860f406fb4ab5c7de84ee1a1');
+  }
+  function inView(el){ var r=el.getBoundingClientRect(); return r.top<(window.innerHeight*0.8)&&r.bottom>(window.innerHeight*0.2); }
+
+  function mount(){
+    if(!/\/gemeinkosten-mitarbeiterlhne\/?$/.test(location.pathname)){ var e=document.getElementById('tsbrille'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    if(document.getElementById('tsbrille')) return;
+    var a=findAnchor(); if(!a) return;
+    injectCSS();
+    var root=build();
+    a.parentNode.insertBefore(root, a.nextSibling);
+    apply(root, DEFAULT, false);
+    root.querySelector('[data-out="absatz"]').textContent='–';
+    root.querySelector('[data-out="gewinn"]').textContent='–';
+    root.querySelectorAll('.tb-seg-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){ apply(root, parseInt(btn.getAttribute('data-i'),10)||0, true); });
+    });
+    var io=new IntersectionObserver(function(ev){ if(ev[0].isIntersecting){ play(root); io.disconnect(); } },{threshold:.25});
+    io.observe(root);
+    if(inView(root)) play(root);
+    var poll=setInterval(function(){ if(!document.body.contains(root)){ clearInterval(poll); return; } if(inView(root)){ play(root); clearInterval(poll); } },250);
+    setTimeout(function(){ clearInterval(poll); },20000);
+  }
+  mount();
+  document.addEventListener("DOMContentLoaded", mount);
+  new MutationObserver(mount).observe(document.documentElement,{childList:true,subtree:true});
+})();
