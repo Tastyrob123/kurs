@@ -157,7 +157,7 @@
    rezepturen — Hero "DB V : Rezepturen" (Muster: zutatenliste-Hero DB IV)
    ============================================================ */
 (function(){
-  var IMG="https://files.catbox.moe/7qzb0p.png"; /* 3-Laptop-Cover Rezepturen: transparent (RGBA) + 2x nachgeschaerft (Lanczos+Unsharp, kein AI), 2720px fuer Retina-Schaerfe, breit gerahmt (aus Meine Rezepte.png) */
+  var IMG="https://files.catbox.moe/n0vdhw.png"; /* 3-Laptop-Cover Rezepturen v2: transparent (RGBA) + Retina-Schaerfe erhalten, ABER Kontrast beruhigt (Low-Pivot-Kompression k=0.86, Farbe+Schaerfe unangetastet, Blacks bleiben tief fuers Blenden) statt frueher contrast(1.12)/unsharp125 = zu hart, 2720px, aus 7qzb0p.png */
   var LOGO="https://files.catbox.moe/au80tp.png";
   function on(){ return /\/rezepturen\/?$/.test(location.pathname); }
   function mount(){
