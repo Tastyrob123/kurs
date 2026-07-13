@@ -4927,18 +4927,30 @@
     trigger(sec,cfg);
     return sec;
   }
+  /* Anker: das root-Level-Element direkt VOR der "Die fertige Übersicht"-Sektion.
+     mountBlock hängt DAHINTER ein -> Block A landet unmittelbar über der Übersicht. */
+  function anchorAboveUebersicht(){
+    var root=document.querySelector('article.notion-root'); if(!root) return null;
+    var hs=document.querySelectorAll('h1,h2,h3');
+    for(var i=0;i<hs.length;i++){
+      if((hs[i].textContent||'').trim().indexOf('Die fertige Übersicht')===0){
+        var top=hs[i]; while(top.parentElement && top.parentElement!==root) top=top.parentElement;
+        if(top.parentElement===root) return top.previousElementSibling;
+      }
+    }
+    return null;
+  }
   function mount(){
     if(!on()){ ['A','B'].forEach(function(k){ var e=document.getElementById('tscb-'+k); if(e&&e.parentNode)e.parentNode.removeChild(e); }); return; }
     /* Früh-Ausstieg, sobald beide Blöcke platziert sind (verhindert Baum-Scan bei jeder DOM-Mutation). */
     var needA=!document.getElementById('tscb-A'), needB=!document.getElementById('tscb-B');
     if(!needA && !needB) return;
     var shop=anchorShop();
-    /* Block A (Bausteinprinzip / 80g Spinat) zuerst — hinter den Laptop (#tszmac), sonst hinter den Shop */
-    if(needA){ var lap=document.querySelector('.tszmac-pc'); var lapList=lap?lap.closest('.notion-column-list'):null; mountBlock(BLOCKS[0], lapList||shop); }
-    /* Block B (Bausteine/Vorlage anzeigen) direkt hinter Block A. #tszein ankert danach hinter #tscb-B,
-       daher stabile Endreihenfolge A -> B -> Einrichtungs-Kasten (#tszein). */
-    var aSec=document.getElementById('tscb-A');
-    if(needB && aSec) mountBlock(BLOCKS[1], aSec);
+    /* Block A (Bausteinprinzip / 80g Spinat) ÜBER "Die fertige Übersicht" -> die Übersicht liegt zwischen A und B. */
+    if(needA){ var above=anchorAboveUebersicht(); if(above) mountBlock(BLOCKS[0], above); }
+    /* Block B (Bausteine/Vorlage anzeigen) hinter den Laptop (#tszmac), sonst hinter den Shop. #tszein ankert danach hinter #tscb-B.
+       Endreihenfolge: A -> "Die fertige Übersicht"(Laptop) -> B -> Einrichtungs-Kasten (#tszein). */
+    if(needB){ var lap=document.querySelector('.tszmac-pc'); var lapList=lap?lap.closest('.notion-column-list'):null; mountBlock(BLOCKS[1], lapList||shop); }
   }
   function boot(){
     var tries=0; var iv=setInterval(function(){ tries++; mount(); if(tries>50)clearInterval(iv); },300);
