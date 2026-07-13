@@ -2440,6 +2440,94 @@
 })();
 
 /* ============================================================
+   MacBook-Cover + Klick-Lightbox (rezepturen) — Viertnutzung
+   Muster 1:1 aus inventurliste (.tsmac). Rohvideo im Ziel-Block
+   (Block-ID #block-39cb… / Anker-Phrase "Nährstoffe und
+   Allergene") per JS-Marker (.tsmac-host) versteckt, MacBook-
+   Poster (bhs.png → Lektion 2.4 in den Screen gebacken) +
+   Play-Button, Klick -> geteilte Lightbox #tsmac-lb.
+   Poster: GitHub-Pages img (rezepturen-mac/pc.png).
+   Läuft nur auf /rezepturen. Natives 2-Spalten-Layout ->
+   KEINE 50/50-Reaktivierung (Lieferpartner-Regel 2).
+   ============================================================ */
+(function(){
+  if(window.__tsmacRez) return; window.__tsmacRez=true;
+  var POSTER="https://tastyrob123.github.io/kurs/img/rezepturen-mac/pc.png";
+  (function(){ var pre=new Image(); pre.src=POSTER; })(); // Poster vorladen -> kein Leer-Blitz
+  var VID='#block-39cb9546553480698e45d99c0d1cb9d5';
+  var PHRASE='Nährstoffe und Allergene';
+  var CSS=[
+    '.page__rezepturen .notion-video.tsmac-host video{display:none!important;}',
+    '.page__rezepturen .tsmac{position:relative;cursor:pointer;display:block;width:100%;line-height:0;background:transparent;}',
+    '.page__rezepturen .tsmac img{width:100%;height:auto;display:block;transition:transform .5s ease;}',
+    '.page__rezepturen .tsmac:hover img{transform:scale(1.02);}',
+    '.page__rezepturen .tsmac__play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}',
+    '.page__rezepturen .tsmac__play span{width:76px;height:76px;border-radius:50%;background:rgba(255,255,255,.16);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;transition:transform .3s,background .3s;}',
+    '.page__rezepturen .tsmac__play span::after{content:"";border-style:solid;border-width:12px 0 12px 20px;border-color:transparent transparent transparent #fff;margin-left:5px;}',
+    '.page__rezepturen .tsmac:hover .tsmac__play span{transform:scale(1.08);background:rgba(255,255,255,.26);}',
+    '#tsmac-lb{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;background:rgba(5,6,11,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:4vw;opacity:0;transition:opacity .35s ease;}',
+    '#tsmac-lb.open{display:flex;opacity:1;}',
+    '#tsmac-lb .tsmac-stage{transform:scale(.94);transition:transform .4s cubic-bezier(.2,.7,.2,1);width:min(92vw,1180px);}',
+    '#tsmac-lb.open .tsmac-stage{transform:scale(1);}',
+    '#tsmac-lb video{width:100%;max-height:86vh;border-radius:12px;box-shadow:0 40px 120px rgba(0,0,0,.6);background:#000;display:block;}',
+    '#tsmac-lb__close{position:absolute;top:22px;right:28px;width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}'
+  ].join('');
+  function injectCSS(){ if(document.getElementById('tsmac-rez-css'))return; var s=document.createElement('style'); s.id='tsmac-rez-css'; s.textContent=CSS; document.head.appendChild(s); }
+  function shut(){ var lb=document.getElementById('tsmac-lb'); if(!lb)return; lb.classList.remove('open'); var v=lb.querySelector('video'); if(v){ try{v.pause();}catch(e){} } }
+  function ensureLb(){
+    var lb=document.getElementById('tsmac-lb'); if(lb) return lb;
+    lb=document.createElement('div'); lb.id='tsmac-lb';
+    var stage=document.createElement('div'); stage.className='tsmac-stage';
+    var close=document.createElement('button'); close.id='tsmac-lb__close'; close.textContent='✕';
+    lb.appendChild(stage); lb.appendChild(close); document.body.appendChild(lb);
+    close.addEventListener('click',shut);
+    lb.addEventListener('click',function(e){ if(e.target===lb) shut(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') shut(); });
+    return lb;
+  }
+  function findVid(scope){
+    // Anker: 1) Ziel-Block per ID  2) Anker-Phrase -> nächste .notion-video  3) generisch
+    var b=scope.querySelector(VID);
+    if(b){ var v=b.matches&&b.matches('.notion-video')?b:b.querySelector('.notion-video'); if(v&&v.querySelector('video')) return v; }
+    var texts=scope.querySelectorAll('.notion-text,p');
+    for(var i=0;i<texts.length;i++){
+      if(texts[i].textContent && texts[i].textContent.indexOf(PHRASE)>-1){
+        var cl=texts[i].closest('.notion-column-list'); if(cl){ var vv=cl.querySelector('.notion-video'); if(vv&&vv.querySelector('video')) return vv; }
+      }
+    }
+    var g=scope.querySelectorAll('.notion-column-list .notion-video');
+    for(var j=0;j<g.length;j++){ if(g[j].querySelector('video')) return g[j]; }
+    return null;
+  }
+  function mount(){
+    if(!/\/rezepturen\/?$/.test(location.pathname)) return;
+    injectCSS();
+    var scope=document.querySelector('.page__rezepturen'); if(!scope) return;
+    var nv=findVid(scope); if(!nv) return;
+    if(nv.querySelector('.tsmac')) return;
+    var raw=nv.querySelector('video'); if(!raw) return;
+    var src=raw.currentSrc||raw.getAttribute('src')||(raw.querySelector('source')&&raw.querySelector('source').getAttribute('src'));
+    if(!src) return;
+    nv.classList.add('tsmac-host');
+    var poster=document.createElement('div'); poster.className='tsmac';
+    poster.innerHTML='<img src="'+POSTER+'" alt="Lektion 2.4 – DB V: Rezepturen" fetchpriority="high" decoding="async"><div class="tsmac__play"><span></span></div>';
+    nv.appendChild(poster);
+    poster.addEventListener('click',function(){
+      var lb=ensureLb(); var stage=lb.querySelector('.tsmac-stage');
+      stage.innerHTML='<video controls playsinline preload="auto" src="'+src+'"></video>';
+      lb.classList.add('open');
+      var v=stage.querySelector('video'); if(v){ try{ v.play(); }catch(e){} }
+    });
+  }
+  function boot(){
+    var tries=0;
+    var iv=setInterval(function(){ tries++; mount(); if(tries>60) clearInterval(iv); },300);
+    new MutationObserver(function(){ mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
+
+/* ============================================================
    inventurliste — Kacheln "Was uns jetzt noch fehlt" (v3)
    Drei reduzierte Luxus-Kacheln (DB Lieferpartner / Zutaten /
    Packaging) ersetzen die Text-Bullets. v3 (11.07.2026):
@@ -4816,6 +4904,10 @@
   .tscb .tsc-play .tsc-play-ic{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:rgba(11,13,20,.16)}
   .tscb .tsc-play .tsc-play-ic svg{width:11px;height:11px;margin-left:1px}
   .tscb .tsc-play.playing{opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.9)}
+  .tscb .tsc-poster{position:absolute;inset:0;z-index:15;border-radius:16px;overflow:hidden;background:#0f0f0f;transition:opacity .45s ease}
+  .tscb .tsc-poster img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+  .tscb .tsc-poster::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,6,11,.12),rgba(5,6,11,.5))}
+  .tscb .tsc-stage.playing .tsc-poster{opacity:0;pointer-events:none}
   .tscb .tscp-head{text-align:left;margin-bottom:14px}
   .tscb .tscp-eye{font-size:.58rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:#c7b489}
   .tscb .tscp-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(20px,1.8vw,26px);font-weight:600;letter-spacing:-.015em;color:#fff;margin:6px 0 0}
@@ -5048,7 +5140,7 @@
       '<div class="tscb-anim" data-cell="B">'+animB()+'</div>'+
       centerText(TXT_B,'B')+
     '</div>';
-    [].forEach.call(sec.querySelectorAll('.tsc-stage'), function(st){ st.insertAdjacentHTML('beforeend', PLAYBTN); });
+    [].forEach.call(sec.querySelectorAll('.tsc-stage'), function(st){ st.insertAdjacentHTML('beforeend', '<div class="tsc-poster"><img src="'+IMG+'" alt=""></div>'+PLAYBTN); });
     return sec;
   }
 
@@ -5152,14 +5244,14 @@
 
   /* Kein Autoplay: Idle-Poster + Play-Button JE Kachel, Animation läuft EINMAL auf Klick. */
   function armCell(cell, playFn){
-    var panel=cell.querySelector('.tsc-anim'), btn=cell.querySelector('.tsc-play');
+    var panel=cell.querySelector('.tsc-anim'), btn=cell.querySelector('.tsc-play'), stage=cell.querySelector('.tsc-stage');
     playFn(panel,{idle:true});
     if(!btn) return;
     var playing=false;
     function label(t){ var l=btn.querySelector('.tsc-play-label'); if(l) l.textContent=t; }
     btn.addEventListener('click',function(){
-      if(playing) return; playing=true; btn.classList.add('playing');
-      playFn(panel,{onEnd:function(){ playing=false; label('Erneut abspielen'); btn.classList.remove('playing'); }});
+      if(playing) return; playing=true; btn.classList.add('playing'); if(stage) stage.classList.add('playing');
+      playFn(panel,{onEnd:function(){ playing=false; label('Erneut abspielen'); btn.classList.remove('playing'); if(stage) stage.classList.remove('playing'); }});
     });
   }
   function armDuo(sec){
