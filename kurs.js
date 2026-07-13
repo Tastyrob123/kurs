@@ -4552,14 +4552,7 @@
   .tscb .tscb-in.center .tsc-steps{justify-content:center}
   .tscb .tscb-in.center .tsc-stage{max-width:640px;margin:20px auto 0}
   @media(max-width:900px){.tscb .tscb-in{grid-template-columns:1fr;gap:30px}}
-  /* Block A dicht unter „Die Lösung" (Leerraum der Spalte wegziehen) */
-  .tscb[data-block="A"]{padding-top:8px;padding-bottom:12px}
-  @media(min-width:901px){.tscb[data-block="A"]{padding-top:0;margin-top:-56px}}
-
-  /* „Die Lösung"-Absatz entschärfen: kleiner + normal, nur „Die Lösung :" fett */
-  .tsc-loesung,.tsc-loesung .notion-text__content,.tsc-loesung .notion-semantic-string{font-size:16px!important;font-weight:400!important;line-height:1.7!important}
-  .tsc-loesung strong{font-weight:400!important}
-  .tsc-loesung strong:first-of-type{font-weight:700!important}
+  /* Block A steht als eigene Vollbreite-Sektion unter „Bausteine" (Block B), über „Empfehlung zur Einrichtung" (#tszein) — keine Sonder-Margin mehr */
 
   /* --- Textpanel rechts --- */
   .tscb .tsx{min-width:0}
@@ -4712,13 +4705,11 @@
     var body=(t.body||[]).map(function(p){return '<p class="tsx-p">'+p+'</p>';}).join('');
     return '<div class="tsx">'+(t.eyebrow?'<div class="tsx-eye">'+t.eyebrow+'</div>':'')+'<h3 class="tsx-h">'+t.h+'</h3>'+body+'</div>';
   }
-  /* Block-A-Linkstext: Roberts 3 Intro-Absätze (aus Notion übernommen, im Modul gepflegt) */
-  var PARAS_A=[
-    'Kurz gesagt: <b>Die Zutat wird einmal gepflegt, aber beliebig oft verwendet.</b>',
-    'In diesem Schritt übersetzen wir das Inventarprodukt in diese verarbeitbare Einheit – zum Beispiel vom gelieferten Gebinde hin zu Gramm, Milliliter oder Stück.',
-    'Öffne hierzu zunächst deine Notion AI Backoffice Startseite, erstelle eine neue Seite die du „DB Zutaten" nennst, einen „Zurück" Button und eine neue Tabelle / Datenbankansicht → Name : „DB IV : Zutaten" :'
-  ];
-  function txtBig(paras){ return '<div class="tsx tsx-left">'+paras.map(function(p){return '<p class="tsx-p">'+p+'</p>';}).join('')+'</div>'; }
+  /* Block-A-Linkstext: Bausteinprinzip (steht unter „Bausteine", über „Empfehlung zur Einrichtung") */
+  var TXT_A={
+    h:'Einmal anlegen, <span>überall verwendbar</span>.',
+    body:['Jede portionierte Größe – zum Beispiel 80 g Spinat – ist ein eigener Baustein. Du legst ihn einmal an: Zutat duplizieren, Portionsgröße setzen, fertig.','Änderst du diesen Baustein an einer einzigen Stelle, rechnen alle verknüpften Rezepturen und Gerichte sofort korrekt weiter.'] };
+  function txtBig(t){ var body=(t.body||[]).map(function(p){return '<p class="tsx-p">'+p+'</p>';}).join(''); return '<div class="tsx tsx-left">'+(t.eyebrow?'<div class="tsx-eye">'+t.eyebrow+'</div>':'')+(t.h?'<h3 class="tsx-h">'+t.h+'</h3>':'')+body+'</div>'; }
 
   /* ---------- Panel A markup ---------- */
   function menuItem(icon,label,right,cls){ return '<div class="tsc-mi '+(cls||'')+'">'+icon+'<span>'+label+'</span>'+(right||'')+'</div>'; }
@@ -4790,7 +4781,7 @@
   }
 
   var BLOCKS=[
-    { key:'A', mode:'textleft', marker:'groesse-animation', anim:animA, play:function(el){playA(el);}, paras:PARAS_A },
+    { key:'A', mode:'textleft', marker:'groesse-animation', anim:animA, play:function(el){playA(el);}, txt:TXT_A },
     { key:'B', mode:'split', marker:'vorlage-animation', anim:animB, play:function(el){playB(el);},
       txt:{ h:'Bausteine in den <span>Zutaten anzeigen</span>.',
         body:['Erstelle in jeder Hauptzutat eine Übersicht, in der automatisch die Subzutaten (bspw. 80g) angezeigt werden.','Öffne dafür oben rechts Neu → Neue Vorlage → / Neue Datenbankansicht → DB IV : Zutaten verknüpfen und Filter „Name" = Name der Zutat → Cover Ansicht → Als Standard festlegen.'] } }
@@ -4802,7 +4793,7 @@
     sec.innerHTML = cfg.mode==='center'
       ? '<div class="tscb-in center">'+cfg.anim()+'</div>'
       : cfg.mode==='textleft'
-      ? '<div class="tscb-in">'+txtBig(cfg.paras)+cfg.anim()+'</div>'
+      ? '<div class="tscb-in">'+txtBig(cfg.txt)+cfg.anim()+'</div>'
       : '<div class="tscb-in">'+cfg.anim()+txtPanel(cfg.txt)+'</div>';
     return sec;
   }
@@ -4926,19 +4917,6 @@
     return null;
   }
   function anchorShop(){ return document.getElementById('tsshop--db4_zutaten'); }
-  function findLoesung(){
-    var root=document.querySelector('article.notion-root')||document.body;
-    var all=document.querySelectorAll('.notion-text');
-    for(var i=0;i<all.length;i++){
-      if((all[i].textContent||'').trim().indexOf('Die Lösung')===0){
-        /* Anker MUSS auf notion-root-Ebene liegen (außerhalb evtl. Notion-Spalte),
-           sonst landet die animierte Karte in einer Spalte -> Reconciler-Freeze. */
-        var node=all[i]; while(node.parentElement && node.parentElement!==root) node=node.parentElement;
-        return { el:all[i], block:(node.parentElement===root?node:(all[i].closest('[id^="block-"]')||all[i])) };
-      }
-    }
-    return null;
-  }
   function mountBlock(cfg, anchorAfter){
     if(document.getElementById('tscb-'+cfg.key)) return document.getElementById('tscb-'+cfg.key);
     var mk=findMarker(cfg.marker), sec=buildBlock(cfg), ref=null;
@@ -4951,36 +4929,15 @@
   }
   function mount(){
     if(!on()){ ['A','B'].forEach(function(k){ var e=document.getElementById('tscb-'+k); if(e&&e.parentNode)e.parentNode.removeChild(e); }); return; }
-    /* WICHTIG: billiger Früh-Ausstieg, sobald alles platziert ist — sonst würde findLoesung()
-       bei JEDER Animations-DOM-Mutation den ganzen .notion-text-Baum scannen (Main-Thread-Storm/Freeze). */
-    var needA=!document.getElementById('tscb-A'), needB=!document.getElementById('tscb-B'), needLo=!document.querySelector('.tsc-loesung');
-    if(!needA && !needB && !needLo) return;
-    var lo=(needLo||needA) ? findLoesung() : null;
-    if(needLo && lo && lo.el){
-      var le=lo.el; le.classList.add('tsc-loesung');
-      le.style.setProperty('font-size','16px','important');
-      le.style.setProperty('font-weight','400','important');
-      le.style.setProperty('line-height','1.7','important');
-      var ss=le.querySelectorAll('strong');
-      for(var si=0;si<ss.length;si++){ ss[si].style.setProperty('font-weight', si===0?'700':'400','important'); }
-      /* „Die Lösung" auf volle Breite (seine Notion-Spalte auf 100%) */
-      var loCol=le.closest('.notion-column');
-      if(loCol){ loCol.style.setProperty('width','100%','important'); loCol.style.setProperty('flex','1 1 100%','important'); loCol.style.setProperty('max-width','100%','important'); }
-      /* die 3 Intro-Absätze ausblenden — sie stehen jetzt LINKS im Block neben der Animation */
-      var HIDE=['kurz gesagt','in diesem schritt übersetzen','öffne hierzu zunächst'];
-      var nt=document.querySelectorAll('.notion-text');
-      for(var ni=0;ni<nt.length;ni++){ var tt=(nt[ni].textContent||'').trim().toLowerCase();
-        for(var h=0;h<HIDE.length;h++){ if(tt.indexOf(HIDE[h])===0){
-          /* wenn die ganze Spaltenliste NUR diese Absätze enthält (kein „Die Lösung"), die Liste ausblenden — sonst nur den Block */
-          var cl=nt[ni].closest('.notion-column-list');
-          var target=(cl && (cl.textContent||'').toLowerCase().indexOf('die lösung')<0) ? cl : (nt[ni].closest('[id^="block-"]')||nt[ni]);
-          target.style.setProperty('display','none','important');
-        } } }
-    }
+    /* Früh-Ausstieg, sobald beide Blöcke platziert sind (verhindert Baum-Scan bei jeder DOM-Mutation). */
+    var needA=!document.getElementById('tscb-A'), needB=!document.getElementById('tscb-B');
+    if(!needA && !needB) return;
     var shop=anchorShop();
-    if(needA) mountBlock(BLOCKS[0], (lo&&lo.block)||shop);
-    /* Reihenfolge PC -> Galerie: Block B hinter den Laptop (#tszmac), sonst hinter den Shop */
+    /* Block B (Bausteine/Vorlage) hinter den Laptop (#tszmac), sonst hinter den Shop */
     if(needB){ var lap=document.querySelector('.tszmac-pc'); var lapList=lap?lap.closest('.notion-column-list'):null; mountBlock(BLOCKS[1], lapList||shop); }
+    /* Block A (80g Spinat) direkt hinter Block B -> sitzt unter „Bausteine", über „Empfehlung zur Einrichtung" (#tszein) */
+    var bSec=document.getElementById('tscb-B');
+    if(needA && bSec) mountBlock(BLOCKS[0], bSec);
   }
   function boot(){
     var tries=0; var iv=setInterval(function(){ tries++; mount(); if(tries>50)clearInterval(iv); },300);
