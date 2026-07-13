@@ -2482,9 +2482,11 @@
   if(window.__tsgk) return; window.__tsgk=true;
   var GLOW='199,180,137';
   var CSS=`
-  #tsgk{width:100%;max-width:100%;margin:34px auto 30px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
+  /* Full-Bleed: aus der schmalen Notion-Spalte auf ~volle Viewport-Breite ausbrechen
+     (Spalte ist zentriert -> Standard 50%/50vw-Technik). */
+  #tsgk{width:94vw;max-width:94vw;margin:40px calc(50% - 47vw) 34px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
   #tsgk *{box-sizing:border-box}
-  #tsgk .tsgk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  #tsgk .tsgk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
   #tsgk .tsgk-card{position:relative;display:block;aspect-ratio:4/5;border-radius:16px;overflow:hidden;background:#04050a;border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85);opacity:0;transform:translateY(18px) scale(.985);will-change:transform,opacity;transition:border-color .4s ease,box-shadow .5s ease}
   /* Reveal = Keyframe-Animation (NICHT transition): auf dieser busy Super.so-Seite
      bleiben class-getriggerte Transitions haengen. .on setzt zusaetzlich den End-
@@ -2495,14 +2497,14 @@
   #tsgk .tsgk-bg{position:absolute;inset:0;z-index:0;border-radius:inherit;overflow:hidden}
   #tsgk .tsgk-bg img{width:100%;height:100%;object-fit:cover;object-position:center 70%;display:block}
   #tsgk .tsgk-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,5,10,.92) 0%,rgba(4,5,10,.62) 30%,rgba(4,5,10,.14) 46%,rgba(4,5,10,0) 60%),radial-gradient(120% 80% at 50% 100%,rgba(4,5,10,.5),rgba(4,5,10,0) 60%)}
-  #tsgk .tsgk-in{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:22px 16px 0}
-  #tsgk .tsgk-logo{display:block;height:26px;width:auto;margin:0 auto 12px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.7))}
-  #tsgk .tsgk-k{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-weight:600;font-size:.66rem;letter-spacing:.02em;color:#c7b489;margin-bottom:5px;text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 8px rgba(0,0,0,.8)}
-  #tsgk .tsgk-h{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1.04rem;font-weight:600;letter-spacing:-.008em;line-height:1.16;color:#fff;margin:0;text-shadow:0 0 4px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,.95),0 3px 14px rgba(0,0,0,.85)}
+  #tsgk .tsgk-in{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:34px 22px 0}
+  #tsgk .tsgk-logo{display:block;height:36px;width:auto;margin:0 auto 17px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.7))}
+  #tsgk .tsgk-k{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-weight:600;font-size:.86rem;letter-spacing:.02em;color:#c7b489;margin-bottom:7px;text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 8px rgba(0,0,0,.8)}
+  #tsgk .tsgk-h{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1.6rem;font-weight:600;letter-spacing:-.01em;line-height:1.14;color:#fff;margin:0;text-shadow:0 0 4px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,.95),0 3px 14px rgba(0,0,0,.85)}
   @keyframes tsgk-rise{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
   @keyframes tsgk-hb{0%{box-shadow:0 4px 14px rgba(var(--g),.10),0 0 14px rgba(var(--g),.10)}18%{box-shadow:0 6px 22px rgba(var(--g),.30),0 0 46px rgba(var(--g),.34)}32%{box-shadow:0 5px 18px rgba(var(--g),.16),0 0 26px rgba(var(--g),.18)}46%{box-shadow:0 6px 20px rgba(var(--g),.26),0 0 40px rgba(var(--g),.28)}72%,100%{box-shadow:0 4px 14px rgba(var(--g),.10),0 0 14px rgba(var(--g),.10)}}
-  @media(max-width:860px){#tsgk .tsgk-grid{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:460px){#tsgk .tsgk-grid{grid-template-columns:repeat(2,1fr);gap:12px}#tsgk .tsgk-in{padding:18px 12px 0}}
+  @media(max-width:860px){#tsgk .tsgk-grid{grid-template-columns:repeat(2,1fr);gap:16px}#tsgk .tsgk-in{padding:26px 16px 0}#tsgk .tsgk-h{font-size:1.32rem}#tsgk .tsgk-k{font-size:.78rem}#tsgk .tsgk-logo{height:32px;margin-bottom:14px}}
+  @media(max-width:460px){#tsgk .tsgk-grid{gap:12px}#tsgk .tsgk-in{padding:18px 12px 0}#tsgk .tsgk-h{font-size:1.08rem}#tsgk .tsgk-k{font-size:.68rem}#tsgk .tsgk-logo{height:26px;margin-bottom:11px}}
   @media(prefers-reduced-motion:reduce){#tsgk .tsgk-card,#tsgk .tsgk-card.on{opacity:1;transform:none;animation:none}#tsgk .tsgk-card.on.done:hover{transform:none;animation:none;box-shadow:0 0 26px rgba(var(--g),.22)}}
   `;
   /* BG-Bilder liegen im Repo (GitHub Pages), da kurs.js von github.io geladen
@@ -4124,20 +4126,25 @@
          type:'later'  = Rollup/aktive Verknüpfung, baust du selbst NACH der Relation (zählt im Balken, Lila) */
       relations:[
         { type:'ghost', name:'Lieferant', target:'Relation · DB I Lieferpartner', flag:'erscheint automatisch',
-          desc:'Die Verbindung zu den Lieferpartnern. Erscheint hier von allein, sobald du sie von der Lieferanten-Seite aus wechselseitig anlegst — du baust sie hier nicht.',
-          img:'https://tastyrob123.github.io/kurs/img/flow/lieferant.jpg' },
-        { type:'ghost', name:'Ist Zutat', target:'Relation · DB IV Zutaten', flag:'erscheint automatisch',
-          desc:'Die Verbindung zu den Zutaten. Kommt automatisch, sobald du die wechselseitige Verbindung von der Zutaten-Seite aus setzt.',
-          img:'https://tastyrob123.github.io/kurs/img/zutaten/tomate.jpg' },
-        { type:'ghost', name:'Packaging / Co.', target:'Relation · Packaging', flag:'erscheint automatisch',
-          desc:'Die Verbindung zum Packaging. Erscheint automatisch über die wechselseitige Verbindung der Packaging-Tabelle.',
-          img:'https://tastyrob123.github.io/kurs/img/flow/produkt.jpg' },
-        { type:'later', name:'Ansprechpartner Lieferant', target:'Rollup · über Lieferant', flag:'später verknüpfen',
-          desc:'Ein Rollup über die Lieferant-Relation. Den baust du selbst — aber erst, wenn die Lieferant-Verbindung steht.',
-          img:'https://tastyrob123.github.io/kurs/img/flow/ansprechpartner.jpg' },
+          desc:'Die Verbindung zu den Lieferpartnern — erscheint von allein.',
+          img:'https://tastyrob123.github.io/kurs/img/lieferpartner/kuehltransporter-sprinter.jpg',
+          content:'<p class="notion-text">Diese Spalte baust du hier <b>nicht</b>. Sobald du in <b>DB I · Lieferpartner</b> die Relation zur Inventurliste anlegst und dabei die <b>wechselseitige Verbindung</b> aktivierst, erscheint „Lieferant" hier von allein — inklusive der Verknüpfung zurück.</p><p class="notion-text">Wo du diese Markierung siehst, gilt: nichts tun, kommt automatisch.</p>' },
         { type:'later', name:'Hauptkontakt Lieferant', target:'Rollup · über Lieferant', flag:'später verknüpfen',
-          desc:'Ein Rollup/Formel über die Lieferant-Relation. Baust du selbst nach, sobald die Verbindung existiert.',
-          img:'https://tastyrob123.github.io/kurs/img/flow/lieferantenvertrag.jpg' }
+          desc:'Rollup über die Lieferant-Relation — baust du selbst.',
+          img:'https://tastyrob123.github.io/kurs/img/flow/lieferantenvertrag.jpg',
+          content:'<p class="notion-text">Ein <b>Rollup</b> über die Lieferant-Relation. Den baust du selbst — aber erst, wenn die Verbindung zu DB I steht.</p><p class="notion-text">Neue Spalte → Typ <b>Rollup</b> → Relation „Lieferant" → Eigenschaft „Hauptkontakt" → Berechnung „Original anzeigen". Danach hier als erledigt markieren.</p>' },
+        { type:'later', name:'Ansprechpartner Lieferant', target:'Rollup · über Lieferant', flag:'später verknüpfen',
+          desc:'Rollup über die Lieferant-Relation — baust du selbst.',
+          img:'https://tastyrob123.github.io/kurs/img/flow/ansprechpartner.jpg',
+          content:'<p class="notion-text">Ein <b>Rollup</b> über die Lieferant-Relation. Baust du selbst, sobald die Verbindung steht.</p><p class="notion-text">Neue Spalte → Typ <b>Rollup</b> → Relation „Lieferant" → Eigenschaft „Ansprechpartner" → „Original anzeigen".</p>' },
+        { type:'ghost', name:'Ist Zutat', target:'Relation · DB IV Zutaten', flag:'erscheint automatisch',
+          desc:'Die Verbindung zu den Zutaten — erscheint von allein.',
+          img:'https://tastyrob123.github.io/kurs/img/zutaten/tomate.jpg',
+          content:'<p class="notion-text">Die Verbindung zu den <b>Zutaten</b>. Baust du hier nicht — sie erscheint automatisch, sobald du in <b>DB IV · Zutaten</b> die wechselseitige Relation zur Inventurliste setzt.</p>' },
+        { type:'ghost', name:'Packaging / Co.', target:'Relation · Packaging', flag:'erscheint automatisch',
+          desc:'Die Verbindung zum Packaging — erscheint von allein.', fit:'contain',
+          img:'https://tastyrob123.github.io/kurs/img/packaging/kuchenbox.jpg',
+          content:'<p class="notion-text">Die Verbindung zum <b>Packaging</b>. Erscheint automatisch über die wechselseitige Relation der Packaging-Tabelle — du legst sie hier nicht an.</p>' }
       ],
       summary:'Wareneinsatz', chain:true },
     { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_lieferanten',
@@ -4220,23 +4227,33 @@
   #tsshop .tss-card.is-done{--tss-g:143,203,170;background:linear-gradient(165deg,rgba(160,208,180,.30),rgba(160,208,180,.12) 55%,rgba(160,208,180,.05));border-color:rgba(160,208,180,.6);box-shadow:0 18px 44px -30px rgba(0,0,0,.85),0 0 38px rgba(143,203,170,.24)}
   #tsshop .tss-card.is-done .tss-val{color:#9FD3B9}
   /* ── Relation-Kacheln: Ghost (erscheint automatisch) + Safe-for-Later (Lila) ── */
-  #tsshop .tss-card.tss-rel{cursor:default}
-  #tsshop .tss-card.tss-later{cursor:pointer}
+  #tsshop .tss-card.tss-rel{cursor:pointer}
   #tsshop .tss-flag{position:absolute;top:11px;left:11px;z-index:4;display:inline-flex;align-items:center;gap:6px;padding:5px 10px 5px 9px;border-radius:999px;font-size:10px;font-weight:600;letter-spacing:.02em;line-height:1;white-space:nowrap;-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px)}
   #tsshop .tss-flag::before{content:"";width:6px;height:6px;border-radius:50%;flex:none}
-  #tsshop .tss-val--rel{font-size:11px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:rgba(255,255,255,.5)}
-  #tsshop .tss-card.tss-ghost{opacity:.5;border:1px dashed rgba(255,255,255,.32);box-shadow:none}
-  #tsshop .tss-card.tss-ghost .tss-imgwrap img{filter:grayscale(.7) brightness(.82)}
-  #tsshop .tss-card.tss-ghost:hover,#tsshop .tss-card.tss-ghost:focus-visible{transform:none;animation:none;border-color:rgba(255,255,255,.45);opacity:.6}
+  #tsshop .tss-val--rel{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:13px;font-weight:600;letter-spacing:0;text-transform:none;color:rgba(216,201,171,.92)}
+  /* Ghost: nur Rahmen/Body wirken „noch nicht da" — das Bild bleibt voll */
+  #tsshop .tss-card.tss-ghost{border:1px dashed rgba(255,255,255,.30);box-shadow:none;background:linear-gradient(165deg,rgba(255,255,255,.035),rgba(255,255,255,.01) 55%,transparent)}
+  #tsshop .tss-card.tss-ghost .tss-body{opacity:.6}
+  #tsshop .tss-card.tss-ghost:hover,#tsshop .tss-card.tss-ghost:focus-visible{transform:translateY(-4px);animation:none;border-color:rgba(255,255,255,.5)}
   #tsshop .tss-ghost .tss-flag{background:rgba(16,18,26,.74);border:1px dashed rgba(255,255,255,.5);color:rgba(255,255,255,.86)}
   #tsshop .tss-ghost .tss-flag::before{background:rgba(255,255,255,.6)}
-  #tsshop .tss-card.tss-ghost.is-done{opacity:1;border-style:solid}
+  #tsshop .tss-card.tss-ghost.is-done{border-style:solid}
+  #tsshop .tss-card.tss-ghost.is-done .tss-body{opacity:1}
   #tsshop .tss-card.tss-later{--tss-g:150,120,224;border:1px solid rgba(150,120,224,.5);background:linear-gradient(165deg,rgba(150,120,224,.17),rgba(150,120,224,.05) 55%,rgba(150,120,224,.015))}
   #tsshop .tss-card.tss-later:hover,#tsshop .tss-card.tss-later:focus-visible{border-color:rgba(150,120,224,.85);box-shadow:0 18px 44px -30px rgba(0,0,0,.85),0 0 34px rgba(150,120,224,.28)}
   #tsshop .tss-later .tss-flag{background:rgba(150,120,224,.92);border:1px solid rgba(255,255,255,.28);color:#0c0a16}
   #tsshop .tss-later .tss-flag::before{background:#0c0a16}
   #tsshop .tss-card.tss-later.is-done{--tss-g:143,203,170;border-color:rgba(160,208,180,.6)}
+  /* Bild mittig „contain" (z. B. Packaging-Kuchenbox) */
+  #tsshop .tss-card.tss-fit-contain .tss-imgwrap{background:#000}
+  #tsshop .tss-card.tss-fit-contain .tss-imgwrap img{object-fit:contain}
   #tsshop.tss-has-rel .tss-bar__fill{background:linear-gradient(90deg,#e35d76,#e32552);box-shadow:0 0 10px rgba(227,37,82,.5),inset 0 1px 0 rgba(255,255,255,.3)}
+  /* Relation-Overlay: Ziel-Label (Lineal) + „erscheint automatisch"-Chip + contain-Bild */
+  #tsshop-detail .tsd-price--rel{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:15px;font-weight:600;letter-spacing:0;color:rgba(216,201,171,.95)}
+  #tsshop-detail .tsd-auto{display:inline-flex;align-items:center;gap:8px;padding:11px 16px;border-radius:12px;font-size:.82rem;font-weight:600;background:rgba(255,255,255,.05);border:1px dashed rgba(255,255,255,.32);color:rgba(255,255,255,.8)}
+  #tsshop-detail .tsd-auto svg{width:16px;height:16px;flex:none}
+  #tsshop-detail .tsd-imgwrap--contain{background:#000}
+  #tsshop-detail .tsd-imgwrap--contain img{object-fit:contain}
   /* Tron-Neon-Sweep beim In-den-Einkaufswagen-Legen */
   #tsshop .tss-neon{position:absolute;inset:0;width:100%;height:100%;z-index:4;pointer-events:none;overflow:visible;filter:drop-shadow(0 0 5px rgba(143,203,170,.95)) drop-shadow(0 0 16px rgba(143,203,170,.5));transition:opacity .5s ease}
   #tsshop .tss-body{padding:16px 18px 18px}
@@ -4391,7 +4408,7 @@
     if(page.relations&&page.relations.length){
       relCards=page.relations.map(function(r,ri){
         var done=(r.type==='later'&&localStorage.getItem(relKey(page,r))==='1')||(r.mirrorKey&&localStorage.getItem(r.mirrorKey)==='1');
-        return '<article class="tss-card tss-rel tss-'+r.type+(done?' is-done':'')+'" data-rel="'+ri+'"'+(r.type==='later'?' role="button" tabindex="0"':'')+' aria-label="'+r.name+' — '+r.flag+'">'
+        return '<article class="tss-card tss-rel tss-'+r.type+(r.fit==='contain'?' tss-fit-contain':'')+(done?' is-done':'')+'" data-rel="'+ri+'" role="button" tabindex="0" aria-label="'+r.name+' — '+r.flag+'">'
           +'<div class="tss-imgwrap"><img src="'+r.img+'" alt="'+r.name+'" loading="lazy"><span class="tss-flag">'+r.flag+'</span><span class="tss-donebadge">'+CHECK+'</span></div>'
           +'<div class="tss-body"><h4 class="tss-name">'+r.name+'</h4><p class="tss-desc">'+r.desc+'</p><div class="tss-val tss-val--rel">'+r.target+'</div></div>'
         +'</article>';
@@ -4533,6 +4550,52 @@
     }
     return ov;
   }
+  /* Relation-Kachel-Overlay: Ghost = Info + „erscheint automatisch"-Chip (kein Done-Button);
+     Safe-for-Later = Instruktionen + „Als erledigt markieren" → Karte wird grün, zählt im Balken. */
+  function openRelDetail(page,k,steps,r,ri,card,root){
+    if(document.getElementById('tsshop-detail')) return;
+    var isLater=r.type==='later', kk=relKey(page,r);
+    var done=isLater?localStorage.getItem(kk)==='1':card.classList.contains('is-done');
+    var contain=r.fit==='contain';
+    var autoChip='<div class="tsd-auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Erscheint automatisch</span></div>';
+    var doneBtn='<button type="button" class="tsd-done'+(done?' is-done':'')+'">'+(done?CHECK:CART)+'<span>'+(done?'Erledigt':'Als erledigt markieren')+'</span></button>';
+    var ov=document.createElement('div'); ov.id='tsshop-detail'; ov.className='tsd-anim';
+    ov.innerHTML='<div class="tsd-back"></div>'
+      +'<div class="tsd-panel">'
+        +'<button type="button" class="tsd-close" aria-label="Schließen">'+XICON+'</button>'
+        +'<div class="tsd-grid">'
+          +'<div class="tsd-imgwrap'+(contain?' tsd-imgwrap--contain':'')+'"><img src="'+r.img+'" alt="'+r.name+'"></div>'
+          +'<div class="tsd-info">'
+            +'<div class="tsd-eyebrow">'+(isLater?'Safe for Later':'Ghost · erscheint automatisch')+'</div>'
+            +'<h2 class="tsd-title">'+r.name+'</h2>'
+            +'<div class="tsd-content">'+(r.content||('<p class="notion-text">'+r.desc+'</p>'))+'</div>'
+            +'<div class="tsd-buy">'
+              +'<div class="tsd-price tsd-price--rel">'+r.target+'</div>'
+              +(isLater?doneBtn:autoChip)
+            +'</div>'
+          +'</div>'
+        +'</div>'
+      +'</div>';
+    function closeOv(){ ov.remove(); document.body.style.overflow=''; }
+    ov.querySelector('.tsd-close').addEventListener('click',closeOv);
+    ov.querySelector('.tsd-back').addEventListener('click',closeOv);
+    ov.addEventListener('click',function(e){ if(e.target===ov) closeOv(); });
+    document.addEventListener('keydown',function esc(e){ if(e.key==='Escape'){ closeOv(); document.removeEventListener('keydown',esc); } });
+    if(isLater){
+      var db=ov.querySelector('.tsd-done');
+      db.addEventListener('click',function(){
+        var nv=localStorage.getItem(kk)==='1'?'0':'1';
+        localStorage.setItem(kk,nv);
+        card.classList.toggle('is-done',nv==='1');
+        updProgress(root,steps,k,page);
+        if(nv==='1'){ closeOv(); setTimeout(function(){ neonSweep(card); },320); }
+        else { db.classList.remove('is-done'); db.innerHTML=CART+'<span>Als erledigt markieren</span>'; }
+      });
+    }
+    document.body.appendChild(ov);
+    document.body.style.overflow='hidden';
+  }
+
   function openDetail(page,k,steps,idx,root){
     if(document.getElementById('tsshop-detail')) return;
     var card=root.querySelector('.tss-card[data-step="'+idx+'"]');
@@ -4628,12 +4691,9 @@
     setTimeout(upd,150);
     cards.forEach(function(c){
       if(c.classList.contains('tss-rel')){
-        if(c.classList.contains('tss-later')){
-          var r=page.relations[parseInt(c.dataset.rel,10)];
-          var toggle=function(){ var kk=relKey(page,r); var nv=localStorage.getItem(kk)==='1'?'0':'1'; localStorage.setItem(kk,nv); c.classList.toggle('is-done',nv==='1'); updProgress(root,steps,k,page); };
-          c.addEventListener('click',toggle);
-          c.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggle(); } });
-        }
+        var ri=parseInt(c.dataset.rel,10);
+        c.addEventListener('click',function(){ openRelDetail(page,k,steps,page.relations[ri],ri,c,root); });
+        c.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openRelDetail(page,k,steps,page.relations[ri],ri,c,root); } });
         return;
       }
       c.addEventListener('click',function(){ openDetail(page,k,steps,parseInt(c.dataset.step,10),root); });
