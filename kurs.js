@@ -4053,9 +4053,9 @@
         { name:'Kühltransporter Sprinter', wert:180, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/kuehltransporter-sprinter.jpg' },
         { name:'Pritschenwagen',           wert:220, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/pritschenwagen-kisten.jpg' },
         { name:'Getränke-LKW',             wert:350, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/getraenke-lkw.jpg' },
-        { name:'Kühlkoffer 7,5t',          wert:450, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/kuehlkoffer-7-5t.jpg' },
-        { name:'Tiefkühl-LKW 18t',         wert:680, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/tiefkuehl-lkw-18t.jpg' },
-        { name:'Sattelzug Kühlauflieger',  wert:950, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/sattelzug-kuehlauflieger.jpg' }
+        { name:'Güterzug',                 wert:1200, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/gueterzug.jpg' },
+        { name:'Containerschiff',          wert:3500, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/containerschiff.jpg' },
+        { name:'Frachtflugzeug',           wert:7500, img:'https://tastyrob123.github.io/kurs/img/lieferpartner/militaer-frachtflugzeug.jpg' }
       ]},
     { kachel_id:'db13_ansprechpartner', kachel_name:'Ansprechpartner', ist_produkt_kachel:true,
       einheit:'Jahresrückvergütung (%)', einheit_typ:'prozent',
