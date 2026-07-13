@@ -6053,7 +6053,7 @@
   #tsd5 .d5-step:active{transform:scale(.94)}
   #tsd5 .d5-step:disabled{opacity:.28;cursor:not-allowed;transform:none;box-shadow:none}
   /* Nährwerte / Portion — deutlich mehr Abstand zu den Feldern darunter */
-  #tsd5 .d5-seclbl{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:16px;font-weight:600;letter-spacing:.005em;color:#fff;text-align:center;margin:0 0 20px}
+  #tsd5 .d5-seclbl{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:27px;font-weight:600;letter-spacing:-.01em;color:#fff;text-align:center;margin:0}
   #tsd5 .d5-nut{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0}
   #tsd5 .d5-ncell{border-radius:13px;padding:16px 6px;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.05);text-align:center}
   #tsd5 .d5-ncell .nv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:23px;font-weight:700;color:#fff;line-height:1}
@@ -6129,16 +6129,15 @@
               '<div class="d5-tile hot"><p class="tl">Preis / Portion</p><div class="tv" data-out="preis">–</div><div class="tu">pro Portion</div></div>'+
             '</div>'+
           '</div>'+
-          '<div class="d5-nutblock">'+
-            '<p class="d5-seclbl">Nährwerte / Portion</p>'+
-            '<div class="d5-nut">'+
-              '<div class="d5-ncell"><div class="nv" data-nut="kcal">–</div><div class="nu">kcal</div></div>'+
-              '<div class="d5-ncell"><div class="nv" data-nut="fett">–</div><div class="nu">Fett</div></div>'+
-              '<div class="d5-ncell"><div class="nv" data-nut="kh">–</div><div class="nu">Kohlenh.</div></div>'+
-              '<div class="d5-ncell"><div class="nv" data-nut="protein">–</div><div class="nu">Protein</div></div>'+
-            '</div>'+
+          '<p class="d5-seclbl">Nährwerte / Portion</p>'+
+          '<div class="d5-nut">'+
+            '<div class="d5-ncell"><div class="nv" data-nut="kcal">–</div><div class="nu">kcal</div></div>'+
+            '<div class="d5-ncell"><div class="nv" data-nut="fett">–</div><div class="nu">Fett</div></div>'+
+            '<div class="d5-ncell"><div class="nv" data-nut="kh">–</div><div class="nu">Kohlenh.</div></div>'+
+            '<div class="d5-ncell"><div class="nv" data-nut="protein">–</div><div class="nu">Protein</div></div>'+
           '</div>'+
-          '<div class="d5-aller"><span class="al-l">Allergene</span><div class="d5-allchips">'+allerHTML+'</div></div>'+
+          '<p class="d5-seclbl">Allergene</p>'+
+          '<div class="d5-allchips">'+allerHTML+'</div>'+
           '<p class="d5-formula"><b>Gesamtmenge ÷ Portionsgröße</b> = Portionen &nbsp;·&nbsp; <b>Kosten &amp; Nährwerte</b> laufen pro Portion mit.</p>'+
         '</div>'+
       '</div>'+
