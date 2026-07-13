@@ -4,6 +4,62 @@
    Byte-genau aus dem Live-DOM extrahiert 2026-07-09.
    ============================================================ */
 
+/* ============================================================
+   Sidebar-Styling-Spans (Farben/Font kommen aus kurs.css, hier nur die Spans):
+   1. Modul-Titel: Zahl in "Modul N" in unser Rot (.ts-modul-num) — Wort weiß / Zahl rot.
+   2. Lektionen: Name NACH "//" beige (.ts-lektion-name) — "Lektion 2.1 //" bleibt weiß.
+   Site-weit, selbstheilend via debounced Observer (Muster wie ts-m2-gold).
+   BEWUSST AM DATEIANFANG platziert: der frühere Platz am Dateiende wurde wiederholt von
+   Parallel-Commits (ad33dbc, 0b76635) beim Anhängen neuer Blöcke überschrieben. Am Anfang
+   arbeitet niemand -> kollisionssicher. Bitte hier lassen.
+   ============================================================ */
+(function(){
+  if(window.__tsSbNum) return; window.__tsSbNum = true;
+
+  /* Modul-Header: erste Ziffernfolge rot wrappen */
+  function wrapModulNum(){
+    document.querySelectorAll('.super-navigation-menu__list-header .super-navigation-menu__item-title').forEach(function(el){
+      if(el.querySelector('.ts-modul-num')) return;
+      var w=document.createTreeWalker(el, NodeFilter.SHOW_TEXT), n;
+      while(n=w.nextNode()){
+        var m=n.nodeValue.match(/\d+/);
+        if(m){
+          var after=n.splitText(m.index); after.splitText(m[0].length);
+          var span=document.createElement('span'); span.className='ts-modul-num'; span.textContent=m[0];
+          after.parentNode.replaceChild(span, after);
+          break;
+        }
+      }
+    });
+  }
+
+  /* Lektionen (Leaf-Links, NICHT in einem list-header): alles nach "//" beige wrappen */
+  function wrapLektionName(){
+    document.querySelectorAll('.super-navigation-menu__item-title').forEach(function(el){
+      if(el.closest('.super-navigation-menu__list-header')) return;
+      if(el.querySelector('.ts-lektion-name')) return;
+      var w=document.createTreeWalker(el, NodeFilter.SHOW_TEXT), n;
+      while(n=w.nextNode()){
+        var i=n.nodeValue.indexOf('//');
+        if(i>-1){
+          var after=n.splitText(i+2);
+          var span=document.createElement('span'); span.className='ts-lektion-name'; span.textContent=after.nodeValue;
+          after.parentNode.replaceChild(span, after);
+          break;
+        }
+      }
+    });
+  }
+
+  function apply(){ wrapModulNum(); wrapLektionName(); }
+
+  apply();
+  document.addEventListener('DOMContentLoaded', apply);
+  var _t=null;
+  new MutationObserver(function(){ if(_t) return; _t=setTimeout(function(){ _t=null; apply(); },200); })
+    .observe(document.documentElement,{childList:true,subtree:true});
+})();
+
 (function () {
   var SEL = '.notion-toggle[class*="notion-toggle-heading"]';
   var booted = false;

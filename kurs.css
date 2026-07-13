@@ -565,6 +565,9 @@ body:has(#sb-toggle-cb:checked) #sb-toggle {
    (Zahl-Span kommt aus kurs.js). Etwas mehr Abstand zwischen den Modulen. */
 .super-sidebar { background: #02040e !important; }
 .super-sidebar__content { background: transparent !important; }
+/* Kopfbereich (Logo + Suche) war grau — auf das Sidebar-Blau durchscheinen lassen */
+.super-sidebar__heading { background: transparent !important; }
+.super-search-input { background: rgba(255,255,255,.05) !important; }
 .super-navigation-menu__list { margin-bottom: 12px !important; }
 /* Modul-Titel + Lektionen: Lineal-Schrift, weiß */
 .super-navigation-menu__item-title {
