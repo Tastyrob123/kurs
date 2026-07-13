@@ -1120,6 +1120,13 @@ details > summary {
 .page__rezepturen #block-2c5edc4c7d1e4c1eb2478fdea38a3535{
   max-width:820px !important; margin-left:auto !important; margin-right:auto !important; }
 
+/* Abstand Rechner #tsd5 → Sektion "Rezepturen als weiterer Baustein" verringert (natürlich):
+   zwei leere Notion-Filler-Absätze direkt unter dem Widget raus (je ~32px toter Raum) +
+   Widget-Untermarge von 62px auf 36px getrimmt. Notion bleibt SSOT (Blöcke sind leer). */
+.page__rezepturen #block-39cb954655348095a314ea9040deec67,
+.page__rezepturen #block-39cb9546553480bd87c3d556118bce98{ display:none !important; }
+.page__rezepturen #tsd5{ margin-bottom:36px !important; }
+
 /* ---- gerichte-getrnke-finaler-schritt — Hero "DB IX : Gerichte & Getränke" (Muster: rezepturen DB V) ---- */
 .page__gerichte-getrnke-finaler-schritt .ts-hero{
   position:relative; width:min(1180px, 94vw); margin:76px auto 10px; text-align:center; isolation:isolate;
