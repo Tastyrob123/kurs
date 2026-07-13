@@ -153,10 +153,12 @@
   };
   function fmt(v){ return (v<0?'−':'+')+Math.abs(v).toFixed(2).replace('.',',')+' €'; }
   function count(el){
-    var t=parseFloat(el.getAttribute('data-target')),s=null,d=900;
-    function step(ts){ if(!s)s=ts; var p=Math.min(1,(ts-s)/d),e=1-Math.pow(1-p,3);
-      el.textContent=fmt(t*e); if(p<1)requestAnimationFrame(step); else el.textContent=fmt(t); }
+    var t=parseFloat(el.getAttribute('data-target')),s=null,d=900,done=false;
+    function step(ts){ if(done)return; if(!s)s=ts; var p=Math.min(1,(ts-s)/d),e=1-Math.pow(1-p,3);
+      el.textContent=fmt(t*e); if(p<1)requestAnimationFrame(step); else { done=true; el.textContent=fmt(t); } }
     requestAnimationFrame(step);
+    // Garantie-Endwert, falls rAF gedrosselt wird (Hintergrund-Tab) — Endzustand nie animationsabhängig.
+    setTimeout(function(){ done=true; el.textContent=fmt(t); }, d+150);
   }
 
   function play(root){
