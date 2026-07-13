@@ -2484,10 +2484,10 @@
   var CSS=`
   /* Full-Bleed: aus der schmalen Notion-Spalte auf ~volle Viewport-Breite ausbrechen
      (Spalte ist zentriert -> Standard 50%/50vw-Technik). */
-  #tsgk{width:94vw;max-width:94vw;margin:40px calc(50% - 47vw) 34px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
+  #tsgk{width:min(1320px,95vw);max-width:95vw;margin:34px auto 30px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
   #tsgk *{box-sizing:border-box}
-  #tsgk .tsgk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
-  #tsgk .tsgk-card{position:relative;display:block;aspect-ratio:4/5;border-radius:16px;overflow:hidden;background:#04050a;border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85);opacity:0;transform:translateY(18px) scale(.985);will-change:transform,opacity;transition:border-color .4s ease,box-shadow .5s ease}
+  #tsgk .tsgk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  #tsgk .tsgk-card{position:relative;display:block;aspect-ratio:5/4;border-radius:16px;overflow:hidden;background:#04050a;border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85);opacity:0;transform:translateY(18px) scale(.985);will-change:transform,opacity;transition:border-color .4s ease,box-shadow .5s ease}
   /* Reveal = Keyframe-Animation (NICHT transition): auf dieser busy Super.so-Seite
      bleiben class-getriggerte Transitions haengen. .on setzt zusaetzlich den End-
      zustand direkt, damit der Inhalt nie von der Animation abhaengt. */
@@ -2495,16 +2495,16 @@
   #tsgk .tsgk-card.on.done{animation:none}
   #tsgk .tsgk-card.on.done:hover{border-color:rgba(var(--g),.5);transform:translateY(-4px);animation:tsgk-hb 2.6s cubic-bezier(.4,0,.3,1) infinite}
   #tsgk .tsgk-bg{position:absolute;inset:0;z-index:0;border-radius:inherit;overflow:hidden}
-  #tsgk .tsgk-bg img{width:100%;height:100%;object-fit:cover;object-position:center 70%;display:block}
+  #tsgk .tsgk-bg img{width:100%;height:100%;object-fit:cover;object-position:center 63%;display:block}
   #tsgk .tsgk-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,5,10,.92) 0%,rgba(4,5,10,.62) 30%,rgba(4,5,10,.14) 46%,rgba(4,5,10,0) 60%),radial-gradient(120% 80% at 50% 100%,rgba(4,5,10,.5),rgba(4,5,10,0) 60%)}
-  #tsgk .tsgk-in{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:34px 22px 0}
-  #tsgk .tsgk-logo{display:block;height:36px;width:auto;margin:0 auto 17px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.7))}
-  #tsgk .tsgk-k{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-weight:600;font-size:.86rem;letter-spacing:.02em;color:#c7b489;margin-bottom:7px;text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 8px rgba(0,0,0,.8)}
-  #tsgk .tsgk-h{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1.6rem;font-weight:600;letter-spacing:-.01em;line-height:1.14;color:#fff;margin:0;text-shadow:0 0 4px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,.95),0 3px 14px rgba(0,0,0,.85)}
+  #tsgk .tsgk-in{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:26px 18px 0}
+  #tsgk .tsgk-logo{display:block;height:30px;width:auto;margin:0 auto 13px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.7))}
+  #tsgk .tsgk-k{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-weight:600;font-size:.64rem;letter-spacing:.02em;color:#c7b489;margin-bottom:6px;text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 8px rgba(0,0,0,.8)}
+  #tsgk .tsgk-h{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1.16rem;font-weight:600;letter-spacing:-.012em;line-height:1.15;color:#fff;margin:0;text-shadow:0 0 4px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,.95),0 3px 14px rgba(0,0,0,.85)}
   @keyframes tsgk-rise{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
   @keyframes tsgk-hb{0%{box-shadow:0 4px 14px rgba(var(--g),.10),0 0 14px rgba(var(--g),.10)}18%{box-shadow:0 6px 22px rgba(var(--g),.30),0 0 46px rgba(var(--g),.34)}32%{box-shadow:0 5px 18px rgba(var(--g),.16),0 0 26px rgba(var(--g),.18)}46%{box-shadow:0 6px 20px rgba(var(--g),.26),0 0 40px rgba(var(--g),.28)}72%,100%{box-shadow:0 4px 14px rgba(var(--g),.10),0 0 14px rgba(var(--g),.10)}}
-  @media(max-width:860px){#tsgk .tsgk-grid{grid-template-columns:repeat(2,1fr);gap:16px}#tsgk .tsgk-in{padding:26px 16px 0}#tsgk .tsgk-h{font-size:1.32rem}#tsgk .tsgk-k{font-size:.78rem}#tsgk .tsgk-logo{height:32px;margin-bottom:14px}}
-  @media(max-width:460px){#tsgk .tsgk-grid{gap:12px}#tsgk .tsgk-in{padding:18px 12px 0}#tsgk .tsgk-h{font-size:1.08rem}#tsgk .tsgk-k{font-size:.68rem}#tsgk .tsgk-logo{height:26px;margin-bottom:11px}}
+  @media(max-width:860px){#tsgk .tsgk-grid{grid-template-columns:repeat(2,1fr);gap:16px}#tsgk .tsgk-in{padding:24px 16px 0}#tsgk .tsgk-h{font-size:1.16rem}#tsgk .tsgk-k{font-size:.64rem}#tsgk .tsgk-logo{height:30px;margin-bottom:13px}}
+  @media(max-width:460px){#tsgk .tsgk-grid{gap:12px}#tsgk .tsgk-in{padding:18px 12px 0}#tsgk .tsgk-h{font-size:1.02rem}#tsgk .tsgk-k{font-size:.6rem}#tsgk .tsgk-logo{height:26px;margin-bottom:11px}}
   @media(prefers-reduced-motion:reduce){#tsgk .tsgk-card,#tsgk .tsgk-card.on{opacity:1;transform:none;animation:none}#tsgk .tsgk-card.on.done:hover{transform:none;animation:none;box-shadow:0 0 26px rgba(var(--g),.22)}}
   #tsgk .tsgk-card{cursor:pointer}
   #tsgk .tsgk-card:focus-visible{outline:2px solid rgba(199,180,137,.75);outline-offset:3px}
