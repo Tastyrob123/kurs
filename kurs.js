@@ -5297,58 +5297,62 @@
   #tsd5 .d5-title .basil{color:#46e05a}
   #tsd5 .d5-title .pesto{color:#fff}
   #tsd5 .d5-sub{max-width:660px;margin:20px auto 0;font-size:15.5px;line-height:1.62;color:#fff}
-  #tsd5 .d5-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;align-items:stretch}
-  #tsd5 .d5-card{position:relative;border-radius:16px;padding:22px 22px 20px;background:rgba(255,255,255,.035);border:1px solid rgba(199,180,137,.28)}
+  #tsd5 .d5-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:stretch}
+  /* High-End Karten: sanfter Verlauf, Gold-Hairline, Tiefe + Glas-Kante oben */
+  #tsd5 .d5-card{position:relative;border-radius:22px;padding:28px 26px 24px;background:linear-gradient(180deg,rgba(255,255,255,.052),rgba(255,255,255,.022));border:1px solid rgba(199,180,137,.24);box-shadow:0 30px 80px -28px rgba(0,0,0,.72),inset 0 1px 0 rgba(255,255,255,.07);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
   /* Rechte Karte Überschrift — zentriert, weiss */
-  #tsd5 .d5-rhead{text-align:center;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:17px;font-weight:600;color:#fff;letter-spacing:-.01em;margin:0 0 16px}
-  /* Bausteine-Zeilen mit freigestelltem Produktbild (größer) */
-  #tsd5 .d5-item{display:grid;grid-template-columns:60px 1fr auto;align-items:center;gap:14px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06);opacity:0;transform:translateX(-14px);transition:opacity .5s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
+  #tsd5 .d5-rhead{text-align:center;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:18px;font-weight:600;color:#fff;letter-spacing:-.01em;margin:0 0 20px}
+  /* Bausteine-Zeilen mit freigestelltem Produktbild (viel größer) */
+  #tsd5 .d5-item{display:grid;grid-template-columns:104px 1fr auto;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.055);opacity:0;transform:translateX(-14px);transition:opacity .5s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
   #tsd5 .d5-item:first-child{padding-top:2px}
+  #tsd5 .d5-item:last-child{border-bottom:0}
   #tsd5.in .d5-item{opacity:1;transform:none}
-  #tsd5 .d5-thumb{width:60px;height:60px;object-fit:contain;object-position:center;filter:drop-shadow(0 5px 10px rgba(0,0,0,.55));flex-shrink:0}
-  #tsd5 .d5-item .nm{font-size:15px;font-weight:500;color:#fff}
-  #tsd5 .d5-item .nm small{display:block;font-size:11px;color:rgba(255,255,255,.4);font-weight:400;margin-top:2px}
+  #tsd5 .d5-thumb{width:104px;height:104px;object-fit:contain;object-position:center;filter:drop-shadow(0 8px 18px rgba(0,0,0,.6));flex-shrink:0}
+  #tsd5 .d5-item .nm{font-size:18px;font-weight:600;letter-spacing:-.01em;color:#fff}
+  #tsd5 .d5-item .nm small{display:block;font-size:12px;color:rgba(255,255,255,.42);font-weight:400;letter-spacing:.01em;margin-top:3px}
   #tsd5 .d5-item .qty{text-align:right;white-space:nowrap}
-  #tsd5 .d5-item .qty .q1{font-size:14px;font-weight:600;color:#fff}
-  #tsd5 .d5-item .qty .q2{font-size:11.5px;color:rgba(255,255,255,.42);margin-top:1px}
+  #tsd5 .d5-item .qty .q1{font-size:15px;font-weight:600;color:#fff}
+  #tsd5 .d5-item .qty .q2{font-size:12px;color:rgba(255,255,255,.42);margin-top:2px}
   #tsd5 .d5-item .qty .q2 b{color:#c7b489;font-weight:600}
-  /* Summen-Fuß — zentriert */
-  #tsd5 .d5-sums{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
-  #tsd5 .d5-sum{border-radius:12px;padding:14px 14px;background:rgba(199,180,137,.07);border:1px solid rgba(199,180,137,.22);text-align:center}
-  #tsd5 .d5-sum .sl{font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:rgba(255,255,255,.5);margin:0 0 6px}
-  #tsd5 .d5-sum .sv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:24px;font-weight:700;color:#c7b489;letter-spacing:-.01em;line-height:1}
+  /* Summen-Fuß — zentriert, edel */
+  #tsd5 .d5-sums{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
+  #tsd5 .d5-sum{border-radius:16px;padding:16px 14px;background:linear-gradient(180deg,rgba(199,180,137,.1),rgba(199,180,137,.04));border:1px solid rgba(199,180,137,.24);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);text-align:center}
+  #tsd5 .d5-sum .sl{font-size:10px;letter-spacing:.7px;text-transform:uppercase;color:rgba(255,255,255,.55);margin:0 0 7px}
+  #tsd5 .d5-sum .sv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:26px;font-weight:700;color:#c7b489;letter-spacing:-.01em;line-height:1}
   /* Rechte Karte — Pro Portion */
-  #tsd5 .d5-right{background:rgba(199,180,137,.06);border-color:rgba(199,180,137,.4)}
-  #tsd5 .d5-ctrl{margin:2px 0 18px}
-  #tsd5 .d5-ctrl .cl{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 10px}
+  #tsd5 .d5-right{background:linear-gradient(180deg,rgba(199,180,137,.085),rgba(199,180,137,.03));border-color:rgba(199,180,137,.38)}
+  #tsd5 .d5-ctrl{margin:2px 0 22px}
+  #tsd5 .d5-ctrl .cl{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 13px}
   #tsd5 .d5-ctrl .cl .lab{font-size:13px;color:rgba(255,255,255,.7)}
-  #tsd5 .d5-ctrl .cl .val{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:19px;font-weight:700;color:#fff}
+  #tsd5 .d5-ctrl .cl .val{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:20px;font-weight:700;color:#fff}
   #tsd5 .d5-ctrl .cl .val small{font-size:12px;font-weight:500;color:rgba(255,255,255,.5);margin-left:2px}
-  #tsd5 .d5-range{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:4px;background:rgba(255,255,255,.14);outline:none;margin:0}
-  #tsd5 .d5-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:#c7b489;cursor:pointer;box-shadow:0 0 0 4px rgba(199,180,137,.18),0 2px 8px rgba(0,0,0,.5);transition:transform .12s ease}
-  #tsd5 .d5-range::-webkit-slider-thumb:active{transform:scale(1.15)}
-  #tsd5 .d5-range::-moz-range-thumb{width:20px;height:20px;border:none;border-radius:50%;background:#c7b489;cursor:pointer;box-shadow:0 0 0 4px rgba(199,180,137,.18)}
-  #tsd5 .d5-scale{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.3);margin-top:7px}
-  #tsd5 .d5-out{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0}
-  #tsd5 .d5-tile{border-radius:12px;padding:14px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);text-align:center}
-  #tsd5 .d5-tile.hot{background:rgba(199,180,137,.1);border-color:rgba(199,180,137,.5)}
-  #tsd5 .d5-tile .tl{font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:rgba(255,255,255,.45);margin:0 0 7px}
-  #tsd5 .d5-tile .tv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:clamp(1.5rem,3.2vw,2rem);font-weight:700;letter-spacing:-.02em;color:#fff;line-height:1}
+  /* Slider — edel: Gold-Füllung bis zum Regler, polierter Bead-Thumb */
+  #tsd5 .d5-range{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:6px;outline:none;margin:0;background:linear-gradient(90deg,#c7b489 0%,#e0d2ac var(--d5fill,25%),rgba(255,255,255,.13) var(--d5fill,25%),rgba(255,255,255,.13) 100%);box-shadow:inset 0 1px 2px rgba(0,0,0,.4)}
+  #tsd5 .d5-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 34% 30%,#fbf5e6,#c7b489 68%);border:1px solid rgba(255,255,255,.4);cursor:pointer;box-shadow:0 0 0 6px rgba(199,180,137,.13),0 4px 12px rgba(0,0,0,.6);transition:transform .14s cubic-bezier(.16,1,.3,1),box-shadow .2s ease}
+  #tsd5 .d5-range::-webkit-slider-thumb:hover{box-shadow:0 0 0 8px rgba(199,180,137,.16),0 4px 14px rgba(0,0,0,.65)}
+  #tsd5 .d5-range::-webkit-slider-thumb:active{transform:scale(1.12)}
+  #tsd5 .d5-range::-moz-range-thumb{width:24px;height:24px;border:1px solid rgba(255,255,255,.4);border-radius:50%;background:radial-gradient(circle at 34% 30%,#fbf5e6,#c7b489 68%);cursor:pointer;box-shadow:0 0 0 6px rgba(199,180,137,.13),0 4px 12px rgba(0,0,0,.6)}
+  #tsd5 .d5-scale{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.32);margin-top:10px}
+  #tsd5 .d5-out{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0}
+  #tsd5 .d5-tile{border-radius:16px;padding:17px 14px;background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);text-align:center}
+  #tsd5 .d5-tile.hot{background:linear-gradient(180deg,rgba(199,180,137,.16),rgba(199,180,137,.05));border-color:rgba(199,180,137,.5)}
+  #tsd5 .d5-tile .tl{font-size:10px;letter-spacing:.7px;text-transform:uppercase;color:rgba(255,255,255,.5);margin:0 0 8px}
+  #tsd5 .d5-tile .tv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:clamp(1.6rem,3.4vw,2.15rem);font-weight:700;letter-spacing:-.02em;color:#fff;line-height:1}
   #tsd5 .d5-tile.hot .tv{color:#c7b489}
-  #tsd5 .d5-tile .tu{font-size:12px;color:rgba(255,255,255,.45);margin-top:5px}
-  /* Nährwerte / Portion — mehr Abstand, zentriert, weiss */
-  #tsd5 .d5-seclbl{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#fff;text-align:center;margin:26px 0 13px}
-  #tsd5 .d5-nut{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0}
-  #tsd5 .d5-ncell{border-radius:10px;padding:11px 6px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);text-align:center}
-  #tsd5 .d5-ncell .nv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:17px;font-weight:700;color:#fff;line-height:1}
-  #tsd5 .d5-ncell .nu{font-size:9.5px;color:rgba(255,255,255,.4);margin-top:5px;letter-spacing:.3px}
-  /* Allergene — Label zentriert weiss, Chips zentriert nebeneinander */
-  #tsd5 .d5-aller{text-align:center;margin-top:24px}
-  #tsd5 .d5-aller .al-l{display:block;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#fff;margin:0 0 10px}
-  #tsd5 .d5-allchips{display:flex;justify-content:center;flex-wrap:wrap;gap:8px}
-  #tsd5 .d5-chip{font-size:12.5px;color:#e6d8b6;background:rgba(199,180,137,.12);border:1px solid rgba(199,180,137,.3);border-radius:999px;padding:5px 13px}
-  /* Formel — freistehend, weiss (Gold-Betonungen bleiben) */
-  #tsd5 .d5-formula{font-size:12.5px;color:#fff;text-align:center;margin:22px 0 0;padding:16px 4px 0;border-top:1px solid rgba(255,255,255,.09);line-height:1.55}
+  #tsd5 .d5-tile .tu{font-size:12px;color:rgba(255,255,255,.45);margin-top:6px}
+  /* Nährwerte / Portion — deutlich mehr Abstand zu den Feldern darunter */
+  #tsd5 .d5-seclbl{font-size:11px;font-weight:600;letter-spacing:1.1px;text-transform:uppercase;color:#fff;text-align:center;margin:30px 0 20px}
+  #tsd5 .d5-nut{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0}
+  #tsd5 .d5-ncell{border-radius:13px;padding:13px 6px;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.05);text-align:center}
+  #tsd5 .d5-ncell .nv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:18px;font-weight:700;color:#fff;line-height:1}
+  #tsd5 .d5-ncell .nu{font-size:9.5px;color:rgba(255,255,255,.42);margin-top:6px;letter-spacing:.3px}
+  /* Allergene — Label zentriert weiss, deutlich mehr Abstand zu den Chips */
+  #tsd5 .d5-aller{text-align:center;margin-top:28px}
+  #tsd5 .d5-aller .al-l{display:block;font-size:11px;font-weight:600;letter-spacing:1.1px;text-transform:uppercase;color:#fff;margin:0 0 16px}
+  #tsd5 .d5-allchips{display:flex;justify-content:center;flex-wrap:wrap;gap:10px}
+  #tsd5 .d5-chip{font-size:13px;color:#efe3c4;background:linear-gradient(180deg,rgba(199,180,137,.16),rgba(199,180,137,.07));border:1px solid rgba(199,180,137,.32);border-radius:999px;padding:6px 15px;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+  /* Formel — freistehend, weiss, größer (Gold-Betonungen bleiben) */
+  #tsd5 .d5-formula{font-size:14.5px;color:#fff;text-align:center;margin:26px 0 0;padding:20px 4px 0;border-top:1px solid rgba(255,255,255,.09);line-height:1.6}
   #tsd5 .d5-formula b{color:#c7b489;font-weight:600}
   #tsd5 .d5-foot{text-align:center;margin:32px auto 0;max-width:700px}
   #tsd5 .d5-foot .fm{font-size:17.5px;line-height:1.5;color:#fff;margin:0 0 8px}
@@ -5369,7 +5373,7 @@
     RECIPE.items.forEach(function(it,i){
       itemsHTML+='<div class="d5-item" style="transition-delay:'+(120+i*90)+'ms">'+
         '<img class="d5-thumb" src="'+IMGBASE+it.img+'" alt="'+it.n+'" decoding="async">'+
-        '<span class="nm">'+it.n+'<small>aus DB Zutaten · '+nf(it.p,2)+' €/kg</small></span>'+
+        '<span class="nm">'+it.n+'<small>'+nf(it.p,2)+' €/kg</small></span>'+
         '<span class="qty"><div class="q1">'+it.g+' g</div><div class="q2"><b class="pp" data-g="'+it.g+'">–</b> g/Portion</div></span>'+
       '</div>';
     });
@@ -5428,6 +5432,7 @@
     var preisPortion=tC/portionen;          // Rohstoffkosten pro Portion
     var f=portion/100;                      // Nährwert-Skalierung (je 100 g)
     var pv=root.querySelector('.pval'); if(pv)pv.textContent=portion;
+    var rng=root.querySelector('.d5-range'); if(rng){ var pct=Math.max(0,Math.min(100,((portion-MIN_P)/(MAX_P-MIN_P))*100)); rng.style.setProperty('--d5fill', pct+'%'); }
     root.querySelectorAll('.pp').forEach(function(el){
       var g=parseFloat(el.getAttribute('data-g'))||0;
       el.textContent=nf(g/portionen,1);
@@ -5503,235 +5508,4 @@
   mount();
   document.addEventListener("DOMContentLoaded", mount);
   new MutationObserver(mount).observe(document.documentElement,{childList:true,subtree:true});
-})();
-
-
-/* =========================================================================
-   Chaos -> Klarheit  (mehrwert-zielbild)
-   Full-Width-Erzaehlanimation unter dem Abschnitt "Warum du das ueberhaupt
-   brauchst.": Akt 1 verstreute Tools -> Akt 2 ein System (Notion+Claude Code)
-   -> Akt 3 echte Gerichte mit Deckungs-Verdikt (Beispielwerte).
-   Guard window.__tsChaos · Pfad /mehrwert-zielbild · React-resilienter Mount.
-   ========================================================================= */
-(function(){
-  if(window.__tsChaos) return; window.__tsChaos = true;
-  function on(){ return /\/mehrwert-zielbild\/?$/.test(location.pathname); }
-  var LINEAL='"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif';
-  var BASE=(window.__tsChaosBase)||'https://tastyrob123.github.io/kurs/img/mehrwert/';
-  function IMG(slug){ return BASE+slug+'.jpg'; }
-  // Beispielwerte (Deckungsbeitrag / Verkauf) — SSOT in der Lektionsdatei.
-  var DISHES=[
-    {slug:'rinderfilet',       name:'Rinderfilet',       v:-0.40, k:'bad'},
-    {slug:'rote-bete-risotto', name:'Rote-Bete-Risotto', v: 3.20, k:'good'},
-    {slug:'lammkarree',        name:'Lammkarree',        v:-0.90, k:'bad'},
-    {slug:'kuerbis-veloute',   name:'Kürbis-Velouté',    v: 2.80, k:'good'},
-    {slug:'pilz-ravioli',      name:'Pilz-Ravioli',      v: 2.40, k:'good'},
-    {slug:'gemuese-steak',     name:'Gemüse-Steak',      v: 3.60, k:'good'}
-  ];
-  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-
-  function css(){
-    if(document.getElementById('tsChaosStyle')) return;
-    var s=document.createElement('style'); s.id='tsChaosStyle';
-    s.textContent=[
-'#tsChaos{--champ:#c7b489;--champ-lite:#d8c9ab;--red:#e32552;--green:#8FCBAA;',
-'  background:radial-gradient(120% 85% at 50% 0%, rgba(46,64,120,.38), transparent 55%);',
-'  position:relative;width:100vw;max-width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);',
-'  box-sizing:border-box;padding:clamp(30px,4vw,54px) clamp(16px,3vw,44px) clamp(26px,3vw,44px);',
-'  color:#fff;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;}',
-'#tsChaos .ck-inner{max-width:1240px;margin:0 auto;text-align:center}',
-'#tsChaos .ck-eyebrow{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--champ);font-weight:600;margin-bottom:12px}',
-'#tsChaos .ck-title{font-family:'+LINEAL+';font-size:clamp(1.9rem,4.4vw,3rem);line-height:1.08;font-weight:600;letter-spacing:-.02em;margin:0 0 clamp(22px,3vw,36px);color:#fff}',
-'#tsChaos .ck-title span{color:var(--champ)}',
-'#tsChaos .ck-stage{position:relative;height:clamp(340px,40vw,420px);margin:0 auto}',
-/* Act1 windows */
-'#tsChaos .ck-win{position:absolute;box-sizing:border-box;border-radius:9px;overflow:hidden;background:#1b1d28;border:1px solid rgba(255,255,255,.16);box-shadow:0 10px 24px rgba(0,0,0,.55);filter:grayscale(.35) brightness(1);opacity:0;transition:left .95s cubic-bezier(.5,0,.2,1),top .95s cubic-bezier(.5,0,.2,1),transform .95s cubic-bezier(.5,0,.2,1),opacity .7s ease,filter .7s ease}',
-'#tsChaos.is-chaos .ck-win{opacity:1;animation:tsChaosJit 3.6s ease-in-out infinite}',
-'#tsChaos .ck-win__bar{display:flex;align-items:center;gap:5px;padding:6px 9px;font-size:.62rem;font-weight:600;color:rgba(255,255,255,.7)}',
-'#tsChaos .ck-win__bar i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);display:inline-block}',
-'#tsChaos .ck-win__body{padding:8px 10px 11px}',
-'#tsChaos .ck-row{height:6px;border-radius:3px;background:rgba(255,255,255,.13);margin:5px 0}',
-'#tsChaos .ck-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:3px}',
-'#tsChaos .ck-cell{height:11px;border-radius:2px;background:rgba(255,255,255,.09)}',
-'#tsChaos .ck-cell.r{background:rgba(227,37,82,.5)}',
-'#tsChaos .ck-bub{max-width:78%;padding:5px 8px;border-radius:9px;font-size:.55rem;color:rgba(255,255,255,.6);background:rgba(255,255,255,.09);margin:5px 0}',
-'#tsChaos .ck-bub.me{margin-left:auto;background:rgba(199,180,137,.16)}',
-'#tsChaos .ck-dots{letter-spacing:2px;color:rgba(255,255,255,.4);font-size:.7rem}',
-'#tsChaos .ck-win--excel .ck-win__bar{background:#1e6b45}',
-'#tsChaos .ck-win--word .ck-win__bar{background:#2a4b8d}',
-'#tsChaos .ck-win--chat .ck-win__bar{background:#3a3550}',
-'#tsChaos .ck-win--pass .ck-win__bar{background:#5a3a3a}',
-'#tsChaos .ck-win--cal .ck-win__bar{background:#8d3a2a}',
-'#tsChaos .ck-win--mail .ck-win__bar{background:#2a5a6b}',
-'#tsChaos .ck-win--note{background:#e9d27a;border-color:#d8be5c;color:#4a3d12}',
-'#tsChaos .ck-win--note .ck-win__bar{color:#4a3d12}',
-'#tsChaos .ck-win--note .ck-row{background:rgba(74,61,18,.28)}',
-'#tsChaos .ck-win--head{background:#15161d;display:flex;align-items:center;justify-content:center}',
-'#tsChaos .ck-head__glyph{width:34px;height:34px;color:rgba(255,255,255,.55)}',
-'#tsChaos .ck-head__q{color:var(--champ);font-weight:700;font-size:.82rem;margin-top:4px}',
-'#tsChaos.is-converge .ck-win,#tsChaos.is-hub .ck-win,#tsChaos.is-dishes .ck-win{left:50%!important;top:42%!important;transform:translate(-50%,-50%) scale(.22) rotate(0)!important;opacity:0!important;animation:none!important}',
-'@keyframes tsChaosJit{0%,100%{transform:translate(0,0) rotate(var(--r))}33%{transform:translate(2px,-3px) rotate(calc(var(--r) + 1deg))}66%{transform:translate(-2px,2px) rotate(calc(var(--r) - .8deg))}}',
-/* Act2/3 panel */
-'#tsChaos .ck-np{position:absolute;left:50%;top:50%;width:min(680px,92%);transform:translate(-50%,-50%) scale(.7);opacity:0;pointer-events:none;background:rgba(12,13,18,.96);border:1px solid rgba(199,180,137,.42);border-radius:16px;box-shadow:0 0 0 0 rgba(199,180,137,.3),0 30px 70px rgba(0,0,0,.6);transition:opacity .7s ease,transform .8s cubic-bezier(.16,1,.3,1),width .8s cubic-bezier(.16,1,.3,1);overflow:hidden}',
-'#tsChaos.is-hub .ck-np{opacity:1;transform:translate(-50%,-50%) scale(1);animation:tsChaosPulse 2.8s ease-in-out infinite}',
-'#tsChaos.is-dishes .ck-np{opacity:1;transform:translate(-50%,-50%) scale(1);width:min(1180px,100%);animation:none}',
-'#tsChaos .ck-np__bar{display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid rgba(255,255,255,.08)}',
-'#tsChaos .ck-np__dot{width:11px;height:11px;border-radius:50%;background:var(--champ);box-shadow:0 0 16px 3px rgba(199,180,137,.6)}',
-'#tsChaos .ck-np__t{font-weight:700;font-size:.98rem}',
-'#tsChaos .ck-np__t b{color:var(--champ);font-weight:700}',
-'#tsChaos .ck-np__pill{margin-left:auto;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#05060b;background:var(--champ);padding:3px 9px;border-radius:9999px;font-weight:700}',
-'@keyframes tsChaosPulse{0%,100%{box-shadow:0 0 0 0 rgba(199,180,137,.28),0 30px 70px rgba(0,0,0,.6)}50%{box-shadow:0 0 40px 9px rgba(199,180,137,.13),0 30px 70px rgba(0,0,0,.6)}}',
-'#tsChaos .ck-np__rows{padding:16px 18px 20px;display:grid;gap:11px;transition:opacity .4s ease,max-height .6s ease,padding .6s ease}',
-'#tsChaos .ck-np__rowline{display:flex;align-items:center;gap:11px}',
-'#tsChaos .ck-np__rowline i{width:9px;height:9px;border-radius:50%;background:var(--green);flex:none}',
-'#tsChaos .ck-np__rowline span{height:8px;border-radius:4px;background:rgba(255,255,255,.14)}',
-'#tsChaos.is-dishes .ck-np__rows{opacity:0;max-height:0;padding:0 18px;overflow:hidden}',
-'#tsChaos .ck-np__dishes{display:flex;gap:clamp(6px,1vw,16px);justify-content:center;align-items:flex-end;padding:0 12px;max-height:0;opacity:0;overflow:hidden;transition:opacity .6s ease .1s,max-height .7s ease,padding .6s ease}',
-'#tsChaos.is-dishes .ck-np__dishes{opacity:1;max-height:380px;padding:14px 14px 20px}',
-'#tsChaos .ck-dish{margin:0;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s cubic-bezier(.16,1,.3,1)}',
-'#tsChaos.is-dishes .ck-dish{opacity:1;transform:none}',
-'#tsChaos.is-dishes .ck-dish:nth-child(1){transition-delay:.05s}#tsChaos.is-dishes .ck-dish:nth-child(2){transition-delay:.13s}#tsChaos.is-dishes .ck-dish:nth-child(3){transition-delay:.21s}#tsChaos.is-dishes .ck-dish:nth-child(4){transition-delay:.29s}#tsChaos.is-dishes .ck-dish:nth-child(5){transition-delay:.37s}#tsChaos.is-dishes .ck-dish:nth-child(6){transition-delay:.45s}',
-'#tsChaos .ck-dish__imgwrap{width:100%;border-radius:12px;overflow:hidden;position:relative;line-height:0}',
-'#tsChaos .ck-dish__imgwrap img{width:100%;height:auto;display:block}',
-'#tsChaos .ck-dish--bad .ck-dish__imgwrap{box-shadow:0 0 0 1px rgba(227,37,82,.5),0 0 26px rgba(227,37,82,.28)}',
-'#tsChaos .ck-dish--good .ck-dish__imgwrap{box-shadow:0 0 0 1px rgba(143,203,170,.45),0 0 22px rgba(143,203,170,.18)}',
-'#tsChaos .ck-dish__name{font-size:clamp(.62rem,1vw,.8rem);color:rgba(255,255,255,.8);margin:9px 0 5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}',
-'#tsChaos .ck-dish__badge{font-size:clamp(.8rem,1.5vw,1.15rem);font-weight:700;font-variant-numeric:tabular-nums;padding:3px 10px;border-radius:9999px}',
-'#tsChaos .ck-badge--bad{color:var(--red);background:rgba(227,37,82,.14)}',
-'#tsChaos .ck-badge--good{color:#062017;background:var(--green)}',
-'#tsChaos .ck-caption{max-width:720px;margin:clamp(22px,3vw,32px) auto 0;font-size:1.02rem;line-height:1.5;color:rgba(255,255,255,.84);min-height:3em;transition:opacity .35s ease}',
-'#tsChaos .ck-replay{margin-top:18px;padding:9px 20px;border-radius:9999px;cursor:pointer;background:var(--champ);color:#05060b;border:0;font-weight:600;font-size:.86rem}',
-'#tsChaos .ck-replay:hover{background:var(--champ-lite)}',
-'#tsChaos .ck-note{margin-top:9px;font-size:.72rem;color:rgba(255,255,255,.38)}',
-'@media(max-width:720px){#tsChaos .ck-np__dishes{flex-wrap:wrap}#tsChaos .ck-dish{flex:0 0 30%}#tsChaos .ck-stage{height:400px}}',
-'@media(prefers-reduced-motion:reduce){#tsChaos .ck-win,#tsChaos .ck-np{animation:none!important}}'
-    ].join('\n');
-    document.head.appendChild(s);
-  }
-
-  var WINS=''+
-  '<div class="ck-win ck-win--excel" style="left:0%;top:5%;width:216px;--r:-3deg"><div class="ck-win__bar"><i></i>Kalkulation.xlsx</div><div class="ck-win__body"><div class="ck-grid"><div class="ck-cell"></div><div class="ck-cell"></div><div class="ck-cell r"></div><div class="ck-cell"></div><div class="ck-cell"></div><div class="ck-cell r"></div><div class="ck-cell"></div><div class="ck-cell"></div><div class="ck-cell"></div><div class="ck-cell"></div><div class="ck-cell"></div><div class="ck-cell r"></div></div></div></div>'+
-  '<div class="ck-win ck-win--chat" style="left:21%;top:2%;width:210px;--r:2deg"><div class="ck-win__bar"><i></i>KI-Tool</div><div class="ck-win__body"><div class="ck-bub">Was kostet mein Gericht?</div><div class="ck-bub me">Bitte Daten angeben…</div><div class="ck-bub">???</div></div></div>'+
-  '<div class="ck-win ck-win--pass" style="left:43%;top:6%;width:198px;--r:-2deg"><div class="ck-win__bar"><i></i>Passwörter</div><div class="ck-win__body"><div class="ck-dots">••••••••</div><div class="ck-dots">••••••</div><div class="ck-dots">•••••••••</div></div></div>'+
-  '<div class="ck-win ck-win--cal" style="left:62%;top:3%;width:194px;--r:3deg"><div class="ck-win__bar"><i></i>Kalender</div><div class="ck-win__body"><div class="ck-grid"><div class="ck-cell"></div><div class="ck-cell"></div><div class="ck-cell"></div><div class="ck-cell"></div><div class="ck-cell"></div><div class="ck-cell r"></div><div class="ck-cell"></div><div class="ck-cell"></div></div></div></div>'+
-  '<div class="ck-win ck-win--note" style="left:81%;top:7%;width:176px;--r:-4deg"><div class="ck-win__bar">Notizzettel</div><div class="ck-win__body"><div class="ck-row" style="width:85%"></div><div class="ck-row" style="width:65%"></div><div class="ck-row" style="width:75%"></div></div></div>'+
-  '<div class="ck-win ck-win--word" style="left:6%;top:48%;width:206px;--r:4deg"><div class="ck-win__bar"><i></i>Rezepte.docx</div><div class="ck-win__body"><div class="ck-row" style="width:90%"></div><div class="ck-row" style="width:70%"></div><div class="ck-row" style="width:82%"></div><div class="ck-row" style="width:55%"></div></div></div>'+
-  '<div class="ck-win ck-win--excel" style="left:27%;top:52%;width:198px;--r:-3deg"><div class="ck-win__bar"><i></i>Preise_2024.xlsx</div><div class="ck-win__body"><div class="ck-grid"><div class="ck-cell"></div><div class="ck-cell r"></div><div class="ck-cell"></div><div class="ck-cell"></div><div class="ck-cell r"></div><div class="ck-cell"></div><div class="ck-cell"></div><div class="ck-cell r"></div></div></div></div>'+
-  '<div class="ck-win ck-win--mail" style="left:48%;top:49%;width:202px;--r:2deg"><div class="ck-win__bar"><i></i>Posteingang</div><div class="ck-win__body"><div class="ck-row" style="width:78%"></div><div class="ck-row" style="width:88%"></div><div class="ck-row" style="width:64%"></div></div></div>'+
-  '<div class="ck-win ck-win--note" style="left:68%;top:53%;width:180px;--r:-5deg"><div class="ck-win__bar">Zettel</div><div class="ck-win__body"><div class="ck-row" style="width:70%"></div><div class="ck-row" style="width:88%"></div></div></div>'+
-  '<div class="ck-win ck-win--head" style="left:86%;top:47%;width:146px;height:118px;--r:4deg"><div style="text-align:center"><svg class="ck-head__glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"></path></svg><div class="ck-head__q">Wissen im Kopf</div></div></div>';
-
-  function dishesHtml(){
-    return DISHES.map(function(d){
-      return '<figure class="ck-dish ck-dish--'+d.k+'">'+
-        '<div class="ck-dish__imgwrap"><img src="'+IMG(d.slug)+'" alt="'+d.name+'" loading="lazy"></div>'+
-        '<figcaption class="ck-dish__name">'+d.name+'</figcaption>'+
-        '<div class="ck-dish__badge ck-badge--'+d.k+'" data-target="'+d.v+'">0,00 €</div>'+
-      '</figure>';
-    }).join('');
-  }
-
-  function build(){
-    var root=document.createElement('section');
-    root.id='tsChaos'; root.className='ck-stage-wrap';
-    root.innerHTML=''+
-      '<div class="ck-inner">'+
-        '<div class="ck-eyebrow">Warum ein System</div>'+
-        '<h2 class="ck-title">Vom Chaos zur <span>Klarheit.</span></h2>'+
-        '<div class="ck-stage">'+
-          WINS+
-          '<div class="ck-np">'+
-            '<div class="ck-np__bar"><span class="ck-np__dot"></span><span class="ck-np__t">Notion <b>+ Claude Code</b></span><span class="ck-np__pill">Ein Ort</span></div>'+
-            '<div class="ck-np__rows"><div class="ck-np__rowline"><i></i><span style="width:70%"></span></div><div class="ck-np__rowline"><i></i><span style="width:84%"></span></div><div class="ck-np__rowline"><i></i><span style="width:60%"></span></div><div class="ck-np__rowline"><i></i><span style="width:76%"></span></div></div>'+
-            '<div class="ck-np__dishes">'+dishesHtml()+'</div>'+
-          '</div>'+
-        '</div>'+
-        '<p class="ck-caption">Heute: verstreut in Excel, Word, mehreren Tools — Wissen in Köpfen, Dokumente und Passwörter überall.</p>'+
-        '<button class="ck-replay" type="button">↻ Nochmal abspielen</button>'+
-        '<p class="ck-note">Beispielwerte zur Illustration.</p>'+
-      '</div>';
-    return root;
-  }
-
-  var CAPS={
-    chaos:'Heute: verstreut in Excel, Word, mehreren Tools — Wissen in Köpfen, Dokumente und Passwörter überall.',
-    hub:'Notion mit Claude Code zieht alles an einen Ort. Ein System, statt zehn Inseln.',
-    dishes:'Und im Backoffice siehst du es für jedes Gericht: welches trägt sich — und welches kostet dich bei jedem Verkauf Geld?'
-  };
-  function fmt(v){ return (v<0?'−':'+')+Math.abs(v).toFixed(2).replace('.',',')+' €'; }
-  function count(el){
-    var t=parseFloat(el.getAttribute('data-target')),s=null,d=900,done=false;
-    function step(ts){ if(done)return; if(!s)s=ts; var p=Math.min(1,(ts-s)/d),e=1-Math.pow(1-p,3);
-      el.textContent=fmt(t*e); if(p<1)requestAnimationFrame(step); else { done=true; el.textContent=fmt(t); } }
-    requestAnimationFrame(step);
-    // Garantie-Endwert, falls rAF gedrosselt wird (Hintergrund-Tab) — Endzustand nie animationsabhängig.
-    setTimeout(function(){ done=true; el.textContent=fmt(t); }, d+150);
-  }
-
-  function play(root){
-    var stage=root.querySelector('.ck-stage'), cap=root.querySelector('.ck-caption');
-    function set(c){ stage.parentNode; root.className='ck-stage-wrap '+c; }
-    function say(k){ cap.style.opacity=0; setTimeout(function(){ cap.textContent=CAPS[k]; cap.style.opacity=1; },200); }
-    function badges(){ root.querySelectorAll('.ck-dish__badge').forEach(function(el,i){ setTimeout(function(){ count(el); },250+i*90); }); }
-    if(reduce){
-      root.className='ck-stage-wrap is-dishes'; cap.textContent=CAPS.dishes;
-      root.querySelectorAll('.ck-dish__badge').forEach(function(el){ el.textContent=fmt(parseFloat(el.getAttribute('data-target'))); });
-      return;
-    }
-    root.className='ck-stage-wrap is-chaos'; say('chaos');
-    var tm=[];
-    tm.push(setTimeout(function(){ root.className='ck-stage-wrap is-converge'; },3200));
-    tm.push(setTimeout(function(){ root.className='ck-stage-wrap is-hub'; say('hub'); },4200));
-    tm.push(setTimeout(function(){ root.className='ck-stage-wrap is-dishes'; say('dishes'); badges(); },7200));
-    root._tm=tm;
-  }
-
-  function inView(el){ var r=el.getBoundingClientRect(); return r.top<(innerHeight*0.85)&&r.bottom>0; }
-
-  function arm(root){
-    var played=false;
-    function go(){ if(played)return; played=true; play(root); }
-    root.querySelector('.ck-replay').addEventListener('click',function(){
-      if(root._tm)root._tm.forEach(clearTimeout);
-      played=false; go();
-    });
-    if('IntersectionObserver' in window){
-      var io=new IntersectionObserver(function(ev){ if(ev[0].isIntersecting){ go(); io.disconnect(); } },{threshold:.3});
-      io.observe(root);
-    }
-    if(inView(root)) go();
-    var poll=setInterval(function(){ if(!document.body.contains(root)){ clearInterval(poll); return; } if(inView(root)){ go(); clearInterval(poll); } },250);
-    setTimeout(function(){ clearInterval(poll); },20000);
-  }
-
-  function anchor(){
-    // Phrase-first: Absatz "...ein gut laufender Salat den Schnitt rettet." -> danach einsetzen.
-    var scope=document.querySelector('.page__mehrwert-zielbild')||document;
-    var ps=scope.querySelectorAll('.notion-text, p');
-    var after=null, before=null;
-    for(var i=0;i<ps.length;i++){
-      var t=(ps[i].textContent||'');
-      if(!after && /gut laufender Salat den Schnitt rettet/.test(t)) after=ps[i];
-      if(!before && /^Genau das ändern wir/.test(t.trim())) before=ps[i];
-    }
-    return {after:after, before:before};
-  }
-
-  function mount(){
-    if(!on()){ var ex=document.getElementById('tsChaos'); if(ex)ex.remove(); return; }
-    if(document.getElementById('tsChaos')) return;
-    var a=anchor();
-    var target=a.after||a.before; if(!target) return;
-    css();
-    var root=build();
-    if(a.after){ target.parentNode.insertBefore(root, target.nextSibling); }
-    else { target.parentNode.insertBefore(root, target); }
-    arm(root);
-  }
-
-  mount();
-  document.addEventListener('DOMContentLoaded', mount);
-  var _mt=null;
-  new MutationObserver(function(){ if(_mt)return; _mt=setTimeout(function(){ _mt=null; mount(); },300); })
-    .observe(document.documentElement,{childList:true,subtree:true});
 })();
