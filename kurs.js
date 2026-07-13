@@ -5297,7 +5297,7 @@
   function nf(v,dec){ return (v).toFixed(dec).replace('.',','); }
 
   var CSS=`
-  #tsd5{width:min(1000px,95vw);margin:26px auto 62px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;opacity:0;transform:translateY(20px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+  #tsd5{width:min(1180px,94vw);margin:26px auto 62px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;opacity:0;transform:translateY(20px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
   #tsd5.in{opacity:1;transform:none}
   /* Header — Hero-Komposition (Pesto-Glas + Logo + Titel im unteren Bilddrittel) */
   #tsd5 .d5-head{position:relative;text-align:center;margin:0 0 34px;isolation:isolate}
@@ -5316,7 +5316,7 @@
   /* Rechte Karte Überschrift — zentriert, weiss */
   #tsd5 .d5-rhead{text-align:center;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:18px;font-weight:600;color:#fff;letter-spacing:-.01em;margin:0 0 20px}
   /* Bausteine-Zeilen mit freigestelltem Produktbild (viel größer) */
-  #tsd5 .d5-item{display:grid;grid-template-columns:104px 1fr auto;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.055);opacity:0;transform:translateX(-14px);transition:opacity .5s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
+  #tsd5 .d5-item{display:grid;grid-template-columns:104px 1fr auto;align-items:center;gap:16px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.055);opacity:0;transform:translateX(-14px);transition:opacity .5s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
   #tsd5 .d5-item:first-child{padding-top:2px}
   #tsd5 .d5-item:last-child{border-bottom:0}
   #tsd5.in .d5-item{opacity:1;transform:none}
@@ -5332,8 +5332,8 @@
   #tsd5 .d5-sum{border-radius:16px;padding:16px 14px;background:linear-gradient(180deg,rgba(199,180,137,.1),rgba(199,180,137,.04));border:1px solid rgba(199,180,137,.24);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);text-align:center}
   #tsd5 .d5-sum .sl{font-size:10px;letter-spacing:.7px;text-transform:uppercase;color:rgba(255,255,255,.55);margin:0 0 7px}
   #tsd5 .d5-sum .sv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:26px;font-weight:700;color:#c7b489;letter-spacing:-.01em;line-height:1}
-  /* Rechte Karte — Pro Portion */
-  #tsd5 .d5-right{background:linear-gradient(180deg,rgba(199,180,137,.085),rgba(199,180,137,.03));border-color:rgba(199,180,137,.38)}
+  /* Rechte Karte — Pro Portion (füllt die volle Kartenhöhe, kein leerer Boden) */
+  #tsd5 .d5-right{background:linear-gradient(180deg,rgba(199,180,137,.085),rgba(199,180,137,.03));border-color:rgba(199,180,137,.38);display:flex;flex-direction:column;justify-content:space-between}
   #tsd5 .d5-ctrl{margin:2px 0 22px}
   #tsd5 .d5-ctrl .cl{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 13px}
   #tsd5 .d5-ctrl .cl .lab{font-size:13px;color:rgba(255,255,255,.7)}
