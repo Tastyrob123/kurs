@@ -4537,7 +4537,7 @@
   function step(n,label){ return '<div class="tsc-step" data-step="'+n+'"><span class="n"><span class="num">'+n+'</span>'+CK+'</span>'+label+'</div>'; }
   function txtPanel(t){
     var body=(t.body||[]).map(function(p){return '<p class="tsx-p">'+p+'</p>';}).join('');
-    return '<div class="tsx"><div class="tsx-eye">'+t.eyebrow+'</div><h3 class="tsx-h">'+t.h+'</h3>'+body+'<div class="tsx-ph">Platzhalter · Text folgt von Robert</div></div>';
+    return '<div class="tsx">'+(t.eyebrow?'<div class="tsx-eye">'+t.eyebrow+'</div>':'')+'<h3 class="tsx-h">'+t.h+'</h3>'+body+'</div>';
   }
   /* Block-A-Linkstext: Roberts 3 Intro-Absätze (aus Notion übernommen, im Modul gepflegt) */
   var PARAS_A=[
@@ -4619,8 +4619,8 @@
   var BLOCKS=[
     { key:'A', mode:'textleft', marker:'groesse-animation', anim:animA, play:function(el){playA(el);}, paras:PARAS_A },
     { key:'B', mode:'split', marker:'vorlage-animation', anim:animB, play:function(el){playB(el);},
-      txt:{ eyebrow:'Einmal einrichten', h:'Jede Zutat als <span>Galerie mit Cover</span>.',
-        body:['Platzhalter — hier kommt dein Erklärtext rechts neben die Animation.','Eine Vorlage mit voreingestellter Galerie- und Coveransicht zeigt dir in jeder Zutat sofort ihre Größeneinheiten — als Standard gesetzt, gilt sie automatisch für jede neue Seite.'] } }
+      txt:{ h:'Jeder Baustein in der <span>Hauptzutat</span>.',
+        body:['Erstelle in jeder Hauptzutat eine Übersicht, in der automatisch die Subzutaten (bspw. 80g) angezeigt werden.','Öffne dafür oben rechts Neu → Neue Vorlage → / Neue Datenbankansicht → DB IV : Zutaten verknüpfen und Filter „Name" = Name der Zutat → Cover Ansicht → Als Standard festlegen.'] } }
   ];
 
   function buildBlock(cfg){
