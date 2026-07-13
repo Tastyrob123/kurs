@@ -5956,14 +5956,16 @@
 
 /* ---- */
 
-/* Sidebar-Modul-Titel: die Zahl in "Modul N" in unser Rot wrappen (Wort weiß / Zahl rot).
-   Farben/Font kommen aus kurs.css; hier nur der .ts-modul-num-Span. Site-weit,
-   selbstheilend via debounced Observer (Muster wie ts-m2-gold).
+/* Sidebar-Styling-Spans (Farben/Font kommen aus kurs.css, hier nur die Spans):
+   1. Modul-Titel: die Zahl in "Modul N" in unser Rot (.ts-modul-num) — Wort weiß / Zahl rot.
+   2. Lektionen: der Name NACH "//" beige (.ts-lektion-name) — "Lektion 2.1 //" bleibt weiß.
+   Site-weit, selbstheilend via debounced Observer (Muster wie ts-m2-gold).
    HINWEIS: bei Parallel-Arbeit an kurs.js darauf achten, dass dieser Block am Dateiende erhalten bleibt. */
 (function(){
   if(window.__tsSbNum) return; window.__tsSbNum = true;
 
-  function wrapNums(){
+  /* Modul-Header: erste Ziffernfolge rot wrappen */
+  function wrapModulNum(){
     document.querySelectorAll('.super-navigation-menu__list-header .super-navigation-menu__item-title').forEach(function(el){
       if(el.querySelector('.ts-modul-num')) return;
       var w=document.createTreeWalker(el, NodeFilter.SHOW_TEXT), n;
@@ -5979,9 +5981,29 @@
     });
   }
 
-  wrapNums();
-  document.addEventListener('DOMContentLoaded', wrapNums);
+  /* Lektionen (Leaf-Links, NICHT in einem list-header): alles nach "//" beige wrappen */
+  function wrapLektionName(){
+    document.querySelectorAll('.super-navigation-menu__item-title').forEach(function(el){
+      if(el.closest('.super-navigation-menu__list-header')) return;
+      if(el.querySelector('.ts-lektion-name')) return;
+      var w=document.createTreeWalker(el, NodeFilter.SHOW_TEXT), n;
+      while(n=w.nextNode()){
+        var i=n.nodeValue.indexOf('//');
+        if(i>-1){
+          var after=n.splitText(i+2);
+          var span=document.createElement('span'); span.className='ts-lektion-name'; span.textContent=after.nodeValue;
+          after.parentNode.replaceChild(span, after);
+          break;
+        }
+      }
+    });
+  }
+
+  function apply(){ wrapModulNum(); wrapLektionName(); }
+
+  apply();
+  document.addEventListener('DOMContentLoaded', apply);
   var _t=null;
-  new MutationObserver(function(){ if(_t) return; _t=setTimeout(function(){ _t=null; wrapNums(); },200); })
+  new MutationObserver(function(){ if(_t) return; _t=setTimeout(function(){ _t=null; apply(); },200); })
     .observe(document.documentElement,{childList:true,subtree:true});
 })();

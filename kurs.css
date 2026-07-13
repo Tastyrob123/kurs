@@ -573,6 +573,8 @@ body:has(#sb-toggle-cb:checked) #sb-toggle {
 }
 /* Nur die Zahl im Modul-Header in unserem Rot */
 .super-navigation-menu__list-header .ts-modul-num { color: #e32552 !important; }
+/* Lektions-Name (Teil nach "//") beige — "Lektion 2.1 //" bleibt weiß (Span aus kurs.js) */
+.super-navigation-menu__item-title .ts-lektion-name { color: #c7b489 !important; }
 
 /* Phase-Karten: Überschrift + Text mittig in der Kachel */
 .notion-tabs__panel > .notion-heading,
