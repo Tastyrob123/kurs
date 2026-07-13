@@ -5950,7 +5950,7 @@
   /* High-End Karten: sanfter Verlauf, Gold-Hairline, Tiefe + Glas-Kante oben */
   #tsd5 .d5-card{position:relative;border-radius:22px;padding:28px 26px 24px 20px;background:linear-gradient(180deg,rgba(255,255,255,.052),rgba(255,255,255,.022));border:1px solid rgba(199,180,137,.24);box-shadow:0 30px 80px -28px rgba(0,0,0,.72),inset 0 1px 0 rgba(255,255,255,.07);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
   /* Rechte Karte Überschrift — zentriert, weiss */
-  #tsd5 .d5-rhead{text-align:center;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:27px;font-weight:600;color:#fff;letter-spacing:-.01em;margin:6px 0 16px}
+  #tsd5 .d5-rhead{text-align:center;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:27px;font-weight:600;color:#fff;letter-spacing:-.01em;margin:2px 0 22px}
   /* Bausteine-Zeilen mit freigestelltem Produktbild (viel größer) */
   #tsd5 .d5-item{display:grid;grid-template-columns:108px 1fr auto;align-items:center;gap:18px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.055);opacity:0;transform:translateX(-14px);transition:opacity .5s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
   #tsd5 .d5-item:first-child{padding-top:2px}
@@ -5966,7 +5966,7 @@
   /* Summen-Fuß — zentriert, edel */
   #tsd5 .d5-sums{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
   #tsd5 .d5-sum{border-radius:16px;padding:16px 14px;background:linear-gradient(180deg,rgba(199,180,137,.1),rgba(199,180,137,.04));border:1px solid rgba(199,180,137,.24);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);text-align:center}
-  #tsd5 .d5-sum .sl{font-size:11px;letter-spacing:.7px;text-transform:uppercase;color:rgba(255,255,255,.55);margin:0 0 8px}
+  #tsd5 .d5-sum .sl{font-size:12px;letter-spacing:.01em;color:rgba(255,255,255,.55);margin:0 0 8px}
   #tsd5 .d5-sum .sv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:30px;font-weight:700;color:#c7b489;letter-spacing:-.01em;line-height:1}
   /* Rechte Karte — Pro Portion (füllt die volle Kartenhöhe, kein leerer Boden) */
   #tsd5 .d5-right{background:linear-gradient(180deg,rgba(199,180,137,.085),rgba(199,180,137,.03));border-color:rgba(199,180,137,.38);display:flex;flex-direction:column;justify-content:space-between}
@@ -5985,7 +5985,7 @@
   #tsd5 .d5-out{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0}
   #tsd5 .d5-tile{border-radius:16px;padding:17px 14px;background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);text-align:center;display:flex;flex-direction:column;justify-content:center}
   #tsd5 .d5-tile.hot{background:linear-gradient(180deg,rgba(199,180,137,.16),rgba(199,180,137,.05));border-color:rgba(199,180,137,.5);padding-top:22px;padding-bottom:22px}
-  #tsd5 .d5-tile .tl{font-size:10px;letter-spacing:.7px;text-transform:uppercase;color:rgba(255,255,255,.5);margin:0 0 8px}
+  #tsd5 .d5-tile .tl{font-size:12px;letter-spacing:.01em;color:rgba(255,255,255,.55);margin:0 0 8px}
   #tsd5 .d5-tile .tv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:clamp(1.6rem,3.4vw,2.15rem);font-weight:700;letter-spacing:-.02em;color:#fff;line-height:1}
   #tsd5 .d5-tile.hot .tv{color:#c7b489;font-size:clamp(2.4rem,5vw,3.05rem)}
   #tsd5 .d5-tile .tu{font-size:12px;color:rgba(255,255,255,.45);margin-top:6px}
@@ -5997,18 +5997,18 @@
   #tsd5 .d5-step:active{transform:scale(.94)}
   #tsd5 .d5-step:disabled{opacity:.28;cursor:not-allowed;transform:none;box-shadow:none}
   /* Nährwerte / Portion — deutlich mehr Abstand zu den Feldern darunter */
-  #tsd5 .d5-seclbl{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:15px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#fff;text-align:center;margin:30px 0 22px}
+  #tsd5 .d5-seclbl{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:16px;font-weight:600;letter-spacing:.005em;color:#fff;text-align:center;margin:0 0 20px}
   #tsd5 .d5-nut{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0}
   #tsd5 .d5-ncell{border-radius:13px;padding:16px 6px;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.05);text-align:center}
   #tsd5 .d5-ncell .nv{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:23px;font-weight:700;color:#fff;line-height:1}
   #tsd5 .d5-ncell .nu{font-size:11px;color:rgba(255,255,255,.45);margin-top:7px;letter-spacing:.3px}
   /* Allergene — Label zentriert weiss, deutlich mehr Abstand zu den Chips */
-  #tsd5 .d5-aller{text-align:center;margin:28px 0 26px}
-  #tsd5 .d5-aller .al-l{display:block;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:15px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#fff;margin:0 0 16px}
+  #tsd5 .d5-aller{text-align:center;margin:0}
+  #tsd5 .d5-aller .al-l{display:block;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:16px;font-weight:600;letter-spacing:.005em;color:#fff;margin:0 0 16px}
   #tsd5 .d5-allchips{display:flex;justify-content:center;flex-wrap:wrap;gap:11px}
   #tsd5 .d5-chip{font-size:15px;color:#efe3c4;background:linear-gradient(180deg,rgba(199,180,137,.16),rgba(199,180,137,.07));border:1px solid rgba(199,180,137,.32);border-radius:999px;padding:8px 18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
   /* Formel — freistehend, weiss, größer (Gold-Betonungen bleiben) */
-  #tsd5 .d5-formula{font-size:14.5px;color:#fff;text-align:center;margin:26px 0 0;padding:20px 4px 0;border-top:1px solid rgba(255,255,255,.09);line-height:1.6}
+  #tsd5 .d5-formula{font-size:14.5px;color:#fff;text-align:center;margin:0;line-height:1.6}
   #tsd5 .d5-formula b{color:#c7b489;font-weight:600}
   #tsd5 .d5-foot{text-align:center;margin:48px auto 0;max-width:720px}
   #tsd5 .d5-foot .fm{font-size:20px;line-height:1.5;color:#fff;margin:0 0 12px}
@@ -6061,22 +6061,26 @@
           '</div>'+
         '</div>'+
         '<div class="d5-card d5-right">'+
-          '<p class="d5-rhead">Pro Portion</p>'+
-          '<div class="d5-ctrl">'+
-            '<div class="cl"><span class="lab">Portionsgröße</span><span class="val"><span class="pval">'+DEFAULT_PORTION+'</span><small> g</small></span></div>'+
-            '<input type="range" class="d5-range" min="'+MIN_P+'" max="'+MAX_P+'" step="1" value="'+DEFAULT_PORTION+'">'+
-            '<div class="d5-scale"><span>'+MIN_P+' g</span><span>'+MAX_P+' g</span></div>'+
+          '<div class="d5-top">'+
+            '<p class="d5-rhead">Pro Portion</p>'+
+            '<div class="d5-ctrl">'+
+              '<div class="cl"><span class="lab">Portionsgröße</span><span class="val"><span class="pval">'+DEFAULT_PORTION+'</span><small> g</small></span></div>'+
+              '<input type="range" class="d5-range" min="'+MIN_P+'" max="'+MAX_P+'" step="1" value="'+DEFAULT_PORTION+'">'+
+              '<div class="d5-scale"><span>'+MIN_P+' g</span><span>'+MAX_P+' g</span></div>'+
+            '</div>'+
+            '<div class="d5-out">'+
+              '<div class="d5-tile d5-adj"><p class="tl">Anzahl Portionen</p><div class="d5-adjrow"><button type="button" class="d5-step" data-step="-1" aria-label="Weniger Portionen">&#8722;</button><div class="tv" data-out="portionen">–</div><button type="button" class="d5-step" data-step="1" aria-label="Mehr Portionen">+</button></div><div class="tu">Portionen</div></div>'+
+              '<div class="d5-tile hot"><p class="tl">Preis / Portion</p><div class="tv" data-out="preis">–</div><div class="tu">pro Portion</div></div>'+
+            '</div>'+
           '</div>'+
-          '<div class="d5-out">'+
-            '<div class="d5-tile d5-adj"><p class="tl">Anzahl Portionen</p><div class="d5-adjrow"><button type="button" class="d5-step" data-step="-1" aria-label="Weniger Portionen">&#8722;</button><div class="tv" data-out="portionen">–</div><button type="button" class="d5-step" data-step="1" aria-label="Mehr Portionen">+</button></div><div class="tu">Portionen</div></div>'+
-            '<div class="d5-tile hot"><p class="tl">Preis / Portion</p><div class="tv" data-out="preis">–</div><div class="tu">pro Portion</div></div>'+
-          '</div>'+
-          '<p class="d5-seclbl">Nährwerte / Portion</p>'+
-          '<div class="d5-nut">'+
-            '<div class="d5-ncell"><div class="nv" data-nut="kcal">–</div><div class="nu">kcal</div></div>'+
-            '<div class="d5-ncell"><div class="nv" data-nut="fett">–</div><div class="nu">Fett</div></div>'+
-            '<div class="d5-ncell"><div class="nv" data-nut="kh">–</div><div class="nu">Kohlenh.</div></div>'+
-            '<div class="d5-ncell"><div class="nv" data-nut="protein">–</div><div class="nu">Protein</div></div>'+
+          '<div class="d5-nutblock">'+
+            '<p class="d5-seclbl">Nährwerte / Portion</p>'+
+            '<div class="d5-nut">'+
+              '<div class="d5-ncell"><div class="nv" data-nut="kcal">–</div><div class="nu">kcal</div></div>'+
+              '<div class="d5-ncell"><div class="nv" data-nut="fett">–</div><div class="nu">Fett</div></div>'+
+              '<div class="d5-ncell"><div class="nv" data-nut="kh">–</div><div class="nu">Kohlenh.</div></div>'+
+              '<div class="d5-ncell"><div class="nv" data-nut="protein">–</div><div class="nu">Protein</div></div>'+
+            '</div>'+
           '</div>'+
           '<div class="d5-aller"><span class="al-l">Allergene</span><div class="d5-allchips">'+allerHTML+'</div></div>'+
           '<p class="d5-formula"><b>Gesamtmenge ÷ Portionsgröße</b> = Portionen &nbsp;·&nbsp; <b>Kosten &amp; Nährwerte</b> laufen pro Portion mit.</p>'+
