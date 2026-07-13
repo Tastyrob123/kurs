@@ -4287,7 +4287,7 @@
         { type:'later', name:'Hauptkontakt Lieferant', target:'Formel · Visitenkarte', flag:'später verknüpfen',
           desc:'Formel „Hauptkontakt Visitenkarte" — baust du selbst.',
           img:'https://tastyrob123.github.io/kurs/img/flow/lieferantenvertrag.jpg',
-          content:'<p class="notion-text">→ <b>Eigenschaft</b> : Formel</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Hauptkontakt Visitenkarte</p><p class="notion-text">&nbsp;</p><p class="notion-text">Eine Formel, die den Hauptansprechpartner deines Lieferanten als Visitenkarte zeigt (Name, Titel, Telefon, Mail). Die vollständige Formel baust du im Schritt „Hauptkontakt Visitenkarte" der Lieferpartner-Lektion.</p>' },
+          content:'<p class="notion-text">→ <b>Eigenschaft</b> : Formel</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Hauptkontakt Visitenkarte</p><p class="notion-text">&nbsp;</p><p class="notion-text">Trage diese Formel ein:</p><div class="notion-code" style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.7rem;line-height:1.55">prop("Lieferpartner")<br>&nbsp;&nbsp;.map(current.prop("Ansprechpartner Übersicht")<br>&nbsp;&nbsp;&nbsp;&nbsp;/* Nur Hauptansprechpartner filtern */<br>&nbsp;&nbsp;&nbsp;&nbsp;.filter(current.prop("Hauptansprechpartner") == "X")<br>&nbsp;&nbsp;&nbsp;&nbsp;/* Kontaktkarte für jeden Ansprechpartner aufbauen */<br>&nbsp;&nbsp;&nbsp;&nbsp;.map(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"👤 " + current.prop("Name") +<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(not empty(current.prop("Job / Title")), "\\n💼 " + current.prop("Job / Title"), "") +<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(not empty(current.prop("Telefon")), "\\n📞 " + current.prop("Telefon"), "") +<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(not empty(current.prop("E-Mail")), "\\n✉️ " + current.prop("E-Mail"), "")<br>&nbsp;&nbsp;&nbsp;&nbsp;)<br>&nbsp;&nbsp;)<br>&nbsp;&nbsp;.flat()<br>&nbsp;&nbsp;/* Mehrere Karten mit Leerzeile trennen */<br>&nbsp;&nbsp;.join("\\n\\n")</div><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt den Hauptansprechpartner deines Lieferanten als Visitenkarte — Name, Titel, Telefon, Mail.</p>' },
         { type:'later', name:'Ansprechpartner Lieferant', target:'Rollup · über Lieferant', flag:'später verknüpfen',
           desc:'Rollup über die Lieferant-Verknüpfung — baust du selbst.',
           img:'https://tastyrob123.github.io/kurs/img/flow/ansprechpartner.jpg',
@@ -4296,10 +4296,10 @@
           desc:'Spiegelspalte der Zutaten-Verknüpfung — erscheint von allein.',
           img:'https://tastyrob123.github.io/kurs/img/zutaten/tomate.jpg',
           content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> selbst an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch, sobald du in <b>DB IV : Zutaten</b> die Verknüpfung „Inventar Produkt" mit <b>wechselseitiger Verbindung</b> zur Inventurliste anlegst.</p>' },
-        { type:'ghost', name:'Packaging / Co.', target:'Verknüpfung · Packaging', flag:'erscheint automatisch',
-          desc:'Spiegelspalte der Packaging-Verknüpfung — erscheint von allein.',
+        { type:'ghost', name:'Packaging / Co.', target:'Selbst-Verknüpfung · Inventory', flag:'erscheint automatisch',
+          desc:'Selbst-Verknüpfung innerhalb der Inventurliste — erscheint von allein.',
           img:'https://tastyrob123.github.io/kurs/img/packaging/kuchenbox.jpg',
-          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> selbst an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch über die <b>wechselseitige Verbindung</b> der Packaging-Tabelle.</p>' }
+          content:'<p class="notion-text"><b>Packaging</b> ist keine eigene Tabelle — es ist eine <b>gefilterte Galerie-Ansicht deiner Inventurliste</b> (Quelle: TB Inventory), gefiltert nach Kategorie.</p><p class="notion-text">&nbsp;</p><p class="notion-text">„Packaging / Co." ist eine <b>wechselseitige Verknüpfung innerhalb derselben Tabelle</b> — du verknüpfst ein Produkt mit dem passenden Verpackungs-Artikel. Die Gegenspalte erscheint hier automatisch, sobald du die Verbindung anlegst.</p>' }
       ],
       summary:'Wareneinsatz', chain:true },
     { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_lieferanten',
