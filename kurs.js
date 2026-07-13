@@ -5738,7 +5738,7 @@
   #tsd5 .d5-herotext{position:relative;z-index:2;margin-top:-33%;padding:0 8px 4px}
   #tsd5 .d5-logo{display:block;width:46px;height:auto;margin:0 auto 12px;filter:drop-shadow(0 2px 8px rgba(0,0,0,.95)) drop-shadow(0 6px 24px rgba(0,0,0,.85));pointer-events:none;user-select:none}
   #tsd5 .d5-title{margin:0;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;font-weight:600;line-height:1.03;letter-spacing:-.02em;font-size:clamp(2.1rem,5.4vw,3.4rem);text-shadow:0 2px 4px rgba(0,0,0,.85),0 4px 12px rgba(0,0,0,.5)}
-  #tsd5 .d5-title .basil{color:#46e05a}
+  #tsd5 .d5-title .basil{color:#7c7200}
   #tsd5 .d5-title .pesto{color:#fff}
   #tsd5 .d5-sub{max-width:660px;margin:20px auto 0;font-size:15.5px;line-height:1.62;color:#fff}
   #tsd5 .d5-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:stretch}
