@@ -2906,6 +2906,175 @@
 /* ---- */
 
 /* ============================================================
+   zutatenliste — #tszein  "Empfehlung zur Einrichtung"
+   Self-contained Klon des Empfehlungskastens (#tsmiss/#tslpemp)
+   für /zutatenliste, direkt UNTER Block B (#tscb-B). Linke Spalte
+   = Notion-Ansichts-Liste "DB IV : Zutaten" (4 Einrichtungs-Stufen,
+   zyklisches Glas-Highlight), rechte Spalte = Lineal-Heading
+   "Empfehlung zur Einrichtung" (letztes Wort beige) + Intro +
+   4er-Schrittliste. Goldene Verbindungslinie vom aktiven linken
+   Row zum zugehörigen Schritt (1:1, Muster #tsmiss). Glas-Sprache
+   identisch (--g:199,180,137, Perspektiv-Entrance, Pointer-Tilt,
+   Heartbeat, Gold-Top-Line). Text hartkodiert (Robert-Vorgabe,
+   verbatim). Anker: nach Section #tscb-B, React-sicher (re-mount).
+   ============================================================ */
+(function(){
+  if(window.__tszein) return; window.__tszein=true;
+  var SLUG=/\/zutatenliste\/?$/;
+  var ICON='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1.5" y="2.5" width="13" height="11" rx="1.5"/><path d="M1.5 6.5h13M6.5 6.5v7"/></svg>';
+  var ROWS=['Inventarprodukt anlegen','Zutat = 1000 g','Verknüpfen','Untereinheit 80 g'];
+  var STEPS=[
+    'Inventarprodukte anlegen',
+    '(Fast) jedes Inventarprodukt = Zutat mit 1000 ml / g',
+    'Inventarprodukt ↔ Zutat verknüpfen',
+    'Untereinheiten der Zutaten (bspw. 80g) anlegen durch duplizieren'
+  ];
+  var INTRO='Um deine Zutaten-Liste das erste Mal in Betrieb zu nehmen, empfehle ich folgendes:';
+  var CSS=`
+  #tszein{--g:199,180,137;--rx:0deg;--ry:0deg;position:relative;display:grid;grid-template-columns:minmax(280px,1fr) 1.5fr;gap:clamp(28px,4.5vw,56px);align-items:center;width:min(1000px,95vw);margin:34px auto 34px;padding:clamp(26px,4vw,44px) clamp(24px,4.5vw,50px);border-radius:20px;background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015) 55%,rgba(255,255,255,0));border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85),0 0 14px rgba(var(--g),.08);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff;transform-style:preserve-3d;will-change:transform;opacity:0;transform:perspective(1100px) rotateX(9deg) translateY(34px) scale(.97);transition:opacity .8s ease,transform .9s cubic-bezier(.16,1,.3,1)}
+  #tszein,#tszein *{box-sizing:border-box}
+  #tszein.in{opacity:1;transform:perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry))}
+  #tszein.live{transition:transform .16s ease-out,box-shadow .5s ease,border-color .4s ease}
+  #tszein.live:hover{border-color:rgba(var(--g),.4);animation:tszein-heartbeat 2.6s cubic-bezier(.4,0,.3,1) infinite}
+  #tszein::before{content:"";position:absolute;inset:0;border-radius:20px;background:radial-gradient(560px circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,.055),transparent 46%);opacity:0;transition:opacity .5s ease;pointer-events:none}
+  #tszein.live:hover::before{opacity:1}
+  #tszein::after{content:"";position:absolute;top:0;left:9%;right:9%;height:1px;background:linear-gradient(90deg,transparent,rgba(var(--g),.4),transparent);pointer-events:none}
+  #tszein .tsz-link{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:0;opacity:1;transition:opacity .35s ease}
+  #tszein .tsz-link.off{opacity:0}
+  #tszein .tsz-link path{fill:none;stroke:rgba(var(--g),.55);stroke-width:1.5;filter:drop-shadow(0 0 6px rgba(var(--g),.35))}
+  #tszein .tsz-link circle{fill:rgba(var(--g),.9)}
+  #tszein .tsz-col{min-width:0;position:relative;z-index:1;transform:translateZ(22px)}
+  #tszein .db-hd{font-size:1.4rem;font-weight:700;letter-spacing:-.01em;line-height:1.2;margin:0 0 14px;color:#fff;opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+  #tszein .db-hd .g{color:#9e947f}
+  #tszein.in .db-hd{opacity:1;transform:none}
+  #tszein .db-row{display:flex;flex-direction:column;align-items:stretch;gap:6px;max-width:300px}
+  #tszein .tb{display:inline-flex;align-items:center;gap:9px;padding:11px 15px;border-radius:12px;font-size:.92rem;font-weight:600;color:rgba(255,255,255,.5);white-space:nowrap;opacity:0;transform:translateY(10px) scale(.97);transition:color .45s ease,background .5s ease,box-shadow .5s ease,opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
+  #tszein .tb svg{width:15px;height:15px;flex:none;opacity:.7}
+  #tszein .tb .num{color:#9e947f;font-variant-numeric:tabular-nums;opacity:.9;font-size:.82rem}
+  #tszein.in .tb{opacity:1;transform:none}
+  #tszein.in .tb:nth-child(2){transition-delay:.08s}
+  #tszein.in .tb:nth-child(3){transition-delay:.16s}
+  #tszein.in .tb:nth-child(4){transition-delay:.24s}
+  #tszein .tb.on{color:#fff;background:rgba(255,255,255,.09);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),0 0 22px rgba(var(--g),.10)}
+  #tszein .tb.on svg{opacity:1}
+  #tszein .tb.on .num{opacity:1}
+  #tszein .tsz-item{opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+  #tszein.in .tsz-item{opacity:1;transform:none}
+  #tszein .emph{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1.45rem;font-weight:600;letter-spacing:-.012em;color:#fff;margin:0 0 12px;padding:0}
+  #tszein .emph .eg{color:#9e947f}
+  #tszein .p{color:rgba(255,255,255,.68);font-size:.96rem;line-height:1.7;margin:0 0 16px;max-width:none}
+  #tszein .tsz-ol{margin:0;padding-left:1.6em}
+  #tszein .tsz-ol li{color:rgba(255,255,255,.62);font-size:.92rem;line-height:1.55;margin:0 0 8px;padding:10px 14px;border-radius:12px;transition:color .45s ease,background .5s ease,box-shadow .5s ease}
+  #tszein .tsz-ol li::marker{color:rgba(255,255,255,.35);font-weight:600}
+  #tszein .tsz-ol li.lit{color:#fff;background:rgba(255,255,255,.09);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),0 0 22px rgba(var(--g),.10)}
+  #tszein .tsz-ol li.lit::marker{color:rgba(var(--g),.9)}
+  @keyframes tszein-heartbeat{0%{box-shadow:0 4px 14px rgba(var(--g),.10),0 0 14px rgba(var(--g),.10)}18%{box-shadow:0 6px 22px rgba(var(--g),.30),0 0 46px rgba(var(--g),.34)}32%{box-shadow:0 5px 18px rgba(var(--g),.16),0 0 26px rgba(var(--g),.18)}46%{box-shadow:0 6px 20px rgba(var(--g),.26),0 0 40px rgba(var(--g),.28)}72%,100%{box-shadow:0 4px 14px rgba(var(--g),.10),0 0 14px rgba(var(--g),.10)}}
+  @media(max-width:900px){#tszein{grid-template-columns:1fr;gap:26px}#tszein .tsz-link{display:none}#tszein .db-row{max-width:none}}
+  @media(max-width:720px){#tszein .db-hd{font-size:1.25rem}#tszein .tb{padding:10px 13px;font-size:.86rem}#tszein .emph{font-size:1.3rem}}
+  @media(prefers-reduced-motion:reduce){#tszein,#tszein.in{opacity:1;transform:none;transition:none}#tszein .db-hd,#tszein .tb,#tszein .tsz-item{opacity:1;transform:none;transition:none}#tszein.live:hover{animation:none;box-shadow:0 18px 44px -30px rgba(0,0,0,.85),0 0 26px rgba(var(--g),.22)}}
+  `;
+  function on(){ return SLUG.test(location.pathname); }
+  function injectCSS(){ if(document.getElementById('tszein-css'))return; var s=document.createElement('style'); s.id='tszein-css'; s.textContent=CSS; document.head.appendChild(s); }
+  function pos(el,root){ var x=0,y=0; while(el&&el!==root){ x+=el.offsetLeft; y+=el.offsetTop; el=el.offsetParent; } return {x:x,y:y}; }
+  function tilt(wrap){
+    if(!(window.matchMedia&&matchMedia('(hover: hover) and (pointer: fine)').matches)) return;
+    if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var raf=null, cx=0, cy=0;
+    wrap.addEventListener('mousemove',function(e){
+      cx=e.clientX; cy=e.clientY;
+      if(!wrap.classList.contains('live')||raf) return;
+      raf=requestAnimationFrame(function(){
+        raf=null;
+        var r=wrap.getBoundingClientRect();
+        var px=(cx-r.left)/r.width, py=(cy-r.top)/r.height;
+        wrap.style.setProperty('--ry',((px-.5)*5).toFixed(2)+'deg');
+        wrap.style.setProperty('--rx',((.5-py)*4).toFixed(2)+'deg');
+        wrap.style.setProperty('--mx',(px*100).toFixed(1)+'%');
+        wrap.style.setProperty('--my',(py*100).toFixed(1)+'%');
+      });
+    });
+    wrap.addEventListener('mouseleave',function(){ wrap.style.setProperty('--rx','0deg'); wrap.style.setProperty('--ry','0deg'); });
+  }
+  /* Auto-Cycle durch die 4 Stufen + goldene Verbindungslinie zum zugehörigen Schritt (Muster #tsmiss) */
+  function controller(wrap){
+    var NS='http://www.w3.org/2000/svg';
+    var tabs=[].slice.call(wrap.querySelectorAll('.tb'));
+    var lis=[].slice.call(wrap.querySelectorAll('.tsz-ol li'));
+    if(tabs.length<4||lis.length<4) return;
+    var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var svg=document.createElementNS(NS,'svg'); svg.setAttribute('class','tsz-link off');
+    var path=document.createElementNS(NS,'path');
+    var c1=document.createElementNS(NS,'circle'), c2=document.createElementNS(NS,'circle');
+    c1.setAttribute('r','2.5'); c2.setAttribute('r','2.5');
+    svg.appendChild(path); svg.appendChild(c1); svg.appendChild(c2);
+    wrap.appendChild(svg);
+    function draw(a,b){
+      svg.setAttribute('viewBox','0 0 '+wrap.clientWidth+' '+wrap.clientHeight);
+      var pa=pos(a,wrap), pb=pos(b,wrap);
+      var ax=pa.x+a.offsetWidth+10, ay=pa.y+a.offsetHeight/2;
+      var bx=pb.x-14, by=pb.y+b.offsetHeight/2;
+      var dx=Math.max(30,(bx-ax)*.45);
+      path.setAttribute('d','M'+ax+' '+ay+' C'+(ax+dx)+' '+ay+', '+(bx-dx)+' '+by+', '+bx+' '+by);
+      c1.setAttribute('cx',ax); c1.setAttribute('cy',ay);
+      c2.setAttribute('cx',bx); c2.setAttribute('cy',by);
+      try{
+        var len=path.getTotalLength();
+        path.style.transition='none'; path.style.strokeDasharray=len; path.style.strokeDashoffset=len;
+        void path.getBoundingClientRect();
+        path.style.transition='stroke-dashoffset .55s cubic-bezier(.22,1,.36,1)'; path.style.strokeDashoffset='0';
+      }catch(e){}
+      svg.classList.remove('off');
+    }
+    var idx=0;
+    function apply(){
+      for(var i=0;i<tabs.length;i++) tabs[i].classList.toggle('on',i===idx);
+      for(var j=0;j<lis.length;j++) lis[j].classList.toggle('lit',j===idx);
+      if(window.innerWidth<901){ svg.classList.add('off'); return; }
+      draw(tabs[idx],lis[idx]);
+    }
+    var timer=null;
+    var io=new IntersectionObserver(function(e){
+      if(e[0].isIntersecting){ apply(); if(!reduce&&!timer) timer=setInterval(function(){ idx=(idx+1)%tabs.length; apply(); },2600); }
+      else if(timer){ clearInterval(timer); timer=null; }
+    },{threshold:.3});
+    io.observe(wrap);
+    window.addEventListener('resize',apply);
+  }
+  function mount(){
+    if(!on()){ var e=document.getElementById('tszein'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
+    injectCSS();
+    if(document.getElementById('tszein')) return;
+    var anchor=document.getElementById('tscb-B'); if(!anchor) return;
+    var wrap=document.createElement('div'); wrap.id='tszein';
+    var L=document.createElement('div'); L.className='tsz-col';
+    var R=document.createElement('div'); R.className='tsz-col';
+    L.innerHTML='<div class="db-hd">DB IV : <span class="g">Zutaten</span></div>'+
+      '<div class="db-row">'+ROWS.map(function(r,i){ return '<span class="tb"><span class="num">0'+(i+1)+'</span>'+ICON+' '+r+'</span>'; }).join('')+'</div>';
+    var emph=document.createElement('div'); emph.className='emph tsz-item'; emph.innerHTML='Empfehlung zur <span class="eg">Einrichtung</span>';
+    var intro=document.createElement('p'); intro.className='p tsz-item'; intro.textContent=INTRO;
+    var ol=document.createElement('ol'); ol.className='tsz-ol tsz-item'; ol.innerHTML=STEPS.map(function(s){ return '<li>'+s+'</li>'; }).join('');
+    R.appendChild(emph); R.appendChild(intro); R.appendChild(ol);
+    wrap.appendChild(L); wrap.appendChild(R);
+    if(anchor.nextSibling) anchor.parentNode.insertBefore(wrap,anchor.nextSibling); else anchor.parentNode.appendChild(wrap);
+    var items=R.querySelectorAll('.tsz-item');
+    for(var i=0;i<items.length;i++) items[i].style.transitionDelay=(i*0.12+0.1)+'s';
+    var io=new IntersectionObserver(function(e){
+      if(e[0].isIntersecting){ wrap.classList.add('in'); setTimeout(function(){ wrap.classList.add('live'); },950); io.disconnect(); }
+    },{threshold:.25});
+    io.observe(wrap);
+    controller(wrap); tilt(wrap);
+  }
+  function boot(){
+    var tries=0;
+    var iv=setInterval(function(){ tries++; mount(); if(tries>60) clearInterval(iv); },300);
+    new MutationObserver(function(){ if(on()) mount(); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
+
+/* ---- */
+
+/* ============================================================
    Schaufenster / Warenkorb — #tsshop v2 (Gastro-OS Shop)
    Die Phasen-Bereiche werden zum Shop: jeder Notion-Toggle-
    Schritt ("1. Button anlegen" … "15. Notizen") wird eine
@@ -4619,7 +4788,7 @@
   var BLOCKS=[
     { key:'A', mode:'textleft', marker:'groesse-animation', anim:animA, play:function(el){playA(el);}, paras:PARAS_A },
     { key:'B', mode:'split', marker:'vorlage-animation', anim:animB, play:function(el){playB(el);},
-      txt:{ h:'Jeder Baustein in der <span>Hauptzutat</span>.',
+      txt:{ h:'Bausteine in den <span>Zutaten anzeigen</span>.',
         body:['Erstelle in jeder Hauptzutat eine Übersicht, in der automatisch die Subzutaten (bspw. 80g) angezeigt werden.','Öffne dafür oben rechts Neu → Neue Vorlage → / Neue Datenbankansicht → DB IV : Zutaten verknüpfen und Filter „Name" = Name der Zutat → Cover Ansicht → Als Standard festlegen.'] } }
   ];
 
