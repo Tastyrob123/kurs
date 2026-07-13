@@ -2484,11 +2484,12 @@
   var CSS=`
   /* Full-Bleed: aus der schmalen Notion-Spalte auf ~volle Viewport-Breite ausbrechen
      (Spalte ist zentriert -> Standard 50%/50vw-Technik). */
-  /* zentriert relativ zum Viewport: die schmale Notion-Spalte ist zentriert,
-     daher left:50% + translateX(-50%) — sonst bricht der breitere Block rechts aus. */
-  #tsgk{width:min(1320px,95vw);max-width:95vw;margin:34px 0 30px;position:relative;left:50%;transform:translateX(-50%);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
+  /* Zentrierung bulletproof: aeusserer Container bricht auf volle Viewport-Breite
+     aus (50%/50vw-Trick, hier bewaehrt), innerer Grid wird auf 1320 gedeckelt und
+     per margin:auto exakt mittig gesetzt — unabhaengig von der Notion-Spaltenbreite. */
+  #tsgk{width:100vw;max-width:100vw;margin:34px 0 30px;margin-left:calc(50% - 50vw);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
   #tsgk *{box-sizing:border-box}
-  #tsgk .tsgk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  #tsgk .tsgk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;width:min(1320px,92vw);margin:0 auto}
   #tsgk .tsgk-card{position:relative;display:block;aspect-ratio:6/5;border-radius:18px;overflow:hidden;background:#04050a;border:1px solid rgba(255,255,255,.09);box-shadow:0 22px 50px -32px rgba(0,0,0,.9);opacity:0;transform:translateY(18px) scale(.985);will-change:transform,opacity;transition:border-color .4s ease,box-shadow .5s ease}
   /* Reveal = Keyframe-Animation (NICHT transition): auf dieser busy Super.so-Seite
      bleiben class-getriggerte Transitions haengen. .on setzt zusaetzlich den End-
@@ -4269,26 +4270,26 @@
          type:'ghost'  = wechselseitige Relation, erscheint automatisch → du tust nichts (nicht im Balken)
          type:'later'  = Rollup/aktive Verknüpfung, baust du selbst NACH der Relation (zählt im Balken, Lila) */
       relations:[
-        { type:'ghost', name:'Lieferant', target:'Relation · DB I Lieferpartner', flag:'erscheint automatisch',
-          desc:'Die Verbindung zu den Lieferpartnern — erscheint von allein.',
+        { type:'ghost', name:'Lieferant', target:'Verknüpfung · DB I Lieferpartner', flag:'erscheint automatisch',
+          desc:'Spiegelspalte der Lieferpartner-Verknüpfung — erscheint von allein.',
           img:'https://tastyrob123.github.io/kurs/img/lieferpartner/kuehltransporter-sprinter.jpg',
-          content:'<p class="notion-text">Diese Spalte baust du hier <b>nicht</b>. Sobald du in <b>DB I · Lieferpartner</b> die Relation zur Inventurliste anlegst und dabei die <b>wechselseitige Verbindung</b> aktivierst, erscheint „Lieferant" hier von allein — inklusive der Verknüpfung zurück.</p><p class="notion-text">Wo du diese Markierung siehst, gilt: nichts tun, kommt automatisch.</p>' },
-        { type:'later', name:'Hauptkontakt Lieferant', target:'Rollup · über Lieferant', flag:'später verknüpfen',
-          desc:'Rollup über die Lieferant-Relation — baust du selbst.',
+          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> selbst an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sobald du in <b>DB I : Lieferpartner</b> die Verknüpfung zur Inventurliste mit <b>wechselseitiger Verbindung</b> anlegst, taucht sie hier von allein auf.</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Lieferant</p><p class="notion-text">&nbsp;</p><p class="notion-text">Du benennst sie hier nur — verknüpft wird von der Lieferpartner-Seite.</p>' },
+        { type:'later', name:'Hauptkontakt Lieferant', target:'Formel · Visitenkarte', flag:'später verknüpfen',
+          desc:'Formel „Hauptkontakt Visitenkarte" — baust du selbst.',
           img:'https://tastyrob123.github.io/kurs/img/flow/lieferantenvertrag.jpg',
-          content:'<p class="notion-text">→ Eigenschaft : Rollup</p><p class="notion-text">→ Verknüpfung : Lieferant</p><p class="notion-text">→ Eigenschaft : Hauptkontakt</p><p class="notion-text">→ Berechnen : Original anzeigen</p><p class="notion-text">→ Name der Spalte : Hauptkontakt Lieferant</p><p class="notion-text">Dir wird hier der Hauptkontakt des jeweiligen Lieferanten angezeigt.</p>' },
+          content:'<p class="notion-text">→ <b>Eigenschaft</b> : Formel</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Hauptkontakt Visitenkarte</p><p class="notion-text">&nbsp;</p><p class="notion-text">Eine Formel, die den Hauptansprechpartner deines Lieferanten als Visitenkarte zeigt (Name, Titel, Telefon, Mail). Die vollständige Formel baust du im Schritt „Hauptkontakt Visitenkarte" der Lieferpartner-Lektion.</p>' },
         { type:'later', name:'Ansprechpartner Lieferant', target:'Rollup · über Lieferant', flag:'später verknüpfen',
-          desc:'Rollup über die Lieferant-Relation — baust du selbst.',
+          desc:'Rollup über die Lieferant-Verknüpfung — baust du selbst.',
           img:'https://tastyrob123.github.io/kurs/img/flow/ansprechpartner.jpg',
-          content:'<p class="notion-text">→ Eigenschaft : Rollup</p><p class="notion-text">→ Verknüpfung : Lieferant</p><p class="notion-text">→ Eigenschaft : Ansprechpartner</p><p class="notion-text">→ Berechnen : Original anzeigen</p><p class="notion-text">→ Name der Spalte : Ansprechpartner Lieferant</p><p class="notion-text">Dir werden hier die Ansprechpartner des jeweiligen Lieferanten angezeigt.</p>' },
-        { type:'ghost', name:'Ist Zutat', target:'Relation · DB IV Zutaten', flag:'erscheint automatisch',
-          desc:'Die Verbindung zu den Zutaten — erscheint von allein.',
+          content:'<p class="notion-text">→ <b>Eigenschaft</b> : Rollup</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Verknüpfung</b> : Lieferant</p><p class="notion-text">→ <b>Eigenschaft</b> : Ansprechpartner</p><p class="notion-text">→ <b>Berechnen</b> : Eindeutige Werte zeigen</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Ansprechpartner Lieferant</p><p class="notion-text">&nbsp;</p><p class="notion-text">Dir werden hier die Ansprechpartner angezeigt, die im verknüpften Lieferanten hinterlegt sind.</p>' },
+        { type:'ghost', name:'Ist Zutat', target:'Verknüpfung · DB IV Zutaten', flag:'erscheint automatisch',
+          desc:'Spiegelspalte der Zutaten-Verknüpfung — erscheint von allein.',
           img:'https://tastyrob123.github.io/kurs/img/zutaten/tomate.jpg',
-          content:'<p class="notion-text">Die Verbindung zu den <b>Zutaten</b>. Baust du hier nicht — sie erscheint automatisch, sobald du in <b>DB IV · Zutaten</b> die wechselseitige Relation zur Inventurliste setzt.</p>' },
-        { type:'ghost', name:'Packaging / Co.', target:'Relation · Packaging', flag:'erscheint automatisch',
-          desc:'Die Verbindung zum Packaging — erscheint von allein.',
+          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> selbst an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch, sobald du in <b>DB IV : Zutaten</b> die Verknüpfung „Inventar Produkt" mit <b>wechselseitiger Verbindung</b> zur Inventurliste anlegst.</p>' },
+        { type:'ghost', name:'Packaging / Co.', target:'Verknüpfung · Packaging', flag:'erscheint automatisch',
+          desc:'Spiegelspalte der Packaging-Verknüpfung — erscheint von allein.',
           img:'https://tastyrob123.github.io/kurs/img/packaging/kuchenbox.jpg',
-          content:'<p class="notion-text">Die Verbindung zum <b>Packaging</b>. Erscheint automatisch über die wechselseitige Relation der Packaging-Tabelle — du legst sie hier nicht an.</p>' }
+          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> selbst an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch über die <b>wechselseitige Verbindung</b> der Packaging-Tabelle.</p>' }
       ],
       summary:'Wareneinsatz', chain:true },
     { path:/\/lieferpartner-ansprechpartner-lieferantenvertrge\/?$/, kachel:'db13_lieferanten',
