@@ -560,6 +560,21 @@ body:has(#sb-toggle-cb:checked) #sb-toggle {
   top: 16px; left: 62px;
 }
 
+/* Sidebar-Innenraum: dunkleres Blau als Seiten-BG, Modul-Titel in Lineal-Schrift
+   (Wort weiß, Zahl in unserem Rot — Zahl-Span kommt aus kurs.js), Lektionen beige,
+   etwas mehr Abstand zwischen den Modulen. */
+.super-sidebar { background: #02040e !important; }
+.super-sidebar__content { background: transparent !important; }
+.super-navigation-menu__list { margin-bottom: 12px !important; }
+/* Default = Lektionen (Leaf-Links) beige */
+.super-navigation-menu__item-title { color: #c7b489 !important; }
+/* Override = Modul-Titel (aufklappbare Header) weiß, Lineal-Schrift */
+.super-navigation-menu__list-header .super-navigation-menu__item-title {
+  font-family: "Lineal TS", var(--font-sans, sans-serif) !important;
+  color: #ffffff !important;
+}
+.super-navigation-menu__list-header .ts-modul-num { color: #e32552 !important; }
+
 /* Phase-Karten: Überschrift + Text mittig in der Kachel */
 .notion-tabs__panel > .notion-heading,
 .notion-tabs__panel > .notion-text {

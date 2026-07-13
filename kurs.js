@@ -5954,3 +5954,34 @@
   document.addEventListener("DOMContentLoaded", mount);
   new MutationObserver(mount).observe(document.documentElement,{childList:true,subtree:true});
 })();
+
+/* ---- */
+
+/* Sidebar-Modul-Titel: die Zahl in "Modul N" in unser Rot wrappen (Wort weiß / Zahl rot).
+   Farben/Font kommen aus kurs.css; hier nur der .ts-modul-num-Span. Site-weit,
+   selbstheilend via debounced Observer (Muster wie ts-m2-gold). */
+(function(){
+  if(window.__tsSbNum) return; window.__tsSbNum = true;
+
+  function wrapNums(){
+    document.querySelectorAll('.super-navigation-menu__list-header .super-navigation-menu__item-title').forEach(function(el){
+      if(el.querySelector('.ts-modul-num')) return;
+      var w=document.createTreeWalker(el, NodeFilter.SHOW_TEXT), n;
+      while(n=w.nextNode()){
+        var m=n.nodeValue.match(/\d+/);
+        if(m){
+          var after=n.splitText(m.index); after.splitText(m[0].length);
+          var span=document.createElement('span'); span.className='ts-modul-num'; span.textContent=m[0];
+          after.parentNode.replaceChild(span, after);
+          break;
+        }
+      }
+    });
+  }
+
+  wrapNums();
+  document.addEventListener('DOMContentLoaded', wrapNums);
+  var _t=null;
+  new MutationObserver(function(){ if(_t) return; _t=setTimeout(function(){ _t=null; wrapNums(); },200); })
+    .observe(document.documentElement,{childList:true,subtree:true});
+})();
