@@ -5736,10 +5736,9 @@
   #tsd5 .d5-head{position:relative;text-align:center;margin:0 0 34px;isolation:isolate}
   #tsd5 .d5-hero{position:relative;display:block;width:min(470px,84%);margin:0 auto}
   #tsd5 .d5-jar{display:block;width:100%;height:auto;object-fit:contain;filter:contrast(1.05) saturate(1.06);pointer-events:none;user-select:none}
-  #tsd5 .d5-hero::after{content:"";position:absolute;z-index:1;left:50%;bottom:4%;transform:translateX(-50%);width:92%;height:46%;background:radial-gradient(closest-side,rgba(4,5,10,.72) 0%,rgba(4,5,10,.4) 55%,rgba(4,5,10,0) 80%);pointer-events:none}
   #tsd5 .d5-herotext{position:relative;z-index:2;margin-top:-33%;padding:0 8px 4px}
   #tsd5 .d5-logo{display:block;width:46px;height:auto;margin:0 auto 12px;filter:drop-shadow(0 2px 8px rgba(0,0,0,.95)) drop-shadow(0 6px 24px rgba(0,0,0,.85));pointer-events:none;user-select:none}
-  #tsd5 .d5-title{margin:0;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;font-weight:600;line-height:1.03;letter-spacing:-.02em;font-size:clamp(2.1rem,5.4vw,3.4rem);text-shadow:0 0 5px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,1),0 3px 16px rgba(0,0,0,1),0 6px 40px rgba(0,0,0,.96),0 12px 90px rgba(0,0,0,.85)}
+  #tsd5 .d5-title{margin:0;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;font-weight:600;line-height:1.03;letter-spacing:-.02em;font-size:clamp(2.1rem,5.4vw,3.4rem);text-shadow:0 1px 2px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.4)}
   #tsd5 .d5-title .basil{color:#46e05a}
   #tsd5 .d5-title .pesto{color:#fff}
   #tsd5 .d5-sub{max-width:660px;margin:20px auto 0;font-size:15.5px;line-height:1.62;color:#fff}
