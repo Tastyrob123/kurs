@@ -6405,183 +6405,168 @@
 })();
 
 /* ============================================================
-   #tsrezsys — SYSTEMFLUSS (DB V) · /rezepturen
+   #tsrezsys — SYSTEMFLUSS (DB V) · /rezepturen  [v2]
    Zwischen Finance-Warenkorb (#tsshop--db5_finance_personal) und
-   Learnings (#tsl). Nicht-interaktiver Konvergenz-/Propagations-
-   Flow im Stil #tsflow: Zutaten-Bausteine -> Rezeptur (zentraler
-   Knoten, buendelt) -> Kennzahlen (Preis/Portion, Allergene,
-   Naehrwerte) ziehen sich durchs System -> Gericht (Sauce) &
-   Getraenk (Sirup) -> Menue/Kalkulation.
-   KEINE Aggregations-/Portionsrechnung (das deckt #tsd5 bereits ab).
+   Learnings (#tsl). Nicht-interaktiver, reduzierter High-End-Flow:
+   Zutat (Bausteine) -> Rezept (zentraler Hub) -> Gericht (Sauce) /
+   Getraenk (Sirup) -> Menue (Kalkulation). Die Kennzahlen
+   (Preis/Portion, Allergene, Naehrwerte) ziehen als Licht durch
+   das System bis in die Menuekalkulation.
+   Keine Piktogramme (nur edle Ringknoten + Typo), kein greller Blob.
+   KEINE Aggregations-/Portionsrechnung (deckt #tsd5 ab).
    Champagner-Gold #c7b489, Lineal TS 600, reduced-motion-Gate.
    ============================================================ */
 (function(){
   if(window.__tsrezsys) return; window.__tsrezsys=true;
   var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var CSS=`
-  #tsrezsys{width:min(1040px,94vw);margin:clamp(30px,5vh,58px) auto clamp(34px,5vh,60px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff;opacity:0;transform:translateY(18px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+  #tsrezsys{width:min(1120px,94vw);margin:clamp(32px,5.5vh,64px) auto clamp(36px,5vh,64px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff;opacity:0;transform:translateY(18px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
   #tsrezsys.in{opacity:1;transform:none}
   #tsrezsys *{box-sizing:border-box}
-  #tsrezsys .rs-head{text-align:center;margin:0 0 clamp(30px,4vw,48px)}
-  #tsrezsys .rs-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#c7b489;margin:0 0 12px}
-  #tsrezsys .rs-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#c7b489;box-shadow:0 0 12px rgba(199,180,137,.7)}
-  #tsrezsys .rs-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(1.5rem,3.4vw,2.2rem);font-weight:600;letter-spacing:-.02em;line-height:1.12;margin:0;color:#fff}
+  #tsrezsys .rs-head{text-align:center;margin:0 0 clamp(34px,4.5vw,56px)}
+  #tsrezsys .rs-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#c7b489;margin:0 0 14px}
+  #tsrezsys .rs-eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:#c7b489;box-shadow:0 0 12px rgba(199,180,137,.7)}
+  #tsrezsys .rs-title{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:clamp(1.55rem,3.4vw,2.25rem);font-weight:600;letter-spacing:-.02em;line-height:1.12;margin:0;color:#fff}
   #tsrezsys .rs-title .g{color:#c7b489}
-  #tsrezsys .stage{position:relative;width:100%;aspect-ratio:1040/380}
+  #tsrezsys .stage{position:relative;width:100%;aspect-ratio:1200/440}
   #tsrezsys svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-  #tsrezsys .ln{fill:none;stroke:#c7b489;stroke-width:1.6;stroke-linecap:round;vector-effect:non-scaling-stroke;opacity:.9}
-  #tsrezsys .ln.dim{opacity:.5;stroke-width:1.4}
-  #tsrezsys .comet{fill:#efe6d2;filter:drop-shadow(0 0 6px rgba(199,180,137,.9));opacity:0}
+  #tsrezsys .ln{fill:none;stroke:#c7b489;stroke-width:1.25;stroke-linecap:round;vector-effect:non-scaling-stroke;opacity:.55}
+  #tsrezsys .guide{fill:none;stroke:none}
+  #tsrezsys .comet{fill:#f3ead4;filter:drop-shadow(0 0 7px rgba(199,180,137,.95));opacity:0}
   #tsrezsys .comet.on{opacity:1}
-  #tsrezsys .nd{position:absolute;transform:translate(-50%,-50%) scale(.5);opacity:0;transition:opacity .35s ease,transform .45s cubic-bezier(.34,1.56,.64,1)}
+  #tsrezsys .nd{position:absolute;transform:translate(-50%,-50%) scale(.72);opacity:0;transition:opacity .45s ease,transform .55s cubic-bezier(.34,1.56,.64,1)}
   #tsrezsys .nd.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
-  #tsrezsys .dot{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#0f1218;border:1.5px solid rgba(216,201,171,.35);color:#d8c9ab;margin:0 auto;transition:border-color .4s ease,box-shadow .4s ease,background .4s ease}
-  #tsrezsys .nd.lit .dot{border-color:rgba(199,180,137,.9);box-shadow:0 0 22px rgba(199,180,137,.3)}
-  #tsrezsys .nd .ic{width:19px;height:19px;display:block}
-  #tsrezsys .nd.ing .dot{width:20px;height:20px;border-width:1.25px}
-  #tsrezsys .nd.rez .dot{width:74px;height:74px;background:radial-gradient(120% 120% at 38% 28%,#efe6d2,#d8c9ab 52%,#c7b489);border:1.5px solid rgba(216,201,171,.9);color:#05060b;box-shadow:0 0 0 6px rgba(199,180,137,.06),0 0 46px rgba(199,180,137,.28)}
-  #tsrezsys .nd.rez .ic{width:30px;height:30px}
-  #tsrezsys .lbl{position:absolute;top:calc(100% + 9px);left:50%;transform:translateX(-50%);width:132px;text-align:center;font-size:11px;font-weight:600;letter-spacing:.04em;line-height:1.3;color:rgba(255,255,255,.82)}
-  #tsrezsys .lbl small{display:block;font-weight:500;letter-spacing:.02em;color:rgba(216,201,171,.6);font-size:9.5px;margin-top:2px;text-transform:uppercase}
-  #tsrezsys .nd.rez .lbl{top:calc(100% + 12px);font-size:12.5px;color:#efe6d2}
-  #tsrezsys .ing-cap{position:absolute;transform:translate(-50%,-50%);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:rgba(216,201,171,.55);white-space:nowrap;opacity:0;transition:opacity .4s ease}
-  #tsrezsys .ing-cap.on{opacity:1}
-  /* Kennzahl-Chips, die an der Rezeptur entstehen */
-  #tsrezsys .kpk{position:absolute;left:33%;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;gap:7px;align-items:flex-start;pointer-events:none}
-  #tsrezsys .kp{font-size:11px;font-weight:600;letter-spacing:.02em;color:#efe6d2;background:rgba(199,180,137,.12);border:1px solid rgba(199,180,137,.4);border-radius:999px;padding:4px 11px;white-space:nowrap;opacity:0;transform:translateX(-6px) scale(.9);transition:opacity .4s ease,transform .5s cubic-bezier(.34,1.56,.64,1)}
-  #tsrezsys .kp.on{opacity:1;transform:translateX(0) scale(1)}
-  #tsrezsys .kpk{margin-left:52px;margin-top:-64px}
-  /* Ergebnis-Zeile unter der Bühne */
-  #tsrezsys .rs-desc{max-width:720px;margin:clamp(26px,3.5vw,42px) auto 0;text-align:center;font-size:16px;line-height:1.65;color:#fff}
+  #tsrezsys .dot{display:block;position:relative;width:46px;height:46px;border-radius:50%;background:radial-gradient(65% 65% at 40% 34%,rgba(255,255,255,.05),rgba(13,16,22,.92));border:1px solid rgba(216,201,171,.26);margin:0 auto;transition:border-color .55s ease,box-shadow .55s ease}
+  #tsrezsys .dot::after{content:"";position:absolute;top:50%;left:50%;width:7px;height:7px;border-radius:50%;background:#ecdfc2;transform:translate(-50%,-50%) scale(0);opacity:0;transition:transform .55s cubic-bezier(.34,1.56,.64,1),opacity .4s ease;box-shadow:0 0 10px rgba(199,180,137,.7)}
+  #tsrezsys .nd.lit .dot{border-color:rgba(199,180,137,.85);box-shadow:0 0 0 1px rgba(199,180,137,.1),0 0 26px rgba(199,180,137,.18)}
+  #tsrezsys .nd.lit .dot::after{transform:translate(-50%,-50%) scale(1);opacity:1}
+  #tsrezsys .nd.sat .dot{width:11px;height:11px;border-color:rgba(216,201,171,.4)}
+  #tsrezsys .nd.sat .dot::after{width:0;height:0}
+  #tsrezsys .nd.sat.lit .dot{box-shadow:0 0 14px rgba(199,180,137,.28)}
+  /* Rezept-Hub: champagner-getoentes Glas, feiner Doppelring, sanfter Halo — ruhiger Ankerknoten, kein greller Blob */
+  #tsrezsys .nd.rez .dot{width:70px;height:70px;background:radial-gradient(70% 70% at 42% 34%,rgba(199,180,137,.22),rgba(199,180,137,.06) 58%,rgba(15,18,24,.92));border:1px solid rgba(216,201,171,.5)}
+  #tsrezsys .nd.rez .dot::before{content:"";position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(216,201,171,.14);transition:border-color .55s ease}
+  #tsrezsys .nd.rez .dot::after{width:9px;height:9px}
+  #tsrezsys .nd.rez.lit .dot{border-color:rgba(216,201,171,.95);box-shadow:0 0 0 1px rgba(199,180,137,.12),0 0 48px rgba(199,180,137,.3)}
+  #tsrezsys .nd.rez.lit .dot::before{border-color:rgba(199,180,137,.45)}
+  #tsrezsys .lbl{position:absolute;left:50%;transform:translateX(-50%);width:150px;text-align:center;line-height:1.25}
+  #tsrezsys .lbl.below{top:calc(100% + 12px)}
+  #tsrezsys .lbl.above{bottom:calc(100% + 12px)}
+  #tsrezsys .lbl .nm{display:block;font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-size:14.5px;font-weight:600;letter-spacing:-.005em;color:#fff}
+  #tsrezsys .lbl .sub{display:block;font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(216,201,171,.55);margin-top:4px}
+  #tsrezsys .nd.rez .lbl .nm{font-size:16px;color:#efe6d2}
+  /* Kennzahl-Leiste unter dem Flow — edle Hairline-Tags */
+  #tsrezsys .rs-keys{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:clamp(30px,4vw,48px) auto 0}
+  #tsrezsys .kp{font-size:11px;font-weight:600;letter-spacing:.05em;color:#d8c9ab;background:rgba(199,180,137,.05);border:1px solid rgba(216,201,171,.28);border-radius:999px;padding:6px 15px;white-space:nowrap;opacity:0;transform:translateY(6px);transition:opacity .5s ease,transform .6s cubic-bezier(.34,1.56,.64,1)}
+  #tsrezsys .kp.on{opacity:1;transform:none}
+  #tsrezsys .rs-desc{max-width:660px;margin:clamp(18px,2.4vw,26px) auto 0;text-align:center;font-size:15.5px;line-height:1.65;color:rgba(255,255,255,.9)}
   #tsrezsys .rs-desc .g{color:#c7b489}
-  @media(max-width:760px){
-    #tsrezsys .stage-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -3vw}
-    #tsrezsys .stage{min-width:660px;margin:0 3vw}
+  @media(max-width:820px){
+    #tsrezsys .stage-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -3vw;padding-bottom:6px}
+    #tsrezsys .stage{min-width:720px;margin:0 3vw}
   }
   @media(prefers-reduced-motion:reduce){
     #tsrezsys{opacity:1;transform:none;transition:none}
     #tsrezsys .nd{opacity:1;transform:translate(-50%,-50%) scale(1);transition:none}
-    #tsrezsys .kp,#tsrezsys .ing-cap,#tsrezsys .comet{transition:none}
+    #tsrezsys .kp,#tsrezsys .comet,#tsrezsys .dot,#tsrezsys .dot::after{transition:none}
     #tsrezsys .kp{opacity:1;transform:none}
-    #tsrezsys .ing-cap{opacity:1}
   }
   `;
   function injectCSS(){ if(document.getElementById('tsrezsys-css'))return; var s=document.createElement('style'); s.id='tsrezsys-css'; s.textContent=CSS; document.head.appendChild(s); }
 
-  /* Icons (inline SVG, gold via currentColor) */
-  var IC_LEAF='<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/></svg>';
-  var IC_BOOK='<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>';
-  var IC_PLATE='<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>';
-  var IC_GLASS='<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"/><path d="M12 15v7"/><path d="M5 3h14l-1.5 8.5a5.5 5.5 0 0 1-11 0Z"/></svg>';
-  var IC_MENU='<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>';
-
-  /* Nodes: [id, left%, top%, klasse, icon, label, sublabel] */
+  /* Nodes: [id, left%, top%, klasse, name, sublabel, labelPos] — %-Werte aus SVG-Koordinaten (viewBox 1200x440) */
   var NODES=[
-    ['i1', 7,  22, 'ing', '', '', ''],
-    ['i2', 7,  50, 'ing', '', '', ''],
-    ['i3', 7,  78, 'ing', '', '', ''],
-    ['rez',33, 50, 'rez', IC_BOOK, 'Rezeptur', ''],
-    ['ger',63, 24, 'dn',  IC_PLATE, 'Gericht', 'z. B. Sauce'],
-    ['get',63, 76, 'dn',  IC_GLASS, 'Getränk', 'z. B. Sirup'],
-    ['men',90, 50, 'dn',  IC_MENU, 'Menü', 'Kalkulation']
+    ['s1', 5,    40.9, 'sat', '', '', ''],
+    ['s2', 5,    52.3, 'sat', '', '', ''],
+    ['s3', 5,    63.6, 'sat', '', '', ''],
+    ['zut',17.5, 52.3, 'zt',  'Zutat',   'Bausteine',   'below'],
+    ['rez',40,   52.3, 'rez', 'Rezept',  '',            'below'],
+    ['ger',66.7, 27.3, 'dn',  'Gericht', 'z. B. Sauce', 'above'],
+    ['get',66.7, 77.3, 'dn',  'Getränk', 'z. B. Sirup', 'below'],
+    ['men',92.5, 52.3, 'dn',  'Menü',    'Kalkulation', 'below']
   ];
   function build(){
     var root=document.createElement('div'); root.id='tsrezsys';
     var nodesHTML='';
     NODES.forEach(function(n){
-      var lbl = n[5] ? ('<span class="lbl">'+n[5]+(n[6]?('<small>'+n[6]+'</small>'):'')+'</span>') : '';
-      nodesHTML+='<div class="nd '+n[3]+'" data-id="'+n[0]+'" style="left:'+n[1]+'%;top:'+n[2]+'%"><span class="dot">'+n[4]+'</span>'+lbl+'</div>';
+      var lbl = n[4] ? ('<span class="lbl '+n[6]+'"><span class="nm">'+n[4]+'</span>'+(n[5]?('<span class="sub">'+n[5]+'</span>'):'')+'</span>') : '';
+      nodesHTML+='<div class="nd '+n[3]+'" data-id="'+n[0]+'" style="left:'+n[1]+'%;top:'+n[2]+'%"><span class="dot"></span>'+lbl+'</div>';
     });
-    var svg='<svg viewBox="0 0 1040 380" preserveAspectRatio="none">'+
-      /* converge Zutaten -> Rezeptur */
-      '<path class="ln lc" data-k="conv" d="M73,84 C 180,84 210,190 343,190"/>'+
-      '<path class="ln lc" data-k="conv" d="M73,190 H 343"/>'+
-      '<path class="ln lc" data-k="conv" d="M73,296 C 180,296 210,190 343,190"/>'+
-      /* Rezeptur -> Gericht / Getraenk */
-      '<path class="ln lo" data-k="down" d="M343,190 C 470,190 520,91 655,91"/>'+
-      '<path class="ln lo" data-k="down" d="M343,190 C 470,190 520,289 655,289"/>'+
-      /* Gericht/Getraenk -> Menue */
-      '<path class="ln lo" data-k="end" d="M655,91 C 790,91 830,190 936,190"/>'+
-      '<path class="ln lo" data-k="end" d="M655,289 C 790,289 830,190 936,190"/>'+
-      '<circle class="comet" data-p="up" r="4.5"/>'+
-      '<circle class="comet" data-p="dn" r="4.5"/>'+
-      '</svg>';
-    var kpk='<div class="kpk">'+
-      '<span class="kp" data-i="0">Preis / Portion</span>'+
-      '<span class="kp" data-i="1">Allergene</span>'+
-      '<span class="kp" data-i="2">Nährwerte</span>'+
-    '</div>';
-    root.innerHTML='<div class="rs-head"><span class="rs-eyebrow">Das Rückgrat · DB V</span>'+
-      '<h2 class="rs-title">Eine Rezeptur. Das ganze <span class="g">System</span> rechnet mit.</h2></div>'+
-      '<div class="stage-wrap"><div class="stage">'+svg+nodesHTML+
-        '<span class="ing-cap" style="left:7%;top:97%">Zutaten · Bausteine</span>'+
-        kpk+
-      '</div></div>'+
-      '<p class="rs-desc">Ob Sauce oder Sirup — die Rezeptur bündelt deine Zutaten und schickt <span class="g">Preis pro Portion, Allergene und Nährwerte</span> von hier aus durch dein ganzes System.</p>';
+    var svg='<svg viewBox="0 0 1200 440" preserveAspectRatio="none">'
+      /* Bausteine -> Zutat */
+      +'<path class="ln" data-k="conv" d="M60,180 C 120,180 150,230 210,230"/>'
+      +'<path class="ln" data-k="conv" d="M60,230 H 210"/>'
+      +'<path class="ln" data-k="conv" d="M60,280 C 120,280 150,230 210,230"/>'
+      /* Zutat -> Rezept */
+      +'<path class="ln" data-k="zr" d="M210,230 H 480"/>'
+      /* Rezept -> Gericht / Getraenk */
+      +'<path class="ln" data-k="down" d="M480,230 C 600,230 660,120 800,120"/>'
+      +'<path class="ln" data-k="down" d="M480,230 C 600,230 660,340 800,340"/>'
+      /* Gericht / Getraenk -> Menue */
+      +'<path class="ln" data-k="end" d="M800,120 C 940,120 990,230 1110,230"/>'
+      +'<path class="ln" data-k="end" d="M800,340 C 940,340 990,230 1110,230"/>'
+      /* unsichtbare Leitpfade fuer die Kometen (Rezept -> ... -> Menue) */
+      +'<path class="guide" data-g="up" d="M480,230 C 600,230 660,120 800,120 C 940,120 990,230 1110,230"/>'
+      +'<path class="guide" data-g="dn" d="M480,230 C 600,230 660,340 800,340 C 940,340 990,230 1110,230"/>'
+      +'<circle class="comet" data-p="up" r="4"/><circle class="comet" data-p="dn" r="4"/>'
+      +'</svg>';
+    root.innerHTML='<div class="rs-head"><span class="rs-eyebrow">Das Rückgrat · DB V</span>'
+      +'<h2 class="rs-title">Eine Rezeptur. Das ganze <span class="g">System</span> rechnet mit.</h2></div>'
+      +'<div class="stage-wrap"><div class="stage">'+svg+nodesHTML
+      +'</div></div>'
+      +'<div class="rs-keys"><span class="kp" data-i="0">Preis pro Portion</span><span class="kp" data-i="1">Allergene</span><span class="kp" data-i="2">Nährwerte</span></div>'
+      +'<p class="rs-desc">Ob Sauce oder Sirup — jede Rezeptur bündelt deine Zutaten und trägt diese Werte <span class="g">durch dein ganzes System</span> bis in die Menükalkulation.</p>';
     return root;
   }
 
-  function lit(root,id){ var n=root.querySelector('.nd[data-id="'+id+'"]'); if(n){ n.classList.add('on'); n.classList.add('lit'); } }
-  function on(root,id){ var n=root.querySelector('.nd[data-id="'+id+'"]'); if(n) n.classList.add('on'); }
-
-  function drawLine(p, dur, delay){
-    var L=p.getTotalLength(); p.style.strokeDasharray=L; p.style.strokeDashoffset=L;
-    p.style.transition='stroke-dashoffset '+dur+'ms cubic-bezier(.4,0,.2,1) '+delay+'ms';
-    // force reflow then release
-    void p.getBoundingClientRect();
-    p.style.strokeDashoffset='0';
+  function q(root,id){return root.querySelector('.nd[data-id="'+id+'"]');}
+  function lit(root,id){var n=q(root,id);if(n){n.classList.add('on');n.classList.add('lit');}}
+  function on(root,id){var n=q(root,id);if(n)n.classList.add('on');}
+  function draw(p,dur){var L=p.getTotalLength();p.style.strokeDasharray=L;p.style.strokeDashoffset=L;p.style.transition='stroke-dashoffset '+dur+'ms cubic-bezier(.4,0,.2,1)';void p.getBoundingClientRect();p.style.strokeDashoffset='0';}
+  function comet(root,which){
+    var guide=root.querySelector('.guide[data-g="'+which+'"]');
+    var c=root.querySelector('.comet[data-p="'+which+'"]');
+    if(!guide||!c)return;
+    var L=guide.getTotalLength(),t0=null,dur=1900;
+    c.classList.add('on');
+    function step(now){
+      if(t0===null)t0=now;
+      var pr=Math.min(1,(now-t0)/dur);
+      var e=pr<.5?2*pr*pr:1-Math.pow(-2*pr+2,2)/2; // easeInOutQuad
+      var pt=guide.getPointAtLength(L*e);
+      c.setAttribute('cx',pt.x);c.setAttribute('cy',pt.y);
+      if(pr<1)requestAnimationFrame(step); else c.classList.remove('on');
+    }
+    requestAnimationFrame(step);
   }
 
   function play(root){
-    if(root.__played) return; root.__played=true;
+    if(root.__played)return; root.__played=true;
     root.classList.add('in');
     if(reduced){
       root.querySelectorAll('.nd').forEach(function(n){n.classList.add('on','lit');});
       root.querySelectorAll('.ln').forEach(function(l){l.style.strokeDashoffset='0';});
       return;
     }
-    var convs=[].slice.call(root.querySelectorAll('.ln[data-k="conv"]'));
-    var downs=[].slice.call(root.querySelectorAll('.ln[data-k="down"]'));
-    var ends =[].slice.call(root.querySelectorAll('.ln[data-k="end"]'));
-    // 1) Zutaten
-    setTimeout(function(){ on(root,'i1'); },180);
-    setTimeout(function(){ on(root,'i2'); },320);
-    setTimeout(function(){ on(root,'i3'); },460);
-    setTimeout(function(){ root.querySelector('.ing-cap').classList.add('on'); },520);
-    // 2) konvergieren -> Rezeptur
-    setTimeout(function(){ convs.forEach(function(p){ drawLine(p,760,0); }); },700);
-    setTimeout(function(){ lit(root,'rez'); },1360);
-    // 3) Kennzahlen entstehen
-    root.querySelectorAll('.kp').forEach(function(k){ setTimeout(function(){ k.classList.add('on'); }, 1620 + (+k.getAttribute('data-i'))*150); });
-    // 4) Down -> Gericht/Getraenk + Kometen
-    setTimeout(function(){ downs.forEach(function(p){ drawLine(p,820,0); }); comet(root,'up','down'); comet(root,'dn','down'); },2150);
-    setTimeout(function(){ lit(root,'ger'); lit(root,'get'); },2980);
-    // 5) -> Menue
-    setTimeout(function(){ ends.forEach(function(p){ drawLine(p,760,0); }); comet(root,'up','end'); comet(root,'dn','end'); },3200);
-    setTimeout(function(){ lit(root,'men'); },3960);
+    var conv=[].slice.call(root.querySelectorAll('.ln[data-k="conv"]'));
+    var zr=[].slice.call(root.querySelectorAll('.ln[data-k="zr"]'));
+    var down=[].slice.call(root.querySelectorAll('.ln[data-k="down"]'));
+    var end=[].slice.call(root.querySelectorAll('.ln[data-k="end"]'));
+    setTimeout(function(){on(root,'s1');},200);
+    setTimeout(function(){on(root,'s2');},320);
+    setTimeout(function(){on(root,'s3');},440);
+    setTimeout(function(){conv.forEach(function(p){draw(p,720);});},560);
+    setTimeout(function(){lit(root,'zut');},1180);
+    setTimeout(function(){zr.forEach(function(p){draw(p,640);});},1260);
+    setTimeout(function(){lit(root,'rez');},1860);
+    root.querySelectorAll('.kp').forEach(function(k){setTimeout(function(){k.classList.add('on');},2120+(+k.getAttribute('data-i'))*160);});
+    setTimeout(function(){down.forEach(function(p){draw(p,820);});comet(root,'up');comet(root,'dn');},2480);
+    setTimeout(function(){lit(root,'ger');lit(root,'get');},3320);
+    setTimeout(function(){end.forEach(function(p){draw(p,780);});},3560);
+    setTimeout(function(){lit(root,'men');},4380);
   }
 
-  /* Komet entlang eines Pfad-Segments */
-  function comet(root,which,seg){
-    var sel = seg==='down' ? '.ln[data-k="down"]' : '.ln[data-k="end"]';
-    var paths=root.querySelectorAll(sel);
-    var path = which==='up' ? paths[0] : paths[1];
-    var c = root.querySelector('.comet[data-p="'+which+'"]');
-    if(!path||!c) return;
-    var L=path.getTotalLength(), t0=null, dur=820;
-    c.classList.add('on');
-    function step(now){
-      if(t0===null)t0=now;
-      var p=Math.min(1,(now-t0)/dur);
-      var pt=path.getPointAtLength(L*p);
-      c.setAttribute('cx',pt.x); c.setAttribute('cy',pt.y);
-      if(p<1) requestAnimationFrame(step);
-      else if(seg==='end') c.classList.remove('on');
-    }
-    requestAnimationFrame(step);
-  }
-
-  function inView(el){ var r=el.getBoundingClientRect(); return r.top < (window.innerHeight*0.78) && r.bottom > (window.innerHeight*0.22); }
+  function inView(el){ var r=el.getBoundingClientRect(); return r.top < (window.innerHeight*0.8) && r.bottom > (window.innerHeight*0.2); }
 
   function anchorMount(root){
     var shop=document.getElementById('tsshop--db5_finance_personal');
@@ -6592,16 +6577,13 @@
     if(nx && nx.parentNode){ nx.parentNode.insertBefore(root, nx); return true; }
     return false;
   }
-
   function mount(){
     if(!/\/rezepturen\/?$/.test(location.pathname)){ var e=document.getElementById('tsrezsys'); if(e&&e.parentNode)e.parentNode.removeChild(e); return; }
     if(document.getElementById('tsrezsys')) return;
-    // Warten bis mind. ein Anker existiert (Finance-Shop oder #tsl)
     if(!document.getElementById('tsshop--db5_finance_personal') && !document.getElementById('tsl')) return;
     injectCSS();
     var root=build();
     if(!anchorMount(root)) return;
-    // Reveal-Trigger: IO + Polling-Fallback
     var started=false;
     function go(){ if(started)return; started=true; play(root); }
     if('IntersectionObserver' in window){
