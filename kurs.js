@@ -2743,186 +2743,240 @@
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
 
-/* gemeinkosten-mitarbeiterlhne — Lohn-Ebenen-Erklaerung (#tslohn)
-   Full-bleed, transparent (Website-Hintergrund), edge-to-edge.
-   Struktur wie eine Rechnung: Bruttolohn (100%) + Abgaben = Arbeitgeber-Bruttokosten.
-   Farbcodierung nach BEDEUTUNG: neutral=Ausgangswert, beige=fixe Sozialabgaben,
-   schraffiert-grau=variable Umlagen, gold=Ergebnis.
+/* gemeinkosten-mitarbeiterlhne — Lohn-Ebenen-Erklaerung (#tslohn) — v4 „edel/hero"
+   Erzaehl-Dramaturgie: (1) refined Timeline der 3 Ebenen, (2) Hero-Wertbalken
+   Bruttolohn 100% -> goldene Erweiterung (+Aufschlag) mit hochzaehlendem Faktor,
+   (3) Detail-Aufschluesselung des Aufschlags (Doppelrand-Karte, feine Balken).
+   Full-bleed, transparent (Website-Hintergrund). Palette: Beige/Champagner + Neutral.
    Nur Fakten-Prozentwerte (RV 9,3 / KV 7,3 / PV 1,8 / ALV 1,3 / Umlagen variabel);
    KEINE erfundenen Euro-Betraege (Niemals-schaetzen).
-   Anker: NACH der 3-Ebenen-Bulletliste, Text bleibt erhalten.                     */
+   Anker: NACH der 3-Ebenen-Bulletliste, Text bleibt erhalten.
+   GPU-sicher: nur transform (scaleX) + opacity animiert.                          */
 (function(){
   if(window.__tslohn) return; window.__tslohn=true;
 
-  var GLOW='199,180,137';
-  var MAXPCT=9.3;
+  var G='199,180,137';          /* Beige/Champagner-Glow */
+  var EASE='cubic-bezier(.32,.72,0,1)';
+  var MAX=9.3;                  /* laengster Detail-Balken */
   var SV=[
-    {name:'Rentenversicherung',       pct:9.3, disp:'9,3 %'},
-    {name:'Krankenversicherung',      pct:7.3, disp:'7,3 %', note:'+ Zusatzbeitrag'},
-    {name:'Pflegeversicherung',       pct:1.8, disp:'1,8 %'},
-    {name:'Arbeitslosenversicherung', pct:1.3, disp:'1,3 %'}
+    {n:'Rentenversicherung',       p:9.3, d:'9,3 %'},
+    {n:'Krankenversicherung',      p:7.3, d:'7,3 %', note:'+ Zusatzbeitrag'},
+    {n:'Pflegeversicherung',       p:1.8, d:'1,8 %'},
+    {n:'Arbeitslosenversicherung', p:1.3, d:'1,3 %'}
   ];
-  var FACTOR_TARGET=1.21;
+  var FAC=1.21;
 
   var CSS=`
-  #tslohn{width:100vw;max-width:100vw;margin:44px 0;margin-left:calc(50% - 50vw);
-    background:transparent;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;-webkit-font-smoothing:antialiased;
-    border-top:1px solid rgba(255,255,255,.09);border-bottom:1px solid rgba(255,255,255,.09)}
+  #tslohn{--g:${G};width:100vw;max-width:100vw;margin:52px 0;margin-left:calc(50% - 50vw);color:#fff;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;-webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(70% 120% at 82% 12%,rgba(var(--g),.10),rgba(var(--g),0) 60%),
+      radial-gradient(60% 100% at 12% 100%,rgba(70,90,150,.12),rgba(70,90,150,0) 60%);
+    border-top:1px solid rgba(255,255,255,0);border-bottom:1px solid rgba(255,255,255,0)}
+  #tslohn::before,#tslohn::after{content:"";display:block;height:1px;width:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent)}
   #tslohn *{box-sizing:border-box}
-  #tslohn .tslohn-wrap{width:100%;padding:52px clamp(20px,5vw,96px) 56px}
+  #tslohn .tsl-wrap{width:min(1120px,90vw);margin:0 auto;padding:64px 0 68px}
 
-  #tslohn .tslohn-eyebrow{font-size:.7rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:#c7b489;margin:0 0 14px}
-  #tslohn .tslohn-h{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-weight:600;font-size:clamp(1.6rem,3.4vw,2.35rem);line-height:1.1;letter-spacing:-.02em;color:#fff;margin:0 0 10px}
-  #tslohn .tslohn-h span{color:#c7b489}
-  #tslohn .tslohn-sub{font-size:1rem;line-height:1.55;color:rgba(255,255,255,.6);margin:0 0 40px;max-width:640px}
+  /* -------- Kopf -------- */
+  #tslohn .tsl-eyebrow{display:inline-block;font-size:.66rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;
+    color:#c7b489;padding:6px 14px;border:1px solid rgba(var(--g),.34);border-radius:99px;background:rgba(var(--g),.06);margin-bottom:22px}
+  #tslohn .tsl-h{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,sans-serif;font-weight:600;
+    font-size:clamp(1.9rem,4.6vw,3.1rem);line-height:1.04;letter-spacing:-.025em;color:#fff;margin:0 0 16px;max-width:16ch}
+  #tslohn .tsl-h em{font-style:normal;color:#c7b489}
+  #tslohn .tsl-lead{font-size:clamp(1rem,1.6vw,1.14rem);line-height:1.6;color:rgba(255,255,255,.6);margin:0 0 52px;max-width:56ch}
 
-  /* ===== Zone A — drei Ebenen ===== */
-  #tslohn .tslohn-secttl{font-size:.72rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.4);margin:0 0 18px}
-  #tslohn .tslohn-levels{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:0 0 52px}
-  #tslohn .tslohn-lv{position:relative;display:flex;gap:16px;padding:22px 24px;border-radius:14px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.08);
-    opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
-  #tslohn.on .tslohn-lv{opacity:1;transform:none}
-  #tslohn.on .tslohn-lv[data-i="0"]{transition-delay:.04s}
-  #tslohn.on .tslohn-lv[data-i="1"]{transition-delay:.16s}
-  #tslohn.on .tslohn-lv[data-i="2"]{transition-delay:.28s}
-  #tslohn .tslohn-lv--gold{background:linear-gradient(180deg,rgba(${GLOW},.14),rgba(${GLOW},.04));border-color:rgba(${GLOW},.5);box-shadow:0 24px 50px -34px rgba(${GLOW},.7)}
-  #tslohn .tslohn-lv__no{flex:0 0 auto;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-    font-family:"Lineal TS",-apple-system,sans-serif;font-weight:600;font-size:1.05rem;color:rgba(255,255,255,.55);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14)}
-  #tslohn .tslohn-lv--gold .tslohn-lv__no{color:#05060b;background:#c7b489;border-color:#c7b489;box-shadow:0 0 20px rgba(${GLOW},.5)}
-  #tslohn .tslohn-lv__name{display:block;font-family:"Lineal TS",-apple-system,sans-serif;font-weight:600;font-size:1.1rem;letter-spacing:-.01em;color:#fff;line-height:1.2;margin-bottom:6px}
-  #tslohn .tslohn-lv--gold .tslohn-lv__name{color:#e9dcb8}
-  #tslohn .tslohn-lv__desc{display:block;font-size:.86rem;line-height:1.5;color:rgba(255,255,255,.55)}
-  #tslohn .tslohn-lv__desc b{color:rgba(255,255,255,.82);font-weight:600}
-  #tslohn .tslohn-lv__tag{display:inline-block;margin-top:12px;font-size:.64rem;font-weight:600;letter-spacing:.04em;color:#05060b;background:#c7b489;padding:3px 10px;border-radius:99px}
+  /* -------- Timeline der 3 Ebenen -------- */
+  #tslohn .tsl-line{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin:0 0 60px}
+  #tslohn .tsl-line::before{content:"";position:absolute;left:calc(16.66% + 6px);right:calc(16.66% + 6px);top:20px;height:1px;
+    background:linear-gradient(90deg,rgba(255,255,255,.14),rgba(var(--g),.5));opacity:0;transition:opacity 1s ease .5s}
+  #tslohn.on .tsl-line::before{opacity:1}
+  #tslohn .tsl-node{position:relative}
+  #tslohn .tsl-dot{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-family:"Lineal TS",-apple-system,sans-serif;font-weight:600;font-size:1.06rem;color:rgba(255,255,255,.6);
+    background:rgba(10,12,20,.9);border:1px solid rgba(255,255,255,.16);position:relative;z-index:2;margin-bottom:16px;
+    box-shadow:inset 0 1px 1px rgba(255,255,255,.12)}
+  #tslohn .tsl-node--gold .tsl-dot{color:#05060b;background:linear-gradient(180deg,#efe6d2,#c7b489);border-color:rgba(var(--g),.6);
+    box-shadow:inset 0 1px 1px rgba(255,255,255,.6),0 0 26px rgba(var(--g),.5)}
+  #tslohn .tsl-k{font-size:.63rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.38);display:block;margin-bottom:7px}
+  #tslohn .tsl-node--gold .tsl-k{color:#c7b489}
+  #tslohn .tsl-n{font-family:"Lineal TS",-apple-system,sans-serif;font-weight:600;font-size:1.14rem;letter-spacing:-.01em;color:#fff;display:block;margin-bottom:8px;line-height:1.15}
+  #tslohn .tsl-node--gold .tsl-n{color:#efe6d2}
+  #tslohn .tsl-d{font-size:.85rem;line-height:1.5;color:rgba(255,255,255,.52)}
+  #tslohn .tsl-d b{color:rgba(255,255,255,.8);font-weight:600}
 
-  /* ===== Zone B — die Rechnung ===== */
-  #tslohn .tslohn-calc{border:1px solid rgba(255,255,255,.09);border-radius:16px;overflow:hidden;background:rgba(0,0,0,.22)}
-  #tslohn .tslohn-row{display:grid;grid-template-columns:minmax(300px,440px) 1fr;align-items:center;gap:clamp(18px,3vw,48px);padding:16px clamp(18px,3vw,32px)}
-  #tslohn .tslohn-row+.tslohn-row{border-top:1px solid rgba(255,255,255,.06)}
-  #tslohn .tslohn-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
-  #tslohn .tslohn-name{display:flex;align-items:baseline;gap:11px;font-size:1rem;color:rgba(255,255,255,.9)}
-  #tslohn .tslohn-op{flex:0 0 auto;width:20px;text-align:center;font-family:"Lineal TS",-apple-system,sans-serif;font-weight:600;color:rgba(${GLOW},.85);font-size:1.05rem}
-  #tslohn .tslohn-note{display:block;font-size:.74rem;color:rgba(255,255,255,.4);margin-top:3px;padding-left:31px}
-  #tslohn .tslohn-val{font-variant-numeric:tabular-nums;font-weight:600;font-size:1.05rem;color:#fff;white-space:nowrap}
+  /* -------- Hero-Wertbalken (Doppelrand) -------- */
+  #tslohn .tsl-hero{position:relative;padding:7px;border-radius:30px;background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.09);box-shadow:0 50px 120px -60px rgba(0,0,0,.9);margin:0 0 34px}
+  #tslohn .tsl-hero-core{position:relative;padding:38px clamp(22px,4vw,46px) 40px;border-radius:24px;overflow:hidden;
+    background:linear-gradient(180deg,rgba(14,16,26,.72),rgba(5,6,12,.72));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.09),inset 0 0 0 1px rgba(255,255,255,.03)}
+  #tslohn .tsl-hero-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:30px}
+  #tslohn .tsl-hero-lbl{font-size:.95rem;line-height:1.5;color:rgba(255,255,255,.62);max-width:44ch}
+  #tslohn .tsl-hero-lbl b{color:#fff;font-weight:600}
+  #tslohn .tsl-facwrap{text-align:right;flex:0 0 auto;line-height:1}
+  #tslohn .tsl-fac-k{font-size:.6rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.4);display:block;margin-bottom:10px}
+  #tslohn .tsl-fac{font-family:"Lineal TS",-apple-system,sans-serif;font-weight:600;font-size:clamp(2.6rem,6vw,3.6rem);
+    letter-spacing:-.02em;color:#efe6d2;font-variant-numeric:tabular-nums;
+    text-shadow:0 0 40px rgba(var(--g),.45);display:inline-block}
+  #tslohn .tsl-fac small{font-family:-apple-system,sans-serif;font-size:.9rem;font-weight:600;color:rgba(231,222,200,.6);letter-spacing:0;margin-left:8px}
 
-  /* Balkenspur */
-  #tslohn .tslohn-bar{position:relative;height:12px;border-radius:99px;background:rgba(255,255,255,.05);overflow:hidden}
-  #tslohn .tslohn-fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:99px;transition:width 1.05s cubic-bezier(.4,.1,.2,1)}
-  #tslohn .tslohn-fill--sv{background:linear-gradient(90deg,#b89c67,#e9dcb8);box-shadow:0 0 16px rgba(${GLOW},.4)}
-  #tslohn .tslohn-fill--vari{background:repeating-linear-gradient(115deg,rgba(255,255,255,.3) 0 7px,rgba(255,255,255,.12) 7px 14px)}
+  #tslohn .tsl-track{position:relative;display:flex;height:64px;margin:0 0 14px;gap:3px}
+  #tslohn .tsl-seg{position:relative;height:100%;border-radius:12px;overflow:hidden;transform:scaleX(0);transform-origin:left;
+    transition:transform 1s ${EASE}}
+  #tslohn.on .tsl-seg{transform:scaleX(1)}
+  #tslohn .tsl-seg-base{flex:0 0 82%;background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,.07));
+    border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.22)}
+  #tslohn .tsl-seg-ext{flex:1 1 auto;background:linear-gradient(180deg,#efe6d2,#c7b489);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 12px 34px -12px rgba(var(--g),.8);transition-delay:.55s}
+  #tslohn .tsl-seg-ext::after{content:"";position:absolute;inset:0;transform:translateX(-140%);
+    background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.75) 50%,transparent 62%)}
+  #tslohn.on .tsl-seg-ext::after{animation:tslShim 1.4s ease 1.5s 1 forwards}
+  #tslohn .tsl-seglab{position:absolute;top:50%;transform:translateY(-50%);z-index:2;font-size:.82rem;font-weight:600;white-space:nowrap;opacity:0;transition:opacity .5s ease}
+  #tslohn.on .tsl-seg-base .tsl-seglab{opacity:1;transition-delay:.5s}
+  #tslohn.on .tsl-seg-ext .tsl-seglab{opacity:1;transition-delay:1.1s}
+  #tslohn .tsl-seg-base .tsl-seglab{left:20px;color:rgba(255,255,255,.9)}
+  #tslohn .tsl-seg-ext .tsl-seglab{left:50%;transform:translate(-50%,-50%);color:#05060b}
+  @keyframes tslShim{to{transform:translateX(150%)}}
 
-  /* Ausgangs- & Ergebniszeile */
-  #tslohn .tslohn-row--base{background:rgba(255,255,255,.03)}
-  #tslohn .tslohn-row--base .tslohn-name{font-family:"Lineal TS",-apple-system,sans-serif;font-weight:600;font-size:1.12rem;color:#fff}
-  #tslohn .tslohn-row--base .tslohn-val{font-size:1.5rem;color:#fff}
-  #tslohn .tslohn-row--total{background:linear-gradient(180deg,rgba(${GLOW},.16),rgba(${GLOW},.05));border-top:1px solid rgba(${GLOW},.35)}
-  #tslohn .tslohn-row--total .tslohn-name{font-family:"Lineal TS",-apple-system,sans-serif;font-weight:600;font-size:1.2rem;color:#e9dcb8}
-  #tslohn .tslohn-total-val{display:flex;align-items:baseline;gap:14px;justify-content:flex-end;flex-wrap:wrap}
-  #tslohn .tslohn-fac{font-family:"Lineal TS",-apple-system,sans-serif;font-weight:600;font-size:2rem;line-height:1;color:#c7b489;letter-spacing:-.01em;text-shadow:0 0 24px rgba(${GLOW},.45);font-variant-numeric:tabular-nums}
-  #tslohn .tslohn-fac small{font-family:-apple-system,sans-serif;font-size:.9rem;font-weight:600;color:rgba(231,222,200,.7)}
-  #tslohn .tslohn-total-note{font-size:.86rem;color:rgba(255,255,255,.6)}
+  #tslohn .tsl-scale{display:flex;justify-content:space-between;font-size:.72rem;color:rgba(255,255,255,.4);font-variant-numeric:tabular-nums;padding:0 2px}
+  #tslohn .tsl-scale b{color:#c7b489;font-weight:600}
+  #tslohn .tsl-hero-cap{margin:26px 0 0;padding-top:22px;border-top:1px solid rgba(255,255,255,.08);font-size:1rem;line-height:1.55;color:rgba(255,255,255,.7)}
+  #tslohn .tsl-hero-cap b{color:#efe6d2;font-weight:600}
 
-  /* Gruppenband */
-  #tslohn .tslohn-grp{display:flex;align-items:center;gap:12px;padding:14px clamp(18px,3vw,32px);background:rgba(255,255,255,.015);border-top:1px solid rgba(255,255,255,.06);
-    font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.42)}
-  #tslohn .tslohn-grp::before{content:"";width:9px;height:9px;border-radius:2px;flex:0 0 auto}
-  #tslohn .tslohn-grp--sv::before{background:linear-gradient(90deg,#b89c67,#e9dcb8)}
-  #tslohn .tslohn-grp--vari::before{background:repeating-linear-gradient(115deg,rgba(255,255,255,.32) 0 4px,rgba(255,255,255,.12) 4px 8px)}
+  /* -------- Detail-Aufschluesselung (Doppelrand) -------- */
+  #tslohn .tsl-break{position:relative;padding:7px;border-radius:26px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}
+  #tslohn .tsl-break-core{padding:30px clamp(20px,3.4vw,38px) 30px;border-radius:20px;background:rgba(0,0,0,.24);box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+  #tslohn .tsl-break-ttl{font-family:"Lineal TS",-apple-system,sans-serif;font-weight:600;font-size:1.16rem;letter-spacing:-.01em;color:#fff;margin:0 0 4px}
+  #tslohn .tsl-break-sub{font-size:.88rem;color:rgba(255,255,255,.5);margin:0 0 24px}
+  #tslohn .tsl-grp{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.44)}
+  #tslohn .tsl-grp+.tsl-rows{margin-bottom:20px}
+  #tslohn .tsl-sw{width:10px;height:10px;border-radius:3px;flex:0 0 auto}
+  #tslohn .tsl-sw--sv{background:linear-gradient(180deg,#efe6d2,#c7b489)}
+  #tslohn .tsl-sw--v{background:repeating-linear-gradient(115deg,rgba(255,255,255,.32) 0 4px,rgba(255,255,255,.12) 4px 8px)}
+  #tslohn .tsl-row{display:grid;grid-template-columns:minmax(190px,270px) 1fr 62px;align-items:center;gap:20px;padding:11px 0}
+  #tslohn .tsl-row+.tsl-row{border-top:1px solid rgba(255,255,255,.055)}
+  #tslohn .tsl-rn{font-size:.94rem;color:rgba(255,255,255,.86)}
+  #tslohn .tsl-rn s{display:block;text-decoration:none;font-size:.72rem;color:rgba(255,255,255,.4);margin-top:2px}
+  #tslohn .tsl-rbar{position:relative;height:8px;border-radius:99px;background:rgba(255,255,255,.06)}
+  #tslohn .tsl-rfill{position:absolute;left:0;top:0;bottom:0;width:100%;border-radius:99px;transform:scaleX(0);transform-origin:left;transition:transform 1s ${EASE}}
+  #tslohn.on .tsl-rfill{transform:scaleX(1)}
+  #tslohn .tsl-rfill--sv{background:linear-gradient(90deg,#b89c67,#efe6d2);box-shadow:0 0 14px rgba(var(--g),.4)}
+  #tslohn .tsl-rfill--v{background:repeating-linear-gradient(115deg,rgba(255,255,255,.3) 0 6px,rgba(255,255,255,.12) 6px 12px)}
+  #tslohn .tsl-rp{text-align:right;font-size:.98rem;font-weight:600;color:#fff;font-variant-numeric:tabular-nums}
+  #tslohn .tsl-row--v .tsl-rp{font-size:.82rem;font-weight:500;color:rgba(255,255,255,.55)}
+  #tslohn .tsl-sum{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:22px;padding-top:20px;border-top:1px solid rgba(var(--g),.28)}
+  #tslohn .tsl-sum-l{font-size:.82rem;font-weight:600;letter-spacing:.02em;color:rgba(255,255,255,.6)}
+  #tslohn .tsl-sum-v{font-family:"Lineal TS",-apple-system,sans-serif;font-weight:600;font-size:1.5rem;color:#efe6d2;text-shadow:0 0 22px rgba(var(--g),.4)}
 
-  #tslohn .tslohn-foot{margin:22px 4px 0;font-size:.8rem;line-height:1.6;color:rgba(255,255,255,.4)}
+  #tslohn .tsl-foot{margin:24px 4px 0;font-size:.82rem;line-height:1.65;color:rgba(255,255,255,.42)}
+  #tslohn .tsl-foot b{color:rgba(255,255,255,.72);font-weight:600}
 
-  #tslohn .tslohn-row,#tslohn .tslohn-grp{opacity:0;transform:translateX(-6px);transition:opacity .5s ease,transform .5s ease}
-  #tslohn.on .tslohn-row,#tslohn.on .tslohn-grp{opacity:1;transform:none}
+  /* -------- Reveal (blur-fade-up, gestaffelt) -------- */
+  #tslohn .tsl-rise{opacity:0;transform:translateY(22px);filter:blur(6px);transition:opacity .9s ${EASE},transform .9s ${EASE},filter .9s ${EASE}}
+  #tslohn.on .tsl-rise{opacity:1;transform:none;filter:none}
 
   @media(max-width:820px){
-    #tslohn .tslohn-wrap{padding:40px 18px 44px}
-    #tslohn .tslohn-levels{grid-template-columns:1fr;gap:12px;margin-bottom:40px}
-    #tslohn .tslohn-row{grid-template-columns:1fr;gap:12px;padding:16px 18px}
-    #tslohn .tslohn-bar{order:2}
-    #tslohn .tslohn-row--base .tslohn-val,#tslohn .tslohn-fac{font-size:1.5rem}
-    #tslohn .tslohn-total-val{justify-content:space-between}
+    #tslohn .tsl-wrap{width:92vw;padding:44px 0 48px}
+    #tslohn .tsl-line{grid-template-columns:1fr;gap:20px;margin-bottom:44px}
+    #tslohn .tsl-line::before{display:none}
+    #tslohn .tsl-hero-core{padding:26px 18px 28px}
+    #tslohn .tsl-hero-head{margin-bottom:22px}
+    #tslohn .tsl-facwrap{text-align:left}
+    #tslohn .tsl-track{height:54px}
+    #tslohn .tsl-seg-base .tsl-seglab{left:12px;font-size:.72rem}
+    #tslohn .tsl-break-core{padding:22px 16px}
+    #tslohn .tsl-row{grid-template-columns:1fr 56px;gap:6px 14px}
+    #tslohn .tsl-rn{grid-column:1;grid-row:1}#tslohn .tsl-rp{grid-column:2;grid-row:1}
+    #tslohn .tsl-rbar{grid-column:1 / -1;grid-row:2;margin-top:3px}
   }
   @media(prefers-reduced-motion:reduce){
-    #tslohn .tslohn-lv,#tslohn .tslohn-row,#tslohn .tslohn-grp{opacity:1;transform:none;transition:none}
-    #tslohn .tslohn-fill{transition:none}
+    #tslohn .tsl-rise,#tslohn .tsl-seg,#tslohn .tsl-rfill,#tslohn .tsl-seglab,#tslohn .tsl-line::before{opacity:1;transform:none;filter:none;transition:none}
+    #tslohn .tsl-seg-ext::after{display:none}
   }`;
 
-  function nf(v,dec){ return v.toFixed(dec).replace('.',','); }
+  var STAG=['.tsl-eyebrow','.tsl-h','.tsl-lead','.tsl-line','.tsl-hero','.tsl-break','.tsl-foot'];
+
+  function nf(v,d){ return v.toFixed(d).replace('.',','); }
   function injectCSS(){ if(document.getElementById('tslohn-css'))return; var s=document.createElement('style'); s.id='tslohn-css'; s.textContent=CSS; document.head.appendChild(s); }
 
-  function svRow(r){
-    var w=Math.round(r.pct/MAXPCT*100);
-    return '<div class="tslohn-row">'
-      +'<div class="tslohn-head"><span class="tslohn-name"><span class="tslohn-op">+</span>'+r.name+'</span><span class="tslohn-val">'+r.disp+'</span></div>'
-      +'<div class="tslohn-bar"><span class="tslohn-fill tslohn-fill--sv" data-w="'+w+'"></span></div>'
-      +(r.note?'<span class="tslohn-note">'+r.note+'</span>':'')
-    +'</div>';
-  }
-
   function build(){
+    var svRows=SV.map(function(r){
+      var w=(r.p/MAX*100).toFixed(1);
+      return '<div class="tsl-row"><div class="tsl-rn">'+r.n+(r.note?'<s>'+r.note+'</s>':'')+'</div>'
+        +'<div class="tsl-rbar"><span class="tsl-rfill tsl-rfill--sv" style="width:'+w+'%"></span></div>'
+        +'<div class="tsl-rp">'+r.d+'</div></div>';
+    }).join('');
+
     var root=document.createElement('div'); root.id='tslohn';
     root.innerHTML=
-      '<div class="tslohn-wrap">'
-      +'<p class="tslohn-eyebrow">Mitarbeiterlöhne</p>'
-      +'<h2 class="tslohn-h">Vom Nettolohn zu den <span>Arbeitgeberkosten</span></h2>'
-      +'<p class="tslohn-sub">Es gibt drei Lohn-Ebenen — und für deine Kalkulation zählt nur die dritte.</p>'
+      '<div class="tsl-wrap">'
+      +'<span class="tsl-eyebrow tsl-rise">Mitarbeiterlöhne</span>'
+      +'<h2 class="tsl-h tsl-rise">Was eine Arbeitsstunde <em>wirklich</em> kostet</h2>'
+      +'<p class="tsl-lead tsl-rise">Netto, Brutto, Arbeitgeberkosten — drei Zahlen, die oft verwechselt werden. Für deine Kalkulation zählt nur die dritte. Hier siehst du, warum sie höher liegt, als im Vertrag steht.</p>'
 
-      +'<p class="tslohn-secttl">Die drei Lohn-Ebenen</p>'
-      +'<div class="tslohn-levels">'
-        +'<div class="tslohn-lv" data-i="0"><span class="tslohn-lv__no">1</span><div><span class="tslohn-lv__name">Nettolohn</span><span class="tslohn-lv__desc">Was beim Mitarbeiter auf dem <b>Konto ankommt</b>.</span></div></div>'
-        +'<div class="tslohn-lv" data-i="1"><span class="tslohn-lv__no">2</span><div><span class="tslohn-lv__name">Bruttolohn</span><span class="tslohn-lv__desc">Was im <b>Arbeitsvertrag</b> steht: Netto + Lohnsteuer + Arbeitnehmer-Sozialabgaben.</span></div></div>'
-        +'<div class="tslohn-lv tslohn-lv--gold" data-i="2"><span class="tslohn-lv__no">3</span><div><span class="tslohn-lv__name">Arbeitgeber-Bruttokosten</span><span class="tslohn-lv__desc">Bruttolohn + <b>Arbeitgeber-Abgaben</b>. Was dich als Arbeitgeber wirklich kostet.</span><span class="tslohn-lv__tag">deine Kostenzahl</span></div></div>'
+      /* Timeline */
+      +'<div class="tsl-line tsl-rise">'
+        +'<div class="tsl-node"><div class="tsl-dot">1</div><span class="tsl-k">Nettolohn</span><span class="tsl-n">Die Auszahlung</span><span class="tsl-d">Was beim Mitarbeiter auf dem <b>Konto</b> ankommt.</span></div>'
+        +'<div class="tsl-node"><div class="tsl-dot">2</div><span class="tsl-k">Bruttolohn</span><span class="tsl-n">Der Vertrag</span><span class="tsl-d">Netto + Lohnsteuer + <b>Arbeitnehmer</b>-Sozialabgaben.</span></div>'
+        +'<div class="tsl-node tsl-node--gold"><div class="tsl-dot">3</div><span class="tsl-k">Arbeitgeber-Bruttokosten</span><span class="tsl-n">Deine Realität</span><span class="tsl-d">Bruttolohn + <b>Arbeitgeber</b>-Abgaben. Deine echte Kostenzahl.</span></div>'
       +'</div>'
 
-      +'<p class="tslohn-secttl">So entsteht Ebene 3 — der Aufbau auf den Bruttolohn</p>'
-      +'<div class="tslohn-calc">'
-        +'<div class="tslohn-row tslohn-row--base">'
-          +'<div class="tslohn-head"><span class="tslohn-name">Bruttolohn</span><span class="tslohn-val">100 %</span></div>'
-          +'<div style="font-size:.82rem;color:rgba(255,255,255,.45)">Ausgangswert &middot; Ebene 2</div>'
+      /* Hero */
+      +'<div class="tsl-hero tsl-rise"><div class="tsl-hero-core">'
+        +'<div class="tsl-hero-head">'
+          +'<div class="tsl-hero-lbl">Der Vertrag nennt den <b>Bruttolohn</b>. Doch obendrauf zahlt der Arbeitgeber seinen Anteil zur Sozialversicherung und die Umlagen — der <b>versteckte Aufschlag</b>.</div>'
+          +'<div class="tsl-facwrap"><span class="tsl-fac-k">Arbeitgeber-Kosten-Faktor</span><span class="tsl-fac" data-target="'+FAC+'">1,00<small>× Bruttolohn</small></span></div>'
         +'</div>'
-
-        +'<div class="tslohn-grp tslohn-grp--sv">Arbeitgeberanteil zur Sozialversicherung</div>'
-        +SV.map(svRow).join('')
-
-        +'<div class="tslohn-grp tslohn-grp--vari">Umlagen &middot; betriebsindividuell</div>'
-        +'<div class="tslohn-row">'
-          +'<div class="tslohn-head"><span class="tslohn-name"><span class="tslohn-op">+</span>Unfallversicherung &amp; Umlagen U1 / U2 / U3</span><span class="tslohn-val" style="color:rgba(255,255,255,.6);font-weight:500">variabel</span></div>'
-          +'<div class="tslohn-bar"><span class="tslohn-fill tslohn-fill--vari" data-w="42"></span></div>'
+        +'<div class="tsl-track">'
+          +'<div class="tsl-seg tsl-seg-base"><span class="tsl-seglab">Bruttolohn · 100&thinsp;%</span></div>'
+          +'<div class="tsl-seg tsl-seg-ext"><span class="tsl-seglab">+ 21&thinsp;%</span></div>'
         +'</div>'
+        +'<div class="tsl-scale"><span>0</span><span>Bruttolohn = 100&thinsp;%</span><span><b>≈ 121&thinsp;%</b></span></div>'
+        +'<p class="tsl-hero-cap">Ergebnis: die <b>Arbeitgeber-Bruttokosten</b> — rund <b>+21&thinsp;% bis +23&thinsp;%</b> über dem Bruttolohn. Das ist die Zahl, mit der du kalkulierst.</p>'
+      +'</div></div>'
 
-        +'<div class="tslohn-row tslohn-row--total">'
-          +'<div class="tslohn-head"><span class="tslohn-name"><span class="tslohn-op">=</span>Arbeitgeber-Bruttokosten</span></div>'
-          +'<div class="tslohn-total-val"><span class="tslohn-fac" data-target="'+FACTOR_TARGET+'">1,00<small>&thinsp;× Bruttolohn</small></span><span class="tslohn-total-note">das sind <b style="color:#e9dcb8">+21 % bis +23 %</b> obendrauf</span></div>'
-        +'</div>'
-      +'</div>'
+      /* Breakdown */
+      +'<div class="tsl-break tsl-rise"><div class="tsl-break-core">'
+        +'<h3 class="tsl-break-ttl">Woraus der Aufschlag besteht</h3>'
+        +'<p class="tsl-break-sub">Der Arbeitgeberanteil, aufgeschlüsselt — Balkenlänge zeigt das Gewicht.</p>'
+        +'<div class="tsl-grp"><span class="tsl-sw tsl-sw--sv"></span>Anteil zur Sozialversicherung</div>'
+        +'<div class="tsl-rows">'+svRows+'</div>'
+        +'<div class="tsl-grp"><span class="tsl-sw tsl-sw--v"></span>Umlagen · betriebsindividuell</div>'
+        +'<div class="tsl-rows"><div class="tsl-row tsl-row--v"><div class="tsl-rn">Unfallversicherung &amp; Umlagen U1 / U2 / U3</div>'
+          +'<div class="tsl-rbar"><span class="tsl-rfill tsl-rfill--v" style="width:40%"></span></div>'
+          +'<div class="tsl-rp">variabel</div></div></div>'
+        +'<div class="tsl-sum"><span class="tsl-sum-l">Aufschlag auf den Bruttolohn</span><span class="tsl-sum-v">+21&thinsp;% bis +23&thinsp;%</span></div>'
+      +'</div></div>'
 
-      +'<p class="tslohn-foot">In der Gastronomie rechnet man mit einem AG-Kosten-Faktor von <b style="color:rgba(255,255,255,.7)">ca. 1,21 bis 1,30</b> — die Spanne nach oben mit Urlaubsrückstellungen und Lohnfortzahlung im Krankheitsfall. Prozentsätze sind gerundete Richtwerte; Unfallversicherung und Umlagen U1/U2/U3 sind betriebsindividuell.</p>'
+      +'<p class="tsl-foot tsl-rise">In der Gastronomie rechnet man mit einem AG-Kosten-Faktor von <b>ca. 1,21 bis 1,30</b> — die Spanne nach oben mit Urlaubsrückstellungen und Lohnfortzahlung im Krankheitsfall. Prozentsätze sind gerundete Richtwerte; Unfallversicherung und Umlagen U1/U2/U3 sind betriebsindividuell.</p>'
       +'</div>';
     return root;
   }
 
   function play(root){
     if(root.__played) return; root.__played=true;
+    /* gestaffelter blur-fade-up der Hauptbloecke */
+    STAG.forEach(function(sel,i){ var el=root.querySelector(sel); if(el) el.style.transitionDelay=(i*0.09)+'s'; });
+    /* Detail-Balken gestaffelt fuellen (nach Hero) */
+    var fills=[].slice.call(root.querySelectorAll('.tsl-rfill'));
+    fills.forEach(function(f,i){ f.style.transitionDelay=(1.5+i*0.1)+'s'; });
     root.classList.add('on');
-    var rows=[].slice.call(root.querySelectorAll('.tslohn-row, .tslohn-grp'));
-    rows.forEach(function(rw,i){ rw.style.transitionDelay=(0.45+i*0.08)+'s'; });
-    var fills=[].slice.call(root.querySelectorAll('.tslohn-fill'));
-    fills.forEach(function(f,i){ setTimeout(function(){ f.style.width=f.getAttribute('data-w')+'%'; }, 700+i*130); });
-    var fac=root.querySelector('.tslohn-fac');
+    /* Faktor-Count-up (rAF) + Garantie-Endwert (setTimeout) */
+    var fac=root.querySelector('.tsl-fac');
     if(fac){
       var small=fac.querySelector('small').outerHTML;
       var target=parseFloat(fac.getAttribute('data-target'))||1.21, dur=1500, t0=null, done=false;
-      function set(v){ fac.innerHTML=nf(v,2)+small; }
-      function step(now){ if(t0===null)t0=now; var p=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-p,3), v=1+(target-1)*e; if(!done) set(v); if(p<1&&!done) requestAnimationFrame(step); }
-      setTimeout(function(){ requestAnimationFrame(step); }, 900);
-      setTimeout(function(){ done=true; set(target); }, 900+dur+180);
+      function setv(v){ fac.innerHTML=nf(v,2)+small; }
+      function step(now){ if(t0===null)t0=now; var p=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-p,3), v=1+(target-1)*e; if(!done){ setv(v); if(p<1) requestAnimationFrame(step); } }
+      setTimeout(function(){ if(!done) requestAnimationFrame(step); }, 700);
+      setTimeout(function(){ done=true; setv(target); }, 700+dur+200);
     }
-    setTimeout(function(){ root.classList.add('done'); }, 900+1500+400);
   }
 
-  function inView(el){ var r=el.getBoundingClientRect(); var vh=window.innerHeight||document.documentElement.clientHeight; return r.top < vh-70 && r.bottom > 0; }
+  function inView(el){ var r=el.getBoundingClientRect(); var vh=window.innerHeight||document.documentElement.clientHeight; return r.top < vh-80 && r.bottom > 0; }
   function setup(root){
-    var io=new IntersectionObserver(function(e){ if(e[0].isIntersecting){ play(root); io.disconnect(); } },{threshold:.15});
+    var io=new IntersectionObserver(function(e){ if(e[0].isIntersecting){ play(root); io.disconnect(); } },{threshold:.12});
     io.observe(root);
     function cleanup(){ window.removeEventListener('scroll',onScroll); clearInterval(poll); }
     function onScroll(){ if(inView(root)){ play(root); cleanup(); } }
@@ -2934,10 +2988,7 @@
 
   function findList(){
     var uls=document.querySelectorAll('.page__gemeinkosten-mitarbeiterlhne ul.notion-bulleted-list');
-    for(var i=0;i<uls.length;i++){
-      var tx=uls[i].textContent||'';
-      if(/Nettolohn/.test(tx) && /Arbeitgeber-Bruttokosten/.test(tx)) return uls[i];
-    }
+    for(var i=0;i<uls.length;i++){ var t=uls[i].textContent||''; if(/Nettolohn/.test(t)&&/Arbeitgeber-Bruttokosten/.test(t)) return uls[i]; }
     return null;
   }
   function mount(){
