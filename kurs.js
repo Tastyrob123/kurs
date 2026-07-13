@@ -2506,6 +2506,38 @@
   @media(max-width:860px){#tsgk .tsgk-grid{grid-template-columns:repeat(2,1fr);gap:16px}#tsgk .tsgk-in{padding:26px 16px 0}#tsgk .tsgk-h{font-size:1.32rem}#tsgk .tsgk-k{font-size:.78rem}#tsgk .tsgk-logo{height:32px;margin-bottom:14px}}
   @media(max-width:460px){#tsgk .tsgk-grid{gap:12px}#tsgk .tsgk-in{padding:18px 12px 0}#tsgk .tsgk-h{font-size:1.08rem}#tsgk .tsgk-k{font-size:.68rem}#tsgk .tsgk-logo{height:26px;margin-bottom:11px}}
   @media(prefers-reduced-motion:reduce){#tsgk .tsgk-card,#tsgk .tsgk-card.on{opacity:1;transform:none;animation:none}#tsgk .tsgk-card.on.done:hover{transform:none;animation:none;box-shadow:0 0 26px rgba(var(--g),.22)}}
+  #tsgk .tsgk-card{cursor:pointer}
+  #tsgk .tsgk-card:focus-visible{outline:2px solid rgba(199,180,137,.75);outline-offset:3px}
+  /* ===== Klick-Modal: zentriertes Info-Fenster mit Kursinhalt ===== */
+  .tsgk-ov{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .28s ease;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif}
+  .tsgk-ov.open{opacity:1;pointer-events:auto}
+  .tsgk-ov__scrim{position:absolute;inset:0;background:rgba(3,4,8,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  .tsgk-ov__box{position:relative;z-index:1;width:min(640px,100%);max-height:88vh;overflow:auto;border-radius:20px;background:linear-gradient(180deg,#0c1018,#080b12);border:1px solid rgba(255,255,255,.12);box-shadow:0 40px 120px -30px rgba(0,0,0,.9);padding:40px;color:#e9ecf3;transform:translateY(14px) scale(.98);transition:transform .3s cubic-bezier(.22,1,.36,1);-webkit-overflow-scrolling:touch}
+  .tsgk-ov.open .tsgk-ov__box{transform:none}
+  .tsgk-ov__box::-webkit-scrollbar{width:9px}.tsgk-ov__box::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:9px}
+  .tsgk-ov__x{position:absolute;top:16px;right:16px;width:34px;height:34px;border:0;border-radius:50%;background:rgba(255,255,255,.06);color:#c7ccd8;font-size:20px;line-height:1;cursor:pointer;transition:background .2s,color .2s}
+  .tsgk-ov__x:hover{background:rgba(255,255,255,.14);color:#fff}
+  .tsgk-ov__logo{display:block;height:30px;width:auto;margin:0 0 15px}
+  .tsgk-ov__k{font-family:"Lineal TS",-apple-system,sans-serif;font-weight:600;font-size:.8rem;letter-spacing:.02em;color:#c7b489;display:block;margin-bottom:4px}
+  .tsgk-ov__h{font-family:"Lineal TS",-apple-system,sans-serif;font-weight:600;font-size:1.7rem;letter-spacing:-.01em;line-height:1.12;color:#fff;margin:0 0 16px}
+  .tsgk-ov__intro{font-size:1rem;line-height:1.6;color:#c3c9d5;margin:0 0 24px}
+  .tsgk-ov__sec{margin:0 0 24px}
+  .tsgk-ov__sec h4{font-family:"Lineal TS",-apple-system,sans-serif;font-weight:600;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#8b93a4;margin:0 0 12px}
+  .tsgk-ov__list{list-style:none;margin:0;padding:0}
+  .tsgk-ov__list li{position:relative;padding:0 0 0 20px;margin:0 0 8px;font-size:.95rem;line-height:1.5;color:#d3d8e2}
+  .tsgk-ov__list li::before{content:"";position:absolute;left:2px;top:9px;width:6px;height:6px;border-radius:50%;background:#c7b489}
+  .tsgk-calc{border:1px solid rgba(255,255,255,.10);border-radius:14px;overflow:hidden;background:rgba(255,255,255,.02)}
+  .tsgk-calc__ex{padding:11px 16px;font-size:.82rem;line-height:1.4;color:#9aa2b2;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(199,180,137,.05)}
+  .tsgk-calc__row{display:flex;justify-content:space-between;gap:16px;padding:11px 16px;font-size:.94rem;color:#d3d8e2;border-bottom:1px solid rgba(255,255,255,.06)}
+  .tsgk-calc__row span:last-child{color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .tsgk-calc__sum{background:rgba(199,180,137,.08);border-bottom:0}
+  .tsgk-calc__sum span{font-family:"Lineal TS",-apple-system,sans-serif;font-weight:600;color:#fff}
+  .tsgk-calc__sum span:last-child{color:#e8d9b6}
+  .tsgk-ov__pct{margin:10px 2px 0;font-size:.88rem;color:#c7b489}
+  .tsgk-ov__tip{margin:24px 0 0;padding:16px 18px;border-radius:12px;background:rgba(199,180,137,.08);border:1px solid rgba(199,180,137,.2);font-size:.92rem;line-height:1.55;color:#dfe3ec}
+  .tsgk-ov__tip strong{color:#e8d9b6;font-weight:600}
+  body.tsgk-lock{overflow:hidden}
+  @media(max-width:520px){.tsgk-ov{padding:0}.tsgk-ov__box{max-height:100vh;border-radius:0;padding:32px 22px 36px}.tsgk-ov__h{font-size:1.42rem}.tsgk-ov__intro{font-size:.95rem}}
   `;
   /* BG-Bilder liegen im Repo (GitHub Pages), da kurs.js von github.io geladen
      wird -> absolute Pages-URL noetig. Serie 3: Produkt mittig auf reinem Schwarz. */
@@ -2521,11 +2553,118 @@
     ['Marketing','marketing'],
     ['Sonstige Kosten','sonstige-kosten']
   ];
+  var TITLE={}; CARDS.forEach(function(c){ TITLE[c[1]]=c[0]; });
+  /* Kursinhalt je Kostenblock. Alle Beispielrechnungen beziehen sich auf denselben
+     fiktiven Beispielbetrieb (80 Plaetze, ~40.000 EUR Netto-Umsatz/Monat) — reine
+     Lehr-Beispiele, keine echten Zahlen. Stil: direkt, Du, kein Verkaufston. */
+  var EX='Beispielbetrieb: Restaurant, 80 Plätze, ~40.000 € Netto-Umsatz/Monat (480.000 €/Jahr).';
+  var CONTENT={
+    'reinigungskosten':{
+      intro:'Sauberkeit ist im Gastro-Betrieb keine Kür, sondern Hygienevorschrift und Gästeerlebnis in einem. Reinigungskosten fallen täglich an und werden trotzdem fast immer zu niedrig angesetzt.',
+      includes:['Externe Reinigungsfirma für Gastraum & Sanitär','Küchen-Grundreinigung (periodisch)','Fettabscheider entleeren & reinigen (Nachweispflicht)','Reinigungsmittel & Verbrauchsmaterial','Wäscheservice: Tischwäsche, Kochjacken, Handtücher','Fenster- und Sonderreinigung'],
+      ex:EX,
+      rows:[['Reinigungsfirma Gastraum & WC (6×/Woche, 2 Std, 22 €)','1.144 €'],['Reinigungsmittel & Verbrauch','180 €'],['Wäscheservice','260 €'],['Fettabscheider (anteilig)','200 €'],['Küchen-Grundreinigung (anteilig)','150 €']],
+      sum:['Summe / Monat','≈ 1.934 €'],
+      pct:'≈ 23.200 € im Jahr — rund 4,8 % vom Umsatz. Faustregel: 3–5 %.',
+      tip:'Die Fettabscheider-Reinigung ist gesetzlich vorgeschrieben und nachweispflichtig. Wer sie schleifen lässt, riskiert Ärger mit dem Ordnungsamt und verstopfte Leitungen mitten im Service.'
+    },
+    'versicherungen':{
+      intro:'Ein Wasserschaden, ein Küchenbrand, ein gestürzter Gast — ein einziger Fall kann den Betrieb kosten. Versicherungen sind die Rücklage, die im Ernstfall greift, wenn das eigene Konto es nicht kann.',
+      includes:['Betriebshaftpflicht (Personen- & Sachschäden Dritter)','Inhalts-/Geschäftsversicherung (Feuer, Leitungswasser, Sturm, Einbruch)','Betriebsunterbrechung (Umsatzausfall nach Schaden)','Glasversicherung','Elektronik- & Maschinenversicherung','Rechtsschutz für den Betrieb'],
+      ex:EX,
+      rows:[['Betriebshaftpflicht','650 €'],['Inhaltsversicherung (Einrichtung ~150.000 €)','1.800 €'],['Betriebsunterbrechung','900 €'],['Glasversicherung','240 €'],['Elektronik / Maschinen','480 €'],['Rechtsschutz','380 €']],
+      sum:['Summe / Jahr','≈ 4.450 €'],
+      pct:'≈ 370 € im Monat — rund 0,9 % vom Umsatz.',
+      tip:'Die häufigste Falle ist die Unterversicherung. Ist die Versicherungssumme niedriger als der echte Wiederbeschaffungswert, kürzt die Versicherung im Schaden anteilig — dann bleibst du auf einem Teil sitzen.'
+    },
+    'verwaltung':{
+      intro:'Der Papierkram, den kein Gast sieht — aber der über Bußgelder, Steuernachzahlungen und Nerven entscheidet. Verwaltung ist der Betrieb hinter dem Betrieb.',
+      includes:['Steuerberater: Finanzbuchhaltung & Jahresabschluss','Lohn- & Gehaltsabrechnung','Kassensystem inkl. TSE (Pflicht)','Warenwirtschaft / Software','Bank- & Kontoführung','Beiträge IHK & DEHOGA','Telefon, Internet, Bürobedarf'],
+      ex:EX,
+      rows:[['Steuerberater (FiBu + Abschluss anteilig)','550 €'],['Lohnabrechnung (12 Mitarbeitende)','144 €'],['Kassensystem + TSE-Lizenz','90 €'],['Warenwirtschaft / Software','60 €'],['Telefon & Internet','70 €'],['IHK / DEHOGA (anteilig)','45 €'],['Bürobedarf / Porto','40 €']],
+      sum:['Summe / Monat','≈ 999 €'],
+      pct:'≈ 12.000 € im Jahr — rund 2,5 % vom Umsatz.',
+      tip:'Die TSE (Technische Sicherheitseinrichtung) an der Kasse ist Pflicht. Fehlt sie oder ist sie defekt, wird die unangekündigte Kassennachschau des Finanzamts sofort zum Problem.'
+    },
+    'instandhaltung':{
+      intro:'Kombidämpfer, Kühlhaus, Spülmaschine, Zapfanlage — deine Technik läuft im Dauerbetrieb. Instandhaltung entscheidet, ob sie planbar gewartet wird oder mitten im Freitagabend-Service ausfällt.',
+      includes:['Wartungsverträge: Lüftung, Kälte, Kombidämpfer, Spültechnik','Reparaturen & Ersatzteile','Handwerker (Elektro, Sanitär)','Kleinere Anschaffungen & Nachrüstungen','Rücklage für Geräteausfall'],
+      ex:EX,
+      rows:[['Wartung Lüftungsanlage','700 €'],['Wartung Kälte / Kühlhaus','900 €'],['Wartung Kombidämpfer & Spültechnik','600 €'],['Reparaturen & Ersatzteile','2.400 €'],['Handwerker','1.200 €'],['Rücklage Geräteausfall','1.800 €']],
+      sum:['Summe / Jahr','≈ 7.600 €'],
+      pct:'≈ 630 € im Monat — rund 1,6 % vom Umsatz. Faustregel: 1–2 % als Rücklage.',
+      tip:'Wartung ist planbar, ein Ausfall nie. Ein gewartetes Kühlhaus hält Jahre länger — ein ungewartetes fällt an dem Tag aus, an dem es voll ist. Rücklage bilden, bevor der teure Fall kommt.'
+    },
+    'miete-kaution':{
+      intro:'Meist der größte Fixkostenblock nach Personal und Wareneinsatz. Die Miete läuft, ob der Laden voll ist oder leer — deshalb entscheidet das Verhältnis von Miete zu Umsatz über die Rentabilität.',
+      includes:['Kaltmiete','Nebenkosten (Grundsteuer, Müll, Wasser, Allgemeinstrom)','Kaution (einmalig, meist 3 Monatsmieten)','Ggf. Umsatzmiete / Staffelmiete','Ggf. Pacht bei Inventarübernahme'],
+      ex:EX,
+      rows:[['Kaltmiete (220 m² à 18 €)','3.960 €'],['Nebenkosten','640 €'],['— laufend / Monat','4.600 €'],['Kaution einmalig (3 Kaltmieten, gebunden)','11.880 €']],
+      sum:['Laufend / Jahr','≈ 55.200 €'],
+      pct:'≈ 11,5 % vom Umsatz. Faustregel: Miete inkl. NK unter 8–12 % halten — ab 15 % wird es eng.',
+      tip:'Die Kaution ist kein Aufwand, bindet aber Kapital, das dir bei der Eröffnung fehlt. Rechne sie in der Liquiditätsplanung mit, nicht in der Gewinn-und-Verlust-Rechnung.'
+    },
+    'abschreibungen':{
+      intro:'Die Küche, die Einrichtung, die Kaffeemaschine — du zahlst sie einmal, nutzt sie aber jahrelang. Die Abschreibung (AfA) verteilt die Anschaffung steuerlich über die Nutzungsdauer. Kein Geldabfluss, aber echter Wertverzehr.',
+      includes:['AfA auf Küchengeräte & -einrichtung','Gastraum-Möblierung','Kassen- & IT-Technik','Geschirr / Erstausstattung','Umbauten & fest eingebaute Anlagen','Geringwertige Wirtschaftsgüter (GWG) bis 800 € sofort'],
+      ex:EX+' — Abschreibung nach amtlicher Nutzungsdauer (ND).',
+      rows:[['Kücheneinrichtung 90.000 € / ND 8 J.','11.250 €'],['Gastraum-Möblierung 40.000 € / ND 8 J.','5.000 €'],['Kassen- & IT-Technik 8.000 € / ND 3 J.','2.667 €'],['Geschirr & Ausstattung 12.000 € / ND 5 J.','2.400 €']],
+      sum:['Summe / Jahr','≈ 21.317 €'],
+      pct:'≈ 1.775 € im Monat als kalkulatorischer Aufwand — rund 4,4 % vom Umsatz.',
+      tip:'Abschreibung senkt den Gewinn und damit die Steuer, ohne dass Geld abfließt — Gewinn und Liquidität laufen hier auseinander. GWG bis 800 € netto kannst du sofort voll absetzen, das spart Verwaltung.'
+    },
+    'marketing':{
+      intro:'Der beste Laden nützt nichts, wenn ihn niemand kennt. Marketing bringt Gäste rein — aber nur, wenn du es planst und misst, statt aus dem Bauch heraus Geld zu verbrennen.',
+      includes:['Social Media: Content & Betreuung','Google & Meta Ads','Website & Hosting','Foodfotografie','Print: Flyer, Speisekarten, Aushänge','Google-Business-Profil & Bewertungsmanagement','Aktionen & Events'],
+      ex:EX,
+      rows:[['Social-Media-Content & Betreuung','400 €'],['Google & Meta Ads','350 €'],['Foodfotografie (anteilig)','150 €'],['Print & Speisekarten','120 €'],['Aktionen / Events','140 €'],['Website & Hosting (anteilig)','40 €']],
+      sum:['Summe / Monat','≈ 1.200 €'],
+      pct:'≈ 14.400 € im Jahr — rund 3 % vom Umsatz. Faustregel: 3–6 %, in der Eröffnungsphase mehr.',
+      tip:'Miss, was reinkommt. Ein Gutscheincode oder die simple Frage „Woher kennst du uns?" macht jeden Marketing-Euro nachvollziehbar. Ohne Messung weißt du nie, welche Ausgabe tatsächlich Gäste bringt.'
+    },
+    'sonstige-kosten':{
+      intro:'Die Sammelposition für alles, was in keinen anderen Block passt — einzeln klein, in Summe relevant. Genau hier versteckt sich die schleichende Marge, die niemand auf dem Schirm hat.',
+      includes:['Kartenzahlungs-Disagio & Terminalgebühren','GEMA (Musik im Betrieb)','Bank- & Kontoführung','Rundfunkbeitrag','Schädlingsbekämpfung (Vertrag)','Genehmigungen, Konzessionen, Arbeitsschutz','Puffer für Unvorhergesehenes'],
+      ex:EX+' — davon ~28.000 € Kartenumsatz.',
+      rows:[['Kartenzahlungs-Disagio (~0,9 %)','252 €'],['GEMA','55 €'],['Bank- & Kontoführung','45 €'],['Rundfunkbeitrag','46 €'],['Schädlingsbekämpfung','60 €'],['Diverses / Puffer','120 €']],
+      sum:['Summe / Monat','≈ 578 €'],
+      pct:'≈ 7.000 € im Jahr — rund 1,5 % vom Umsatz.',
+      tip:'Das Karten-Disagio wächst mit jedem Euro Kartenumsatz. Ab einem gewissen Volumen lässt sich die Gebühr neu verhandeln — das sind pro Jahr schnell vierstellige Beträge, die sonst leise abfließen.'
+    }
+  };
+  function closeModal(){ var ov=document.getElementById('tsgk-ov'); if(!ov)return; ov.classList.remove('open'); document.body.classList.remove('tsgk-lock'); }
+  function openModal(slug){
+    var d=CONTENT[slug]; if(!d) return;
+    var ov=document.getElementById('tsgk-ov');
+    if(!ov){
+      ov=document.createElement('div'); ov.id='tsgk-ov'; ov.className='tsgk-ov'; ov.setAttribute('role','dialog'); ov.setAttribute('aria-modal','true');
+      ov.innerHTML='<div class="tsgk-ov__scrim"></div><div class="tsgk-ov__box"><button class="tsgk-ov__x" aria-label="Schließen">&times;</button><div class="tsgk-ov__body"></div></div>';
+      document.body.appendChild(ov);
+      ov.querySelector('.tsgk-ov__scrim').addEventListener('click',closeModal);
+      ov.querySelector('.tsgk-ov__x').addEventListener('click',closeModal);
+      document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal(); });
+    }
+    var rows=d.rows.map(function(r){ return '<div class="tsgk-calc__row"><span>'+r[0]+'</span><span>'+r[1]+'</span></div>'; }).join('');
+    var inc=d.includes.map(function(x){ return '<li>'+x+'</li>'; }).join('');
+    ov.querySelector('.tsgk-ov__body').innerHTML=
+      '<img class="tsgk-ov__logo" src="'+LOGO+'" alt="Tasty Studios">'
+      +'<span class="tsgk-ov__k">Kostenblock</span>'
+      +'<h3 class="tsgk-ov__h">'+(TITLE[slug]||'')+'</h3>'
+      +'<p class="tsgk-ov__intro">'+d.intro+'</p>'
+      +'<div class="tsgk-ov__sec"><h4>Was dazugehört</h4><ul class="tsgk-ov__list">'+inc+'</ul></div>'
+      +'<div class="tsgk-ov__sec"><h4>Beispielrechnung</h4><div class="tsgk-calc"><div class="tsgk-calc__ex">'+d.ex+'</div>'+rows
+      +'<div class="tsgk-calc__row tsgk-calc__sum"><span>'+d.sum[0]+'</span><span>'+d.sum[1]+'</span></div></div>'
+      +'<div class="tsgk-ov__pct">'+d.pct+'</div></div>'
+      +'<div class="tsgk-ov__tip"><strong>Praxis-Tipp</strong> — '+d.tip+'</div>';
+    ov.querySelector('.tsgk-ov__box').scrollTop=0;
+    document.body.classList.add('tsgk-lock');
+    requestAnimationFrame(function(){ ov.classList.add('open'); });
+  }
   function injectCSS(){ if(document.getElementById('tsgk-css'))return; var s=document.createElement('style'); s.id='tsgk-css'; s.textContent=CSS; document.head.appendChild(s); }
   function build(){
     var root=document.createElement('div'); root.id='tsgk';
     root.innerHTML='<div class="tsgk-grid">'+CARDS.map(function(c){
-      return '<div class="tsgk-card" style="--g:'+GLOW+'">'
+      return '<div class="tsgk-card" style="--g:'+GLOW+'" data-slug="'+c[1]+'" role="button" tabindex="0" aria-label="'+c[0]+' — Details öffnen">'
         +'<span class="tsgk-bg" aria-hidden="true"><img src="'+BASE+c[1]+'.webp" alt="" loading="lazy"></span>'
         +'<div class="tsgk-in"><img class="tsgk-logo" src="'+LOGO+'" alt="Tasty Studios" loading="lazy">'
         +'<span class="tsgk-k">Kostenblock</span>'
@@ -2578,6 +2717,8 @@
     ul.style.display='none';
     var root=build();
     ul.parentNode.insertBefore(root, ul.nextSibling);
+    root.addEventListener('click',function(e){ var c=e.target.closest('.tsgk-card'); if(c&&c.dataset.slug) openModal(c.dataset.slug); });
+    root.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '||e.key==='Spacebar'){ var c=e.target.closest('.tsgk-card'); if(c&&c.dataset.slug){ e.preventDefault(); openModal(c.dataset.slug); } } });
     setup(root);
   }
   function boot(){
