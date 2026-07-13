@@ -2484,10 +2484,12 @@
   var CSS=`
   /* Full-Bleed: aus der schmalen Notion-Spalte auf ~volle Viewport-Breite ausbrechen
      (Spalte ist zentriert -> Standard 50%/50vw-Technik). */
-  #tsgk{width:min(1320px,95vw);max-width:95vw;margin:34px auto 30px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
+  /* zentriert relativ zum Viewport: die schmale Notion-Spalte ist zentriert,
+     daher left:50% + translateX(-50%) — sonst bricht der breitere Block rechts aus. */
+  #tsgk{width:min(1320px,95vw);max-width:95vw;margin:34px 0 30px;position:relative;left:50%;transform:translateX(-50%);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:#fff}
   #tsgk *{box-sizing:border-box}
   #tsgk .tsgk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-  #tsgk .tsgk-card{position:relative;display:block;aspect-ratio:5/4;border-radius:16px;overflow:hidden;background:#04050a;border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 44px -30px rgba(0,0,0,.85);opacity:0;transform:translateY(18px) scale(.985);will-change:transform,opacity;transition:border-color .4s ease,box-shadow .5s ease}
+  #tsgk .tsgk-card{position:relative;display:block;aspect-ratio:6/5;border-radius:18px;overflow:hidden;background:#04050a;border:1px solid rgba(255,255,255,.09);box-shadow:0 22px 50px -32px rgba(0,0,0,.9);opacity:0;transform:translateY(18px) scale(.985);will-change:transform,opacity;transition:border-color .4s ease,box-shadow .5s ease}
   /* Reveal = Keyframe-Animation (NICHT transition): auf dieser busy Super.so-Seite
      bleiben class-getriggerte Transitions haengen. .on setzt zusaetzlich den End-
      zustand direkt, damit der Inhalt nie von der Animation abhaengt. */
@@ -2495,16 +2497,16 @@
   #tsgk .tsgk-card.on.done{animation:none}
   #tsgk .tsgk-card.on.done:hover{border-color:rgba(var(--g),.5);transform:translateY(-4px);animation:tsgk-hb 2.6s cubic-bezier(.4,0,.3,1) infinite}
   #tsgk .tsgk-bg{position:absolute;inset:0;z-index:0;border-radius:inherit;overflow:hidden}
-  #tsgk .tsgk-bg img{width:100%;height:100%;object-fit:cover;object-position:center 63%;display:block}
+  #tsgk .tsgk-bg img{width:100%;height:100%;object-fit:cover;object-position:center 68%;display:block}
   #tsgk .tsgk-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,5,10,.92) 0%,rgba(4,5,10,.62) 30%,rgba(4,5,10,.14) 46%,rgba(4,5,10,0) 60%),radial-gradient(120% 80% at 50% 100%,rgba(4,5,10,.5),rgba(4,5,10,0) 60%)}
-  #tsgk .tsgk-in{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:26px 18px 0}
-  #tsgk .tsgk-logo{display:block;height:30px;width:auto;margin:0 auto 13px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.7))}
-  #tsgk .tsgk-k{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-weight:600;font-size:.64rem;letter-spacing:.02em;color:#c7b489;margin-bottom:6px;text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 8px rgba(0,0,0,.8)}
-  #tsgk .tsgk-h{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1.16rem;font-weight:600;letter-spacing:-.012em;line-height:1.15;color:#fff;margin:0;text-shadow:0 0 4px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,.95),0 3px 14px rgba(0,0,0,.85)}
+  #tsgk .tsgk-in{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:32px 22px 0}
+  #tsgk .tsgk-logo{display:block;height:30px;width:auto;margin:0 auto 20px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.7))}
+  #tsgk .tsgk-k{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-weight:600;font-size:.66rem;letter-spacing:.1em;color:#c7b489;margin-bottom:10px;text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 8px rgba(0,0,0,.8)}
+  #tsgk .tsgk-h{font-family:"Lineal TS",-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;font-size:1.42rem;font-weight:600;letter-spacing:-.012em;line-height:1.16;color:#fff;margin:0;text-shadow:0 0 4px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,.95),0 3px 14px rgba(0,0,0,.85)}
   @keyframes tsgk-rise{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
   @keyframes tsgk-hb{0%{box-shadow:0 4px 14px rgba(var(--g),.10),0 0 14px rgba(var(--g),.10)}18%{box-shadow:0 6px 22px rgba(var(--g),.30),0 0 46px rgba(var(--g),.34)}32%{box-shadow:0 5px 18px rgba(var(--g),.16),0 0 26px rgba(var(--g),.18)}46%{box-shadow:0 6px 20px rgba(var(--g),.26),0 0 40px rgba(var(--g),.28)}72%,100%{box-shadow:0 4px 14px rgba(var(--g),.10),0 0 14px rgba(var(--g),.10)}}
-  @media(max-width:860px){#tsgk .tsgk-grid{grid-template-columns:repeat(2,1fr);gap:16px}#tsgk .tsgk-in{padding:24px 16px 0}#tsgk .tsgk-h{font-size:1.16rem}#tsgk .tsgk-k{font-size:.64rem}#tsgk .tsgk-logo{height:30px;margin-bottom:13px}}
-  @media(max-width:460px){#tsgk .tsgk-grid{gap:12px}#tsgk .tsgk-in{padding:18px 12px 0}#tsgk .tsgk-h{font-size:1.02rem}#tsgk .tsgk-k{font-size:.6rem}#tsgk .tsgk-logo{height:26px;margin-bottom:11px}}
+  @media(max-width:860px){#tsgk .tsgk-grid{grid-template-columns:repeat(2,1fr);gap:16px}#tsgk .tsgk-in{padding:28px 18px 0}#tsgk .tsgk-h{font-size:1.34rem}#tsgk .tsgk-k{font-size:.66rem}#tsgk .tsgk-logo{height:30px;margin-bottom:18px}}
+  @media(max-width:460px){#tsgk .tsgk-grid{gap:12px}#tsgk .tsgk-in{padding:22px 14px 0}#tsgk .tsgk-h{font-size:1.14rem}#tsgk .tsgk-k{font-size:.62rem}#tsgk .tsgk-logo{height:26px;margin-bottom:14px}}
   @media(prefers-reduced-motion:reduce){#tsgk .tsgk-card,#tsgk .tsgk-card.on{opacity:1;transform:none;animation:none}#tsgk .tsgk-card.on.done:hover{transform:none;animation:none;box-shadow:0 0 26px rgba(var(--g),.22)}}
   #tsgk .tsgk-card{cursor:pointer}
   #tsgk .tsgk-card:focus-visible{outline:2px solid rgba(199,180,137,.75);outline-offset:3px}
@@ -2512,14 +2514,15 @@
   .tsgk-ov{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .28s ease;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif}
   .tsgk-ov.open{opacity:1;pointer-events:auto}
   .tsgk-ov__scrim{position:absolute;inset:0;background:rgba(3,4,8,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-  .tsgk-ov__box{position:relative;z-index:1;width:min(640px,100%);max-height:88vh;overflow:auto;border-radius:20px;background:linear-gradient(180deg,#0c1018,#080b12);border:1px solid rgba(255,255,255,.12);box-shadow:0 40px 120px -30px rgba(0,0,0,.9);padding:40px;color:#e9ecf3;transform:translateY(14px) scale(.98);transition:transform .3s cubic-bezier(.22,1,.36,1);-webkit-overflow-scrolling:touch}
+  .tsgk-ov__box{position:relative;z-index:1;width:min(640px,100%);max-height:88vh;overflow:hidden;border-radius:22px;background:linear-gradient(180deg,#0c1018,#080b12);border:1px solid rgba(255,255,255,.12);box-shadow:0 40px 120px -30px rgba(0,0,0,.9);color:#e9ecf3;transform:translateY(14px) scale(.98);transition:transform .3s cubic-bezier(.22,1,.36,1)}
   .tsgk-ov.open .tsgk-ov__box{transform:none}
-  .tsgk-ov__box::-webkit-scrollbar{width:9px}.tsgk-ov__box::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:9px}
-  .tsgk-ov__x{position:absolute;top:16px;right:16px;width:34px;height:34px;border:0;border-radius:50%;background:rgba(255,255,255,.06);color:#c7ccd8;font-size:20px;line-height:1;cursor:pointer;transition:background .2s,color .2s}
-  .tsgk-ov__x:hover{background:rgba(255,255,255,.14);color:#fff}
-  .tsgk-ov__logo{display:block;height:30px;width:auto;margin:0 0 15px}
-  .tsgk-ov__k{font-family:"Lineal TS",-apple-system,sans-serif;font-weight:600;font-size:.8rem;letter-spacing:.02em;color:#c7b489;display:block;margin-bottom:4px}
-  .tsgk-ov__h{font-family:"Lineal TS",-apple-system,sans-serif;font-weight:600;font-size:1.7rem;letter-spacing:-.01em;line-height:1.12;color:#fff;margin:0 0 16px}
+  .tsgk-ov__body{max-height:88vh;overflow:auto;-webkit-overflow-scrolling:touch;padding:44px 44px 40px}
+  .tsgk-ov__body::-webkit-scrollbar{width:9px}.tsgk-ov__body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:9px}
+  .tsgk-ov__x{position:absolute;top:18px;right:18px;z-index:4;width:38px;height:38px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.1);border-radius:50%;background:rgba(14,18,28,.72);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);color:#c7ccd8;font-size:19px;line-height:1;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+  .tsgk-ov__x:hover{background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.2)}
+  .tsgk-ov__logo{display:block;height:32px;width:auto;margin:0 0 18px}
+  .tsgk-ov__k{font-family:"Lineal TS",-apple-system,sans-serif;font-weight:600;font-size:.82rem;letter-spacing:.1em;color:#c7b489;display:block;margin-bottom:6px}
+  .tsgk-ov__h{font-family:"Lineal TS",-apple-system,sans-serif;font-weight:600;font-size:2rem;letter-spacing:-.015em;line-height:1.1;color:#fff;margin:0 0 18px}
   .tsgk-ov__intro{font-size:1rem;line-height:1.6;color:#c3c9d5;margin:0 0 24px}
   .tsgk-ov__sec{margin:0 0 24px}
   .tsgk-ov__sec h4{font-family:"Lineal TS",-apple-system,sans-serif;font-weight:600;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#8b93a4;margin:0 0 12px}
@@ -2656,7 +2659,7 @@
       +'<div class="tsgk-calc__row tsgk-calc__sum"><span>'+d.sum[0]+'</span><span>'+d.sum[1]+'</span></div></div>'
       +'<div class="tsgk-ov__pct">'+d.pct+'</div></div>'
       +'<div class="tsgk-ov__tip"><strong>Praxis-Tipp</strong> — '+d.tip+'</div>';
-    ov.querySelector('.tsgk-ov__box').scrollTop=0;
+    ov.querySelector('.tsgk-ov__body').scrollTop=0;
     document.body.classList.add('tsgk-lock');
     requestAnimationFrame(function(){ ov.classList.add('open'); });
   }
