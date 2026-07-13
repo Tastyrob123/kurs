@@ -5063,3 +5063,38 @@
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
 })();
+
+/* ---- Rezepturen · Intro-Lead Einblend-Reveal (Fade + Rise, gestaffelt) ----
+   Muster analog ts-home/is-in. Startzustand (opacity:0) wird per JS-Klasse ts-rz-arm gesetzt
+   → falls JS nicht läuft, bleibt der Text sichtbar (kein Risiko unsichtbaren Textes).
+   Läuft genau einmal; reduced-motion überspringt die Animation. */
+(function(){
+  if(window.__tsRezIntro) return; window.__tsRezIntro=true;
+  var IDS=['block-80f311485aa84816b97ce805515ce8c2','block-394b9546553480c1a132df5b2fd33e6e','block-2c5edc4c7d1e4c1eb2478fdea38a3535'];
+  var DELAY=[0,0.12,0.24];
+  function onRez(){ return /\/rezepturen\/?$/.test(location.pathname); }
+  function reduced(){ return window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches; }
+  var done=false;
+  function arm(){
+    if(done) return;
+    if(!onRez()) return;
+    var els=IDS.map(function(id){ return document.getElementById(id); });
+    if(els.some(function(e){ return !e; })) return;   // noch nicht im DOM
+    done=true;
+    if(reduced()) return;                              // keine Animation, Text bleibt normal sichtbar
+    els.forEach(function(el,i){ el.classList.add('ts-rz-arm'); el.style.transitionDelay=DELAY[i]+'s'; });
+    function play(){ els.forEach(function(el){ el.classList.add('ts-rz-in'); }); }
+    function inView(){ var r=els[0].getBoundingClientRect(); return r.top < (window.innerHeight||0)*0.9 && r.bottom>0; }
+    if('IntersectionObserver' in window){
+      var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ play(); io.disconnect(); } }); },{threshold:.2, rootMargin:'0px 0px -10% 0px'});
+      io.observe(els[0]);
+    }
+    if(inView()) requestAnimationFrame(play);          // bereits sichtbar → sofort
+  }
+  function boot(){
+    var tries=0;
+    var iv=setInterval(function(){ tries++; arm(); if(done||tries>60) clearInterval(iv); },300);
+    new MutationObserver(function(){ arm(); }).observe(document.documentElement,{childList:true,subtree:true});
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+})();
