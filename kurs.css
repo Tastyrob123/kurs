@@ -1204,3 +1204,12 @@ details > summary {
 .page__rezepturen .tsmac__play span{width:76px;height:76px;border-radius:50%;background:rgba(255,255,255,.16);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;transition:transform .3s,background .3s;}
 .page__rezepturen .tsmac__play span::after{content:"";border-style:solid;border-width:12px 0 12px 20px;border-color:transparent transparent transparent #fff;margin-left:5px;}
 .page__rezepturen .tsmac:hover .tsmac__play span{transform:scale(1.08);background:rgba(255,255,255,.26);}
+
+/* ===== Gemeinkosten & Löhne (Lektion 2.5) · Intro-Leads unter dem Hero zentriert =====
+   Die zwei Intro-Absätze ("In dieser Lektion befassen wir uns…" + "Was genau sind
+   Gemeinkosten?…") mittig, Intro-Lead-Muster (max-width 820, margin auto). Body-Fließtext
+   darunter bleibt linksbündig. Die Blöcke sind selbst die <p class="notion-text__content">. */
+.page__gemeinkosten-mitarbeiterlhne #block-394b9546553480219c1ecd736ca4db72,
+.page__gemeinkosten-mitarbeiterlhne #block-394b9546553480e3a695d91b190fa4b6{
+  text-align:center !important; max-width:820px; margin-left:auto !important; margin-right:auto !important;
+}
