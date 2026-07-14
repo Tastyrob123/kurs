@@ -1981,6 +1981,42 @@
 
 /* ---- */
 
+/* gemeinkosten-mitarbeiterlhne — H1 "Gemeinkosten für DB II" (MacBook-Video-Sektion):
+   Phrase "DB II" beige via .ts-accent (#c7b489, global in kurs.css:749) + etwas Abstand
+   zum Text darunter. Block-ID-Anker, selbstheilend, ueberschreibt den generischen
+   Letztes-Wort-Toner __tsTone. Notion bleibt Text-SSOT (JS restyled nur). */
+(function(){
+  if(window.__tsGkDb2Head) return; window.__tsGkDb2Head=true;
+  var ID='block-394b95465534800593a7ebf82b7d1b03';
+  var BLACK='Gemeinkosten für ', ACCENT='DB II', TAIL='';
+  function injectCSS(){
+    if(document.getElementById('tsgkdb2-css')) return;
+    var s=document.createElement('style'); s.id='tsgkdb2-css';
+    s.textContent='#'+ID+'{margin-bottom:20px !important}';
+    document.head.appendChild(s);
+  }
+  function norm(s){ return (s||'').replace(/\s+/g,' ').trim(); }
+  function tone(){
+    var el=document.getElementById(ID); if(!el) return;
+    var want=norm(BLACK+ACCENT+TAIL);
+    var sp=el.querySelector('.ts-accent');
+    if(sp && norm(sp.textContent)===norm(ACCENT) && norm(el.textContent)===want) return; /* schon korrekt -> nichts tun (verhindert Ping-Pong) */
+    while(el.firstChild) el.removeChild(el.firstChild);
+    el.appendChild(document.createTextNode(BLACK));
+    var s=document.createElement('span'); s.className='ts-accent'; s.textContent=ACCENT;
+    el.appendChild(s);
+    if(TAIL) el.appendChild(document.createTextNode(TAIL));
+  }
+  function apply(){ injectCSS(); tone(); }
+  apply();
+  document.addEventListener('DOMContentLoaded', apply);
+  var _t=null;
+  new MutationObserver(function(){ if(_t) return; _t=setTimeout(function(){ _t=null; apply(); },200); })
+    .observe(document.documentElement,{childList:true,subtree:true});
+})();
+
+/* ---- */
+
 /* zutatenliste — Section-Heading "Die fertige Übersicht." : Wort "Übersicht" beige (.ts-gold).
    Lineal-Schrift + Größe kommen aus kurs.css; hier nur der Wort-Wrap, selbstheilend (Muster wie __tsm2). */
 (function(){
@@ -7127,7 +7163,7 @@
    ============================================================ */
 (function(){
   if(window.__tsmacGk) return; window.__tsmacGk=true;
-  var POSTER="https://cdn.jsdelivr.net/gh/Tastyrob123/kurs@main/img/gemeinkosten-mac/pc.png";
+  var POSTER="https://tastyrob123.github.io/kurs/img/gemeinkosten-mac/pc.png";
   (function(){ var pre=new Image(); pre.src=POSTER; })();
   var VID='#block-39cb9546553480c8a4d0e1fc54cfcb87';
   var PHRASE='Wir bauen zwei Datenbanken';
