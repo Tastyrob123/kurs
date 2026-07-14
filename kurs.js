@@ -4520,12 +4520,35 @@
       eyebrow:'Der Warenkorb · DB VI · Annahmen',
       title:'Deine <span>Gemeinkostenannahmen</span>.',
       sub:'Aus deinen Fixkosten wird die Rechen-Ebene: Monat, Kostenfaktoren, GK-Kosten pro Monat, Absatz pro Monat und am Ende die Gemeinkosten pro Produkt.',
+      /* Relation-Kachel (Ableitung, zu bestätigen): DB VIII rollt „GK Monat für DB III" auf
+         „GK pro Produkt" — die Eigenschaft liegt in DIESER Annahmen-Tabelle. Ist die
+         DB-VIII-Verknüpfung wechselseitig, erscheint hier die Gegenspalte „Gerichte". */
+      relations:[
+        { type:'ghost', name:'Gerichte', target:'Gegenspalte · aus DB VIII Gerichte', flag:'erscheint automatisch',
+          desc:'Gegenspalte der GK-Verknüpfung aus den Gerichten — erscheint von allein.',
+          img:'https://tastyrob123.github.io/kurs/img/gerichte/lammkarree.jpg',
+          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch, sobald du in <b>DB VIII : Gerichte &amp; Getränke</b> die Verknüpfung „GK Monat für DB III" mit <b>wechselseitiger Verbindung</b> anlegst — über die legen deine Gerichte anteilig Gemeinkosten um.</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Gerichte</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt dir, welche Gerichte auf diese Gemeinkosten-Annahme umgelegt werden.</p>' }
+      ],
       summary:'Annahmen', chain:true },
     { path:/\/gemeinkosten-mitarbeiterlhne\/?$/, kachel:'db7_mitarbeiterloehne',
       container:'.notion-tabs', marker:/Mitarbeiter/,
       eyebrow:'Der Warenkorb · DB VII',
       title:'Deine Mitarbeiterlöhne. <span>Netto für Netto</span>.',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB VII ist das Nettogehalt.',
+      /* Relation-Kacheln: DB VII hat selbst keine Verknüpfungs-Schritte. Zwei Gegenspalten
+         erscheinen automatisch, sobald spätere Tabellen auf die Mitarbeiter-DB verknüpfen —
+         DB V-Finance („Mitarbeiter Zubereitung") und DB VIII („Mitarbeiter"). Namens-Konvention
+         wie DB IV (Ghost = benannt nach der Quell-Tabelle: Rezepturen / Gerichte). */
+      relations:[
+        { type:'ghost', name:'Rezepturen', target:'Gegenspalte · aus DB V Finance', flag:'erscheint automatisch',
+          desc:'Gegenspalte der Mitarbeiter-Verknüpfung aus der Finance-Erweiterung — erscheint von allein.',
+          img:'https://tastyrob123.github.io/kurs/img/rezepturen/curry-mango-dip.jpg',
+          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch, sobald du in <b>DB V : Rezepturen</b> (Finance-Erweiterung) die Verknüpfung „Mitarbeiter Zubereitung" mit <b>wechselseitiger Verbindung</b> zu deinen Mitarbeitern anlegst.</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Rezepturen</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt dir, welche Rezeptur-Zubereitungen diesem Mitarbeiter zugeordnet sind.</p>' },
+        { type:'ghost', name:'Gerichte', target:'Gegenspalte · aus DB VIII Gerichte', flag:'erscheint automatisch',
+          desc:'Gegenspalte der Mitarbeiter-Verknüpfung aus den Gerichten — erscheint von allein.',
+          img:'https://tastyrob123.github.io/kurs/img/gerichte/entenbrust.jpg',
+          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch, sobald du in <b>DB VIII : Gerichte &amp; Getränke</b> die Verknüpfung „Mitarbeiter" mit <b>wechselseitiger Verbindung</b> anlegst.</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Gerichte</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt dir, welche Gerichte dieser Mitarbeiter zubereitet.</p>' }
+      ],
       summary:'Lohnsumme', chain:true },
     /* DB VIII Gerichte & Getränke — 4 getrennte Phasen-Tab-Widgets (.notion-tabs) zu EINEM
        Regal gebündelt (multi:true, expect:4). marker /Phase/ trifft alle vier. 37 Schritte. */
