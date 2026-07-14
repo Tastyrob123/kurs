@@ -4655,15 +4655,12 @@
       eyebrow:'Der Warenkorb · DB VII',
       title:'Deine Mitarbeiterlöhne. <span>Netto für Netto</span>.',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB VII ist das Nettogehalt.',
-      /* Relation-Kacheln: DB VII hat selbst keine Verknüpfungs-Schritte. Zwei Gegenspalten
-         erscheinen automatisch, sobald spätere Tabellen auf die Mitarbeiter-DB verknüpfen —
-         DB V-Finance („Mitarbeiter Zubereitung") und DB VIII („Mitarbeiter"). Namens-Konvention
-         wie DB IV (Ghost = benannt nach der Quell-Tabelle: Rezepturen / Gerichte). */
+      /* Relation-Kachel: „Gerichte" = Gegenspalte der DB-VIII-„Mitarbeiter"-Verknüpfung
+         (real in Roberts 👤-Mitarbeiter-DB heißt sie „Bereitet zu"), erscheint automatisch.
+         Der frühere „Rezepturen"-Ghost (DB V-Finance) wurde 2026-07-14 ENTFERNT — Robert hat
+         die „Mitarbeiter Zubereitung"→Mitarbeiter-Verknüpfung real nicht eingerichtet
+         (gegen die echte 👤-Mitarbeiter-DB verifiziert: keine Rezepturen-Gegenspalte). */
       relations:[
-        { type:'ghost', name:'Rezepturen', target:'Gegenspalte · aus DB V Finance', flag:'erscheint automatisch',
-          desc:'Gegenspalte der Mitarbeiter-Verknüpfung aus der Finance-Erweiterung — erscheint von allein.',
-          img:'https://tastyrob123.github.io/kurs/img/rezepturen/curry-mango-dip.jpg',
-          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch, sobald du in <b>DB V : Rezepturen</b> (Finance-Erweiterung) die Verknüpfung „Mitarbeiter Zubereitung" mit <b>wechselseitiger Verbindung</b> zu deinen Mitarbeitern anlegst.</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Rezepturen</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt dir, welche Rezeptur-Zubereitungen diesem Mitarbeiter zugeordnet sind.</p>' },
         { type:'ghost', name:'Gerichte', target:'Gegenspalte · aus DB VIII Gerichte', flag:'erscheint automatisch',
           desc:'Gegenspalte der Mitarbeiter-Verknüpfung aus den Gerichten — erscheint von allein.',
           img:'https://tastyrob123.github.io/kurs/img/gerichte/entenbrust.jpg',
