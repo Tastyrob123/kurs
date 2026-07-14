@@ -4664,7 +4664,19 @@
         { type:'ghost', name:'Gerichte', target:'Gegenspalte · aus DB VIII Gerichte', flag:'erscheint automatisch',
           desc:'Gegenspalte der Mitarbeiter-Verknüpfung aus den Gerichten — erscheint von allein.',
           img:'https://tastyrob123.github.io/kurs/img/gerichte/entenbrust.jpg',
-          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch, sobald du in <b>DB VIII : Gerichte &amp; Getränke</b> die Verknüpfung „Mitarbeiter" mit <b>wechselseitiger Verbindung</b> anlegst.</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Gerichte</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt dir, welche Gerichte dieser Mitarbeiter zubereitet.</p>' }
+          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch, sobald du in <b>DB VIII : Gerichte &amp; Getränke</b> die Verknüpfung „Mitarbeiter" mit <b>wechselseitiger Verbindung</b> anlegst.</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Gerichte</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt dir, welche Gerichte dieser Mitarbeiter zubereitet.</p>' },
+        { type:'later', name:'Mitarbeiterkleidung', target:'Verknüpfung · Arbeitskleidung', flag:'später verknüpfen',
+          desc:'Verknüpfung zur Arbeitskleidung des Mitarbeiters — baust du selbst.',
+          img:'https://tastyrob123.github.io/kurs/img/mitarbeiterloehne/serviceschuerze.jpg',
+          content:'<p class="notion-text">→ <b>Eigenschaft</b> : Verknüpfung</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Mitarbeiterkleidung</p><p class="notion-text">&nbsp;</p><p class="notion-text">Du verknüpfst hier die Arbeitskleidung, die dem Mitarbeiter zugeordnet ist.</p>' },
+        { type:'later', name:'Mitarbeiter Pflicht Dokumente', target:'Verknüpfung · Pflicht-Dokumente', flag:'später verknüpfen',
+          desc:'Verknüpfung zu den Pflicht-Dokumenten des Mitarbeiters — baust du selbst.',
+          img:'https://tastyrob123.github.io/kurs/img/mitarbeiterloehne/ausweis-lanyard.jpg',
+          content:'<p class="notion-text">→ <b>Eigenschaft</b> : Verknüpfung</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Mitarbeiter Pflicht Dokumente</p><p class="notion-text">&nbsp;</p><p class="notion-text">Du verknüpfst hier die Pflicht-Dokumente (z. B. Gesundheitszeugnis, Hygienebelehrung) des Mitarbeiters.</p>' },
+        { type:'later', name:'Vorhandene Dokumente', target:'Rollup · über Pflicht-Dokumente', flag:'später verknüpfen',
+          desc:'Rollup über die Pflicht-Dokumente-Verknüpfung — baust du selbst.',
+          img:'https://tastyrob123.github.io/kurs/img/mitarbeiterloehne/stechkarten-kartenhalter.jpg',
+          content:'<p class="notion-text">→ <b>Eigenschaft</b> : Rollup</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Verknüpfung</b> : Mitarbeiter Pflicht Dokumente</p><p class="notion-text">→ <b>Berechnen</b> : Original anzeigen</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Vorhandene Dokumente</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt dir, welche Pflicht-Dokumente beim Mitarbeiter vorliegen.</p>' }
       ],
       summary:'Lohnsumme', chain:true },
     /* DB VIII Gerichte & Getränke — 4 getrennte Phasen-Tab-Widgets (.notion-tabs) zu EINEM
