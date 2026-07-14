@@ -1981,6 +1981,33 @@
 
 /* ---- */
 
+/* gemeinkosten-mitarbeiterlhne — die zwei Intro-Absätze unter dem Hero zentriert.
+   DRIFTSICHER (ersetzt die alte block-ID-gebundene kurs.css-Regel, die brach, sobald Robert
+   den Notion-Text neu schrieb): identifiziert die Intro-Absätze als die ERSTEN BEIDEN
+   nicht-leeren .notion-text-Blöcke der Seite und setzt .ts-gkintro (Styling in kurs.css).
+   Body-Absätze darunter bleiben linksbündig. Selbstheilend, Notion bleibt Text-SSOT. */
+(function(){
+  if(window.__tsGkIntroCenter) return; window.__tsGkIntroCenter=true;
+  function apply(){
+    var page=document.querySelector('.page__gemeinkosten-mitarbeiterlhne');
+    if(!page) return;
+    var all=[].slice.call(page.querySelectorAll('.notion-text'));
+    var intro=all.filter(function(b){ return (b.textContent||'').trim().length>0; }).slice(0,2);
+    all.forEach(function(b){
+      var want=intro.indexOf(b)>-1;
+      if(want && !b.classList.contains('ts-gkintro')) b.classList.add('ts-gkintro');
+      else if(!want && b.classList.contains('ts-gkintro')) b.classList.remove('ts-gkintro');
+    });
+  }
+  apply();
+  document.addEventListener('DOMContentLoaded', apply);
+  var _t=null;
+  new MutationObserver(function(){ if(_t) return; _t=setTimeout(function(){ _t=null; apply(); },200); })
+    .observe(document.documentElement,{childList:true,subtree:true});
+})();
+
+/* ---- */
+
 /* gemeinkosten-mitarbeiterlhne — H1 "Gemeinkosten für DB II" (MacBook-Video-Sektion):
    Phrase "DB II" beige via .ts-accent (#c7b489, global in kurs.css:749) + etwas Abstand
    zum Text darunter. Block-ID-Anker, selbstheilend, ueberschreibt den generischen
