@@ -4607,14 +4607,20 @@
       eyebrow:'Der Warenkorb · DB VI · Annahmen',
       title:'Deine <span>Gemeinkostenannahmen</span>.',
       sub:'Aus deinen Fixkosten wird die Rechen-Ebene: Monat, Kostenfaktoren, GK-Kosten pro Monat, Absatz pro Monat und am Ende die Gemeinkosten pro Produkt.',
-      /* Relation-Kachel (bestätigt Robert 2026-07-14): DB VIII rollt „GK Monat für DB III" auf
-         „GK pro Produkt" — die Eigenschaft liegt in DIESER Annahmen-Tabelle. Ist die
-         DB-VIII-Verknüpfung wechselseitig, erscheint hier die Gegenspalte „Gerichte". */
+      /* Relation-Kacheln (bestätigt Robert 2026-07-14): zwei Gegenspalten erscheinen im Nachgang.
+         (1) „Gerichte" — DB VIII rollt „GK Monat für DB III" auf „GK pro Produkt" (liegt in DIESER
+             Annahmen-Tabelle); wechselseitig → Gegenspalte „Gerichte" (real: TastyChef Rezeptdatenbank).
+         (2) „Master Overview" — die 📊 Kostenauswertung Master (Key Metrics) verknüpft per „GK Monat"
+             wechselseitig auf die Annahmen → Gegenspalte „Master Overview" erscheint hier von allein. */
       relations:[
         { type:'ghost', name:'Gerichte', target:'Gegenspalte · aus DB VIII Gerichte', flag:'erscheint automatisch',
           desc:'Gegenspalte der GK-Verknüpfung aus den Gerichten — erscheint von allein.',
           img:'https://tastyrob123.github.io/kurs/img/gerichte/lammkarree.jpg',
-          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch, sobald du in <b>DB VIII : Gerichte &amp; Getränke</b> die Verknüpfung „GK Monat für DB III" mit <b>wechselseitiger Verbindung</b> anlegst — über die legen deine Gerichte anteilig Gemeinkosten um.</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Gerichte</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt dir, welche Gerichte auf diese Gemeinkosten-Annahme umgelegt werden.</p>' }
+          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch, sobald du in <b>DB VIII : Gerichte &amp; Getränke</b> die Verknüpfung „GK Monat für DB III" mit <b>wechselseitiger Verbindung</b> anlegst — über die legen deine Gerichte anteilig Gemeinkosten um.</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Gerichte</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt dir, welche Gerichte auf diese Gemeinkosten-Annahme umgelegt werden.</p>' },
+        { type:'ghost', name:'Master Overview', target:'Gegenspalte · aus Key Metrics', flag:'erscheint automatisch',
+          desc:'Gegenspalte der „GK Monat"-Verknüpfung aus der Kostenauswertung Master — erscheint von allein.',
+          img:'https://tastyrob123.github.io/kurs/img/gemeinkosten/buchhaltung-rechner.jpg',
+          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch, sobald du in <b>Key Metrics</b> die <b>📊 Kostenauswertung Master</b> anlegst und ihre Verknüpfung „GK Monat" mit <b>wechselseitiger Verbindung</b> auf deine Gemeinkosten-Annahmen legst.</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Master Overview</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt dir, in welcher monatlichen Kostenauswertung diese Annahme berücksichtigt ist.</p>' }
       ],
       summary:'Annahmen', chain:true },
     { path:/\/gemeinkosten-mitarbeiterlhne\/?$/, kachel:'db7_mitarbeiterloehne',
