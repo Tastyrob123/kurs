@@ -4571,7 +4571,7 @@
       eyebrow:'Der Warenkorb · DB VI · Annahmen',
       title:'Deine <span>Gemeinkostenannahmen</span>.',
       sub:'Aus deinen Fixkosten wird die Rechen-Ebene: Monat, Kostenfaktoren, GK-Kosten pro Monat, Absatz pro Monat und am Ende die Gemeinkosten pro Produkt.',
-      /* Relation-Kachel (Ableitung, zu bestätigen): DB VIII rollt „GK Monat für DB III" auf
+      /* Relation-Kachel (bestätigt Robert 2026-07-14): DB VIII rollt „GK Monat für DB III" auf
          „GK pro Produkt" — die Eigenschaft liegt in DIESER Annahmen-Tabelle. Ist die
          DB-VIII-Verknüpfung wechselseitig, erscheint hier die Gegenspalte „Gerichte". */
       relations:[
@@ -4617,22 +4617,22 @@
          type:'ghost'  = wechselseitige Relation, erscheint automatisch → du tust nichts (nicht im Balken)
          type:'later'  = Rollup/aktive Verknüpfung, baust du selbst NACH der Relation (zählt im Balken, Lila) */
       relations:[
-        { type:'ghost', name:'Lieferant', target:'Verknüpfung · DB I Lieferpartner', flag:'erscheint automatisch',
+        { type:'ghost', name:'Lieferpartner', target:'Verknüpfung · DB I Lieferpartner', flag:'erscheint automatisch',
           desc:'Spiegelspalte der Lieferpartner-Verknüpfung — erscheint von allein.',
           img:'https://tastyrob123.github.io/kurs/img/lieferpartner/kuehltransporter-sprinter.jpg',
-          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> selbst an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sobald du in <b>DB I : Lieferpartner</b> die Verknüpfung zur Inventurliste mit <b>wechselseitiger Verbindung</b> anlegst, taucht sie hier von allein auf.</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Lieferant</p><p class="notion-text">&nbsp;</p><p class="notion-text">Du benennst sie hier nur — verknüpft wird von der Lieferpartner-Seite.</p>' },
+          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> selbst an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sobald du in <b>DB I : Lieferpartner</b> die Verknüpfung zur Inventurliste mit <b>wechselseitiger Verbindung</b> anlegst, taucht sie hier von allein auf.</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Lieferpartner</p><p class="notion-text">&nbsp;</p><p class="notion-text">Du benennst sie hier nur — verknüpft wird von der Lieferpartner-Seite.</p>' },
         { type:'later', name:'Hauptkontakt Lieferant', target:'Formel · Visitenkarte', flag:'später verknüpfen',
           desc:'Formel „Hauptkontakt Visitenkarte" — baust du selbst.',
           img:'https://tastyrob123.github.io/kurs/img/flow/lieferantenvertrag.jpg',
           content:'<p class="notion-text">→ <b>Eigenschaft</b> : Formel</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Hauptkontakt Visitenkarte</p><p class="notion-text">&nbsp;</p><p class="notion-text">Trage diese Formel ein:</p><div class="notion-code" style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.7rem;line-height:1.55">prop("Lieferpartner")<br>&nbsp;&nbsp;.map(current.prop("Ansprechpartner Übersicht")<br>&nbsp;&nbsp;&nbsp;&nbsp;/* Nur Hauptansprechpartner filtern */<br>&nbsp;&nbsp;&nbsp;&nbsp;.filter(current.prop("Hauptansprechpartner") == "X")<br>&nbsp;&nbsp;&nbsp;&nbsp;/* Kontaktkarte für jeden Ansprechpartner aufbauen */<br>&nbsp;&nbsp;&nbsp;&nbsp;.map(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"👤 " + current.prop("Name") +<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(not empty(current.prop("Job / Title")), "\\n💼 " + current.prop("Job / Title"), "") +<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(not empty(current.prop("Telefon")), "\\n📞 " + current.prop("Telefon"), "") +<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(not empty(current.prop("E-Mail")), "\\n✉️ " + current.prop("E-Mail"), "")<br>&nbsp;&nbsp;&nbsp;&nbsp;)<br>&nbsp;&nbsp;)<br>&nbsp;&nbsp;.flat()<br>&nbsp;&nbsp;/* Mehrere Karten mit Leerzeile trennen */<br>&nbsp;&nbsp;.join("\\n\\n")</div><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt den Hauptansprechpartner deines Lieferanten als Visitenkarte — Name, Titel, Telefon, Mail.</p>' },
-        { type:'later', name:'Ansprechpartner Lieferant', target:'Rollup · über Lieferant', flag:'später verknüpfen',
-          desc:'Rollup über die Lieferant-Verknüpfung — baust du selbst.',
+        { type:'later', name:'Ansprechpartner Lieferant', target:'Rollup · über Lieferpartner', flag:'später verknüpfen',
+          desc:'Rollup über die Lieferpartner-Verknüpfung — baust du selbst.',
           img:'https://tastyrob123.github.io/kurs/img/flow/ansprechpartner.jpg',
-          content:'<p class="notion-text">→ <b>Eigenschaft</b> : Rollup</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Verknüpfung</b> : Lieferant</p><p class="notion-text">→ <b>Eigenschaft</b> : Ansprechpartner</p><p class="notion-text">→ <b>Berechnen</b> : Eindeutige Werte zeigen</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Ansprechpartner Lieferant</p><p class="notion-text">&nbsp;</p><p class="notion-text">Dir werden hier die Ansprechpartner angezeigt, die im verknüpften Lieferanten hinterlegt sind.</p>' },
+          content:'<p class="notion-text">→ <b>Eigenschaft</b> : Rollup</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Verknüpfung</b> : Lieferpartner</p><p class="notion-text">→ <b>Eigenschaft</b> : Ansprechpartner</p><p class="notion-text">→ <b>Berechnen</b> : Eindeutige Werte zeigen</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Ansprechpartner Lieferant</p><p class="notion-text">&nbsp;</p><p class="notion-text">Dir werden hier die Ansprechpartner angezeigt, die im verknüpften Lieferanten hinterlegt sind.</p>' },
         { type:'ghost', name:'Ist Zutat', target:'Verknüpfung · DB IV Zutaten', flag:'erscheint automatisch',
           desc:'Spiegelspalte der Zutaten-Verknüpfung — erscheint von allein.',
           img:'https://tastyrob123.github.io/kurs/img/zutaten/tomate.jpg',
-          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> selbst an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch, sobald du in <b>DB IV : Zutaten</b> die Verknüpfung „Inventar Produkt" mit <b>wechselseitiger Verbindung</b> zur Inventurliste anlegst.</p>' },
+          content:'<p class="notion-text">Diese Spalte legst du hier <b>nicht</b> selbst an.</p><p class="notion-text">&nbsp;</p><p class="notion-text">Sie erscheint automatisch, sobald du in <b>DB IV : Zutaten</b> die Verknüpfung „Inventar Produkt" mit <b>wechselseitiger Verbindung</b> zur Inventurliste anlegst.</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Ist Zutat</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt dir, welche Zutaten dieses Inventarprodukt verwenden.</p>' },
         { type:'ghost', name:'Packaging / Co.', target:'Gegenspalte · aus DB VIII Gerichte', flag:'erscheint automatisch',
           desc:'Gegenspalte der Packaging-Verknüpfung aus den Gerichten — erscheint von allein.',
           img:'https://tastyrob123.github.io/kurs/img/packaging/kuchenbox.jpg',
@@ -4656,7 +4656,7 @@
         { type:'later', name:'Hauptkontakt', target:'Rollup · über Ansprechpartner', flag:'später verknüpfen',
           desc:'Rollup über die Ansprechpartner-Verknüpfung — baust du selbst.',
           img:'https://tastyrob123.github.io/kurs/img/flow/lieferantenvertrag.jpg',
-          content:'<p class="notion-text">→ <b>Eigenschaft</b> : Rollup</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Verknüpfung</b> : Ansprechpartner Übersicht</p><p class="notion-text">→ <b>Eigenschaft</b> : Kontaktinfos</p><p class="notion-text">→ <b>Berechnen</b> : Original anzeigen</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Kontaktinfos</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt den Hauptansprechpartner deines Lieferpartners direkt in der Übersicht.</p>' }
+          content:'<p class="notion-text">→ <b>Eigenschaft</b> : Rollup</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Verknüpfung</b> : Ansprechpartner Übersicht</p><p class="notion-text">→ <b>Eigenschaft</b> : Kontaktinfos</p><p class="notion-text">→ <b>Berechnen</b> : Original anzeigen</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Hauptkontakt</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zeigt den Hauptansprechpartner deines Lieferpartners direkt in der Übersicht.</p>' }
       ],
       summary:'Transportkosten', cta:'Tour buchen', ctaDone:'Tour gebucht', chain:true },
     /* Zweites Regal auf derselben Seite: DB II Ansprechpartner (Marker eindeutig = Hauptansprechpartner) */
@@ -4677,12 +4677,8 @@
       eyebrow:'DB III - Lieferantenverträge',
       title:'Deine Lieferverträge. <span>Sauber dokumentiert</span>.',
       sub:'Jeder Schritt liegt als Karte im Regal. Klick ihn auf, arbeite ihn ab, leg ihn in den Einkaufswagen — die Währung von DB III ist der Vertragswert.<br>Um zu starten: / → neue Tabellenansicht / Datenbank → DB III : Lieferverträge Übersicht.',
-      relations:[
-        { type:'later', name:'Kontakt', target:'Rollup · über Lieferpartner', flag:'später verknüpfen',
-          desc:'Rollup über die Lieferpartner-Verknüpfung — baust du selbst.',
-          img:'https://tastyrob123.github.io/kurs/img/flow/ansprechpartner.jpg',
-          content:'<p class="notion-text">→ <b>Eigenschaft</b> : Rollup</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Verknüpfung</b> : Lieferpartner</p><p class="notion-text">→ <b>Eigenschaft</b> : Ansprechpartner</p><p class="notion-text">→ <b>Berechnen</b> : Original anzeigen</p><p class="notion-text">&nbsp;</p><p class="notion-text">→ <b>Name der Spalte</b> : Kontakt</p><p class="notion-text">&nbsp;</p><p class="notion-text">Zieht den Ansprechpartner des verknüpften Lieferpartners in den Vertrag.</p>' }
-      ],
+      /* DB III „Kontakt" ist ein NORMALER Lektions-Schritt (#3, Rollup über die in Schritt 2
+         gebaute Lieferpartner-Verknüpfung, inline baubar) → keine Relation-Kachel (sonst Duplikat). */
       summary:'Vertragsvolumina', cta:'Vertrag abschließen', ctaDone:'Vertrag geschlossen', chain:true }
   ];
 
